@@ -1,0 +1,9 @@
+FROM scratch
+MAINTAINER sealyun
+COPY cri ./cri
+COPY etc ./etc
+COPY registry ./registry
+COPY scripts ./scripts
+COPY images ./images
+COPY manifests ./manifests
+CMD ["kubectl apply -f manifests/nvidia-device-plugin.yaml"]

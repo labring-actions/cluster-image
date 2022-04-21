@@ -1,0 +1,5 @@
+FROM scratch
+COPY manifests ./manifests
+COPY registry ./registry
+COPY images ./images
+CMD ["kubectl apply -f manifests/databases.spotahome.com_redisfailovers.yaml","kubectl apply -f manifests/redis-operator-resources.yaml","kubectl apply -f manifests/redis-operator-basic.yaml"]

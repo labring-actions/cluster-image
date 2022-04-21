@@ -1,0 +1,41 @@
+#!/bin/bash
+version=${1:-v3.22.1}
+domain=${2:-docker.io}
+repo=${3:-cuisongliu}
+username=${4:-cuisongliu}
+password=${5:-}
+application=${6:-calico}
+prefix=$domain/$repo
+
+if [ ! -x ./buildah ];then
+  wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah
+  chmod a+x buildah
+  cp -rf buildah /usr/bin
+fi
+#TODO modify to online file
+if [ ! -x ./sealos ];then
+  wget https://sealyun-temp.oss-accelerate.aliyuncs.com/sealos/test/sealos --no-check-certificate -O sealos
+  chmod a+x sealos
+fi
+
+mkdir -p rootfs
+cp -rf runtime/applications/$application/* rootfs/
+# shellcheck disable=SC2164
+cd rootfs
+sh init.sh $version amd64 $prefix
+../sealos build -t $prefix/oci-$application:$version-amd64 --platform linux/amd64 -f Kubefile  .
+cd ../ && rm -rf rootfs
+mkdir -p rootfs
+cp -rf runtime/applications/$application/* rootfs/
+# shellcheck disable=SC2164
+cd rootfs
+sh init.sh $version arm64 $prefix
+../sealos build -t $prefix/oci-$application:$version-arm64 --platform linux/arm64 -f Kubefile  .
+
+../buildah login --username $username --password $password $domain
+../buildah push $prefix/oci-$application:$version-amd64
+../buildah push $prefix/oci-$application:$version-arm64
+../buildah manifest create $prefix/oci-$application:$version
+../buildah manifest add $prefix/oci-$application:$version docker://$prefix/oci-$application:$version-amd64
+../buildah manifest add $prefix/oci-$application:$version docker://$prefix/oci-$application:$version-arm64
+../buildah manifest push --all $prefix/oci-$application:$version docker://$prefix/oci-$application:$version

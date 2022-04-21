@@ -1,0 +1,12 @@
+# cloud-kernel
+
+用户可以自行自动打包seal
+
+
+- SEALOS_VERSION 默认 3.3.9-rc.1
+- MARKET_CTL_VERSION 默认 1.0.5
+- SSH_CMD_VERSION 默认 1.5.5
+- NERD_CTL_VERSION 默认 0.7.3
+- CRI_CTL_VERSION 默认 1.20.0
+- DOCKER_VERSION 默认 19.03.12
+- CONTAINERD_VERSION 默认 1.4.3
