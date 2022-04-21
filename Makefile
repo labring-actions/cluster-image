@@ -13,23 +13,12 @@ rm -rf $$TMP_DIR ;\
 }
 endef
 
-ADDLICENSE_BIN = $(shell pwd)/bin/addlicense
-install-addlicense: ## check license if not exist install go-lint tools
-	$(call go-get-tool,$(ADDLICENSE_BIN),github.com/google/addlicense@latest)
-
-filelicense:
-filelicense: install-addlicense
-	for file in ${Dirs} ; do \
-		if [[  $$file != '_output' && $$file != 'docs' && $$file != 'vendor' && $$file != 'logger' && $$file != 'applications' ]]; then \
-			$(ADDLICENSE_BIN)  -y $(shell date +"%Y") -c "sealyun." -f hack/template/LICENSE ./$$file ; \
-		fi \
-    done
 
 OSSUTIL_BIN = $(shell pwd)/bin/ossutil
 install-ossutil: ## check license if not exist install go-lint tools
 	$(call go-get-tool,$(OSSUTIL_BIN),github.com/aliyun/ossutil@latest)
 
 upload-oss: install-ossutil
-	tar -czvf cluster-image.tar.gz runtime hack/application.sh hack/build.sh hack/containerd.sh hack/init.sh
+	tar -czvf cluster-image.tar.gz runtime hack
 	$(OSSUTIL_BIN) cp -f cluster-image.tar.gz  oss://sealyun-home/images/cluster-image.tar.gz
 	rm -rf cluster-image.tar.gz
