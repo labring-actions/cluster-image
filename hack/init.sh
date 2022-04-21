@@ -1,8 +1,8 @@
 #!/bin/bash
-ln -s cloud-kernel/runtime runtime
-ln -s cloud-kernel/hack/build.sh build.sh
-ln -s cloud-kernel/hack/containerd.sh containerd.sh
-ln -s cloud-kernel/hack/application.sh application.sh
+ln -s cluster-image/runtime runtime
+ln -s cluster-image/hack/build.sh build.sh
+ln -s cluster-image/hack/containerd.sh containerd.sh
+ln -s cluster-image/hack/application.sh application.sh
 mkdir -p /etc/containers
 cat > /etc/containers/policy.json << EOF
 {

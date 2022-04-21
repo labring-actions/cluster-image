@@ -26,7 +26,7 @@ var loggerLevel int
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cloud-kernel",
+	Use:   "cluster-image",
 	Short: "auto update k8s to sealyun",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:

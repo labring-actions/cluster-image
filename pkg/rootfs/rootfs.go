@@ -153,9 +153,8 @@ func (b *build) initInstall() error {
 	client := b.getSSHClient()
 	shell := `
 yum install -y git && \
-git clone https://github.com/labring/cluster-image && cd cloud-kernel && \
-git checkout refactor && cd ../ && \
-ln -s cloud-kernel/hack/init.sh && sh init.sh
+git clone https://github.com/labring/cluster-image && \
+ln -s cluster-image/hack/init.sh && sh init.sh
 `
 	return client.CmdAsync(shell)
 }

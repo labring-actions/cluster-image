@@ -1,0 +1,34 @@
+name: Go
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - '*'
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+    - name: Build
+      run: go env -w GOOS=linux && go env -w GOARCH=amd64 && go env -w  GOPROXY=https://goproxy.io  && go build -o cluster-image -v && chmod a+x cluster-image
+
+    - name: Build Arm
+      run: go env -w GOOS=linux && go env -w GOARCH=arm64 && go env -w  GOPROXY=https://goproxy.io  && go build -o cluster-image-arm64 -v && chmod a+x cluster-image-arm64
+
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "cluster-image,cluster-image-arm64"
+        bodyFile: "README.MD"
+        token: ${{ secrets.GITHUB_TOKEN }}
