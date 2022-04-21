@@ -24,3 +24,12 @@ filelicense: install-addlicense
 			$(ADDLICENSE_BIN)  -y $(shell date +"%Y") -c "sealyun." -f hack/template/LICENSE ./$$file ; \
 		fi \
     done
+
+OSSUTIL_BIN = $(shell pwd)/bin/ossutil
+install-ossutil: ## check license if not exist install go-lint tools
+	$(call go-get-tool,$(OSSUTIL_BIN),github.com/aliyun/ossutil@latest)
+
+upload-oss: install-ossutil
+	tar -czvf cluster-image.tar.gz runtime hack/application.sh hack/build.sh hack/containerd.sh hack/init.sh
+	$(OSSUTIL_BIN) cp -f cluster-image.tar.gz  oss://sealyun-home/images/cluster-image.tar.gz
+	rm -rf cluster-image.tar.gz

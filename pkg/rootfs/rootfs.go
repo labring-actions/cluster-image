@@ -152,9 +152,9 @@ func (b *build) initInstall() error {
 	logger.Info("init public instance install")
 	client := b.getSSHClient()
 	shell := `
-yum install -y git && \
-git clone https://github.com/labring/cluster-image && \
-ln -s cluster-image/hack/init.sh && sh init.sh
+yum install -y wget && \
+wget https://sealyun-home.oss-cn-beijing.aliyuncs.com/images/cluster-image.tar.gz -O cluster-image.tar.gz && \
+tar -zxvf cluster-image.tar.gz && cp -rf hack/* .
 `
 	return client.CmdAsync(shell)
 }
