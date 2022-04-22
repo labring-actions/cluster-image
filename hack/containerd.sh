@@ -45,7 +45,7 @@ mkdir -p crishim && tar -zxvf image-cri-shim.tar.gz -C crishim
 mv crishim/image-cri-shim rootfs/cri/
 rm -rf image-cri-shim.tar.gz crishim
 # sealctl
-wget https://sealyun-temp.oss-accelerate.aliyuncs.com/sealos/a903d1a8/sealctl-$arch --no-check-certificate -O rootfs/opt/sealctl
+wget https://sealyun-home.oss-accelerate.aliyuncs.com/sealos-4.0/latest/sealctl-$arch --no-check-certificate -O rootfs/opt/sealctl
 # lsof
 wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/lsof-$os-$arch --no-check-certificate -O rootfs/opt/lsof
 # images
@@ -56,11 +56,6 @@ if [ ! -x ./kubeadm ];then
 fi
 ./kubeadm config images list --kubernetes-version $kubeVersion  2>/dev/null>> rootfs/images/shim/DefaultImageList
 rm -rf kubeadm
-if [ ! -x ./sealctl ];then
-  wget https://sealyun-temp.oss-accelerate.aliyuncs.com/sealos/a903d1a8/sealctl-amd64 --no-check-certificate -O sealctl
-  chmod a+x sealctl
-fi
-./sealctl registry pull raw -f rootfs/images/shim/DefaultImageList --arch $arch  --data-dir rootfs/registry
 # Kubefile
 sed -i "s/v0.0.0/v$kubeVersion/g" ./rootfs/Kubefile
 sed -i "s#__lvscare__#$ipvsImage#g" ./rootfs/Kubefile
@@ -68,12 +63,7 @@ sed -i "s#__lvscare__#$ipvsImage#g" ./rootfs/Kubefile
 pauseImage=$(cat ./rootfs/images/shim/DefaultImageList  | grep k8s.gcr.io/pause)
 sed -i "s#__pause__#k8s.gcr.io/${pauseImage##k8s.gcr.io/}#g" ./rootfs/scripts/init.sh
 sed -i "s#__pause__#sealos.hub:5000/${pauseImage##k8s.gcr.io/}#g" ./rootfs/etc/config.toml
-# buildah
-if [ ! -x ./buildah ];then
-  wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah
-  chmod a+x buildah
-fi
 cd rootfs
 chmod  -R 0755  *
-../buildah build -t $repo/oci-kubernetes:$kubeVersion-$arch --arch $arch --os $os -f Kubefile  .
+../sealos build -t $repo/oci-kubernetes:$kubeVersion-$arch --platform $os/$arch -f Kubefile  .
 cd ../ && rm -rf rootfs
