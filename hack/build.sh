@@ -6,10 +6,9 @@ repo=${3:-cuisongliu}
 username=${4:-cuisongliu}
 password=${5:-}
 proxy=${6:-}
-if [ ! -x /usr/bin ];then
-  wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah
-  chmod a+x buildah
-  mv buildah /usr/bin
+if [ ! -x /usr/bin/buildah ];then
+  wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O /usr/bin/buildah
+  chmod a+x /usr/bin/buildah
 fi
 if [ ! -x ./sealos ];then
   wget https://sealyun-home.oss-accelerate.aliyuncs.com/sealos-4.0/latest/sealos-amd64 --no-check-certificate -O sealos
