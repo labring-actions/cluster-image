@@ -1,6 +1,6 @@
 #!/bin/bash
 kubeVersion=${1:-1.22.8}
-containerdVersion=1.5.8
+containerdVersion=1.6.2
 ipvsImage=ghcr.io/sealyun/lvscare:v1.1.3-beta.2
 os=linux
 arch=${2:-amd64}
@@ -27,7 +27,7 @@ wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin
 # registry install
 wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/registry-$arch.tar --no-check-certificate -O rootfs/images/registry.tar
 # cri install
-wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/cri-containerd-cni-$containerdVersion-$os-$arch.tar.gz --no-check-certificate -O cri-containerd-cni-linux.tar.gz
+wget https://github.com/containerd/containerd/releases/download/v$containerdVersion/cri-containerd-cni-$containerdVersion-linux-amd64.tar.gz --no-check-certificate -O cri-containerd-cni-linux.tar.gz
 tar -zxvf  cri-containerd-cni-linux.tar.gz
 rm -rf etc opt && mkdir -p usr/bin
 cp -rf usr/local/bin/* usr/bin/
@@ -40,7 +40,7 @@ tar xf nerdctl.tar.gz
 mv nerdctl rootfs/cri/
 rm -rf nerdctl.tar.gz containerd-rootless*
 # shim install
-wget ${proxy}https://github.com/sealyun-market/image-cri-shim/releases/download/v0.0.7/image-cri-shim_0.0.7_${os}_${arch}.tar.gz -O image-cri-shim.tar.gz
+wget ${proxy}https://github.com/sealyun-market/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_${os}_${arch}.tar.gz -O image-cri-shim.tar.gz
 mkdir -p crishim && tar -zxvf image-cri-shim.tar.gz -C crishim
 mv crishim/image-cri-shim rootfs/cri/
 rm -rf image-cri-shim.tar.gz crishim
