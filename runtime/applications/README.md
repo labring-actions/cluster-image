@@ -1,6 +1,11 @@
 ### ImageList
 
 - registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:1.22.8
+- registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:1.22.9
+- registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:1.21.12
+- registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:1.20.15
+- registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:1.19.16
+- registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:1.18.20
 - registry.cn-hongkong.aliyuncs.com/sealyun/oci-nvidia:1.22.8
 - registry.cn-hongkong.aliyuncs.com/sealyun/oci-calico:v3.22.1
 - registry.cn-hongkong.aliyuncs.com/sealyun/oci-openebs:3.1.0
