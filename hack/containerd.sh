@@ -27,7 +27,7 @@ wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin
 # registry install
 wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/registry-$arch.tar --no-check-certificate -O rootfs/images/registry.tar
 # cri install
-wget https://github.com/containerd/containerd/releases/download/v$containerdVersion/cri-containerd-cni-$containerdVersion-linux-amd64.tar.gz --no-check-certificate -O cri-containerd-cni-linux.tar.gz
+wget https://github.com/containerd/containerd/releases/download/v$containerdVersion/cri-containerd-cni-$containerdVersion-linux-$arch.tar.gz --no-check-certificate -O cri-containerd-cni-linux.tar.gz
 tar -zxvf  cri-containerd-cni-linux.tar.gz
 rm -rf etc opt && mkdir -p usr/bin
 cp -rf usr/local/bin/* usr/bin/
