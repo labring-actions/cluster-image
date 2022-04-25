@@ -1,0 +1,6 @@
+quay.io/strimzi/kafka:0.28.0-kafka-3.1.0
+quay.io/strimzi/kafka:0.28.0-kafka-3.0.0
+quay.io/strimzi/kafka-bridge:0.21.4
+quay.io/strimzi/jmxtrans:0.28.0
+quay.io/strimzi/kaniko-executor:0.28.0
+quay.io/strimzi/maven-builder:0.28.0
