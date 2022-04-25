@@ -1,0 +1,2 @@
+redis:6.2.6-alpine
+quay.io/oliver006/redis_exporter:v1.33.0-alpine
