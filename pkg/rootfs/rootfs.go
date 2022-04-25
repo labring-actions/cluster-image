@@ -85,6 +85,7 @@ func (b *build) createPublicInstance() error {
 	if b.Instances == nil {
 		return errors.New("create public ecs is error")
 	}
+	logger.Info("instances is %v", b.Instances)
 	return nil
 }
 

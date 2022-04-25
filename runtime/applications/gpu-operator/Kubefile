@@ -2,6 +2,6 @@ FROM scratch
 MAINTAINER sealyun
 COPY registry ./registry
 COPY images ./images
-COPY manifests ./manifests
+COPY charts ./charts
 COPY opt ./opt
 CMD ["chmod a+x charts/gpu-operator.sh","sh charts/gpu-operator.sh"]
