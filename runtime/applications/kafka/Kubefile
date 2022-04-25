@@ -1,5 +1,4 @@
 FROM scratch
 COPY manifests ./manifests
 COPY registry ./registry
-COPY images ./images
 CMD ["kubectl apply -f manifests/kafka.yaml"]
