@@ -4,7 +4,7 @@
 
 ```shell
 systemctl stop image-cri-shim.service
-wget https://gh.api.99988866.xyz/https://github.com//sealyun-market/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_linux_amd64.tar.gz
+wget https://gh.api.99988866.xyz/https://github.com//labring/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_linux_amd64.tar.gz
 tar -zxvf image-cri-shim_0.0.8_linux_amd64.tar.gz
 cp image-cri-shim /usr/bin/
 

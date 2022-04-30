@@ -1,7 +1,7 @@
 #!/bin/bash
 kubeVersion=${1:-1.22.8}
 containerdVersion=1.6.2
-ipvsImage=ghcr.io/sealyun/lvscare:v1.1.3-beta.2
+ipvsImage=ghcr.io/labring/lvscare:v1.1.3-beta.2
 os=linux
 arch=${2:-amd64}
 #https://github.91chi.fun//
@@ -40,7 +40,7 @@ tar xf nerdctl.tar.gz
 mv nerdctl rootfs/cri/
 rm -rf nerdctl.tar.gz containerd-rootless*
 # shim install
-wget ${proxy}https://github.com/sealyun-market/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_${os}_${arch}.tar.gz -O image-cri-shim.tar.gz
+wget ${proxy}https://github.com/labring/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_${os}_${arch}.tar.gz -O image-cri-shim.tar.gz
 mkdir -p crishim && tar -zxvf image-cri-shim.tar.gz -C crishim
 mv crishim/image-cri-shim rootfs/cri/
 rm -rf image-cri-shim.tar.gz crishim

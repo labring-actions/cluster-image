@@ -62,7 +62,7 @@ CNI:
   Version: v3.19.1
 HubDomain: sealos.hub
 Images:
-- ghcr.io/sealyun/lvscare:v1.1.3-beta.2
+- ghcr.io/labring/lvscare:v1.1.3-beta.2
 - docker.io/calico/cni:v3.19.1
 - docker.io/calico/pod2daemon-flexvol:v3.19.1
 - docker.io/calico/node:v3.19.1
