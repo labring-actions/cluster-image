@@ -114,6 +114,12 @@ check_cmd(){
     fi
 }
 
+check_file(){
+    if [ -f $* ]; then
+       error The machine $* is not clear. Please clear $* the system.
+    fi
+}
+
 check_root(){
   if [ $UID -ne 0 ];then
       error Not root user. Please run "su root" as root.
