@@ -1,0 +1,4 @@
+FROM scratch
+COPY opt ./opt
+CMD ["cp opt/helm /usr/bin/"]
+ENTRYPOINT ["rm -rf /usr/bin/helm"]
