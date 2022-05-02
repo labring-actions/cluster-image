@@ -8,6 +8,7 @@ LABEL check="check.sh"
 LABEL init-registry="init-registry.sh \$registryPort \$registryData \$registryConfig"
 LABEL clean-registry="clean-registry.sh \$registryData \$registryConfig"
 LABEL auth="auth.sh"
+LABEL sealos.io.type="rootfs"
 ENV criData=/var/lib/containerd
 ENV registryData=/var/lib/registry
 ENV registryConfig=/etc/registry
