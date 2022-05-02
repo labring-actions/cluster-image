@@ -37,6 +37,7 @@ oom_score = 0
           runtime_root = ""
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
             SystemdCgroup = true
+            __options__
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
       [plugins."io.containerd.grpc.v1.cri".registry.configs]

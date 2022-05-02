@@ -1,7 +1,7 @@
 FROM scratch
 MAINTAINER sealyun
+LABEL sealos.io.type="addons"
 COPY cri ./cri
-COPY etc ./etc
 COPY registry ./registry
 COPY scripts ./scripts
 COPY manifests ./manifests

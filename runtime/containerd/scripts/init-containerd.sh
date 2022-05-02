@@ -33,6 +33,7 @@ if ! [ -x /usr/bin/crictl ]; then
   chmod a+x /usr/bin/*
   systemctl enable containerd.service
   cp ../etc/config.toml /etc/containerd
+  sed -i "s#__options__##g" /etc/containerd/config.toml
   sed -i "s/sealos.hub:5000/$registry_domain:$registry_port/g" /etc/containerd/config.toml
   sed -i "s#/var/lib/containerd#$storage#g" /etc/containerd/config.toml
   sed -i "s#__username__#$username#g" /etc/containerd/config.toml

@@ -20,14 +20,14 @@ mkdir -p rootfs
 cp -rf runtime/applications/$application/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
-sh init.sh $version amd64 $prefix
+sh init.sh amd64
 ../sealos build -t $prefix/oci-$application:$version-amd64 --platform linux/amd64 -f Kubefile  .
 cd ../ && rm -rf rootfs
 mkdir -p rootfs
 cp -rf runtime/applications/$application/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
-sh init.sh $version arm64 $prefix
+sh init.sh arm64
 ../sealos build -t $prefix/oci-$application:$version-arm64 --platform linux/arm64 -f Kubefile  .
 
 buildah login --username $username --password $password $domain
