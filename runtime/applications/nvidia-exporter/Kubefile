@@ -1,0 +1,5 @@
+FROM scratch
+MAINTAINER sealyun
+COPY registry ./registry
+COPY manifests ./manifests
+CMD ["kubectl apply -f manifests/dcgm-exporter.yaml","kubectl apply -f manifests/dcgm-monitor.yaml"]

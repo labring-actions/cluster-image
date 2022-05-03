@@ -6,3 +6,4 @@ tar -zxvf helm-v3.8.2-linux-$arch.tar.gz
 chmod a+x linux-$arch/helm
 mv linux-$arch/helm opt/
 echo "download helm success"
+sleep 120
