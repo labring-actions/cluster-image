@@ -16,10 +16,10 @@ jobs:
         with:
           go-version: 1.13
         id: go
-          - name: Check out code into the Go module directory
-            uses: actions/checkout@v1
-          - name: Build
-            run: go env -w GOOS=linux && go env -w GOARCH=amd64 && go env -w  GOPROXY=https://goproxy.io  && go build -o cluster-image -v && chmod a+x cluster-image
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: Build
+        run: go env -w GOOS=linux && go env -w GOARCH=amd64 && go env -w  GOPROXY=https://goproxy.io  && go build -o cluster-image -v && chmod a+x cluster-image
 
       - name: Auto build image
         id: autobuild
