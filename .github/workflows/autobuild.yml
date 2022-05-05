@@ -1,0 +1,36 @@
+name: Auto build image
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  issue_comment:
+    name: Auto build k8s image
+    if: startswith(github.event.comment.body, '/imagebuild_k8s')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Auto build image
+        id: autobuild
+        env:
+          ak: ${{ secrets.AK }}
+          sk: ${{ secrets.SK }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          commentbody="${{github.event.comment.body}}"
+          version=`echo "$commentbody"|cut -d" " -f2`
+          echo "start to build kubernetes:$version"
+          BIN_URL=$(curl -LsSf https://api.github.com/repos/labring/cluster-image/releases/latest | jq -r ".assets[0].browser_download_url")
+          wget -c $BIN_URL -O cluster-image && chmod +x cluster-image
+          export PATH=${PATH}:$(pwd)
+          cluster-image run --ak ${ak} --sk ${sk} --repo-password ${password} --repo-username ${username} --repo ${registry} --k8s-versions $version
+          echo "::set-output name=version::$version"
+      - name: Success Commit
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Image registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:${{ steps.autobuild.outputs.version }} build successfully!

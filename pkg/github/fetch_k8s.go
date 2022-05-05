@@ -21,8 +21,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/labring/cluster-image/pkg/utils/logger"
-	"github.com/labring/cluster-image/pkg/utils/marketctl"
-	"github.com/labring/cluster-image/pkg/vars"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -102,11 +100,11 @@ func fetchTags() []string {
 func fetchSealyunTags() map[string]string {
 	tags := make(map[string]string, 0)
 	var u string
-	if vars.Run.IsArm64 {
-		u = fmt.Sprintf(sealyunArmURL, marketctl.Domain(vars.Run.Release))
-	} else {
-		u = fmt.Sprintf(sealyunAmdURL, marketctl.Domain(vars.Run.Release))
-	}
+	//if vars.Run.IsArm64 {
+	//	u = fmt.Sprintf(sealyunArmURL, marketctl.Domain(vars.Run.Release))
+	//} else {
+	//	u = fmt.Sprintf(sealyunAmdURL, marketctl.Domain(vars.Run.Release))
+	//}
 	var versions sealyunVersion
 	data, _ := getUrl(u)
 	if data != nil {

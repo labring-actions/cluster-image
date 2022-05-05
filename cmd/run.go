@@ -47,7 +47,6 @@ var runCmd = &cobra.Command{
 		}
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		logger.Debug("run param arm64: %v", vars.Run.IsArm64)
 		logger.Debug("run param uploading: %v", vars.Run.Upload)
 		logger.Debug("run param release: %v", vars.Run.Release)
 		logger.Debug("run param k8s-versions: %v", gFetch)
@@ -108,7 +107,6 @@ func init() {
 	runCmd.Flags().StringVar(&vars.Run.AkID, "ak", "", "云厂商的 akId")
 	runCmd.Flags().StringVar(&vars.Run.AkSK, "sk", "", "云厂商的 akSK")
 	runCmd.Flags().StringVar(&vars.Run.DingDing, "dingding", "", "钉钉的Token")
-	runCmd.Flags().BoolVar(&vars.Run.IsArm64, "arm64", false, "是否为arm64")
 
 	runCmd.Flags().StringVar(&vars.Run.RegistryRepo, "repo", "sealyun", "默认仓库")
 	runCmd.Flags().StringVar(&vars.Run.RegistryUsername, "repo-username", "sealyun@1244797166814602", "默认用户名")

@@ -36,7 +36,6 @@ var applicationCmd = &cobra.Command{
 		}
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		logger.Debug("run param arm64: %v", vars.Run.IsArm64)
 		logger.Debug("run param versions: %v", applicationVersion)
 		vars.LoadAKSK()
 		if vars.Run.AkID == "" {
@@ -63,7 +62,6 @@ func init() {
 	rootCmd.AddCommand(applicationCmd)
 	applicationCmd.Flags().StringVar(&vars.Run.AkID, "ak", "", "云厂商的 akId")
 	applicationCmd.Flags().StringVar(&vars.Run.AkSK, "sk", "", "云厂商的 akSK")
-	applicationCmd.Flags().BoolVar(&vars.Run.IsArm64, "arm64", false, "是否为arm64")
 
 	applicationCmd.Flags().StringVar(&vars.Run.RegistryRepo, "repo", "sealyun", "默认仓库")
 	applicationCmd.Flags().StringVar(&vars.Run.RegistryUsername, "repo-username", "sealyun@1244797166814602", "默认用户名")

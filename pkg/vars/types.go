@@ -15,7 +15,6 @@
 package vars
 
 type RunFlags struct {
-	IsArm64          bool
 	DingDing         string
 	AkID             string
 	AkSK             string
