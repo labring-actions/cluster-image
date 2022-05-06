@@ -163,7 +163,7 @@ tar -zxvf cluster-image.tar.gz && cp -rf hack/* .
 func (b *build) kubePackage() error {
 	logger.Info("build kube image")
 	//sh build.sh 1.22.8 registry-vpc.cn-hongkong.aliyuncs.com sealyun sealyun@1244797166814602 xxxx
-	buildFmt := "sh build.sh %s registry-vpc.cn-hongkong.aliyuncs.com %s %s %s"
+	buildFmt := "sh build.sh %s %s %s %s %s"
 	client := b.getSSHClient()
 
 	type ErrorData struct {
@@ -173,7 +173,7 @@ func (b *build) kubePackage() error {
 	var errs []ErrorData
 	for _, version := range b.KubeVersions {
 		logger.Debug("当前build版本: " + version)
-		if err := client.CmdAsync(fmt.Sprintf(buildFmt, version, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword)); err != nil {
+		if err := client.CmdAsync(fmt.Sprintf(buildFmt, version, vars.Run.RegistryDomain, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword)); err != nil {
 			errs = append(errs, ErrorData{
 				Version: version,
 				Error:   err.Error(),
@@ -205,7 +205,7 @@ func (b *build) kubePackage() error {
 
 func (b *build) appPackage() error {
 	logger.Info("build app image")
-	buildFmt := "sh application.sh %s registry-vpc.cn-hongkong.aliyuncs.com %s %s %s %s"
+	buildFmt := "sh application.sh %s %s %s %s %s %s"
 	client := b.getSSHClient()
 
 	type ErrorData struct {
@@ -213,5 +213,5 @@ func (b *build) appPackage() error {
 		Error   string
 	}
 	logger.Debug("当前build版本: " + b.APPVersion)
-	return client.CmdAsync(fmt.Sprintf(buildFmt, b.APPVersion, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword, b.APPType))
+	return client.CmdAsync(fmt.Sprintf(buildFmt, b.APPVersion, vars.Run.RegistryDomain, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword, b.APPType))
 }

@@ -107,7 +107,7 @@ func init() {
 	runCmd.Flags().StringVar(&vars.Run.AkID, "ak", "", "云厂商的 akId")
 	runCmd.Flags().StringVar(&vars.Run.AkSK, "sk", "", "云厂商的 akSK")
 	runCmd.Flags().StringVar(&vars.Run.DingDing, "dingding", "", "钉钉的Token")
-
+	runCmd.Flags().StringVar(&vars.Run.RegistryDomain, "repo-domain", "registry-vpc.cn-hongkong.aliyuncs.com", "默认仓库Domain")
 	runCmd.Flags().StringVar(&vars.Run.RegistryRepo, "repo", "sealyun", "默认仓库")
 	runCmd.Flags().StringVar(&vars.Run.RegistryUsername, "repo-username", "sealyun@1244797166814602", "默认用户名")
 	runCmd.Flags().StringVar(&vars.Run.RegistryPassword, "repo-password", "", "默认密码")

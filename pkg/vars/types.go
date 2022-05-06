@@ -19,6 +19,7 @@ type RunFlags struct {
 	AkID             string
 	AkSK             string
 	RegistryRepo     string
+	RegistryDomain   string
 	RegistryUsername string
 	RegistryPassword string
 	MarketCtlToken   string

@@ -64,6 +64,7 @@ func init() {
 	applicationCmd.Flags().StringVar(&vars.Run.AkSK, "sk", "", "云厂商的 akSK")
 
 	applicationCmd.Flags().StringVar(&vars.Run.RegistryRepo, "repo", "sealyun", "默认仓库")
+	applicationCmd.Flags().StringVar(&vars.Run.RegistryDomain, "repo-domain", "registry-vpc.cn-hongkong.aliyuncs.com", "默认仓库Domain")
 	applicationCmd.Flags().StringVar(&vars.Run.RegistryUsername, "repo-username", "sealyun@1244797166814602", "默认用户名")
 	applicationCmd.Flags().StringVar(&vars.Run.RegistryPassword, "repo-password", "", "默认密码")
 	applicationCmd.Flags().StringVar(&applicationType, "type", "calico", "镜像类型")
