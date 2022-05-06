@@ -34,7 +34,7 @@ jobs:
           version=`echo "$commentbody"|cut -d" " -f2`
           echo "start to build kubernetes:$version"
           export PATH=${PATH}:$(pwd)
-          cluster-image run --ak ${ak} --sk ${sk} --repo-password ${password} --repo-username ${username} --repo ${registry} --k8s-versions $version
+          cluster-image run --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username}/cluster-image --k8s-versions $version
           echo "::set-output name=version::$version"
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
