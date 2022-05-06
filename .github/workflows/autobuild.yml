@@ -41,4 +41,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Image registry.cn-hongkong.aliyuncs.com/sealyun/oci-kubernetes:${{ steps.autobuild.outputs.version }} build successfully!
+            Image ghcr.io/${{ github.repository_owner }}/cluster-image/oci-kubernetes:${{ steps.autobuild.outputs.version }} build successfully!
