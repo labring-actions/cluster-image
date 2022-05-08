@@ -25,11 +25,12 @@ import (
 
 var applicationVersion string
 var applicationType string
+var applicationDir string
 var applicationCmd = &cobra.Command{
 	Use:   "application",
 	Short: "执行打包APP离线包并发布到镜像仓库上",
 	Run: func(cmd *cobra.Command, args []string) {
-		builder := rootfs.NewAppBuild(applicationVersion, applicationType)
+		builder := rootfs.NewAppBuild(applicationVersion, applicationType, applicationDir)
 		if err := builder.Exec(); err != nil {
 			logger.Error("执行发生错误: %s", err.Error())
 			os.Exit(1)
@@ -69,4 +70,6 @@ func init() {
 	applicationCmd.Flags().StringVar(&vars.Run.RegistryPassword, "repo-password", "", "默认密码")
 	applicationCmd.Flags().StringVar(&applicationType, "type", "calico", "镜像类型")
 	applicationCmd.Flags().StringVar(&applicationVersion, "version", "v3.22.1", "镜像版本信息")
+	applicationCmd.Flags().StringVar(&applicationDir, "dir", "default", "镜像目录信息")
+
 }

@@ -42,14 +42,15 @@ type build struct {
 	SSHClient    *sshutil.SSH
 	APPType      string
 	APPVersion   string
+	APPDir       string
 }
 
 func NewBuild(versions []string) Builder {
 	return &build{Type: ecs.HKAmd64, KubeVersions: versions}
 }
 
-func NewAppBuild(version string, appType string) Builder {
-	return &build{Type: ecs.HKAmd64, APPType: appType, APPVersion: version}
+func NewAppBuild(version string, appType string, appDir string) Builder {
+	return &build{Type: ecs.HKAmd64, APPType: appType, APPVersion: version, APPDir: appDir}
 }
 
 func (b *build) Exec() error {
@@ -205,7 +206,7 @@ func (b *build) kubePackage() error {
 
 func (b *build) appPackage() error {
 	logger.Info("build app image")
-	buildFmt := "sh application.sh %s %s %s %s %s %s"
+	buildFmt := "sh application.sh %s %s %s %s %s %s %s"
 	client := b.getSSHClient()
 
 	type ErrorData struct {
@@ -213,5 +214,5 @@ func (b *build) appPackage() error {
 		Error   string
 	}
 	logger.Debug("当前build版本: " + b.APPVersion)
-	return client.CmdAsync(fmt.Sprintf(buildFmt, b.APPVersion, vars.Run.RegistryDomain, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword, b.APPType))
+	return client.CmdAsync(fmt.Sprintf(buildFmt, b.APPVersion, vars.Run.RegistryDomain, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword, b.APPType, b.APPDir))
 }

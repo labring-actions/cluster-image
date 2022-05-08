@@ -5,6 +5,7 @@ repo=${3:-cuisongliu}
 username=${4:-cuisongliu}
 password=${5:-}
 application=${6:-calico}
+dir=${7:-default}
 prefix=$domain/$repo
 
 if [ ! -x /usr/bin/buildah ];then
@@ -17,14 +18,14 @@ if [ ! -x ./sealos ];then
 fi
 
 mkdir -p rootfs
-cp -rf runtime/applications/$application/* rootfs/
+cp -rf runtime/applications/$application/$dir/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
 sh init.sh amd64
 ../sealos build -t $prefix/oci-$application:$version-amd64 --platform linux/amd64 -f Kubefile  .
 cd ../ && rm -rf rootfs
 mkdir -p rootfs
-cp -rf runtime/applications/$application/* rootfs/
+cp -rf runtime/applications/$application/$dir/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
 sh init.sh arm64
