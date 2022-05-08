@@ -37,4 +37,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
-          body: ${{ steps.autobuild.outputs.body }}
+          body: |
+            ```
+            ${{ steps.autobuild.outputs.body }}
+            ```
