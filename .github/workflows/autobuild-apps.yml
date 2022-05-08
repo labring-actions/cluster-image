@@ -41,3 +41,5 @@ jobs:
             ```
             ${{ steps.autobuild.outputs.body }}
             ```
+
+            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-apps.yml)
