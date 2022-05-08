@@ -53,20 +53,31 @@ func NewAppBuild(version string, appType string, appDir string) Builder {
 	return &build{Type: ecs.HKAmd64, APPType: appType, APPVersion: version, APPDir: appDir}
 }
 
+type FuncAndName struct {
+	Name string
+	Func func() error
+}
+
 func (b *build) Exec() error {
-	var pipelines []func() error
-	pipelines = append(pipelines, b.createPublicInstance, b.getPublicInstancePublicIP, b.pingPublicIP, b.initInstall)
+	var pipelines []FuncAndName
+
+	pipelines = append(pipelines,
+		toFunc("createPublicInstance", b.createPublicInstance),
+		toFunc("getPublicInstancePublicIP", b.getPublicInstancePublicIP),
+		toFunc("pingPublicIP", b.pingPublicIP),
+		toFunc("initInstall", b.initInstall))
 	if b.APPType == "" {
-		pipelines = append(pipelines, b.kubePackage)
+		pipelines = append(pipelines, toFunc("kubePackage", b.kubePackage))
 	} else {
-		pipelines = append(pipelines, b.appPackage)
+		pipelines = append(pipelines, toFunc("appPackage", b.appPackage))
 	}
 
-	pipelines = append(pipelines, b.deletePublicInstance)
+	pipelines = append(pipelines, toFunc("deletePublicInstance", b.deletePublicInstance))
 
 	var err error
 	for _, f := range pipelines {
-		if err = f(); err != nil {
+		logger.Info("func %s is running", f.Name)
+		if err = f.Func(); err != nil {
 			logger.Error("exec pipelines error: %s , after 10s delete instance", err)
 			break
 		}
@@ -80,8 +91,14 @@ func (b *build) Exec() error {
 	return err
 }
 
+func toFunc(funcName string, fun func() error) FuncAndName {
+	return FuncAndName{
+		Name: funcName,
+		Func: fun,
+	}
+}
+
 func (b *build) createPublicInstance() error {
-	logger.Info("create public instance")
 	b.Instances = ecs.NewCloud(b.Type).New(1, false, true)
 	if b.Instances == nil {
 		return errors.New("create public ecs is error")
@@ -91,13 +108,11 @@ func (b *build) createPublicInstance() error {
 }
 
 func (b *build) deletePublicInstance() error {
-	logger.Info("delete public instance")
 	ecs.NewCloud(b.Type).Delete(b.Instances, 10)
 	return nil
 }
 
 func (b *build) getPublicInstancePublicIP() error {
-	logger.Info("get public instance public ip")
 	var instanceInfo *ecs.CloudInstanceResponse
 	if err := retry.Do(func() error {
 		var err error
@@ -151,7 +166,6 @@ func (b *build) pingPublicIP() error {
 }
 
 func (b *build) initInstall() error {
-	logger.Info("init public instance install")
 	client := b.getSSHClient()
 	shell := `
 yum install -y wget && \
@@ -162,7 +176,6 @@ tar -zxvf cluster-image.tar.gz && cp -rf hack/* .
 }
 
 func (b *build) kubePackage() error {
-	logger.Info("build kube image")
 	//sh build.sh 1.22.8 registry-vpc.cn-hongkong.aliyuncs.com sealyun sealyun@1244797166814602 xxxx
 	buildFmt := "sh build.sh %s %s %s %s %s"
 	client := b.getSSHClient()
@@ -205,7 +218,6 @@ func (b *build) kubePackage() error {
 }
 
 func (b *build) appPackage() error {
-	logger.Info("build app image")
 	buildFmt := "sh application.sh %s %s %s %s %s %s %s"
 	client := b.getSSHClient()
 

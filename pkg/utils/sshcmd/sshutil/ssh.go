@@ -80,7 +80,8 @@ func readPipe(host string, pipe io.Reader, isErr bool) {
 			if isErr {
 				logger.Error("[%s] %s", host, line)
 			} else {
-				fmt.Println(fmt.Sprintf("%s: %s", host, string(line)))
+				logger.Info(fmt.Sprintf("%s: %s", host, string(line)))
+				//fmt.Println(fmt.Sprintf("%s: %s", host, string(line)))
 			}
 		}
 	}

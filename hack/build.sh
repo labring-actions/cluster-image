@@ -25,3 +25,4 @@ buildah manifest create $prefix/oci-kubernetes:$version
 buildah manifest add $prefix/oci-kubernetes:$version docker://$prefix/oci-kubernetes:$version-amd64
 buildah manifest add $prefix/oci-kubernetes:$version docker://$prefix/oci-kubernetes:$version-arm64
 buildah manifest push --all $prefix/oci-kubernetes:$version docker://$prefix/oci-kubernetes:$version
+echo "script $prefix/oci-kubernetes:$version build successfully!"

@@ -34,11 +34,14 @@ jobs:
           version=`echo "$commentbody"|cut -d" " -f2`
           echo "start to build kubernetes:$version"
           export PATH=${PATH}:$(pwd)
-          cluster-image run --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username} --k8s-versions $version
-          echo "::set-output name=version::$version"
+          cluster-image run --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username} --k8s-versions $version --logger-file output.log
+          body="$(cat output.log)"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo "::set-output name=body::$body"
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
-          body: |
-            Image ghcr.io/${{ github.repository_owner }}/oci-kubernetes:${{ steps.autobuild.outputs.version }} build successfully!
+          body: ${{ steps.get-comment-body.outputs.body }}

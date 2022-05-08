@@ -21,6 +21,7 @@ install-ossutil: ## check license if not exist install go-lint tools
 #xattr -c -r *
 upload-oss: install-ossutil
 	cd hack && xattr -c -r * && cd ../
+	cd runtime && xattr -c -r * && cd ../
 	tar -czvf cluster-image.tar.gz runtime hack
 	$(OSSUTIL_BIN) cp -f cluster-image.tar.gz  oss://sealyun-home/images/cluster-image.tar.gz
 	rm -rf cluster-image.tar.gz

@@ -38,3 +38,4 @@ buildah manifest create $prefix/oci-$application:$version
 buildah manifest add $prefix/oci-$application:$version docker://$prefix/oci-$application:$version-amd64
 buildah manifest add $prefix/oci-$application:$version docker://$prefix/oci-$application:$version-arm64
 buildah manifest push --all $prefix/oci-$application:$version docker://$prefix/oci-$application:$version
+echo "script $prefix/oci-$application:$version build successfully!"

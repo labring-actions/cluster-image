@@ -35,8 +35,8 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.Flags().StringVar(&loggerFile, "logger-file", "", "输出日志的文件路径")
-	rootCmd.Flags().IntVar(&loggerLevel, "logger-level", 5, "输出日志的文件级别，支持3 error, 4 warn, 5 info, 6 debug, 7 trace")
+	rootCmd.PersistentFlags().StringVar(&loggerFile, "logger-file", "", "输出日志的文件路径")
+	rootCmd.PersistentFlags().IntVar(&loggerLevel, "logger-level", 5, "输出日志的文件级别，支持3 error, 4 warn, 5 info, 6 debug, 7 trace")
 }
 
 func initConfig() {

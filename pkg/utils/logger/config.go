@@ -42,7 +42,7 @@ func Cfg(level int, logFIle string) {
 	}
 	cfg, _ := json.Marshal(config)
 	SetLogger(string(cfg))
-	SetLogPath(true)
+	SetLogPath(false)
 }
 
 // "File": {                // 文件日志配置

@@ -35,6 +35,7 @@ var applicationCmd = &cobra.Command{
 			logger.Error("执行发生错误: %s", err.Error())
 			os.Exit(1)
 		}
+		logger.Info("cluster-image build %s %s success", applicationType, applicationVersion)
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
 		logger.Debug("run param versions: %v", applicationVersion)

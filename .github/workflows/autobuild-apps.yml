@@ -1,0 +1,38 @@
+name: Auto build APP image
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  issue_comment:
+    name: Auto build app image
+    if: startswith(github.event.comment.body, '/imagebuild_app')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Auto build image
+        id: autobuild
+        env:
+          ak: ${{ secrets.AK }}
+          sk: ${{ secrets.SK }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.REGISTRY }}
+        run: |
+          DOWNLOAD_URL=$(curl -LsSf https://api.github.com/repos/labring/cluster-image/releases/latest | jq -r ".assets[0].browser_download_url")
+          wget -c $DOWNLOAD_URL -O cluster-image && chmod +x cluster-image
+          export PATH=${PATH}:$(pwd)
+          commentbody="${{github.event.comment.body}}"
+          app=`echo "$commentbody"|cut -d" " -f2`
+          version=`echo "$commentbody"|cut -d" " -f3`
+          subpath=`echo "$commentbody"|cut -d" " -f4`
+
+          echo "::set-output name=version::$version"
+          echo "::set-output name=app::$app"
+      - name: Success Commit
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Image ghcr.io/${{ github.repository_owner }}/oci-${{ steps.autobuild.outputs.app }}:${{ steps.autobuild.outputs.version }} build successfully!
