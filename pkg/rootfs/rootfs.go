@@ -26,6 +26,7 @@ import (
 	"github.com/labring/cluster-image/pkg/utils/sshcmd/sshutil"
 	"github.com/labring/cluster-image/pkg/vars"
 	"os"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -193,6 +194,7 @@ func (b *build) kubePackage() error {
 				Error:   err.Error(),
 			})
 		}
+		logger.Info("script build cluster image %s successfully!", fmt.Sprintf("%s:%s", strings.Join([]string{vars.Run.RegistryDomain, vars.Run.RegistryRepo, "oci-kubernetes"}, "/"), version))
 	}
 	if len(errs) > 0 {
 		t := template.New("output")
@@ -226,5 +228,9 @@ func (b *build) appPackage() error {
 		Error   string
 	}
 	logger.Debug("当前build版本: " + b.APPVersion)
-	return client.CmdAsync(fmt.Sprintf(buildFmt, b.APPVersion, vars.Run.RegistryDomain, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword, b.APPType, b.APPDir))
+	if err := client.CmdAsync(fmt.Sprintf(buildFmt, b.APPVersion, vars.Run.RegistryDomain, vars.Run.RegistryRepo, vars.Run.RegistryUsername, vars.Run.RegistryPassword, b.APPType, b.APPDir)); err != nil {
+		return err
+	}
+	logger.Info("script build cluster image %s successfully!", fmt.Sprintf("%s:%s", strings.Join([]string{vars.Run.RegistryDomain, vars.Run.RegistryRepo, "oci-" + b.APPType}, "/"), b.APPVersion))
+	return nil
 }
