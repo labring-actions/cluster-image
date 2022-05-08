@@ -27,7 +27,7 @@ jobs:
           app=`echo "$commentbody"|cut -d" " -f2`
           version=`echo "$commentbody"|cut -d" " -f3`
           subpath=`echo "$commentbody"|cut -d" " -f4`
-          cluster-image application --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username} --type ${app}  --version ${version} --dir ${subpath} --logger-file app.log
+          cluster-image application --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username} --type ${app}  --version ${version} --dir ${subpath} --logger-file $(pwd)/app.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
