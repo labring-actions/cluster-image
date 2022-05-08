@@ -16,16 +16,11 @@ package cmd
 
 import (
 	"github.com/labring/cluster-image/pkg/ecs"
-	"github.com/labring/cluster-image/pkg/github"
 	"github.com/labring/cluster-image/pkg/rootfs"
 	"github.com/labring/cluster-image/pkg/utils/logger"
-	"github.com/labring/cluster-image/pkg/utils/marketctl"
-	"github.com/labring/cluster-image/pkg/utils/retry"
 	"github.com/labring/cluster-image/pkg/vars"
-	"os"
-	"time"
-
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var gFetch []string
@@ -44,11 +39,10 @@ var runCmd = &cobra.Command{
 				logger.Error("执行发生错误: %s", err.Error())
 				os.Exit(1)
 			}
+			logger.Info("cluster-image build kubernetes %v success", gFetch)
 		}
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		logger.Debug("run param uploading: %v", vars.Run.Upload)
-		logger.Debug("run param release: %v", vars.Run.Release)
 		logger.Debug("run param k8s-versions: %v", gFetch)
 		vars.LoadAKSK()
 		if vars.Run.AkID == "" {
@@ -73,32 +67,6 @@ var runCmd = &cobra.Command{
 			logger.Warn("钉钉的Token为空,无法自动通知")
 		}
 
-		if vars.Run.Upload {
-			if vars.Run.MarketCtlToken == "" {
-				logger.Fatal("MarketCtl的Token为空无法上传离线包")
-				cmd.Help()
-				os.Exit(0)
-			}
-			if err := retry.Do(func() error {
-				err := marketctl.Healthy(vars.Run.Release)
-				if err != nil {
-					return err
-				}
-				if len(gFetch) == 0 {
-					gf, err := github.Fetch()
-					if err != nil {
-						return err
-					}
-					gFetch = gf
-				}
-				return nil
-			}, 25, 1*time.Second, false); err != nil {
-				logger.Fatal("Sealyun的状态监测失败: " + err.Error())
-				cmd.Help()
-				os.Exit(0)
-			}
-		}
-
 	},
 }
 
@@ -112,8 +80,6 @@ func init() {
 	runCmd.Flags().StringVar(&vars.Run.RegistryUsername, "repo-username", "sealyun@1244797166814602", "默认用户名")
 	runCmd.Flags().StringVar(&vars.Run.RegistryPassword, "repo-password", "", "默认密码")
 
-	runCmd.Flags().BoolVar(&vars.Run.Upload, "uploading", false, "是否上传到sealyun")
-	runCmd.Flags().BoolVar(&vars.Run.Release, "release", false, "是否上sealyun生产环境,如为false上传sealyun测试环境")
 	runCmd.Flags().StringVar(&vars.Run.MarketCtlToken, "marketctl", "", "marketctl的token")
 	runCmd.Flags().StringSliceVar(&gFetch, "k8s-versions", gFetch, "需要拉取的版本信息，如果为空则获取github当前一个月内有效版本")
 }

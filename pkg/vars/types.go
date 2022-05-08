@@ -23,6 +23,4 @@ type RunFlags struct {
 	RegistryUsername string
 	RegistryPassword string
 	MarketCtlToken   string
-	Release          bool
-	Upload           bool
 }
