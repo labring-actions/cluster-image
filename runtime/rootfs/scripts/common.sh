@@ -110,13 +110,13 @@ command_exists() {
 check_cmd(){
     which $*
     if [ $? -eq 0 ]; then
-       error The machine $* is not clear. Please clear $* the system.
+       error The machine $* is not clean. Please clean $* the system.
     fi
 }
 
 check_file(){
     if [ -f $* ]; then
-       error The machine $* is not clear. Please clear $* the system.
+       error The machine $* is not clean. Please clean $* the system.
     fi
 }
 
