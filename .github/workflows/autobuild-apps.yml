@@ -6,7 +6,7 @@ on:
 jobs:
   issue_comment:
     name: Auto build app image
-    if: startswith(github.event.comment.body, '/imagebuild_app')
+    if: startswith(github.event.comment.body, '/imagebuild_apps')
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -24,9 +24,9 @@ jobs:
           wget -c $DOWNLOAD_URL -O cluster-image && chmod +x cluster-image
           export PATH=${PATH}:$(pwd)
           commentbody="${{github.event.comment.body}}"
-          app=`echo "$commentbody"|cut -d" " -f2`
-          version=`echo "$commentbody"|cut -d" " -f3`
-          subpath=`echo "$commentbody"|cut -d" " -f4`
+          app=`echo "$commentbody"| awk '{print $2}'`
+          version=`echo "$commentbody"| awk '{print $3}'`
+          subpath=`echo "$commentbody"| awk '{print $4}'`
           cluster-image application --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username} --type ${app}  --version ${version} --dir ${subpath} --logger-file output.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
