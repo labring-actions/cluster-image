@@ -18,12 +18,6 @@ source common.sh
 
 check_root
 check_port
-check_cmd containerd
-check_file /run/containerd/containerd.sock
-check_cmd crictl
 check_cmd docker
 check_file /var/run/docker.sock
-check_cmd kubelet
-check_cmd kubectl
-check_cmd kubeadm
-logger "check root,port,cri,kube success"
+logger "check root,port,cri success"
