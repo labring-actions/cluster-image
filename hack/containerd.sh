@@ -50,7 +50,7 @@ wget https://sealyun-home.oss-accelerate.aliyuncs.com/sealos-4.0/latest/sealctl-
 wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/lsof-$os-$arch --no-check-certificate -O rootfs/opt/lsof
 # images
 echo "$ipvsImage" >  rootfs/images/shim/DefaultImageList
-if [ ! -x ./kubeadm ];then
+if [ ! -f ./kubeadm ];then
   wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin/linux/amd64/kubeadm
   chmod a+x kubeadm
 fi

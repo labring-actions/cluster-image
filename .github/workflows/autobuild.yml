@@ -29,12 +29,20 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
+          sealos: 4.0.0-alpha.11
         run: |
           commentbody="${{github.event.comment.body}}"
           version=`echo "$commentbody"|cut -d" " -f2`
-          echo "start to build kubernetes:$version"
-          export PATH=${PATH}:$(pwd)
-          cluster-image run --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username} --k8s-versions $version --logger-file output.log
+          echo "version: $version"
+          wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${sealos}_linux_amd64.tar.gz
+          tar -zxvf sealos_${sealos}_linux_amd64.tar.gz
+          chmod a+x sealos
+          sudo mv sealos /usr/bin/
+          wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah
+          chmod a+x buildah
+          sudo mv buildah /usr/bin/
+          cp -rf hack/* .
+          sudo sh build.sh $version $registry $username $username $password > output.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
