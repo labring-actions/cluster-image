@@ -47,12 +47,12 @@ jobs:
           sudo sealos build -t $registry/$username/$app:$version-amd64 --platform linux/amd64  -f $filename .  >  ../output.log && cd ../
           cd $subpath-arm64 && sh init.sh arm64
           sudo sealos build -t $registry/$username/$app:$version-arm64 --platform linux/arm64  -f $filename .  >> ../output.log && cd ../
-          sudo buildah push $registry/$username/$app:$version-amd64
-          sudo buildah push $registry/$username/$app:$version-arm64
-          sudo buildah manifest create $registry/$username/$app:$version
-          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-amd64
-          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-arm64
-          sudo buildah manifest push --all $registry/$username/$app:$version docker://$registry/$username/$app:$version
+          sudo buildah push $registry/$username/$app:$version-amd64  >> output.log
+          sudo buildah push $registry/$username/$app:$version-arm64  >> output.log
+          sudo buildah manifest create $registry/$username/$app:$version  >> output.log
+          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-amd64  >> output.log
+          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-arm64  >> output.log
+          sudo buildah manifest push --all $registry/$username/$app:$version docker://$registry/$username/$app:$version >> output.log
           echo "sealos push $registry/$username/$app:$version success"
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
