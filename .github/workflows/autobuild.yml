@@ -11,16 +11,10 @@ jobs:
     permissions:
       issues: write
     steps:
-      - name: Set up Go 1.13
-        uses: actions/setup-go@v1
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          go-version: 1.13
-        id: go
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
-      - name: Build
-        run: go env -w GOOS=linux && go env -w GOARCH=amd64 && go env -w  GOPROXY=https://goproxy.io  && go build -o cluster-image -v && chmod a+x cluster-image
-
+          token: ${{ secrets.TOKEN }}
       - name: Auto build image
         id: autobuild
         env:
