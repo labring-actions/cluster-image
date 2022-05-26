@@ -6,7 +6,7 @@ on:
 jobs:
   issue_comment:
     name: Auto build config image
-    if: startswith(github.event.comment.body, '/imagebuild_config')
+    if: startswith(github.event.comment.body, '/imagebuild_configs')
     runs-on: ubuntu-latest
     permissions:
       issues: write
