@@ -19,10 +19,10 @@ prefix=$domain/$repo
 sh containerd.sh $version amd64 $prefix $proxy
 sh containerd.sh $version arm64 $prefix $proxy
 buildah login --username $username --password $password $domain
-buildah push $prefix/oci-kubernetes:$version-amd64
-buildah push $prefix/oci-kubernetes:$version-arm64
-buildah manifest create $prefix/oci-kubernetes:$version
-buildah manifest add $prefix/oci-kubernetes:$version docker://$prefix/oci-kubernetes:$version-amd64
-buildah manifest add $prefix/oci-kubernetes:$version docker://$prefix/oci-kubernetes:$version-arm64
-buildah manifest push --all $prefix/oci-kubernetes:$version docker://$prefix/oci-kubernetes:$version
-echo "script $prefix/oci-kubernetes:$version build successfully!"
+buildah push $prefix/kubernetes:$version-amd64
+buildah push $prefix/kubernetes:$version-arm64
+buildah manifest create $prefix/kubernetes:$version
+buildah manifest add $prefix/kubernetes:$version docker://$prefix/kubernetes:$version-amd64
+buildah manifest add $prefix/kubernetes:$version docker://$prefix/kubernetes:$version-arm64
+buildah manifest push --all $prefix/kubernetes:$version docker://$prefix/kubernetes:$version
+echo "script $prefix/kubernetes:$version build successfully!"

@@ -22,20 +22,20 @@ cp -rf runtime/applications/$application/$dir/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
 sh init.sh amd64
-../sealos build -t $prefix/oci-$application:$version-amd64 --platform linux/amd64 -f Kubefile  .
+../sealos build -t $prefix/$application:$version-amd64 --platform linux/amd64 -f Kubefile  .
 cd ../ && rm -rf rootfs
 mkdir -p rootfs
 cp -rf runtime/applications/$application/$dir/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
 sh init.sh arm64
-../sealos build -t $prefix/oci-$application:$version-arm64 --platform linux/arm64 -f Kubefile  .
+../sealos build -t $prefix/$application:$version-arm64 --platform linux/arm64 -f Kubefile  .
 
 buildah login --username $username --password $password $domain
-buildah push $prefix/oci-$application:$version-amd64
-buildah push $prefix/oci-$application:$version-arm64
-buildah manifest create $prefix/oci-$application:$version
-buildah manifest add $prefix/oci-$application:$version docker://$prefix/oci-$application:$version-amd64
-buildah manifest add $prefix/oci-$application:$version docker://$prefix/oci-$application:$version-arm64
-buildah manifest push --all $prefix/oci-$application:$version docker://$prefix/oci-$application:$version
-echo "script $prefix/oci-$application:$version build successfully!"
+buildah push $prefix/$application:$version-amd64
+buildah push $prefix/$application:$version-arm64
+buildah manifest create $prefix/$application:$version
+buildah manifest add $prefix/$application:$version docker://$prefix/$application:$version-amd64
+buildah manifest add $prefix/$application:$version docker://$prefix/$application:$version-arm64
+buildah manifest push --all $prefix/$application:$version docker://$prefix/$application:$version
+echo "script $prefix/$application:$version build successfully!"

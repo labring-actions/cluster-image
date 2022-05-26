@@ -1,0 +1,61 @@
+name: Auto build config image
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  issue_comment:
+    name: Auto build config image
+    if: startswith(github.event.comment.body, '/imagebuild_config')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+      - name: Auto build image
+        id: autobuild
+        env:
+          ak: ${{ secrets.AK }}
+          sk: ${{ secrets.SK }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.REGISTRY }}
+          sealos: 4.0.0-alpha.11
+        run: |
+          commentbody="${{github.event.comment.body}}"
+          app=`echo "$commentbody"| awk '{print $2}'`
+          version=`echo "$commentbody"| awk '{print $3}'`
+          subpath=`echo "$commentbody"| awk '{print $4}'`
+          wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${sealos}_linux_amd64.tar.gz
+          tar -zxvf sealos_${sealos}_linux_amd64.tar.gz
+          chmod a+x sealos
+          sudo mv sealos /usr/bin/
+          wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah && chmod a+x buildah
+          sudo mv buildah /usr/bin/
+          cd runtime/config/$subpath/$app
+          filename=Kubefile
+          if  [ -f Dockerfile ]; then
+            filename=Dockerfile
+          fi
+          sudo sealos login $registry -u $username -p $password
+          sudo sealos build -t $registry/$username/$app:$version -f $filename .  > output.log
+          sudo sealos push $registry/$username/$app:$version >> output.log
+          echo "sealos push $registry/$username/$app:$version success"
+          body="$(cat output.log)"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo "::set-output name=body::$body"
+      - name: Success Commit
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ```
+            ${{ steps.autobuild.outputs.body }}
+            ```
+
+            detail log please view [autobuild-configs](https://github.com/labring/cluster-image/actions/workflows/autobuild-configs.yml)
