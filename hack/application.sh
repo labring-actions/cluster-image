@@ -12,24 +12,24 @@ if [ ! -x /usr/bin/buildah ];then
   wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O /usr/bin/buildah
   chmod a+x /usr/bin/buildah
 fi
-if [ ! -x ./sealos ];then
-  wget https://sealyun-home.oss-accelerate.aliyuncs.com/sealos-4.0/latest/sealos-amd64 --no-check-certificate -O sealos
-  chmod a+x sealos
-fi
 
 mkdir -p rootfs
 cp -rf runtime/applications/$application/$dir/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
+filename=Kubefile
+if  [ -f Dockerfile ]; then
+  filename=Dockerfile
+fi
 sh init.sh amd64
-../sealos build -t $prefix/$application:$version-amd64 --platform linux/amd64 -f Kubefile  .
+sealos build -t $prefix/$application:$version-amd64 --platform linux/amd64 -f $filename  .
 cd ../ && rm -rf rootfs
 mkdir -p rootfs
 cp -rf runtime/applications/$application/$dir/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
 sh init.sh arm64
-../sealos build -t $prefix/$application:$version-arm64 --platform linux/arm64 -f Kubefile  .
+sealos build -t $prefix/$application:$version-arm64 --platform linux/arm64 -f $filename  .
 
 buildah login --username $username --password $password $domain
 buildah push $prefix/$application:$version-amd64

@@ -33,27 +33,8 @@ jobs:
           tar -zxvf sealos_${sealos}_linux_amd64.tar.gz
           chmod a+x sealos
           sudo mv sealos /usr/bin/
-          wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah && chmod a+x buildah
-          sudo mv buildah /usr/bin/
-          cd runtime/applications/$app
-          filename=Kubefile
-          if  [ -f Dockerfile ]; then
-            filename=Dockerfile
-          fi
-          sudo sealos login $registry -u $username -p $password
-          cp -rf $subpath $subpath-amd64
-          cp -rf $subpath $subpath-arm64
-          cd $subpath-amd64 && sh init.sh amd64
-          sudo sealos build -t $registry/$username/$app:$version-amd64 --platform linux/amd64  -f $filename .  >  ../output.log && cd ../
-          cd $subpath-arm64 && sh init.sh arm64
-          sudo sealos build -t $registry/$username/$app:$version-arm64 --platform linux/arm64  -f $filename .  >> ../output.log && cd ../
-          sudo buildah push $registry/$username/$app:$version-amd64  >> output.log
-          sudo buildah push $registry/$username/$app:$version-arm64  >> output.log
-          sudo buildah manifest create $registry/$username/$app:$version  >> output.log
-          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-amd64  >> output.log
-          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-arm64  >> output.log
-          sudo buildah manifest push --all $registry/$username/$app:$version docker://$registry/$username/$app:$version >> output.log
-          echo "sealos push $registry/$username/$app:$version success"
+          cp -rf hack/* .
+          sh application.sh $version $registry $username $password $app $subpath > output.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
