@@ -20,14 +20,35 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
         run: |
-          DOWNLOAD_URL=$(curl -LsSf https://api.github.com/repos/labring/cluster-image/releases/latest | jq -r ".assets[0].browser_download_url")
-          wget -c $DOWNLOAD_URL -O cluster-image && chmod +x cluster-image
-          export PATH=${PATH}:$(pwd)
           commentbody="${{github.event.comment.body}}"
           app=`echo "$commentbody"| awk '{print $2}'`
           version=`echo "$commentbody"| awk '{print $3}'`
           subpath=`echo "$commentbody"| awk '{print $4}'`
-          cluster-image application --ak ${ak} --sk ${sk} --repo-domain ${registry} --repo-password ${password} --repo-username ${username} --repo ${username} --type ${app}  --version ${version} --dir ${subpath} --logger-file output.log
+          wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${sealos}_linux_amd64.tar.gz
+          tar -zxvf sealos_${sealos}_linux_amd64.tar.gz
+          chmod a+x sealos
+          sudo mv sealos /usr/bin/
+          wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah && chmod a+x buildah
+          sudo mv buildah /usr/bin/
+          cd runtime/config/$app
+          filename=Kubefile
+          if  [ -f Dockerfile ]; then
+            filename=Dockerfile
+          fi
+          sudo sealos login $registry -u $username -p $password
+          cp -rf $subpath $subpath-amd64
+          cp -rf $subpath $subpath-arm64
+          cd $subpath-amd64 && sh init.sh amd64
+          sudo sealos build -t $registry/$username/$app:$version-amd64 --platform linux/amd64  -f $filename .  >  ../output.log && cd ../
+          cd $subpath-arm64 && sh init.sh arm64
+          sudo sealos build -t $registry/$username/$app:$version-arm64 --platform linux/arm64  -f $filename .  >> ../output.log && cd ../
+          sudo buildah push $registry/$username/$app:$version-amd64
+          sudo buildah push $registry/$username/$app:$version-arm64
+          sudo buildah manifest create $registry/$username/$app:$version
+          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-amd64
+          sudo buildah manifest add $registry/$username/$app:$version docker://$registry/$username/$app:$version-arm64
+          sudo buildah manifest push --all $registry/$username/$app:$version docker://$registry/$username/$app:$version
+          echo "sealos push $registry/$username/$app:$version success"
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
