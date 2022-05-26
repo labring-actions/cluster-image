@@ -19,7 +19,7 @@ ls -l  rootfs/bin/
 cp -rf library/lib64/  rootfs/cri/lib64/lib
 ls -l rootfs/cri/lib64/lib
 rm -rf library
-cd rootfs/cri/lib64 && tar -czvf containerd-lib.tar.gz lib && rm -rf lib && cd ../../../
+cd rootfs/cri/lib64 && tar -czf containerd-lib.tar.gz lib && rm -rf lib && cd ../../../
 #kube install
 wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin/$os/$arch/kubectl -O rootfs/bin/kubectl
 wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin/$os/$arch/kubelet -O rootfs/bin/kubelet
@@ -28,11 +28,11 @@ wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin
 wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/registry-$arch.tar --no-check-certificate -O rootfs/images/registry.tar
 # cri install
 wget https://github.com/containerd/containerd/releases/download/v$containerdVersion/cri-containerd-cni-$containerdVersion-linux-$arch.tar.gz --no-check-certificate -O cri-containerd-cni-linux.tar.gz
-tar -zxvf  cri-containerd-cni-linux.tar.gz
+tar -zxf  cri-containerd-cni-linux.tar.gz
 rm -rf etc opt && mkdir -p usr/bin
 cp -rf usr/local/bin/* usr/bin/
 cp -rf usr/local/sbin/* usr/bin/ && rm -rf usr/bin/critest && rm -rf cri-containerd-cni-$os.tar.gz usr/local
-tar -czvf cri-containerd-linux.tar.gz usr && rm -rf usr
+tar -czf cri-containerd-linux.tar.gz usr && rm -rf usr
 mv cri-containerd-linux.tar.gz rootfs/cri/
 # nerdctl install
 wget ${proxy}https://github.com/containerd/nerdctl/releases/download/v0.16.0/nerdctl-0.16.0-$os-$arch.tar.gz -O  nerdctl.tar.gz
@@ -41,7 +41,7 @@ mv nerdctl rootfs/cri/
 rm -rf nerdctl.tar.gz containerd-rootless*
 # shim install
 wget ${proxy}https://github.com/labring/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_${os}_${arch}.tar.gz -O image-cri-shim.tar.gz
-mkdir -p crishim && tar -zxvf image-cri-shim.tar.gz -C crishim
+mkdir -p crishim && tar -zxf image-cri-shim.tar.gz -C crishim
 mv crishim/image-cri-shim rootfs/cri/
 rm -rf image-cri-shim.tar.gz crishim
 # sealctl
