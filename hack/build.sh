@@ -6,10 +6,6 @@ repo=${3:-cuisongliu}
 username=${4:-cuisongliu}
 password=${5:-}
 proxy=${6:-}
-if [ ! -f /usr/bin/buildah ];then
-  wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O /usr/bin/buildah
-  chmod a+x /usr/bin/buildah
-fi
 prefix=$domain/$repo
 sh containerd.sh $version amd64 $prefix $proxy
 sh containerd.sh $version arm64 $prefix $proxy

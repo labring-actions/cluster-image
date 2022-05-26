@@ -7,12 +7,6 @@ password=${5:-}
 application=${6:-calico}
 dir=${7:-default}
 prefix=$domain/$repo
-
-if [ ! -f /usr/bin/buildah ];then
-  wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O /usr/bin/buildah
-  chmod a+x /usr/bin/buildah
-fi
-
 mkdir -p rootfs
 cp -rf runtime/applications/$application/$dir/* rootfs/
 # shellcheck disable=SC2164

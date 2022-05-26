@@ -36,6 +36,8 @@ jobs:
           tar -zxvf sealos_${sealos}_linux_amd64.tar.gz
           chmod a+x sealos
           sudo mv sealos /usr/bin/
+          wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O /usr/bin/buildah
+          chmod a+x /usr/bin/buildah
           cp -rf hack/* .
           sudo sh application.sh $version $registry $username $username $password $app $subpath > output.log
           body="$(cat output.log)"
