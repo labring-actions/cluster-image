@@ -8,7 +8,7 @@ application=${6:-calico}
 dir=${7:-default}
 prefix=$domain/$repo
 
-if [ ! -x /usr/bin/buildah ];then
+if [ ! -f /usr/bin/buildah ];then
   wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O /usr/bin/buildah
   chmod a+x /usr/bin/buildah
 fi
