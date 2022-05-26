@@ -35,7 +35,7 @@ jobs:
           sudo mv sealos /usr/bin/
           wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah && chmod a+x buildah
           sudo mv buildah /usr/bin/
-          cd runtime/config/$app
+          cd runtime/applications/$app
           filename=Kubefile
           if  [ -f Dockerfile ]; then
             filename=Dockerfile
