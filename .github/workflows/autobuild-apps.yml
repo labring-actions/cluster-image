@@ -23,6 +23,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
+          sealos: 4.0.0-alpha.11
         run: |
           commentbody="${{github.event.comment.body}}"
           app=`echo "$commentbody"| awk '{print $2}'`
