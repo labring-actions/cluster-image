@@ -29,12 +29,15 @@ jobs:
           app=`echo "$commentbody"| awk '{print $2}'`
           version=`echo "$commentbody"| awk '{print $3}'`
           subpath=`echo "$commentbody"| awk '{print $4}'`
+          echo "app: $app"
+          echo "version: $version"
+          echo "subpath: $subpath"
           wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${sealos}_linux_amd64.tar.gz
           tar -zxvf sealos_${sealos}_linux_amd64.tar.gz
           chmod a+x sealos
           sudo mv sealos /usr/bin/
           cp -rf hack/* .
-          sh application.sh $version $registry $username $password $app $subpath > output.log
+          sudo sh application.sh $version $registry $username $username $password $app $subpath > output.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
