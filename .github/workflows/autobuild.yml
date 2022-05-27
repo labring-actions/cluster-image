@@ -42,7 +42,7 @@ jobs:
           cp -rf hack/* .
           sudo sh build.sh $version $registry $username $username $password > output.log
           sudo sh build.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password
-          echo "script $aliyun_registry/$aliyun_repo/kubernetes:$version build successfully!"
+          echo "script $aliyun_registry/$aliyun_repo/kubernetes:$version build successfully!" >> output.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
