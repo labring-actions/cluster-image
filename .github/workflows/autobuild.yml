@@ -24,6 +24,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           sealos: 4.0.0-alpha.11
+          aliyun_registry: registry.cn-hongkong.aliyuncs.com
+          aliyun_username: ${{ secrets.ALIY_REGISTRY_NAME }}
+          aliyun_repo: sealyun
+          aliyun_password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
         run: |
           commentbody="${{github.event.comment.body}}"
           version=`echo "$commentbody"|cut -d" " -f2`
@@ -37,6 +41,8 @@ jobs:
           sudo mv buildah /usr/bin/
           cp -rf hack/* .
           sudo sh build.sh $version $registry $username $username $password > output.log
+          sudo sh build.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password
+          echo "script $aliyun_registry/$aliyun_repo/kubernetes:$version build successfully!"
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
