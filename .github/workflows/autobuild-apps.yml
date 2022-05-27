@@ -45,6 +45,9 @@ jobs:
           sudo mv buildah /usr/bin/
           cp -rf hack/* .
           sudo sh application.sh $version $registry $username $username $password $app $subpath > output.log
+          sudo sh application.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password $app $subpath
+          echo "sealos push $aliyun_registry/$aliyun_repo/$app:$version success" >> output.log
+
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"

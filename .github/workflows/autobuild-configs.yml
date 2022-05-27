@@ -47,7 +47,13 @@ jobs:
           sudo sealos login $registry -u $username -p $password
           sudo sealos build -t $registry/$username/$app:$version -f $filename .  > output.log
           sudo sealos push $registry/$username/$app:$version >> output.log
-          echo "sealos push $registry/$username/$app:$version success"
+          echo "sealos push $registry/$username/$app:$version success" >> output.log
+
+          sudo sealos login $aliyun_registry -u $aliyun_username -p $aliyun_password
+          sudo sealos build -t $aliyun_registry/$aliyun_repo/$app:$version -f $filename .  > output.log
+          sudo sealos push $aliyun_registry/$aliyun_repo/$app:$version >> output.log
+          echo "sealos push $aliyun_registry/$aliyun_repo/$app:$version success" >> output.log
+
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
