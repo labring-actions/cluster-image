@@ -5,10 +5,9 @@ repo=${3:-cuisongliu}
 username=${4:-cuisongliu}
 password=${5:-}
 application=${6:-calico}
-dir=${7:-default}
 prefix=$domain/$repo
 mkdir -p rootfs
-cp -rf runtime/applications/$application/$dir/* rootfs/
+cp -rf runtime/applications/$application/$version/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
 filename=Kubefile
@@ -19,7 +18,7 @@ sh init.sh amd64
 sealos build -t $prefix/$application:$version-amd64 --platform linux/amd64 -f $filename  .
 cd ../ && rm -rf rootfs
 mkdir -p rootfs
-cp -rf runtime/applications/$application/$dir/* rootfs/
+cp -rf runtime/applications/$application/$version/* rootfs/
 # shellcheck disable=SC2164
 cd rootfs
 sh init.sh arm64

@@ -1,0 +1,2 @@
+docker.io/library/redis:5.0-alpine
+quay.io/spotahome/redis-operator:v1.1.0-rc.1

@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm install redis-operator redis-operator","kubectl apply -f manifests/redis-operator-basic.yaml"]

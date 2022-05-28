@@ -1,4 +1,0 @@
-FROM scratch
-COPY manifests ./manifests
-COPY registry ./registry
-CMD ["kubectl apply -f manifests/mysql-bundle.yaml","kubectl apply -f manifests/mysql-cr.yaml"]

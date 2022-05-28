@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["kubectl apply -f manifests/openebs-operator.yaml", "kubectl apply -f manifests/host-path-sc.yaml"]

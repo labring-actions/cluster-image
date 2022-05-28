@@ -1,0 +1,9 @@
+docker.io/grafana/grafana:8.4.6
+k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1
+k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.4.1
+quay.io/kiwigrid/k8s-sidecar:1.15.6
+quay.io/prometheus-operator/prometheus-config-reloader:v0.56.0
+quay.io/prometheus-operator/prometheus-operator:v0.56.0
+quay.io/prometheus/alertmanager:v0.24.0
+quay.io/prometheus/node-exporter:v1.3.1
+quay.io/prometheus/prometheus:v2.35.0

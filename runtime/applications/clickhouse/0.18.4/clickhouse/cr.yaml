@@ -1,0 +1,67 @@
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: "pv-log"
+spec:
+  configuration:
+    settings:
+      http_port: 8123
+      tcp_port: 9000
+      interserver_http_port: 9009
+    users:
+      default/networks/ip: "0.0.0.0/0"
+      default/password: qwerty
+      default/profile: default
+    clusters:
+      - name: "deployment-pv"
+        # Templates are specified for this cluster explicitly
+        templates:
+          clusterServiceTemplate: svc-template
+          podTemplate: pod-template-with-volumes
+        layout:
+          shardsCount: 1
+          replicasCount: 0
+
+  templates:
+    serviceTemplates:
+      - name: svc-template
+        generateName: "clickhouse-{chi}"
+        spec:
+          ports:
+            - name: http
+              port: 8123
+            - name: tcp
+              port: 9000
+          type: ClusterIP
+    podTemplates:
+      - name: pod-template-with-volumes
+        spec:
+#           volumes:
+#             - name: localtime
+#               hostPath:
+#                 path: /etc/localtime
+          containers:
+            - name: clickhouse
+              image: docker.io/fanux/clickhouse-server:22.3
+              volumeMounts:
+                - name: data-storage-vc-template
+                  mountPath: /var/lib/clickhouse
+                - name: log-storage-vc-template
+                  mountPath: /var/log/clickhouse-server
+#                 - mountPath: /etc/localtime
+#                   name: localtime
+    volumeClaimTemplates:
+      - name: data-storage-vc-template
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 3Gi
+      - name: log-storage-vc-template
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 2Gi

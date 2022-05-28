@@ -1,0 +1,5 @@
+docker.io/openebs/node-disk-exporter:1.9.0
+docker.io/openebs/node-disk-manager:1.9.0
+docker.io/openebs/node-disk-operator:1.9.0
+docker.io/openebs/provisioner-localpv:3.2.0
+docker.io/openebs/linux-utils:3.2.0
