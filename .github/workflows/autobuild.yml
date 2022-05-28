@@ -22,7 +22,7 @@ jobs:
           sk: ${{ secrets.SK }}
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.REGISTRY }}
+          password: ${{ secrets.GITHUB_TOKEN }}
           sealos: 4.0.0-alpha.11
           aliyun_registry: registry.cn-qingdao.aliyuncs.com
           aliyun_username: ${{ secrets.ALIY_REGISTRY_NAME }}
