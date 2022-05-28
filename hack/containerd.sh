@@ -65,5 +65,5 @@ sed -i "s#__pause__#k8s.gcr.io/${pauseImage##k8s.gcr.io/}#g" ./rootfs/scripts/in
 sed -i "s#__pause__#sealos.hub:5000/${pauseImage##k8s.gcr.io/}#g" ./rootfs/etc/config.toml
 cd rootfs
 chmod  -R 0755  *
-sealos build -t $repo/kubernetes:$kubeVersion-$arch --platform $os/$arch -f Kubefile  .
+sealos build -t $repo/kubernetes:v$kubeVersion-$arch --platform $os/$arch -f Kubefile  .
 cd ../ && rm -rf rootfs
