@@ -13,5 +13,5 @@ Available Args:
    version: k8s version
 
 Example:
-  /imagebuild_k8s 1.22.8
+  /imagebuild_k8s v1.24.0
 ```

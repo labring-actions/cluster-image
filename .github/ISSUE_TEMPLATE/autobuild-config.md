@@ -15,5 +15,5 @@ Available Args:
    appDirName: current app dir
 
 Example:
-   /imagebuild_configs helm v3.8.2 default
+   /imagebuild_configs coredns v0.0.1 default
 ```
