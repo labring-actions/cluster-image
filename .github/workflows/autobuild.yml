@@ -20,8 +20,9 @@ jobs:
         env:
           ak: ${{ secrets.AK }}
           sk: ${{ secrets.SK }}
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          registry: docker.io
+          username: fanux
+          repo: lameleg
           password: ${{ secrets.REGISTRY }}
           sealos: 4.0.0-alpha.11
           aliyun_registry: registry.cn-qingdao.aliyuncs.com
@@ -40,7 +41,7 @@ jobs:
           chmod a+x buildah
           sudo mv buildah /usr/bin/
           cp -rf hack/* .
-          sudo sh build.sh $version $registry $username $username $password > output.log
+          sudo sh build.sh $version $registry $repo $username $password > output.log
           sudo sh build.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password
           echo "script $aliyun_registry/$aliyun_repo/kubernetes:v$version build successfully!" >> output.log
           body="$(cat output.log)"

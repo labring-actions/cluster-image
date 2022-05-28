@@ -20,8 +20,9 @@ jobs:
         env:
           ak: ${{ secrets.AK }}
           sk: ${{ secrets.SK }}
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          registry: docker.io
+          username: fanux
+          repo: lameleg
           password: ${{ secrets.REGISTRY }}
           sealos: 4.0.0-alpha.11
           aliyun_registry: registry.cn-qingdao.aliyuncs.com
@@ -45,9 +46,9 @@ jobs:
             filename=Dockerfile
           fi
           sudo sealos login $registry -u $username -p $password
-          sudo sealos build -t $registry/$username/$app:$version -f $filename .  > output.log
-          sudo sealos push $registry/$username/$app:$version >> output.log
-          echo "sealos push $registry/$username/$app:$version success" >> output.log
+          sudo sealos build -t $registry/$repo/$app:$version -f $filename .  > output.log
+          sudo sealos push $registry/$repo/$app:$version >> output.log
+          echo "sealos push $registry/$repo/$app:$version success" >> output.log
 
           sudo sealos login $aliyun_registry -u $aliyun_username -p $aliyun_password
           sudo sealos build -t $aliyun_registry/$aliyun_repo/$app:$version -f $filename .  >> output.log
