@@ -21,8 +21,8 @@ jobs:
           ak: ${{ secrets.AK }}
           sk: ${{ secrets.SK }}
           registry: docker.io
-          username: fanux
-          repo: lameleg
+          username: ${{ github.repository_owner }}
+          repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           sealos: 4.0.0-alpha.11
           aliyun_registry: registry.cn-qingdao.aliyuncs.com
