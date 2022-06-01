@@ -16,18 +16,15 @@
 source common.sh
 registry=${1:-sealos.hub}
 registry_port=${2:-5000}
-if ! command_exists image-cri-shim ; then
-  cp ../etc/image-cri-shim.service /etc/systemd/system/
-  cp ../etc/image-cri-shim.yaml /etc
-  sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/systemd/system/image-cri-shim.service
-  sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/image-cri-shim.yaml
-  chmod -R 755 ../cri
-  cp -rf ../cri/image-cri-shim /usr/bin
-  cp ../etc/crictl.yaml /etc
-  chmod a+x /usr/bin/*
-  systemctl enable image-cri-shim.service
-  systemctl restart image-cri-shim.service
-fi
+cp -rf ../etc/image-cri-shim.service /etc/systemd/system/
+cp -rf ../etc/image-cri-shim.yaml /etc
+sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/systemd/system/image-cri-shim.service
+sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/image-cri-shim.yaml
+chmod -R 755 ../cri
+cp -rf ../cri/image-cri-shim /usr/bin
+cp -rf ../etc/crictl.yaml /etc
+chmod a+x /usr/bin/*
+systemctl enable image-cri-shim.service
 systemctl daemon-reload
 systemctl restart image-cri-shim.service
 check_status image-cri-shim
