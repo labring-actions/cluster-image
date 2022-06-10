@@ -127,7 +127,7 @@ check_root(){
 }
 
 check_port(){
-  if ! command_exists image-cri-shim ; then
+  if ! command_exists lsof ; then
      cp ../opt/lsof /usr/bin
   fi
   for port in {10249..10259} {51000..51020} ; do
