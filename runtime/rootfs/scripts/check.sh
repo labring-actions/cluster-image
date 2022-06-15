@@ -20,5 +20,5 @@ check_root
 check_port
 check_cmd docker
 check_file /var/run/docker.sock
-check_file {{ .registryData }}
+check_file /var/lib/registry
 logger "check root,port,cri success"
