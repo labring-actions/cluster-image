@@ -14,8 +14,6 @@
 
 package main
 
-import "github.com/labring/cluster-image/cmd"
-
 func main() {
-	cmd.Execute()
+	//cmd.Execute()
 }
