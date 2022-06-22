@@ -16,7 +16,6 @@
 
 source common.sh
 
-check_root
 check_port
 check_cmd docker
 check_file /var/run/docker.sock
