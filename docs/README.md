@@ -20,10 +20,11 @@
 
 最终会以 docker.io/labring/$NAME:$VERSION 以最终的镜像名称。
 
-其中  docker.io/labring/$NAME:$VERSION-amd64 是AMD64架构
-     docker.io/labring/$NAME:$VERSION-arm64 是ARM64架构
+- docker.io/labring/$NAME:$VERSION-amd64 是AMD64架构
+- docker.io/labring/$NAME:$VERSION-arm64 是ARM64架构
 
-runtime/applications/$NAME/$VERSION 下存放 init.sh 主要是有一些二进制需要分开存放，init下载一些二进制使用，示例代码可以看helm和minio-operator的脚
+runtime/applications/$NAME/$VERSION 下存放 init.sh 主要是有一些二进制需要分开存放.
+init.sh下载一些二进制使用，示例代码可以看helm和minio-operator的脚
 
 ##### 配置镜像
 
