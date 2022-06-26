@@ -1,3 +1,3 @@
 FROM scratch
-COPY .. .
+COPY . .
 CMD ["kubectl apply -f manifests/metrics-server.yaml"]
