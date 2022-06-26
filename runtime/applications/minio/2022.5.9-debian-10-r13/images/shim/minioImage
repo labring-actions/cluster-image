@@ -1,0 +1,2 @@
+docker.io/bitnami/minio:2022.5.23-debian-10-r0
+docker.io/bitnami/minio-client:2022.5.9-debian-10-r13

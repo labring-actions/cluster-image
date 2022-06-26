@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade minio minio -n minio-system --install --create-namespace --set mode=distributed --set service.type=NodePort  --set service.nodePorts.api=30106 --set service.nodePorts.console=30105   --set auth.rootPassword=minio123 --set resources.limits.cpu=2 --set resources.limits.memory=2Gi --set resources.requests.cpu=250m --set resources.requests.memory=256Mi"]
