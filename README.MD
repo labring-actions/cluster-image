@@ -1,22 +1,7 @@
 # cluster-image
 
-升级shim脚本
+### 直接创建ISSUE 支持的镜像
 
-```shell
-systemctl stop image-cri-shim.service
-wget https://gh.api.99988866.xyz/https://github.com//labring/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_linux_amd64.tar.gz
-tar -zxvf image-cri-shim_0.0.8_linux_amd64.tar.gz
-cp image-cri-shim /usr/bin/
-
-cat > /etc/image-cri-shim.yaml << eof
-shim: /var/run/image-cri-shim.sock
-cri: /run/containerd/containerd.sock
-address: http://sealos.hub:5000
-force: true
-debug: false
-image: /var/lib/image-cri-shim
-sync: 0
-auth: admin:passw0rd
-eof
-systemctl restart image-cri-shim.service
-```
+- [k8s集群镜像](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-k8s.md&title=【Auto-build】kubernetes-1.23.6)
+- [APP集群镜像](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-apps.md&title=【Auto-build】helm)
+- [配置集群镜像](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-configs.md&title=【Auto-build】coredns)
