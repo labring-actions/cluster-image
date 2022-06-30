@@ -1,7 +1,7 @@
 #!/bin/bash
 kubeVersion=${1:-1.22.8}
 containerdVersion=1.6.2
-ipvsImage=ghcr.io/labring/lvscare:v1.1.3-beta.2
+ipvsImage=ghcr.io/labring/lvscare:v1.1.3-beta.7
 os=linux
 arch=${2:-amd64}
 #https://github.91chi.fun//
