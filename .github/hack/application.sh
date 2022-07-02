@@ -6,10 +6,11 @@ username=${4:-cuisongliu}
 password=${5:-}
 application=${6:-calico}
 prefix=$domain/$repo
-mkdir -p rootfs
-cp -rf runtime/applications/$application/$version/* rootfs/
+buildDir=.build-image
+mkdir -p $buildDir
+cp -rf applications/$application/$version/* $buildDir/
 # shellcheck disable=SC2164
-cd rootfs
+cd $buildDir
 filename=Kubefile
 if  [ -f Dockerfile ]; then
   filename=Dockerfile
@@ -17,11 +18,11 @@ fi
 sh init.sh amd64
 [ -f init.sh  ] && cp  sh init.sh amd64
 sealos build -t $prefix/$application:$version-amd64 --platform linux/amd64 -f $filename  .
-cd ../ && rm -rf rootfs
-mkdir -p rootfs
-cp -rf runtime/applications/$application/$version/* rootfs/
+cd ../ && rm -rf $buildDir
+mkdir -p $buildDir
+cp -rf applications/$application/$version/* $buildDir/
 # shellcheck disable=SC2164
-cd rootfs
+cd $buildDir
 [ -f init.sh  ] && cp  sh init.sh arm64
 sealos build -t $prefix/$application:$version-arm64 --platform linux/arm64 -f $filename  .
 

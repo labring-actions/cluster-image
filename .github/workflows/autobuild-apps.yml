@@ -42,7 +42,7 @@ jobs:
           wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/buildah.linux.amd64 --no-check-certificate -O buildah
           chmod a+x buildah
           sudo mv buildah /usr/bin/
-          cp -rf hack/* .
+          cp -rf .github/hack/* .
           sudo sh application.sh $version $registry $repo $username $password $app  > output.log
           sudo sh application.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password $app
           echo "sealos push $aliyun_registry/$aliyun_repo/$app:$version success" >> output.log
