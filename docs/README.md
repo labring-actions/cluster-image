@@ -6,14 +6,14 @@
 
 ##### k8s镜像
 
-1. runtime/containerd containerd相关的配置以及脚本
-2. runtime/rootfs 公共的rootfs相关的配置以及脚本
-3. hack/containerd.sh 下载二进制以及其他的配置修改的脚本、
-4. hack/build.sh 编译k8s的集群镜像同时build  x86和arm64架构的镜像
+1. containerd containerd相关的配置以及脚本
+2. rootfs 公共的rootfs相关的配置以及脚本
+3. .github/hack/containerd.sh 下载二进制以及其他的配置修改的脚本、
+4. .github/hack/build.sh 编译k8s的集群镜像同时build  x86和arm64架构的镜像
 
 ##### APP 镜像
 
-所有的镜像都是在 runtime/applications/$NAME/$VERSION 目录存放相关的配置
+所有的镜像都是在 applications/$NAME/$VERSION 目录存放相关的配置
 
 - NAME 是镜像名称
 - VERSION 是镜像版本
@@ -23,12 +23,12 @@
 - docker.io/labring/$NAME:$VERSION-amd64 是AMD64架构
 - docker.io/labring/$NAME:$VERSION-arm64 是ARM64架构
 
-runtime/applications/$NAME/$VERSION 下存放 init.sh 主要是有一些二进制需要分开存放.
+applications/$NAME/$VERSION 下存放 init.sh 主要是有一些二进制需要分开存放.
 init.sh下载一些二进制使用，示例代码可以看helm和minio-operator的脚
 
 ##### 配置镜像
 
-所有的镜像都是在 runtime/config/$NAME/$VERSION 目录存放相关的配置
+所有的镜像都是在 config/$NAME/$VERSION 目录存放相关的配置
 
 - NAME 是镜像名称
 - VERSION 是镜像版本
