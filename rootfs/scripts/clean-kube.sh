@@ -28,5 +28,4 @@ rm -f /etc/sysctl.d/k8s.conf
 rm -f /etc/systemd/system/kubelet.service
 rm -rf /etc/systemd/system/kubelet.service.d
 rm -rf /var/lib/kubelet/
-rm -f /var/lib/kubelet/config.yaml
 logger "clean kube success"

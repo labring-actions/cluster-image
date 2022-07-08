@@ -63,7 +63,7 @@ sed -i "s/v0.0.0/v$kubeVersion/g" ./$buildDir/Kubefile
 sed -i "s#__lvscare__#$ipvsImage#g" ./$buildDir/Kubefile
 # replace
 pauseImage=$(cat ./$buildDir/images/shim/DefaultImageList  | grep k8s.gcr.io/pause)
-sed -i "s#__pause__#k8s.gcr.io/${pauseImage##k8s.gcr.io/}#g" ./$buildDir/scripts/init.sh
+sed -i "s#__pause__#k8s.gcr.io/${pauseImage##k8s.gcr.io/}#g" ./$buildDir/etc/kubelet-flags.env
 sed -i "s#__pause__#sealos.hub:5000/${pauseImage##k8s.gcr.io/}#g" ./$buildDir/etc/config.toml
 cd $buildDir
 chmod  -R 0755  *

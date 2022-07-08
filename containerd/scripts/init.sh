@@ -34,12 +34,6 @@ bash init-shim.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
 if [ $? != 0 ]; then
    error "====init image-cri-shim failed!===="
 fi
-# 修改kubelet
-mkdir -p /etc/systemd/system/kubelet.service.d
-cat > /etc/systemd/system/kubelet.service.d/containerd.conf << eof
-[Service]
-Environment="KUBELET_EXTRA_ARGS=--pod-infra-container-image=__pause__ --container-runtime=remote  --runtime-request-timeout=15m --container-runtime-endpoint=unix:///run/containerd/containerd.sock --image-service-endpoint=unix:///var/run/image-cri-shim.sock"
-eof
 
 chmod a+x init-kube.sh
 bash init-kube.sh

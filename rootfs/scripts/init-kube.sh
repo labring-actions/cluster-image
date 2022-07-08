@@ -50,5 +50,7 @@ mkdir -p /etc/systemd/system
 cp ../etc/kubelet.service /etc/systemd/system/
 [ -d /etc/systemd/system/kubelet.service.d ] || mkdir /etc/systemd/system/kubelet.service.d
 cp ../etc/10-kubeadm.conf /etc/systemd/system/kubelet.service.d/
+[ -d /var/lib/kubelet ] || mkdir /var/lib/kubelet
+cp ../etc/kubelet-flags.env /var/lib/kubelet
 systemctl enable kubelet
 logger "init kube success"
