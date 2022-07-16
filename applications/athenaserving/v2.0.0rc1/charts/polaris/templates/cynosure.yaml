@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "polaris.fullname" . }}-cynosure
+  labels:
+    {{- include "polaris.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "polaris.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "polaris.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "polaris.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-cynosure
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.cynosure.image }}"
+          imagePullPolicy: {{ .Values.cynosure.pullPolicy }}
+          ports:
+            - name: cynosure 
+              containerPort: {{.Values.cynosure.service.port }} 
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: cynosure
+          readinessProbe:
+            tcpSocket:
+              port: cynosure 
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: logs
+              mountPath: /log/server
+            - name: cm
+              mountPath: /opt/server/cynosure/config/application.yml 
+              subPath: application.yml
+
+      volumes:
+        - name: cm
+          configMap:
+            name: {{ include "polaris.fullname" . }}-cynosure 
+            defaultMode: 0755
+        - name: logs
+          hostPath:
+            path: {{.Values.cynosure.log.hostPath}}
+            type: DirectoryOrCreate
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

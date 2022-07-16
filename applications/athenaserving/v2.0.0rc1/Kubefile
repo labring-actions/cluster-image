@@ -1,0 +1,4 @@
+FROM scratch
+COPY . athenaserving
+CMD ["helm install athena athenaserving --set global.storageClass=local-hostpath"]
+
