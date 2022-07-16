@@ -1,0 +1,212 @@
+# Default values for athenaserving.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: "managed-nfs-storage"
+
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+
+### mysql config
+mysql:
+  ## MySQL Authentication parameters
+  ##
+  auth:
+    ## @param auth.rootPassword Password for the `root` user. Ignored if existing secret is provided
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
+    ##
+    rootPassword: "Y3lub3N1cmUK"
+    ## @param auth.database Name for a custom database to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
+    ##
+    database: cynosure
+    ## @param auth.username Name for a custom user to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    username: "cynosure"
+    ## @param auth.password Password for the new user. Ignored if existing secret is provided
+    ##
+    password: "Y3lub3N1cmUK"
+    ## @param auth.replicationUser MySQL replication user
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-up-a-replication-cluster
+    ##
+    replicationUser: replicator
+    ## @param auth.replicationPassword MySQL replication user password. Ignored if existing secret is provided
+    ##
+    replicationPassword: ""
+    ## @param auth.existingSecret Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`
+  primary:
+    service:
+      ## @param primary.service.type MySQL Primary K8s service type
+      ##
+      type: NodePort 
+      ## @param primary.service.port MySQL Primary K8s service port
+      ##
+      port: 3306
+      ## @param primary.service.nodePort MySQL Primary K8s service node port
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ##
+      nodePort: "32406"
+
+  secondary:
+    service:
+      ## @param primary.service.type MySQL Primary K8s service type
+      ##
+      type: NodePort 
+      ## @param primary.service.port MySQL Primary K8s service port
+      ##
+      port: 3306
+      ## @param primary.service.nodePort MySQL Primary K8s service node port
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ##
+      nodePort: "32306"
+    persistence:
+      ## @param primary.persistence.enabled Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir
+      ##
+      enabled: true
+      ## @param primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MySQL primary replicas
+      ## NOTE: When it's set the rest of persistence parameters are ignored
+      ##
+      existingClaim: ""
+      ## @param primary.persistence.storageClass MySQL primary persistent volume storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param primary.persistence.annotations [object] MySQL primary persistent volume claim annotations
+      ##
+      annotations: {}
+      ## @param primary.persistence.accessModes MySQL primary persistent volume access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param primary.persistence.size MySQL primary persistent volume size
+      ##
+      size: 8Gi
+      ## @param primary.persistence.selector [object] Selector to match an existing Persistent Volume
+      ## selector:
+      ##   matchLabels:
+      ##     app: my-app
+      ##
+      selector: {}
+
+ ### zookeepr
+ #
+zookeeper:
+  service:
+    ## @param service.type Kubernetes Service type
+    ##
+    type: ClusterIP
+    ## @param service.ports.client ZooKeeper client service port
+    ## @param service.ports.tls ZooKeeper TLS service port
+    ## @param service.ports.follower ZooKeeper follower service port
+    ## @param service.ports.election ZooKeeper election service port
+    ##
+    ports:
+      client: 2181
+      tls: 3181
+      follower: 2888
+      election: 3888
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param service.nodePorts.client Node port for clients
+    ## @param service.nodePorts.tls Node port for TLS
+    ##
+    nodePorts:
+      client: ""
+      tls: ""
+    ## @param service.disableBaseClientPort Remove client port from service definitions.
+    ##
+    disableBaseClientPort: false
+    ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+

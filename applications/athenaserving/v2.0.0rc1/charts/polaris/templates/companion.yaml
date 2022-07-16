@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "polaris.fullname" . }}-companion
+  labels:
+    {{- include "polaris.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "polaris.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "polaris.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "polaris.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-companion
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.companion.image }}"
+          imagePullPolicy: {{ .Values.companion.pullPolicy }}
+          ports:
+            - name: companion 
+              containerPort: {{.Values.companion.service.port }} 
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: companion
+          readinessProbe:
+            tcpSocket:
+              port: companion 
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          args:
+            - sh
+            - watchdog.sh
+            - -h0.0.0.0
+            - -p6868
+            #    - -whttp://companion.xfyun.cn
+            - -whttp://{{.Release.Name}}-polaris-cynosure:8099
+            - -z{{ .Release.Name }}-zookeeper:2181
+          volumeMounts:
+            - name: logs
+              mountPath: /log/server
+      volumes:
+        - name: logs
+          hostPath:
+            path: {{.Values.companion.log.hostPath}}
+            type: DirectoryOrCreate
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
