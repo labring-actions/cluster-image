@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository:  artifacts.iflytek.com/docker-private/atp/opensource/mmocr
+  repository: public.ecr.aws/iflytek-open/opensource/demo/mmocr 
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v3.1"
