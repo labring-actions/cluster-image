@@ -8,6 +8,9 @@ jobs:
     name: Auto build k8s image
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [ 1.24.0,1.24.1,1.24.2,1.24.3 ]
     permissions:
       issues: write
     steps:
@@ -41,20 +44,20 @@ jobs:
           chmod a+x buildah
           sudo mv buildah /usr/bin/
           cp -rf .github/hack/* .
-          sudo sh build.sh $version $registry $repo $username $password $sealos > output.log
-          sudo sh build.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password $sealos
+          sudo sh build.sh ${{ matrix.version }} $registry $repo $username $password $sealos > output.log
+          sudo sh build.sh ${{ matrix.version }} $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password $sealos
           echo "script $aliyun_registry/$aliyun_repo/kubernetes:v$version build successfully!" >> output.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
           echo "::set-output name=body::$body"
-      - name: Success Commit
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            ```
-            ${{ steps.autobuild.outputs.body }}
-            ```
-            detail log please view [autobuild](https://github.com/labring/cluster-image/actions/workflows/autobuild.yml)
+#      - name: Success Commit
+#        uses: peter-evans/create-or-update-comment@v1
+#        with:
+#          issue-number: ${{ github.event.issue.number }}
+#          body: |
+#            ```
+#            ${{ steps.autobuild.outputs.body }}
+#            ```
+#            detail log please view [autobuild](https://github.com/labring/cluster-image/actions/workflows/autobuild.yml)
