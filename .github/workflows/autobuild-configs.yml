@@ -54,8 +54,8 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            image docker.io/${{ github.repository_owner }}/$app:$version build successfully!
-            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/$app:$version build successfully!
+            image docker.io/${{ github.repository_owner }}/${app}:${version} build successfully!
+            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/${app}:${version} build successfully!
             ```
 
             detail log please view [autobuild-configs](https://github.com/labring/cluster-image/actions/workflows/autobuild-configs.yml)
