@@ -2,7 +2,7 @@
 kubeVersion=${1:-1.22.8}
 containerdVersion=1.6.2
 ipvsImage=ghcr.io/labring/lvscare:v1.1.3-beta.7
-lvscareVersion=latest
+lvscareVersion=4.0.0
 os=linux
 arch=${2:-amd64}
 #https://github.91chi.fun//
@@ -14,7 +14,7 @@ mkdir -p $buildDir/bin && mkdir -p $buildDir/opt && mkdir -p $buildDir/registry 
 cp -rf rootfs/* $buildDir/
 cp -rf containerd/* $buildDir/
 # library install
-wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/library-2.5-$os-$arch.tar.gz --no-check-certificate -O library.tar.gz
+wget https://github.com/labring/cluster-image/releases/download/depend/library-2.5-$os-$arch.tar.gz --no-check-certificate -O library.tar.gz
 tar xf library.tar.gz && rm -rf library.tar.gz
 cp -rf library/bin/*    $buildDir/bin/
 ls -l  $buildDir/bin/
@@ -27,7 +27,7 @@ wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin
 wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin/$os/$arch/kubelet -O $buildDir/bin/kubelet
 wget https://storage.googleapis.com/kubernetes-release/release/v$kubeVersion/bin/$os/$arch/kubeadm -O $buildDir/bin/kubeadm
 # registry install
-wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/registry-$arch.tar --no-check-certificate -O $buildDir/images/registry.tar
+wget https://github.com/labring/cluster-image/releases/download/depend/registry-$arch.tar --no-check-certificate -O $buildDir/images/registry.tar
 # cri install
 wget https://github.com/containerd/containerd/releases/download/v$containerdVersion/cri-containerd-cni-$containerdVersion-linux-$arch.tar.gz --no-check-certificate -O cri-containerd-cni-linux.tar.gz
 tar -zxf  cri-containerd-cni-linux.tar.gz
@@ -47,9 +47,13 @@ mkdir -p crishim && tar -zxf image-cri-shim.tar.gz -C crishim
 mv crishim/image-cri-shim $buildDir/cri/
 rm -rf image-cri-shim.tar.gz crishim
 # sealctl
-wget https://sealyun-home.oss-accelerate.aliyuncs.com/sealos-4.0/$lvscareVersion/sealctl-$arch --no-check-certificate -O $buildDir/opt/sealctl
+wget wget https://github.com/labring/sealos/releases/download/v$lvscareVersion/sealos_${lvscareVersion}_linux_amd64.tar.gz
+tar -zxvf sealos_${lvscareVersion}_linux_amd64.tar.gz sealctl
+mv sealctl $buildDir/opt/
+rm -rf sealos_${lvscareVersion}_linux_amd64.tar.gz
 # lsof
-wget https://sealyun-home.oss-accelerate.aliyuncs.com/images/lsof-$os-$arch --no-check-certificate -O $buildDir/opt/lsof
+wget https://github.com/labring/cluster-image/releases/download/depend/lsof-$os-$arch --no-check-certificate -O $buildDir/opt/lsof
+chmod a+x $buildDir/opt/*
 # images
 echo "$ipvsImage" >  $buildDir/images/shim/DefaultImageList
 if [ ! -f ./kubeadm ];then
