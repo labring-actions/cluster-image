@@ -29,8 +29,6 @@ jobs:
           echo "::set-output name=version::$version"
       - name: Build Image
         env:
-          ak: ${{ secrets.AK }}
-          sk: ${{ secrets.SK }}
           registry: docker.io
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
@@ -40,22 +38,13 @@ jobs:
         run: .github/scripts/configs.sh
       - name: Sync image
         env:
-          ak: ${{ secrets.AK }}
-          sk: ${{ secrets.SK }}
-          sealos: 4.1.0-rc1
-          src_registry: docker.io
-          src_username: ${{ github.repository_owner }}
-          src_repo: ${{ github.repository_owner }}
-          src_password: ${{ secrets.REGISTRY }}
           registry: registry.cn-qingdao.aliyuncs.com
           username: ${{ secrets.ALIY_REGISTRY_NAME }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
           app: ${{ steps.autobuild.outputs.app }}
           version: ${{ steps.autobuild.outputs.version }}
-        run: |
-          sudo skopeo login $registry -u $username -p $password
-          skopeo sync --src docker --dest docker $src_registry/$src_repo/$app:$version   $registry/$repo/ --all
+        run: .github/scripts/configs.sh
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         env:
@@ -65,8 +54,8 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            image docker.io/labring/$app:$version build successfully!
-            image registry.cn-qingdao.aliyuncs.com/labring/$app:$version sync successfully!
+            image docker.io/${{ github.repository_owner }}/$app:$version build successfully!
+            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/$app:$version build successfully!
             ```
 
             detail log please view [autobuild-configs](https://github.com/labring/cluster-image/actions/workflows/autobuild-configs.yml)
