@@ -8,6 +8,17 @@ jobs:
     name: Auto build config image
     if: startswith(github.event.comment.body, '/imagebuild_configs')
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - registry: docker.io
+            username: ${{ github.repository_owner }}
+            repo: ${{ github.repository_owner }}
+            password: ${{ secrets.REGISTRY }}
+          - registry: registry.cn-qingdao.aliyuncs.com
+            username: ${{ secrets.ALIY_REGISTRY_NAME }}
+            repo: ${{ github.repository_owner }}
+            password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
     permissions:
       issues: write
     steps:
@@ -20,15 +31,7 @@ jobs:
         env:
           ak: ${{ secrets.AK }}
           sk: ${{ secrets.SK }}
-          registry: docker.io
-          username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
-          password: ${{ secrets.REGISTRY }}
           sealos: 4.1.0-rc1
-          aliyun_registry: registry.cn-qingdao.aliyuncs.com
-          aliyun_username: ${{ secrets.ALIY_REGISTRY_NAME }}
-          aliyun_repo: ${{ github.repository_owner }}
-          aliyun_password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
         run: |
           commentbody="${{github.event.comment.body}}"
           app=`echo "$commentbody"| awk '{print $2}'`
@@ -44,28 +47,17 @@ jobs:
           if  [ -f Dockerfile ]; then
             filename=Dockerfile
           fi
-          sudo sealos login $registry -u $username -p $password
-          sudo sealos build -t $registry/$repo/$app:$version -f $filename .  > output.log
-          sudo sealos push $registry/$repo/$app:$version >> output.log
-          echo "sealos push $registry/$repo/$app:$version success" >> output.log
-
-          sudo sealos login $aliyun_registry -u $aliyun_username -p $aliyun_password
-          sudo sealos build -t $aliyun_registry/$aliyun_repo/$app:$version -f $filename .  >> output.log
-          sudo sealos push $aliyun_registry/$aliyun_repo/$app:$version >> output.log
-          echo "sealos push $aliyun_registry/$aliyun_repo/$app:$version success" >> output.log
-
-          body="$(cat output.log)"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}"
-          echo "::set-output name=body::$body"
+          sudo sealos login ${{ matrix.registry }}  -u ${{ matrix.username }} -p ${{ matrix.password }} 
+          sudo sealos build -t ${{ matrix.registry }}/${{ matrix.repo }}/$app:$version -f $filename .   
+          sudo sealos push ${{ matrix.registry }}/${{ matrix.repo }}/$app:$version
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            ${{ steps.autobuild.outputs.body }}
+            image docker.io/labring/$app:$version build successfully!
+            image registry.cn-qingdao.aliyuncs.com/labring/$app:$version build successfully!
             ```
 
             detail log please view [autobuild-configs](https://github.com/labring/cluster-image/actions/workflows/autobuild-configs.yml)
