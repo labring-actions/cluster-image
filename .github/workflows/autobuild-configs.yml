@@ -19,8 +19,15 @@ jobs:
         run: .github/scripts/download.sh
         env:
           sealos: 4.1.0-rc1
-      - name: Auto build image
+      - name: Write vars
         id: autobuild
+        run: |
+          commentbody="${{github.event.comment.body}}"
+          app=`echo "$commentbody"| awk '{print $2}'`
+          version=`echo "$commentbody"| awk '{print $3}'`
+          echo "::set-output name=app::$app"
+          echo "::set-output name=version::$version"
+      - name: Build Image
         env:
           ak: ${{ secrets.AK }}
           sk: ${{ secrets.SK }}
@@ -28,20 +35,9 @@ jobs:
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-        run: |
-          commentbody="${{github.event.comment.body}}"
-          app=`echo "$commentbody"| awk '{print $2}'`
-          version=`echo "$commentbody"| awk '{print $3}'`
-          cd config/$app/$version
-          filename=Kubefile
-          if  [ -f Dockerfile ]; then
-            filename=Dockerfile
-          fi
-          sudo sealos login ${{ matrix.registry }}  -u ${{ matrix.username }} -p ${{ matrix.password }} 
-          sudo sealos build -t ${{ matrix.registry }}/${{ matrix.repo }}/$app:$version -f $filename .   
-          sudo sealos push ${{ matrix.registry }}/${{ matrix.repo }}/$app:$version
-          echo "::set-output name=app::$app"
-          echo "::set-output name=version::$version"
+          app: ${{ steps.autobuild.outputs.app }}
+          version: ${{ steps.autobuild.outputs.version }}
+        run: .github/scripts/configs.sh
       - name: Sync image
         env:
           ak: ${{ secrets.AK }}
