@@ -5,10 +5,10 @@ domain=${2:-docker.io}
 repo=${3:-cuisongliu}
 username=${4:-cuisongliu}
 password=${5:-}
-proxy=${6:-}
+sealos=${6:-}
 prefix=$domain/$repo
-sh containerd.sh $version amd64 $prefix $proxy
-sh containerd.sh $version arm64 $prefix $proxy
+sh containerd.sh $version amd64 $prefix $sealos
+sh containerd.sh $version arm64 $prefix $sealos
 buildah login --username $username --password $password $domain
 buildah push $prefix/kubernetes:v$version-amd64
 buildah push $prefix/kubernetes:v$version-arm64

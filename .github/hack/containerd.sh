@@ -1,13 +1,11 @@
 #!/bin/bash
 kubeVersion=${1:-1.22.8}
 containerdVersion=1.6.2
-ipvsImage=ghcr.io/labring/lvscare:v1.1.3-beta.7
-lvscareVersion=4.0.0
 os=linux
 arch=${2:-amd64}
-#https://github.91chi.fun//
 repo=${3:-docker.io/cuisongliu}
-proxy=${4:-}
+lvscareVersion=${4:-}
+ipvsImage=ghcr.io/labring/lvscare:v$lvscareVersion
 buildDir=.build-image
 # init dir
 mkdir -p $buildDir/bin && mkdir -p $buildDir/opt && mkdir -p $buildDir/registry && mkdir -p $buildDir/images/shim && mkdir -p $buildDir/cri/lib64
@@ -37,12 +35,12 @@ cp -rf usr/local/sbin/* usr/bin/ && rm -rf usr/bin/critest && rm -rf cri-contain
 tar -czf cri-containerd-linux.tar.gz usr && rm -rf usr
 mv cri-containerd-linux.tar.gz $buildDir/cri/
 # nerdctl install
-wget ${proxy}https://github.com/containerd/nerdctl/releases/download/v0.16.0/nerdctl-0.16.0-$os-$arch.tar.gz -O  nerdctl.tar.gz
+wget https://github.com/containerd/nerdctl/releases/download/v0.16.0/nerdctl-0.16.0-$os-$arch.tar.gz -O  nerdctl.tar.gz
 tar xf nerdctl.tar.gz
 mv nerdctl $buildDir/cri/
 rm -rf nerdctl.tar.gz containerd-rootless*
 # shim install
-wget ${proxy}https://github.com/labring/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_${os}_${arch}.tar.gz -O image-cri-shim.tar.gz
+wget https://github.com/labring/image-cri-shim/releases/download/v0.0.8/image-cri-shim_0.0.8_${os}_${arch}.tar.gz -O image-cri-shim.tar.gz
 mkdir -p crishim && tar -zxf image-cri-shim.tar.gz -C crishim
 mv crishim/image-cri-shim $buildDir/cri/
 rm -rf image-cri-shim.tar.gz crishim

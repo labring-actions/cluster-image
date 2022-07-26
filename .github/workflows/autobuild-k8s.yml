@@ -41,8 +41,8 @@ jobs:
           chmod a+x buildah
           sudo mv buildah /usr/bin/
           cp -rf .github/hack/* .
-          sudo sh build.sh $version $registry $repo $username $password > output.log
-          sudo sh build.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password
+          sudo sh build.sh $version $registry $repo $username $password $sealos > output.log
+          sudo sh build.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password $sealos
           echo "script $aliyun_registry/$aliyun_repo/kubernetes:v$version build successfully!" >> output.log
           body="$(cat output.log)"
           body="${body//'%'/'%25'}"
