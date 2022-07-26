@@ -54,7 +54,7 @@ jobs:
           app: ${{ steps.autobuild.outputs.app }}
           version: ${{ steps.autobuild.outputs.version }}
         run: |
-          sudo skopeo login $registry --username $username --password $password
+          sudo skopeo login $registry -u $username -p $password
           skopeo sync --src docker --dest docker $src_registry/$src_repo/$app:$version   $registry/$repo/ --all
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
