@@ -24,7 +24,7 @@ jobs:
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-          sealos: 4.0.0
+          sealos: 4.1.0-rc1
           aliyun_registry: registry.cn-qingdao.aliyuncs.com
           aliyun_username: ${{ secrets.ALIY_REGISTRY_NAME }}
           aliyun_repo: ${{ github.repository_owner }}
