@@ -17,12 +17,13 @@ jobs:
           token: ${{ secrets.TOKEN }}
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
+        env:
+          sealos: 4.1.0-rc1
       - name: Auto build image
         id: autobuild
         env:
           ak: ${{ secrets.AK }}
           sk: ${{ secrets.SK }}
-          sealos: 4.1.0-rc1
           registry: docker.io
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
