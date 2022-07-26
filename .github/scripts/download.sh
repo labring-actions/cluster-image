@@ -1,8 +1,6 @@
 #!/bin/bash
 
-VERSION=
-
-wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${VERSION}_linux_amd64.tar.gz
+wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_$sealos_linux_amd64.tar.gz
 tar -zxvf sealos_${VERSION}_linux_amd64.tar.gz sealos
 chmod a+x sealos
 sudo mv sealos /usr/bin/
