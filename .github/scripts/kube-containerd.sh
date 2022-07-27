@@ -6,7 +6,7 @@ mkdir -p $buildDir/bin && mkdir -p $buildDir/opt && mkdir -p $buildDir/registry 
 cp -rf rootfs/* $buildDir/
 cp -rf containerd/* $buildDir/
 # library install
-mv ${downloadDIR}/library/${arch}/library.tar.gz .
+cp ${downloadDIR}/library/${arch}/library.tar.gz .
 if [ $? != 0 ]; then
    echo "====cp library failed!===="
    exit 1
@@ -19,43 +19,43 @@ ls -l $buildDir/cri/lib64/lib
 rm -rf library
 cd $buildDir/cri/lib64 && tar -czf containerd-lib.tar.gz lib && rm -rf lib && cd ../../../
 #kube install
-mv ${downloadDIR}/kube/${arch}/* $buildDir/bin/
+cp  ${downloadDIR}/kube/${arch}/* $buildDir/bin/
 if [ $? != 0 ]; then
    echo "====cp kube failed!===="
    exit 1
 fi
 # registry install
-mv ${downloadDIR}/registry/${arch}/registry.tar $buildDir/images/registry.tar
+cp ${downloadDIR}/registry/${arch}/registry.tar $buildDir/images/registry.tar
 if [ $? != 0 ]; then
    echo "====cp registry failed!===="
    exit 1
 fi
 # cri install
-mv ${downloadDIR}/containerd/${arch}/cri-containerd-linux.tar.gz $buildDir/cri/
+cp ${downloadDIR}/containerd/${arch}/cri-containerd-linux.tar.gz $buildDir/cri/
 if [ $? != 0 ]; then
    echo "====cp cri failed!===="
    exit 1
 fi
 # nerdctl install
-mv ${downloadDIR}/nerdctl/${arch}/nerdctl $buildDir/cri/
+cp ${downloadDIR}/nerdctl/${arch}/nerdctl $buildDir/cri/
 if [ $? != 0 ]; then
    echo "====cp nerdctl failed!===="
    exit 1
 fi
 # shim install
-mv ${downloadDIR}/shim/${arch}/image-cri-shim $buildDir/cri/
+cp ${downloadDIR}/shim/${arch}/image-cri-shim $buildDir/cri/
 if [ $? != 0 ]; then
    echo "====cp shim failed!===="
    exit 1
 fi
 # sealctl
-mv ${downloadDIR}/sealctl/${arch}/sealctl $buildDir/opt/
+cp ${downloadDIR}/sealctl/${arch}/sealctl $buildDir/opt/
 if [ $? != 0 ]; then
    echo "====cp sealctl failed!===="
    exit 1
 fi
 # lsof
-mv ${downloadDIR}/lsof/${arch}/lsof $buildDir/opt/
+cp ${downloadDIR}/lsof/${arch}/lsof $buildDir/opt/
 if [ $? != 0 ]; then
    echo "====cp lsof failed!===="
    exit 1
