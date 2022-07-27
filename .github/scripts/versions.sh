@@ -8,4 +8,6 @@ filePath=$(pwd)/.github/versions/CHANGELOG-${versionGroup}.md
 
 VERSIONS=$(cat $filePath| grep "\[v${versionGroup}" | grep -v "alpha" | grep -v "beta"| grep -v "rc" | awk '{print $2}' | cut -d '[' -f  2 | cut -d ']' -f 1   | awk '{printf "{\"'version'\":\"%s\"},",$1}')
 
+echo "versions is :$VERSIONS"
+
 echo "::set-output name=version::{\"include\":[${VERSIONS%?}]}"
