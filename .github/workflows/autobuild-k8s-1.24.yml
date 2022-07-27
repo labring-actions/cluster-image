@@ -4,12 +4,24 @@ on:
     types:
       - created
 jobs:
+  resolve-versions-arch:
+    if: startswith(github.event.comment.body, '/imagebuild_k8s')
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-versions.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Resolve Versions
+        id: set-versions
+        env:
+          versionGroup: 1.24
+        run: sh .github/scripts/versions_arch.sh
   resolve-versions:
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
-      version: ${{ steps.set-versions.outputs.matrix_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,10 +33,10 @@ jobs:
   build-images:
     name: Auto build k8s image
     needs:
-      - resolve-versions
+      - resolve-versions-arch
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.resolve-versions-arch.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
