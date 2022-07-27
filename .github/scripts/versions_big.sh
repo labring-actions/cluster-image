@@ -4,7 +4,7 @@
 echo "Resolving big versions in $(pwd)"
 
 
-VERSIONS={\"version\":\"1.24\"}
+VERSIONS={\"version\":\"1.24\"},
 
 echo "versions is : {\"include\":[${VERSIONS%?}]}"
 
