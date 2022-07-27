@@ -35,7 +35,7 @@ jobs:
         env:
           sealos: 4.1.0-rc1
 
-      - name: Download image-shim amd64
+      - name: Download image-shim and cri and kube
         run: |
           .github/scripts/download-shim.sh
           .github/scripts/download-cri.sh
