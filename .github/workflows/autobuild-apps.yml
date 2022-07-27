@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
           app: ${{ steps.autobuild.outputs.app }}
           version: ${{ steps.autobuild.outputs.version }}
-        run: .github/scripts/configs.sh
+        run: .github/scripts/apps.sh
 
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
