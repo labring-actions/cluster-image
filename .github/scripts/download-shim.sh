@@ -9,12 +9,10 @@ fi
 chmod a+x image-cri-shim
 sudo mv image-cri-shim /tmp/shim/${arch}/
 
-
 mkdir -p /tmp/sealctl/${arch}
-wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${sealos}_linux_${arch}.tar.gz
 tar -zxvf sealos_${sealos}_linux_${arch}.tar.gz sealctl
 if [ $? != 0 ]; then
-   echo "====download and targz sealctl failed!===="
+   echo "====targz sealctl failed!===="
    exit 1
 fi
 chmod a+x sealctl

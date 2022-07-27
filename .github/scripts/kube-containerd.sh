@@ -36,7 +36,7 @@ sed -i "s#__pause__#k8s.gcr.io/${pauseImage##k8s.gcr.io/}#g" ./$buildDir/etc/kub
 sed -i "s#__pause__#sealos.hub:5000/${pauseImage##k8s.gcr.io/}#g" ./$buildDir/etc/config.toml
 cd $buildDir
 chmod  -R 0755  *
-sudo sealos build -t $registry/$repo/kubernetes:${kubeVersion}-${arch} --platform linux/${arch} -f Kubefile  .
+sudo sealos build -t $registry/$repo/kubernetes:v${kubeVersion}-${arch} --platform linux/${arch} -f Kubefile  .
 
 sudo buildah login --username $username --password $password $registry
-sudo buildah push $registry/$repo/kubernetes:${kubeVersion}-${arch}
+sudo buildah push $registry/$repo/kubernetes:v${kubeVersion}-${arch}

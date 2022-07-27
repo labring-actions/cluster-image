@@ -92,7 +92,7 @@ jobs:
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           app: kubernetes
-          version: ${{ matrix.version }}
+          version: v${{ matrix.version }}
         run: .github/scripts/manifest.sh
 
       - name: Sync Manifest Image
@@ -102,7 +102,7 @@ jobs:
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
           app: kubernetes
-          version: ${{ matrix.version }}
+          version: v${{ matrix.version }}
         run: .github/scripts/manifest.sh
 
       - name: Success Commit
