@@ -15,50 +15,45 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.TOKEN }}
-      - name: Auto build image
-        id: autobuild
+      - name: Download buildah and sealos
+        run: .github/scripts/download.sh
         env:
-          ak: ${{ secrets.AK }}
-          sk: ${{ secrets.SK }}
-          registry: docker.io
-          username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
-          password: ${{ secrets.REGISTRY }}
           sealos: 4.1.0-rc1
-          aliyun_registry: registry.cn-qingdao.aliyuncs.com
-          aliyun_username: ${{ secrets.ALIY_REGISTRY_NAME }}
-          aliyun_repo: ${{ github.repository_owner }}
-          aliyun_password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
+      - name: Write vars
+        id: autobuild
         run: |
           commentbody="${{github.event.comment.body}}"
           app=`echo "$commentbody"| awk '{print $2}'`
           version=`echo "$commentbody"| awk '{print $3}'`
-          echo "app: $app"
-          echo "version: $version"
-          wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${sealos}_linux_amd64.tar.gz
-          tar -zxvf sealos_${sealos}_linux_amd64.tar.gz sealos
-          chmod a+x sealos
-          sudo mv sealos /usr/bin/
-          wget https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64 --no-check-certificate -O buildah
-          chmod a+x buildah
-          sudo mv buildah /usr/bin/
-          cp -rf .github/hack/* .
-          sudo sh application.sh $version $registry $repo $username $password $app  > output.log
-          sudo sh application.sh $version $aliyun_registry $aliyun_repo $aliyun_username $aliyun_password $app
-          echo "sealos push $aliyun_registry/$aliyun_repo/$app:$version success" >> output.log
+          echo "::set-output name=app::$app"
+          echo "::set-output name=version::$version"
+      - name: Build Image
+        env:
+          registry: docker.io
+          username: ${{ github.repository_owner }}
+          repo: ${{ github.repository_owner }}
+          password: ${{ secrets.REGISTRY }}
+          app: ${{ steps.autobuild.outputs.app }}
+          version: ${{ steps.autobuild.outputs.version }}
+        run: .github/scripts/apps.sh
+      - name: Sync image
+        env:
+          registry: registry.cn-qingdao.aliyuncs.com
+          username: ${{ secrets.ALIY_REGISTRY_NAME }}
+          repo: ${{ github.repository_owner }}
+          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
+          app: ${{ steps.autobuild.outputs.app }}
+          version: ${{ steps.autobuild.outputs.version }}
+        run: .github/scripts/configs.sh
 
-          body="$(cat output.log)"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}"
-          echo "::set-output name=body::$body"
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            ${{ steps.autobuild.outputs.body }}
+            image docker.io/${{ github.repository_owner }}/${{ steps.autobuild.outputs.app }}:${{ steps.autobuild.outputs.version }} build successfully!
+            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/${{ steps.autobuild.outputs.app }}:${{ steps.autobuild.outputs.version }} build successfully!
             ```
 
             detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-apps.yml)
