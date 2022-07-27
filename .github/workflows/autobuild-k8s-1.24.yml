@@ -7,8 +7,8 @@ jobs:
   resolve-versions:
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
-#    outputs:
-#      matrix: ${{ steps.set-versions.outputs.matrix }}
+    outputs:
+      matrix: ${{ steps.set-versions.outputs.matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
