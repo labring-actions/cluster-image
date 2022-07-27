@@ -1,6 +1,4 @@
 #!/bin/bash
-
-
 cd config/$app/$version
 filename=Kubefile
 if  [ -f Dockerfile ]; then

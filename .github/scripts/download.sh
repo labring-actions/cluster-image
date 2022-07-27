@@ -1,5 +1,4 @@
 #!/bin/bash
-
 wget https://github.com/labring/sealos/releases/download/v$sealos/sealos_${sealos}_linux_amd64.tar.gz
 tar -zxvf sealos_${sealos}_linux_amd64.tar.gz sealos
 chmod a+x sealos

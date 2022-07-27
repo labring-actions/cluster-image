@@ -1,10 +1,10 @@
 #!/bin/bash
-version=${1:-v3.22.1}
-registry=${2:-docker.io}
-repo=${3:-cuisongliu}
-username=${4:-cuisongliu}
-password=${5:-}
-app=${6:-calico}
+#version=${1:-v3.22.1}
+#registry=${2:-docker.io}
+#repo=${3:-cuisongliu}
+#username=${4:-cuisongliu}
+#password=${5:-}
+#app=${6:-calico}
 prefix=$registry/$repo
 buildDir=.build-image
 mkdir -p $buildDir
