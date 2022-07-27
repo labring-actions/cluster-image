@@ -4,9 +4,25 @@ on:
     types:
       - created
 jobs:
+  resolve-issue-var:
+    if: startswith(github.event.comment.body, '/imagebuild_apps')
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.set-appversion.outputs.app }}
+      version: ${{ steps.set-appversion.outputs.version }}
+    steps:
+      - name: Write vars
+        id: set-appversion
+        run: |
+          commentbody="${{github.event.comment.body}}"
+          app=`echo "$commentbody"| awk '{print $2}'`
+          version=`echo "$commentbody"| awk '{print $3}'`
+          echo "::set-output name=app::$app"
+          echo "::set-output name=version::$version"
   build_apps:
     name: Auto build app image
-    if: startswith(github.event.comment.body, '/imagebuild_apps')
+    needs:
+      - resolve-issue-var
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -22,22 +38,14 @@ jobs:
         run: .github/scripts/download.sh
         env:
           sealos: 4.1.0-rc1
-      - name: Write vars
-        id: autobuild
-        run: |
-          commentbody="${{github.event.comment.body}}"
-          app=`echo "$commentbody"| awk '{print $2}'`
-          version=`echo "$commentbody"| awk '{print $3}'`
-          echo "::set-output name=app::$app"
-          echo "::set-output name=version::$version"
       - name: Build Image
         env:
           registry: docker.io
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-          app: ${{ steps.autobuild.outputs.app }}
-          version: ${{ steps.autobuild.outputs.version }}
+          app: ${{ needs.resolve-issue-var.outputs.app }}
+          version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
         run: .github/scripts/apps.sh
       - name: Sync image
@@ -46,13 +54,14 @@ jobs:
           username: ${{ secrets.ALIY_REGISTRY_NAME }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-          app: ${{ steps.autobuild.outputs.app }}
-          version: ${{ steps.autobuild.outputs.version }}
+          app: ${{ needs.resolve-issue-var.outputs.app }}
+          version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
         run: .github/scripts/apps.sh
 
   build_manifest:
     needs:
+      - resolve-issue-var
       - build_apps
     name: Auto manifest app image
     runs-on: ubuntu-latest
@@ -67,22 +76,14 @@ jobs:
         run: .github/scripts/download.sh
         env:
           sealos: 4.1.0-rc1
-      - name: Write vars
-        id: autobuild
-        run: |
-          commentbody="${{github.event.comment.body}}"
-          app=`echo "$commentbody"| awk '{print $2}'`
-          version=`echo "$commentbody"| awk '{print $3}'`
-          echo "::set-output name=app::$app"
-          echo "::set-output name=version::$version"
       - name: Manifest Image
         env:
           registry: docker.io
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-          app: ${{ steps.autobuild.outputs.app }}
-          version: ${{ steps.autobuild.outputs.version }}
+          app: ${{ needs.resolve-issue-var.outputs.app }}
+          version: ${{ needs.resolve-issue-var.outputs.version }}
         run: .github/scripts/manifest.sh
 
       - name: Sync Manifest Image
@@ -91,8 +92,8 @@ jobs:
           username: ${{ secrets.ALIY_REGISTRY_NAME }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-          app: ${{ steps.autobuild.outputs.app }}
-          version: ${{ steps.autobuild.outputs.version }}
+          app: ${{ needs.resolve-issue-var.outputs.app }}
+          version: ${{ needs.resolve-issue-var.outputs.version }}
         run: .github/scripts/manifest.sh
 
       - name: Success Commit
@@ -101,8 +102,8 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            image docker.io/${{ github.repository_owner }}/${{ steps.autobuild.outputs.app }}:${{ steps.autobuild.outputs.version }} build successfully!
-            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/${{ steps.autobuild.outputs.app }}:${{ steps.autobuild.outputs.version }} build successfully!
+            image docker.io/${{ github.repository_owner }}/${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
+            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
             ```
             
             detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-apps.yml)
