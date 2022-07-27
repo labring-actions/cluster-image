@@ -1,0 +1,11 @@
+#!/bin/bash
+# Recursively finds all directories with a go.mod file and creates
+# a GitHub Actions JSON output option. This is used by the linter action.
+
+echo "Resolving versions in $(pwd)"
+
+filePath=$(pwd)/.github/versions/CHANGELOG-${versionGroup}.md
+
+VERSIONS=$(cat $filePath| grep "\[v${versionGroup}" | grep -v "alpha" | grep -v "beta"| grep -v "rc" | awk '{print $2}' | cut -d '[' -f  2 | cut -d ']' -f 1   | awk '{printf "{\"'version'\":\"%s\"},",$1}')
+
+echo "::set-output name=version::{\"include\":[${VERSIONS%?}]}"
