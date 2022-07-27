@@ -8,7 +8,7 @@ jobs:
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.set-versions.outputs.version }}
+      matrix: ${{ steps.set-versions.outputs.matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,9 +23,7 @@ jobs:
       - resolve-versions
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        version: ${{ fromJson(needs.resolve-versions.outputs.version) }}
-        arch: [ amd64,arm64 ]
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -74,8 +72,7 @@ jobs:
       - build-images
     name: Auto manifest k8s image
     strategy:
-      matrix:
-        version: ${{ fromJson(needs.resolve-versions.outputs.version) }}
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
     runs-on: ubuntu-latest
     permissions:
       issues: write
