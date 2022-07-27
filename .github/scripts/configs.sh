@@ -6,4 +6,12 @@ if  [ -f Dockerfile ]; then
 fi
 sudo sealos login $registry  -u $username -p  $password
 sudo sealos build -t $registry/$repo/$app:$version -f $filename .
+if [ $? != 0 ]; then
+   echo "====build config image failed!===="
+   exit 1
+fi
 sudo sealos push $registry/$repo/$app:$version
+if [ $? != 0 ]; then
+   echo "====push app image failed!===="
+   exit 1
+fi
