@@ -6,6 +6,10 @@ cp -rf rootfs/* $buildDir/
 cp -rf containerd/* $buildDir/
 # library install
 mv /tmp/library/${arch}/library.tar.gz .
+if [ $? != 0 ]; then
+   echo "====cp library failed!===="
+   exit 1
+fi
 tar xf library.tar.gz && rm -rf library.tar.gz
 cp -rf library/bin/*    $buildDir/bin/
 ls -l  $buildDir/bin/
@@ -15,18 +19,46 @@ rm -rf library
 cd $buildDir/cri/lib64 && tar -czf containerd-lib.tar.gz lib && rm -rf lib && cd ../../../
 #kube install
 mv /tmp/kube/${arch}/* $buildDir/bin/
+if [ $? != 0 ]; then
+   echo "====cp kube failed!===="
+   exit 1
+fi
 # registry install
 mv /tmp/registry/${arch}/registry.tar $buildDir/images/registry.tar
+if [ $? != 0 ]; then
+   echo "====cp registry failed!===="
+   exit 1
+fi
 # cri install
 mv /tmp/containerd/${arch}/cri-containerd-linux.tar.gz $buildDir/cri/
+if [ $? != 0 ]; then
+   echo "====cp cri failed!===="
+   exit 1
+fi
 # nerdctl install
 mv /tmp/nerdctl/${arch}/nerdctl $buildDir/cri/
+if [ $? != 0 ]; then
+   echo "====cp nerdctl failed!===="
+   exit 1
+fi
 # shim install
 mv /tmp/shim/${arch}/image-cri-shim $buildDir/cri/
+if [ $? != 0 ]; then
+   echo "====cp shim failed!===="
+   exit 1
+fi
 # sealctl
 mv /tmp/sealctl/${arch}/image-cri-shim $buildDir/opt/
+if [ $? != 0 ]; then
+   echo "====cp sealctl failed!===="
+   exit 1
+fi
 # lsof
 mv /tmp/lsof/${arch}/lsof $buildDir/opt/
+if [ $? != 0 ]; then
+   echo "====cp lsof failed!===="
+   exit 1
+fi
 chmod a+x $buildDir/opt/*
 # images
 cp -rf  /tmp/kubeadm/*ImageList   $buildDir/images/shim/

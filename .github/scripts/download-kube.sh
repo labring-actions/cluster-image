@@ -1,25 +1,25 @@
 #!/bin/bash
-mkdir -p /tmp/kube/${arch}
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubectl -O /tmp/kube/${arch}/kubectl
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubelet -O /tmp/kube/${arch}/kubelet
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubeadm -O /tmp/kube/${arch}/kubeadm
+mkdir -p .download/kube/${arch}
+wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubectl -O .download/kube/${arch}/kubectl
+wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubelet -O .download/kube/${arch}/kubelet
+wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubeadm -O .download/kube/${arch}/kubeadm
 if [ $? != 0 ]; then
    echo "====download kube failed!===="
    exit 1
 fi
-chmod a+x /tmp/kube/${arch}/*
+chmod a+x .download/kube/${arch}/*
 
 
-mkdir -p /tmp/kubeadm /tmp/images/
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/amd64/kubeadm -O /tmp/kubeadm/kubeadm
+mkdir -p .download/kubeadm .download/images/
+wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/amd64/kubeadm -O .download/kubeadm/kubeadm
 if [ $? != 0 ]; then
    echo "====download kubeadm failed!===="
    exit 1
 fi
-sudo mv /tmp/kubeadm/kubeadm /usr/bin/
+sudo mv .download/kubeadm/kubeadm /usr/bin/
 chmod a+x /usr/bin/kubeadm
 
-kubeadm config images list --kubernetes-version ${kubeVersion}  2>/dev/null>> /tmp/images/DefaultImageList
+kubeadm config images list --kubernetes-version ${kubeVersion}  2>/dev/null>> .download/images/DefaultImageList
 if [ $? != 0 ]; then
    echo "====get kubeadm images failed!===="
    exit 1
