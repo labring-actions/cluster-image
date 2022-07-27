@@ -1,0 +1,4 @@
+FROM scratch
+COPY manifests ./manifests
+COPY registry ./registry
+CMD ["kubectl apply -f manifests/kubesphere-installer.yaml","kubectl apply -f manifests/cluster-configuration.yaml"]
