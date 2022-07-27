@@ -10,4 +10,4 @@ VERSIONS=$(cat $filePath| grep "\[v${versionGroup}" | grep -v "alpha" | grep -v 
 
 echo "versions is : {\"include\":[${VERSIONS%?}]}"
 
-echo "::set-output name=matrix::{\"include\":[${VERSIONS%?}]}"
+#echo "::set-output name=matrix::{\"include\":[${VERSIONS%?}]}"
