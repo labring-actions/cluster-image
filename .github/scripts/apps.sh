@@ -9,8 +9,7 @@ filename=Kubefile
 if  [ -f Dockerfile ]; then
   filename=Dockerfile
 fi
-sh init.sh $arch
-[ -f init.sh  ] && cp  sh init.sh $arch
+[ -f init.sh  ] && sh init.sh $arch
 sudo sealos build -t $prefix/$app:$version-$arch --platform linux/$arch -f $filename  .
 if [ $? != 0 ]; then
    echo "====build app image failed!===="
