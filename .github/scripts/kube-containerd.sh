@@ -62,7 +62,11 @@ if [ $? != 0 ]; then
 fi
 chmod a+x $buildDir/opt/*
 # images
-cp -rf  ${downloadDIR}/kubeadm/*ImageList   $buildDir/images/shim/
+cp -rf  ${downloadDIR}/images/*ImageList   $buildDir/images/shim/
+if [ $? != 0 ]; then
+   echo "====cp images failed!===="
+   exit 1
+fi
 # replace
 pauseImage=$(cat ./$buildDir/images/shim/DefaultImageList  | grep k8s.gcr.io/pause)
 sed -i "s#__pause__#k8s.gcr.io/${pauseImage##k8s.gcr.io/}#g" ./$buildDir/etc/kubelet-flags.env
