@@ -85,7 +85,7 @@ jobs:
       - build-images
     name: Auto manifest k8s image
     strategy:
-      matrix: ${{ fromJson(needs.resolve-versions.outputs.version) }}
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
     runs-on: ubuntu-latest
     permissions:
       issues: write
