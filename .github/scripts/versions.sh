@@ -3,7 +3,7 @@
 # a GitHub Actions JSON output option. This is used by the linter action.
 echo "Resolving versions in $(pwd)"
 mkdir -p .versions
-echo "" > .versions/versions.txt
+rm -rf .versions/versions.txt
 for file in $(pwd)/.github/versions/CHANGELOG*
 do
   versions=$(echo $file | cut -d '-' -f 3 | cut -d '.' -f 1,2)
