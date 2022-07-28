@@ -1,4 +1,4 @@
-name: Auto build image
+name: Auto build image k8s for old
 on:
   issue_comment:
     types:
@@ -15,7 +15,7 @@ jobs:
       - name: Resolve Versions
         id: set-versions
         env:
-          versionGroup: ${{ matrix.version }}
+          dir: old
         run: sh .github/scripts/versions_arch.sh
   resolve-versions:
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
@@ -28,7 +28,7 @@ jobs:
       - name: Resolve Versions
         id: set-versions
         env:
-          versionGroup: ${{ matrix.version }}
+          dir: old
         run: sh .github/scripts/versions.sh
   build-images:
     name: Auto build k8s image

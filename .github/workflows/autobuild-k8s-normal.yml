@@ -1,0 +1,133 @@
+name: Auto build image k8s for normal
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  resolve-versions-arch:
+    if: startswith(github.event.comment.body, '/imagebuild_k8s')
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-versions.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Resolve Versions
+        id: set-versions
+        env:
+          dir: normal
+        run: sh .github/scripts/versions_arch.sh
+  resolve-versions:
+    if: startswith(github.event.comment.body, '/imagebuild_k8s')
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-versions.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Resolve Versions
+        id: set-versions
+        env:
+          dir: normal
+        run: sh .github/scripts/versions.sh
+  build-images:
+    name: Auto build k8s image
+    needs:
+      - resolve-versions-arch
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.resolve-versions-arch.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+
+      - name: Download buildah and sealos
+        run: .github/scripts/download.sh
+        env:
+          sealos: 4.1.0-rc1
+
+      - name: Download image-shim and cri and kube
+        run: |
+          .github/scripts/download-shim.sh
+          .github/scripts/download-cri.sh
+          .github/scripts/download-kube.sh
+        env:
+          sealos: 4.1.0-rc1
+          arch: ${{ matrix.arch }}
+          containerdVersion: 1.6.2
+          nerdctlVersion: 0.16.0
+          kubeVersion: ${{ matrix.version }}
+
+      - name: Auto build image
+        env:
+          registry: docker.io
+          username: ${{ github.repository_owner }}
+          repo: ${{ github.repository_owner }}
+          password: ${{ secrets.REGISTRY }}
+          arch: ${{ matrix.arch }}
+          kubeVersion: ${{ matrix.version }}
+        run: .github/scripts/kube-containerd.sh
+      - name: Auto Sync image
+        env:
+          pre_registry: docker.io
+          registry: registry.cn-qingdao.aliyuncs.com
+          username: ${{ secrets.ALIY_REGISTRY_NAME }}
+          repo: ${{ github.repository_owner }}
+          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
+          arch: ${{ matrix.arch }}
+          app: kubernetes
+          version: v${{ matrix.version }}
+        run: .github/scripts/sync.sh
+
+  build_manifest:
+    needs:
+      - resolve-versions
+      - build-images
+    name: Auto manifest k8s image
+    strategy:
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+      - name: Download buildah and sealos
+        run: .github/scripts/download.sh
+        env:
+          sealos: 4.1.0-rc1
+      - name: Manifest Image
+        env:
+          registry: docker.io
+          username: ${{ github.repository_owner }}
+          repo: ${{ github.repository_owner }}
+          password: ${{ secrets.REGISTRY }}
+          app: kubernetes
+          version: v${{ matrix.version }}
+        run: .github/scripts/manifest.sh
+
+      - name: Sync Manifest Image
+        env:
+          registry: registry.cn-qingdao.aliyuncs.com
+          username: ${{ secrets.ALIY_REGISTRY_NAME }}
+          repo: ${{ github.repository_owner }}
+          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
+          app: kubernetes
+          version: v${{ matrix.version }}
+        run: .github/scripts/manifest.sh
+
+      - name: Success Commit
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ```
+            image docker.io/${{ github.repository_owner }}/kubernetes:${{ matrix.version }} build successfully!
+            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/kubernetes:${{ matrix.version }} build successfully!
+            ```
+            
+            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s.yml)
