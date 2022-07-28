@@ -1,4 +1,4 @@
-name: Auto build APP image
+name: Auto build APP image in Hosted
 on:
   issue_comment:
     types:
