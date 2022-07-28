@@ -1,6 +1,6 @@
 #!/bin/bash
 pre_prefix=$pre_registry/$repo
-prefix=$pre_registry/$repo
+prefix=$registry/$repo
 sudo buildah login --username $username --password $password $registry
 sudo buildah tag $pre_prefix/$app:$version-$arch $prefix/$app:$version-$arch
 sudo buildah push $prefix/$app:$version-$arch
