@@ -76,5 +76,5 @@ chmod  -R 0755  *
 cat Kubefile
 sudo sealos build -t $registry/$repo/kubernetes:v${kubeVersion}-${arch} --platform linux/${arch} -f Kubefile  .
 
-sudo buildah login --username $username --password $password $registry
-sudo buildah push $registry/$repo/kubernetes:v${kubeVersion}-${arch}
+sudo sealos login $registry --username $username --password $password
+sudo sealos push $registry/$repo/kubernetes:v${kubeVersion}-${arch}

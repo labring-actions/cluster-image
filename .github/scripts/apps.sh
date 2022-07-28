@@ -16,8 +16,8 @@ if [ $? != 0 ]; then
    exit 1
 fi
 
-sudo buildah login --username $username --password $password $registry
-sudo buildah push $prefix/$app:$version-$arch
+sudo sealos login $registry --username $username --password $password
+sudo sealos push $prefix/$app:$version-$arch
 if [ $? != 0 ]; then
    echo "====push app image failed!===="
    exit 1
