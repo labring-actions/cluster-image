@@ -13,6 +13,7 @@ data:
         }
         hosts {
            $host $domain
+
            fallthrough
         }
         ready

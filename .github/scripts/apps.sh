@@ -16,7 +16,7 @@ if [ $? != 0 ]; then
    exit 1
 fi
 
-sudo sealos login $registry --username $username --password $password
+sudo sealos login $registry -u $username -p $password
 sudo sealos push $prefix/$app:$version-$arch
 if [ $? != 0 ]; then
    echo "====push app image failed!===="
