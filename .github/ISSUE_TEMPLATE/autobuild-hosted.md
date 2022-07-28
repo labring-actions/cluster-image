@@ -1,5 +1,5 @@
 ---
-name: 构建应用集群镜像
+name: 构建应用集群镜像 Hosted
 about: 根据分支目录构建集群镜像并推送到镜像仓库(使用美国ECS)
 title: '【Auto-build】helm'
 assignees: ''
