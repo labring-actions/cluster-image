@@ -50,6 +50,7 @@ jobs:
         run: .github/scripts/apps.sh
       - name: Sync image
         env:
+          pre_registry: docker.io
           registry: registry.cn-qingdao.aliyuncs.com
           username: ${{ secrets.ALIY_REGISTRY_NAME }}
           repo: ${{ github.repository_owner }}
@@ -57,7 +58,7 @@ jobs:
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
-        run: .github/scripts/apps.sh
+        run: .github/scripts/sync.sh
 
   build_manifest:
     needs:

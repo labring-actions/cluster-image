@@ -88,13 +88,15 @@ jobs:
         run: .github/scripts/kube-containerd.sh
       - name: Auto Sync image
         env:
+          pre_registry: docker.io
           registry: registry.cn-qingdao.aliyuncs.com
           username: ${{ secrets.ALIY_REGISTRY_NAME }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
           arch: ${{ matrix.arch }}
-          kubeVersion: ${{ matrix.version }}
-        run: .github/scripts/kube-containerd.sh
+          app: kubernetes
+          version: v${{ matrix.version }}
+        run: .github/scripts/sync.sh
 
   build_manifest:
     needs:
