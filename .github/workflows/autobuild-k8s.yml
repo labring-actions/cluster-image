@@ -4,23 +4,9 @@ on:
     types:
       - created
 jobs:
-  resolve-big-versions:
+  resolve-versions-arch:
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-versions.outputs.matrix }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Resolve Versions
-        id: set-versions
-        run: sh .github/scripts/versions_big.sh
-  resolve-versions-arch:
-    needs:
-      - resolve-big-versions
-    runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJson(needs.resolve-big-versions.outputs.matrix) }}
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
     steps:
@@ -32,11 +18,8 @@ jobs:
           versionGroup: ${{ matrix.version }}
         run: sh .github/scripts/versions_arch.sh
   resolve-versions:
-    needs:
-      - resolve-big-versions
+    if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJson(needs.resolve-big-versions.outputs.matrix) }}
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
     steps:
