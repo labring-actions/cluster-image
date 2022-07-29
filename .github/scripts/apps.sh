@@ -1,6 +1,7 @@
 #!/bin/bash
 prefix=$registry/$repo
 buildDir=.build-image
+rm -rf $buildDir || true
 mkdir -p $buildDir
 cp -rf applications/$app/$version/* $buildDir/
 # shellcheck disable=SC2164
