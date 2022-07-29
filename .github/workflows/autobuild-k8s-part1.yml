@@ -1,4 +1,4 @@
-name: Auto build image k8s for 1.21
+name: Auto build image k8s for part1
 on:
   issue_comment:
     types:
@@ -15,7 +15,7 @@ jobs:
       - name: Resolve Versions
         id: set-versions
         env:
-          versionGroup: 1.21
+          part: 1
         run: sh .github/scripts/versions_arch.sh
   resolve-versions:
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
@@ -28,7 +28,7 @@ jobs:
       - name: Resolve Versions
         id: set-versions
         env:
-          versionGroup: 1.21
+          part: 1
         run: sh .github/scripts/versions.sh
   build-images:
     name: Auto build k8s image
@@ -130,4 +130,4 @@ jobs:
             image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/kubernetes:${{ matrix.version }} build successfully!
             ```
             
-            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-1.21.yml)
+            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-1.15.yml)
