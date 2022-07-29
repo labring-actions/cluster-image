@@ -47,7 +47,8 @@ jobs:
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
-        run: .github/scripts/apps.sh
+          procs: 3
+        run: .github/scripts/apps-hosts.sh
       - name: Sync image
         env:
           pre_registry: docker.io
