@@ -9,5 +9,5 @@ if [ $? != 0 ]; then
    exit 1
 fi
 
-sudo sealos rmi -f  $pre_prefix/$app:$version-$arch
-sudo sealos rmi -f  $prefix/$app:$version-$arch
+sudo sealos rmi -f  $pre_prefix/$app:$version-$arch || true
+sudo sealos rmi -f  $prefix/$app:$version-$arch  || true

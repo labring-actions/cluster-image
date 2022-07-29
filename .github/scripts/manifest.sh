@@ -1,5 +1,6 @@
 #!/bin/bash
 prefix=$registry/$repo
+sudo buildah rmi $prefix/$app:$version ||true
 sudo buildah login --username $username --password $password $registry
 sudo buildah manifest create $prefix/$app:$version
 sudo buildah manifest add $prefix/$app:$version docker://$prefix/$app:$version-amd64

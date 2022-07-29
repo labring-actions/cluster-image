@@ -11,6 +11,7 @@ if  [ -f Dockerfile ]; then
   filename=Dockerfile
 fi
 [ -f init.sh  ] && sh init.sh $arch
+sudo sealos rmi -f $prefix/$app:$version-$arch || true
 sudo sealos build -t $prefix/$app:$version-$arch --platform linux/$arch -f $filename  .
 if [ $? != 0 ]; then
    echo "====build app image failed!===="
