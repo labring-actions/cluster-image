@@ -130,4 +130,4 @@ jobs:
             image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/kubernetes:${{ matrix.version }} build successfully!
             ```
             
-            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s.yml)
+            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-1.17.yml)
