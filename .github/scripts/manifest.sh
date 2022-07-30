@@ -10,3 +10,4 @@ if [ $? != 0 ]; then
    echo "====push  image manifest failed!===="
    exit 1
 fi
+sudo buildah rmi $prefix/$app:$version ||true
