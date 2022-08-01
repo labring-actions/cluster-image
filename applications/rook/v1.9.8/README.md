@@ -28,6 +28,6 @@ sealos run \
   labring/kubernetes:v1.24.3 \
   labring/calico:v3.22.1 \
   labring/helm:v3.8.2 \
-  registry.cn-shenzhen.aliyuncs.com/cnmirror/rook:v1.9.8
+  labring/rook:v1.9.8
 ```
 
