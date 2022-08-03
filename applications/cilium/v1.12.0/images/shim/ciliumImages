@@ -1,0 +1,16 @@
+quay.io/cilium/cilium:v1.12.0
+quay.io/cilium/operator-generic:v1.12.0
+quay.io/cilium/certgen:v0.1.8
+quay.io/cilium/hubble-relay:v1.12.0
+quay.io/cilium/hubble-ui-backend:v0.9.0
+quay.io/cilium/hubble-ui:v0.9.0
+quay.io/cilium/cilium-etcd-operator:v2.0.7
+quay.io/cilium/operator:v1.12.0
+quay.io/cilium/startup-script:d69851597ea019af980891a4628fb36b7880ec26
+quay.io/cilium/clustermesh-apiserver:v1.12.0
+quay.io/coreos/etcd:v3.5.4
+# connectivity test images
+quay.io/cilium/alpine-curl:v1.4.0
+quay.io/cilium/json-mock:v1.3.0
+docker.io/coredns/coredns:1.9.3
+quay.io/cilium/network-perf:bf58fb8bc57c4933dfa6e2a9581d3925c0a0571e
