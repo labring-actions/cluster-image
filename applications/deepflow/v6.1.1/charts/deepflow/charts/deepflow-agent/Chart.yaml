@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: 6.1.1
+description: An automated observability platform for cloud-native developers.
+home: https://github.com/deepflowys/deepflow
+keywords:
+- deepflow
+kubeVersion: '>=1.16.0-0'
+name: deepflow-agent
+sources:
+- https://github.com/deepflowys/deepflow
+type: application
+version: 0.1.002
