@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["kubectl apply -f manifests/longhorn-iscsi-installation.yaml -f manifests/longhorn-nfs-installation.yaml","helm upgrade --install longhorn charts/longhorn --namespace longhorn-system --create-namespace --set service.ui.type=NodePort"]
