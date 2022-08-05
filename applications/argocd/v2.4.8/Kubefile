@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm install argocd charts/argo-cd --namespace=argocd --create-namespace --set server.service.type=NodePort"]
