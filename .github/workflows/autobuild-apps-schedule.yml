@@ -1,16 +1,14 @@
-name: Auto build image k8s for part3
+name: Auto build image k8s for part1
 on:
-  issue_comment:
-    types:
-      - created
+  push:
+    branches:
+      - '*'
+  schedule:
+    - cron: '0 22 * * *'
 env:
   sealos: 4.1.0-rc1
-  containerdVersion: 1.6.2
-  nerdctlVersion: 0.16.0
-  part: 3
 jobs:
   resolve-versions-arch:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
@@ -21,7 +19,6 @@ jobs:
         id: set-versions
         run: sh .github/scripts/versions_arch.sh
   resolve-versions:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
@@ -47,15 +44,6 @@ jobs:
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
 
-      - name: Download image-shim and cri and kube
-        run: |
-          .github/scripts/download-shim.sh
-          .github/scripts/download-cri.sh
-          .github/scripts/download-kube.sh
-        env:
-          arch: ${{ matrix.arch }}
-          kubeVersion: ${{ matrix.version }}
-
       - name: Auto build image
         env:
           registry: docker.io
@@ -63,8 +51,9 @@ jobs:
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           arch: ${{ matrix.arch }}
-          kubeVersion: ${{ matrix.version }}
-        run: .github/scripts/kube-containerd.sh
+          app: ${{ matrix.app }}
+          version: ${{ matrix.version }}
+        run: .github/scripts/apps.sh
       - name: Auto Sync image
         env:
           pre_registry: docker.io
@@ -73,7 +62,7 @@ jobs:
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
           arch: ${{ matrix.arch }}
-          app: kubernetes
+          app: ${{ matrix.app }}
           version: v${{ matrix.version }}
         run: .github/scripts/sync.sh
 
@@ -100,8 +89,8 @@ jobs:
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-          app: kubernetes
-          version: v${{ matrix.version }}
+          app: ${{ matrix.app }}
+          version: ${{ matrix.version }}
         run: .github/scripts/manifest.sh
 
       - name: Sync Manifest Image
@@ -110,18 +99,6 @@ jobs:
           username: ${{ secrets.ALIY_REGISTRY_NAME }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-          app: kubernetes
+          app: ${{ matrix.app }}
           version: v${{ matrix.version }}
         run: .github/scripts/manifest.sh
-
-      - name: Success Commit
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            ```
-            image docker.io/${{ github.repository_owner }}/kubernetes:v${{ matrix.version }} build successfully!
-            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/kubernetes:v${{ matrix.version }} build successfully!
-            ```
-            
-            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-part3.yml)
