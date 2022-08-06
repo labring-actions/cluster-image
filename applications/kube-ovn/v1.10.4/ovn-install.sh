@@ -21,7 +21,7 @@ CNI_CONFIG_PRIORITY=${CNI_CONFIG_PRIORITY:-01}
 # EXCHANGE_LINK_NAME=${EXCHANGE_LINK_NAME:-false}
 # The nic to support container network can be a nic name or a group of regex
 # separated by comma, if empty will use the nic that the default route use
-IFACE=${IFACE:-}
+IFACE="eth.*|en.*"
 # Specifies the name of the dpdk tunnel iface.
 DPDK_TUNNEL_IFACE=${DPDK_TUNNEL_IFACE:-br-phy}
 
@@ -31,9 +31,9 @@ CNI_BIN_DIR="/opt/cni/bin"
 REGISTRY="kubeovn"
 VERSION="v1.10.4"
 IMAGE_PULL_POLICY="IfNotPresent"
-POD_CIDR="100.64.0.0/16"                # Do NOT overlap with NODE/SVC/JOIN CIDR
+POD_CIDR="100.64.0.0/10"                # Do NOT overlap with NODE/SVC/JOIN CIDR
 POD_GATEWAY="100.64.0.1"
-SVC_CIDR="10.96.0.0/12"                # Do NOT overlap with NODE/POD/JOIN CIDR
+SVC_CIDR="10.96.0.0/22"                # Do NOT overlap with NODE/POD/JOIN CIDR
 JOIN_CIDR="100.65.0.0/16"              # Do NOT overlap with NODE/POD/SVC CIDR
 PINGER_EXTERNAL_ADDRESS="114.114.114.114"  # Pinger check external ip probe
 PINGER_EXTERNAL_DOMAIN="alauda.cn"         # Pinger check external domain probe
