@@ -3,7 +3,7 @@
 Build command
 
 ```shell
-sealos build -f Dockerfile -t registry.cn-qingdao.aliyuncs.com/labring/flannel:v1.19.0 .
+sealos build -f Dockerfile -t docker.io/labring/flannel:v1.19.0 .
 ```
 
 manifests
