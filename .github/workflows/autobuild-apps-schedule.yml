@@ -1,8 +1,8 @@
 name: Auto build image k8s for part1
 on:
-  push:
-    branches:
-      - '*'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
   schedule:
     - cron: '0 22 * * *'
 env:
@@ -29,7 +29,7 @@ jobs:
         id: set-versions
         run: sh .github/scripts/versions_schedule.sh
   build-images:
-    name: Auto build k8s image
+    name: Auto build schedule app image
     needs:
       - resolve-versions-arch
     runs-on: ubuntu-latest
@@ -63,14 +63,14 @@ jobs:
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
           arch: ${{ matrix.arch }}
           app: ${{ matrix.app }}
-          version: v${{ matrix.version }}
+          version: ${{ matrix.version }}
         run: .github/scripts/sync.sh
 
   build_manifest:
     needs:
       - resolve-versions
       - build-images
-    name: Auto manifest k8s image
+    name: Auto manifest schedule app image
     strategy:
       matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
     runs-on: ubuntu-latest
@@ -100,5 +100,5 @@ jobs:
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
           app: ${{ matrix.app }}
-          version: v${{ matrix.version }}
+          version: ${{ matrix.version }}
         run: .github/scripts/manifest.sh
