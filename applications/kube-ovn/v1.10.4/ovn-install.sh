@@ -21,7 +21,7 @@ CNI_CONFIG_PRIORITY=${CNI_CONFIG_PRIORITY:-01}
 # EXCHANGE_LINK_NAME=${EXCHANGE_LINK_NAME:-false}
 # The nic to support container network can be a nic name or a group of regex
 # separated by comma, if empty will use the nic that the default route use
-IFACE="eth.*|en.*"
+IFACE=${IFACE:-}
 # Specifies the name of the dpdk tunnel iface.
 DPDK_TUNNEL_IFACE=${DPDK_TUNNEL_IFACE:-br-phy}
 
@@ -167,7 +167,6 @@ echo "Enable Networkpolicy: $ENABLE_NP"
 echo "Enable EIP and SNAT:  $ENABLE_EIP_SNAT"
 echo "Enable Mirror:        $ENABLE_MIRROR"
 echo "-------------------------------"
-
 if [[ $ENABLE_SSL = "true" ]];then
   echo "[Step 0/6] Generate SSL key and cert"
   exist=$(kubectl get secret -n kube-system kube-ovn-tls --ignore-not-found)
