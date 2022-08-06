@@ -1,3 +1,3 @@
 FROM scratch
 COPY . .
-CMD ["bash install.sh"]
+CMD ["bash ovn-install.sh"]
