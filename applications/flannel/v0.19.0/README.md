@@ -3,7 +3,7 @@
 Build command
 
 ```shell
-sealos build -f Dockerfile -t docker.io/labring/flannel:v1.19.0 .
+sealos build -f Dockerfile -t labring/flannel:v1.19.0 .
 ```
 
 manifests
@@ -31,7 +31,7 @@ sealos run  \
   --masters 192.168.72.50 \
   --nodes 192.168.72.51,192.168.72.52 -p 123456 \
   labring/kubernetes:v1.24.2 \
-  registry.cn-qingdao.aliyuncs.com/labring/flannel:v1.19.0
+  labring/flannel:v1.19.0
 ```
 
 2. verify pods status
