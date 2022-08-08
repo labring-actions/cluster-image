@@ -3,6 +3,8 @@ on:
   issue_comment:
     types:
       - created
+env:
+  sealos: 4.1.0-rc1
 jobs:
   issue_comment:
     name: Auto build config image
@@ -17,8 +19,6 @@ jobs:
           token: ${{ secrets.TOKEN }}
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
-        env:
-          sealos: 4.1.0-rc1
       - name: Write vars
         id: autobuild
         run: |

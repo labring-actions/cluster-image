@@ -1,6 +1,0 @@
-apiVersion: v2
-appVersion: 8.0.26
-description: A Helm chart for Kubernetes
-name: mysql
-type: application
-version: 0.1.000

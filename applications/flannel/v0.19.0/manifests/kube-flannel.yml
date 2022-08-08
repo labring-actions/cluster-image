@@ -148,7 +148,7 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       - name: install-cni-plugin-sealos
-        image: registry.cn-shenzhen.aliyuncs.com/cnmirror/cni-plugins:v1.1.1
+        image: docker.io/labring/docker-cni-plugins:v1.1.1
         command: ["/bin/sh"]
         args: ["-c", "cp -f /cni-plugins/* /opt/cni/bin/"]
         volumeMounts:

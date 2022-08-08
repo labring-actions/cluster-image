@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["kubectl create -f manifests/crd.yaml","helm upgrade --install tidb-operator charts/tidb-operator --namespace=tidb-admin --create-namespace","helm upgrade --install tidb-cluster charts/tidb-cluster --namespace=tidb-cluster --create-namespace --set pd.storageClassName=null,tikv.storageClassName=null"]

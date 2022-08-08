@@ -1,0 +1,10 @@
+clickhouse/clickhouse-server:21.8.15.7
+grafana/grafana:9.0.5
+mysql:8.0.26
+deepflowce/deepflow-agent:latest
+deepflowce/deepflow-app:latest
+deepflowce/deepflow-init-grafana-ds-dh:latest
+deepflowce/deepflow-init-grafana:latest
+deepflowce/deepflow-server:latest
+deepflowce/elector:latest
+

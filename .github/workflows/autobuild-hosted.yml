@@ -3,6 +3,8 @@ on:
   issue_comment:
     types:
       - created
+env:
+  sealos: 4.1.0-rc1
 jobs:
   resolve-issue-var:
     if: startswith(github.event.comment.body, '/imagebuild_hosted')
@@ -36,8 +38,6 @@ jobs:
           token: ${{ secrets.TOKEN }}
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
-        env:
-          sealos: 4.1.0-rc1
       - name: Build Image
         env:
           registry: docker.io
@@ -76,8 +76,6 @@ jobs:
           token: ${{ secrets.TOKEN }}
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
-        env:
-          sealos: 4.1.0-rc1
       - name: Manifest Image
         env:
           registry: docker.io
