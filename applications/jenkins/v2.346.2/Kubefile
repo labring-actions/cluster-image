@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade --install jenkins charts/jenkins --namespace jenkins --create-namespace --set controller.adminPassword=jenkins,controller.installLatestPlugins=false,controller.serviceType=NodePort,controller.initContainerEnv[0].name=JENKINS_UC,controller.initContainerEnv[0].value='https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json',controller.initContainerEnv[1].name=JENKINS_UC_DOWNLOAD,controller.initContainerEnv[1].value='https://mirrors.tuna.tsinghua.edu.cn/jenkins'"]
