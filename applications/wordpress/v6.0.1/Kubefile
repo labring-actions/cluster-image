@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm install wordpress charts/wordpress --namespace=wordpress --create-namespace --set wordpressUsername=admin,wordpressPassword=wordpress,service.type=NodePort"]
