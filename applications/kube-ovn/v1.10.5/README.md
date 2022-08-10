@@ -3,7 +3,7 @@
 Build command
 
 ```shell
-sealos build -f Dockerfile -t docker.io/labring/kube-ovn:v1.10.4 .
+sealos build -f Dockerfile -t docker.io/labring/kube-ovn:v1.10.5 .
 ```
 
 ## Usage
@@ -11,20 +11,20 @@ sealos build -f Dockerfile -t docker.io/labring/kube-ovn:v1.10.4 .
 1.Run kube-ovn kubernetes ,net interface is "eth.*,en.*"
 
 ```shell
-sealos run labring/kubernetes:v1.24.3 labring/kube-ovn:v1.10.4 --masters xxxx --nodes xxxxx
+sealos run labring/kubernetes:v1.24.3 labring/kube-ovn:v1.10.5 --masters xxxx --nodes xxxxx
 ```
 
 2.Run kube-ovn kubernetes , change default IFACE
 
 ```shell
-sealos run labring/kubernetes:v1.24.3 labring/kube-ovn:v1.10.4 -e IFACE=enp6s0f0,eth.* --masters xxxx --nodes xxxxx
+sealos run labring/kubernetes:v1.24.3 labring/kube-ovn:v1.10.5 -e IFACE=enp6s0f0,eth.* --masters xxxx --nodes xxxxx
 ```
 
 ## Running Loggers
 
 ```
 -------------------------------
-Kube-OVN Version:     v1.10.4
+Kube-OVN Version:     v1.10.5
 Default Network Mode: geneve
 Default Subnet CIDR:  100.64.0.0/10
 Join Subnet CIDR:     20.65.0.0/16
