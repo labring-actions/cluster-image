@@ -1,0 +1,7 @@
+percona/percona-xtradb-cluster-operator:1.11.0-haproxy
+docker.io/percona/pmm-client:2.28.0
+percona/percona-xtradb-cluster:8.0.27-18.1
+percona/percona-xtradb-cluster-operator:1.11.0
+percona/percona-xtradb-cluster-operator:1.11.0-logcollector
+docker.io/library/percona:8.0
+docker.io/percona/percona-xtradb-cluster-operator:1.11.0-pxc8.0-backup

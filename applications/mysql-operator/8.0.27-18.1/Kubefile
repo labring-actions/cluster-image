@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade --install pxc-operator charts/pxc-operator --namespace pxc --create-namespace","helm upgrade --install pxc-db charts/pxc-db --namespace pxc --create-namespace --set haproxy.serviceType=NodePort,pxc.persistence.enabled=true,pmm.enabled=true"]
