@@ -1,0 +1,48 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "netdata.name" . -}}
+{{- $ingressPath := .Values.ingress.path -}}
+{{- $ingressPathType := .Values.ingress.pathType -}}
+{{- $apiVersion := (include "netdata.ingress.apiVersion" .) -}}
+
+apiVersion: {{ $apiVersion }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ template "netdata.name" . }}
+    chart: {{ template "netdata.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- with .Values.ingress.spec }}
+{{ toYaml . | indent 2 }}
+{{- end }}
+{{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+{{- end }}
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            {{- if not (eq $apiVersion "extensions/v1beta1" "networking.k8s.io/v1beta1") }}
+            pathType: {{ $ingressPathType }}
+            {{- end }}
+            backend:
+              {{- if eq $apiVersion "extensions/v1beta1" "networking.k8s.io/v1beta1" }}
+              serviceName: {{ $fullName }}
+              servicePort: http
+              {{- else }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  name: http
+              {{- end }}
+  {{- end }}
+{{- end }}

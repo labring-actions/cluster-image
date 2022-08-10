@@ -1,0 +1,245 @@
+{{- if .Values.child.enabled -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ template "netdata.name" . }}-child
+  labels:
+    app: {{ template "netdata.name" . }}
+    chart: {{ template "netdata.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    role: child
+spec:
+  {{- with .Values.child.updateStrategy }}
+  updateStrategy: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ template "netdata.name" . }}
+      release: {{ .Release.Name }}
+      role: child
+  template:
+    metadata:
+      annotations:
+      {{- if .Values.child.podAnnotationAppArmor.enabled }}
+        container.apparmor.security.beta.kubernetes.io/{{ .Chart.Name }}: unconfined
+      {{- end }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+{{- with .Values.child.podAnnotations }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+      labels:
+        app: {{ template "netdata.name" . }}
+        release: {{ .Release.Name }}
+        role: child
+{{- with .Values.child.podLabels }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      restartPolicy: Always
+      hostPID: true
+      hostIPC: true
+      hostNetwork: {{ .Values.child.hostNetwork }}
+      {{- if .Values.child.priorityClassName }}
+      priorityClassName: "{{ .Values.child.priorityClassName }}"
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
+      initContainers:
+      {{- if .Values.sysctlInitContainer.enabled }}
+        - name: init-sysctl
+          image: "{{ .Values.initContainersImage.repository }}:{{ .Values.initContainersImage.tag }}"
+          imagePullPolicy: {{ .Values.initContainersImage.pullPolicy }}
+          command:
+{{ toYaml .Values.sysctlInitContainer.command | indent 12 }}
+          securityContext:
+            runAsNonRoot: false
+            privileged: true
+            runAsUser: 0
+          resources:
+{{ toYaml .Values.sysctlInitContainer.resources | indent 12 }}
+      {{- end }}
+        {{- if and .Values.child.persistence.enabled .Values.child.persistence.hostPath }}
+        - name: init-persistence
+          image: "{{ .Values.initContainersImage.repository }}:{{ .Values.initContainersImage.tag }}"
+          resources:
+            requests:
+              cpu: 10m
+          imagePullPolicy: {{ .Values.initContainersImage.pullPolicy }}
+          volumeMounts:
+            - name: persistencevarlibdir
+              mountPath: "/persistencevarlibdir"
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - '
+            chmod 777 /persistencevarlibdir;
+            '
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- if .Values.child.claiming.enabled }}
+            - name: NETDATA_CLAIM_URL
+              value: "{{ .Values.child.claiming.url }}"
+            {{- if .Values.child.claiming.token }}
+            - name: NETDATA_CLAIM_TOKEN
+              value: "{{ .Values.child.claiming.token }}"
+            {{- end }}
+            - name: NETDATA_CLAIM_ROOMS
+              value: "{{ .Values.child.claiming.rooms }}"
+            {{- end }}
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NETDATA_LISTENER_PORT
+              value: '{{ tpl (.Values.child.port | toString) . }}'
+            {{- if .Values.sd.child.enabled }}
+            - name: NETDATA_PLUGINS_GOD_WATCH_PATH
+              value: "/etc/netdata/go.d/sd/go.d.yml"
+            {{- end }}
+            {{- range $key, $value := .Values.child.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- with .Values.child.envFrom }}
+          envFrom:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ tpl (.Values.child.port | toString) . }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/v1/info
+              port: http
+            failureThreshold: {{ .Values.child.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.child.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.child.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.child.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /api/v1/info
+              port: http
+            failureThreshold: {{ .Values.child.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.child.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.child.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.child.readinessProbe.timeoutSeconds }}
+          volumeMounts:
+            - name: proc
+              readOnly: true
+              mountPath: /host/proc
+            - name: run
+              mountPath: /var/run/docker.sock
+            - name: sys
+              mountPath: /host/sys
+            - name: os-release
+              mountPath: /host/etc/os-release
+            {{- range $name, $config := .Values.child.configs }}
+            {{- if $config.enabled }}
+            - name: config
+              mountPath: {{ $config.path }}
+              subPath: {{ $name }}
+            {{- end }}
+            {{- end }}
+            {{- if and .Values.child.persistence.enabled .Values.child.persistence.hostPath }}
+            - name: persistencevarlibdir
+              mountPath: /var/lib/netdata
+            {{- end }}
+            {{- if .Values.sd.child.enabled }}
+            - name: sd-shared
+              mountPath: "/etc/netdata/go.d/sd/"
+            {{- end }}
+            {{- if .Values.child.extraVolumeMounts -}}
+{{ toYaml .Values.child.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+          securityContext:
+            capabilities:
+              add:
+                - SYS_PTRACE
+                - SYS_ADMIN
+          resources:
+{{ toYaml .Values.child.resources | indent 12 }}
+        {{- if .Values.sd.child.enabled }}
+        - name: sd
+          image: "{{ .Values.sd.image.repository }}:{{ .Values.sd.image.tag }}"
+          imagePullPolicy: {{ .Values.sd.image.pullPolicy }}
+          volumeMounts:
+            - name: sd-shared
+              mountPath: "/export/"
+          resources:
+          {{- toYaml .Values.sd.child.resources | nindent 12 }}
+          env:
+            - name: NETDATA_SD_CONFIG_MAP
+              value: "{{ .Values.sd.child.configmap.name }}:{{ .Values.sd.child.configmap.key }}"
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+        {{- end }}
+    {{- with .Values.child.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.child.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.child.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.child.terminationGracePeriodSeconds }}
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: run
+          hostPath:
+            path: /var/run/docker.sock
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: os-release
+          hostPath:
+            path: /etc/os-release
+        - name: config
+          configMap:
+            name: netdata-conf-child
+        {{- with .Values.child.persistence }}
+        {{- if  and .enabled .hostPath }}
+        - name: persistencevarlibdir
+          hostPath:
+            path: {{ .hostPath }}/var/lib/netdata
+            type: DirectoryOrCreate
+        {{- end }}
+        {{- end }}
+        {{- if .Values.sd.child.enabled }}
+        - name: sd-shared
+          emptyDir: { }
+        {{- end }}
+        {{- if .Values.child.extraVolumes }}
+{{ toYaml .Values.child.extraVolumes | indent 8}}
+        {{- end }}
+      dnsPolicy: {{ .Values.child.dnsPolicy }}
+{{- end }}
