@@ -1,0 +1,19 @@
+FROM scratch
+MAINTAINER sealyun
+LABEL init="init.sh \$criData \$registryDomain \$registryPort \$registryUsername \$registryPassword"
+LABEL version="v0.0.0"
+LABEL image="__lvscare__"
+LABEL clean="clean.sh \$criData"
+LABEL check="check.sh"
+LABEL init-registry="init-registry.sh \$registryPort \$registryData \$registryConfig"
+LABEL clean-registry="clean-registry.sh \$registryData \$registryConfig"
+LABEL auth="auth.sh \$registryDomain \$registryPort \$registryUsername \$registryPassword"
+LABEL sealos.io.type="rootfs"
+ENV criData=/var/lib/docker
+ENV registryData=/var/lib/registry
+ENV registryConfig=/etc/registry
+ENV registryDomain=sealos.hub
+ENV registryPort=5000
+ENV registryUsername=admin
+ENV registryPassword=passw0rd
+COPY . .

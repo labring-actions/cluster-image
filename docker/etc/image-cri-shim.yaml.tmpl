@@ -1,0 +1,8 @@
+shim: /var/run/image-cri-shim.sock
+cri: /run/containerd/containerd.sock
+address: http://{{ .registryDomain }}:{{ .registryPort }}
+force: true
+debug: false
+image: /var/lib/image-cri-shim
+sync: 0
+auth: {{ .registryUsername }}:{{ .registryPassword }}

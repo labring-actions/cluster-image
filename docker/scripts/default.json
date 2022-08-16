@@ -1,8 +1,0 @@
-{
-  "init": "init.sh $criData $registryDomain $registryPort",
-  "clean": "clean.sh $criData",
-  "init-registry": "init-registry.sh $registryPort $registryData $registryConfig",
-  "clean-registry": "clean-registry.sh $registryData $registryConfig",
-  "auth": "auth.sh $registryDomain $registryPort $registryUsername $registryPassword",
-  "check": "check.sh"
-}
