@@ -30,5 +30,4 @@ rm -f /usr/bin/docker-init
 rm -f /usr/bin/docker-proxy
 rm -f /usr/bin/dockerd
 rm -f /usr/bin/runc
-rm -f /usr/bin/crictl
 logger "clean docker success"
