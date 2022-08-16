@@ -6,3 +6,5 @@
 # User-specific stuff
 .idea
 bin
+app.log
+.versions
