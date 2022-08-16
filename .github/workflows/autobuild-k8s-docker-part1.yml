@@ -6,7 +6,7 @@ on:
 env:
   sealos: 4.1.0-rc1
   dockerVersion: 20.10.9
-  part: 1
+  part: docker1
 jobs:
   resolve-versions-arch:
     if: startswith(github.event.comment.body, '/imagebuild_k8s_docker')
