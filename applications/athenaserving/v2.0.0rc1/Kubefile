@@ -1,5 +1,5 @@
 FROM scratch
-COPY charts ./athenaserving
+COPY . athenaserving
 COPY registry ./registry
-CMD ["helm install athena athenaserving --set global.storageClass=local-hostpath"]
+CMD ["rm -rf athenaserving/registry && helm install athena athenaserving --set global.storageClass=local-hostpath"]
 
