@@ -37,6 +37,7 @@ if [ $? != 0 ]; then
 fi
 mv docker.tgz .download/docker/${arch}/
 
+# https://github.com/Mirantis/cri-dockerd
 
 mkdir -p .download/lsof/${arch}
 wget https://github.com/labring/cluster-image/releases/download/depend/lsof-linux-${arch} --no-check-certificate -O .download/lsof/${arch}/lsof
