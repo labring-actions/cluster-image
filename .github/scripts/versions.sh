@@ -6,6 +6,7 @@ mkdir -p .versions
 rm -rf .versions/versions.txt
 for file in $(pwd)/.github/versions/${part}/CHANGELOG*
 do
+  wget -qO "$file" "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}"
   versions=$(echo $file | cut -d '-' -f 3 | cut -d '.' -f 1,2)
   cat $file| grep "\[v"| grep -v "github"  | grep -v "alpha" | grep -v "stable"| grep -v "there" | grep -v "beta"| grep -v "rc" | awk '{print $2}' | cut -d '[' -f  2 | cut -d ']' -f 1 | cut -d 'v' -f 2  |  awk '{printf "{\"'version'\":\"%s\"},",$1}' >> .versions/versions.txt
 done
