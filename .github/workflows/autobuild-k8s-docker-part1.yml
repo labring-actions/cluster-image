@@ -4,7 +4,7 @@ on:
     types:
       - created
 env:
-  sealos: 4.1.0-rc1
+  sealos: 4.1.0-rc2
   dockerVersion: 20.10.9
   part: docker1
 jobs:
@@ -49,7 +49,7 @@ jobs:
       - name: Download image-shim and cri and kube
         run: |
           .github/scripts/download-shim.sh
-          .github/scripts/download-cri-docker.sh
+          .github/scripts/download-cri-dockershim.sh
           .github/scripts/download-kube.sh
         env:
           arch: ${{ matrix.arch }}
