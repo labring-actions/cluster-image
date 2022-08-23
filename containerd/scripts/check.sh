@@ -15,9 +15,10 @@
 
 
 source common.sh
+storage=${1:-/var/lib/registry}
 
 check_port
 check_cmd docker
 check_file /var/run/docker.sock
-check_file /var/lib/registry
+check_file $storage
 logger "check root,port,cri success"
