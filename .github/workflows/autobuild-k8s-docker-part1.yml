@@ -5,7 +5,7 @@ on:
       - created
 env:
   sealos: 4.1.0-rc2
-  dockerVersion: 20.10.9
+  dockerVersion: 20.10.17
   part: docker1
   criType: docker
 jobs:
