@@ -4,7 +4,7 @@ on:
     types:
       - created
 env:
-  sealos: 4.1.0-rc1
+  sealos: 4.1.0-rc2
 jobs:
   issue_comment:
     name: Auto build config image
@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.TOKEN }}
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
       - name: Write vars

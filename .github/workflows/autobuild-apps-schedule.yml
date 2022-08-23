@@ -6,7 +6,7 @@ on:
 #  schedule:
 #    - cron: '0 22 * * *'
 env:
-  sealos: 4.1.0-rc1
+  sealos: 4.1.0-rc2
 jobs:
   resolve-versions-arch:
     runs-on: ubuntu-latest
@@ -38,8 +38,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.TOKEN }}
 
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
@@ -79,8 +77,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.TOKEN }}
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
       - name: Manifest Image
