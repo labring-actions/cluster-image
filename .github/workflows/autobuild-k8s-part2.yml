@@ -8,6 +8,7 @@ env:
   containerdVersion: 1.6.2
   nerdctlVersion: 0.16.0
   part: 2
+  criType: containerd
 jobs:
   resolve-versions-arch:
     if: startswith(github.event.comment.body, '/imagebuild_k8s')
