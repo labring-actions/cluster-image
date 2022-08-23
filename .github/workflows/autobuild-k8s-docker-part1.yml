@@ -9,7 +9,7 @@ env:
   part: docker1
 jobs:
   resolve-versions-arch:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s_docker')
+    if: startswith(github.event.comment.body, '/imagebuild_docker_k8s')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
