@@ -1,4 +1,4 @@
-name: Auto build image k8s for part1
+name: Auto build image docker for k8s
 on:
   issue_comment:
     types:
