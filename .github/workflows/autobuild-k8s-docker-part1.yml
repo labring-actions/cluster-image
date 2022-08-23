@@ -21,7 +21,7 @@ jobs:
         id: set-versions
         run: sh .github/scripts/versions_arch.sh
   resolve-versions:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s_docker')
+    if: startswith(github.event.comment.body, '/imagebuild_docker_k8s')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
