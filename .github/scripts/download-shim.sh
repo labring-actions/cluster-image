@@ -20,7 +20,7 @@ sudo mv sealctl .download/sealctl/${arch}/
 
 mkdir -p .download/images/
 ipvsImage=ghcr.io/labring/lvscare:v${sealos}
-sed -i "s#__lvscare__#$ipvsImage#g" rootfs/Kubefile
+sed -i "s#__lvscare__#$ipvsImage#g" ${criType}/Kubefile
 echo "$ipvsImage" >>  .download/images/LvscareImageList
 if [ $? != 0 ]; then
    echo "====get lvscare image failed!===="

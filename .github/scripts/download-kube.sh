@@ -24,7 +24,7 @@ if [ $? != 0 ]; then
    echo "====get kubeadm images failed!===="
    exit 1
 fi
-sed -i "s/v0.0.0/v${kubeVersion}/g" rootfs/Kubefile
+sed -i "s/v0.0.0/v${kubeVersion}/g" ${criType}/Kubefile
 if [ $? != 0 ]; then
    echo "====sed kubernetes failed!===="
    exit 1
