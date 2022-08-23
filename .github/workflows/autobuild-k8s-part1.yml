@@ -4,9 +4,9 @@ on:
     types:
       - created
 env:
-  sealos: 4.1.0-rc1
-  containerdVersion: 1.6.2
-  nerdctlVersion: 0.16.0
+  sealos: 4.1.0-rc2
+  containerdVersion: 1.6.8
+  nerdctlVersion: 0.22.2
   part: 1
   criType: containerd
 jobs:

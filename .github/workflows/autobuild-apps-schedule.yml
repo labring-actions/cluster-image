@@ -6,7 +6,7 @@ on:
 #  schedule:
 #    - cron: '0 22 * * *'
 env:
-  sealos: 4.1.0-rc1
+  sealos: 4.1.0-rc2
 jobs:
   resolve-versions-arch:
     runs-on: ubuntu-latest
