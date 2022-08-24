@@ -11,7 +11,7 @@ env:
   criType: containerd
 jobs:
   resolve-versions-arch:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/imagebuild_part4_k8s')
+    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part4')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
@@ -22,7 +22,7 @@ jobs:
         id: set-versions
         run: sh .github/scripts/versions_arch.sh
   resolve-versions:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/imagebuild_part4_k8s')
+    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part4')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
@@ -63,7 +63,7 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
-        run: .github/scripts/kube-containerd-1.25.sh
+        run: .github/scripts/kube-containerd.sh
 #      - name: Auto Sync image
 #        env:
 #          pre_registry: docker.io

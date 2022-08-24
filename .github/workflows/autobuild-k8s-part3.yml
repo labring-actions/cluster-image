@@ -11,7 +11,7 @@ env:
   criType: containerd
 jobs:
   resolve-versions-arch:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/imagebuild_part3_k8s')
+    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part3')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
@@ -22,7 +22,7 @@ jobs:
         id: set-versions
         run: sh .github/scripts/versions_arch.sh
   resolve-versions:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/imagebuild_part3_k8s')
+    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part3')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-versions.outputs.matrix }}
