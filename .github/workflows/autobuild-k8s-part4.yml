@@ -1,4 +1,4 @@
-name: Auto build image k8s for part2
+name: Auto build image k8s for part4
 on:
   issue_comment:
     types:
@@ -7,7 +7,7 @@ env:
   sealos: 4.1.0-rc2
   containerdVersion: 1.6.8
   nerdctlVersion: 0.22.2
-  part: 2
+  part: 4
   criType: containerd
 jobs:
   resolve-versions-arch:
@@ -120,4 +120,4 @@ jobs:
             image docker.io/${{ github.repository_owner }}/kubernetes:v${{ matrix.version }} build successfully!
             ```
             
-            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-part2.yml)
+            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-part4.yml)

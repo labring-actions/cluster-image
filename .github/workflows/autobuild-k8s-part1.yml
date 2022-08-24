@@ -64,17 +64,17 @@ jobs:
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
         run: .github/scripts/kube-containerd.sh
-      - name: Auto Sync image
-        env:
-          pre_registry: docker.io
-          registry: registry.cn-qingdao.aliyuncs.com
-          username: ${{ secrets.ALIY_REGISTRY_NAME }}
-          repo: ${{ github.repository_owner }}
-          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-          arch: ${{ matrix.arch }}
-          app: kubernetes
-          version: v${{ matrix.version }}
-        run: .github/scripts/sync.sh
+#      - name: Auto Sync image
+#        env:
+#          pre_registry: docker.io
+#          registry: registry.cn-qingdao.aliyuncs.com
+#          username: ${{ secrets.ALIY_REGISTRY_NAME }}
+#          repo: ${{ github.repository_owner }}
+#          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
+#          arch: ${{ matrix.arch }}
+#          app: kubernetes
+#          version: v${{ matrix.version }}
+#        run: .github/scripts/sync.sh
 
   build_manifest:
     needs:
@@ -101,15 +101,15 @@ jobs:
           version: v${{ matrix.version }}
         run: .github/scripts/manifest.sh
 
-      - name: Sync Manifest Image
-        env:
-          registry: registry.cn-qingdao.aliyuncs.com
-          username: ${{ secrets.ALIY_REGISTRY_NAME }}
-          repo: ${{ github.repository_owner }}
-          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-          app: kubernetes
-          version: v${{ matrix.version }}
-        run: .github/scripts/manifest.sh
+#      - name: Sync Manifest Image
+#        env:
+#          registry: registry.cn-qingdao.aliyuncs.com
+#          username: ${{ secrets.ALIY_REGISTRY_NAME }}
+#          repo: ${{ github.repository_owner }}
+#          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
+#          app: kubernetes
+#          version: v${{ matrix.version }}
+#        run: .github/scripts/manifest.sh
 
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
@@ -118,7 +118,6 @@ jobs:
           body: |
             ```
             image docker.io/${{ github.repository_owner }}/kubernetes:v${{ matrix.version }} build successfully!
-            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/kubernetes:v${{ matrix.version }} build successfully!
             ```
             
             detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-part1.yml)
