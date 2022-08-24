@@ -4,11 +4,11 @@
 echo "Resolving versions in $(pwd)"
 mkdir -p .versions
 rm -rf .versions/versions_arch.txt
-for file in $(pwd)/.github/versions/${part}/CHANGELOG*
-do
-  wget -qO "$file" "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}"
-  versions=$(echo $file | cut -d '-' -f 3 | cut -d '.' -f 1,2)
-  cat $file| grep "\[v"| grep -v "github"  | grep -v "alpha" | grep -v "stable"| grep -v "there" | grep -v "beta"| grep -v "rc" | awk '{print $2}' | cut -d '[' -f  2 | cut -d ']' -f 1 | cut -d 'v' -f 2  |  awk '{printf "{\"'version'\":\"%s\",\"'arch'\":\"amd64\"},{\"'version'\":\"%s\",\"'arch'\":\"arm64\"},",$1,$1}' >> .versions/versions_arch.txt
+for file in $(pwd)/.github/versions/${part}/CHANGELOG*; do
+  wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
+    grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
+    cut -dv -f 2 |
+    awk '{printf "{\"'version'\":\"%s\",\"'arch'\":\"amd64\"},{\"'version'\":\"%s\",\"'arch'\":\"arm64\"},",$1,$1}' >>.versions/versions_arch.txt
 done
 VERSIONS_ARCH=$(cat .versions/versions_arch.txt)
 echo "versions arch is : {\"include\":[${VERSIONS_ARCH%?}]}"
