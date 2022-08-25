@@ -63,7 +63,7 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
-        run: .github/scripts/kube-containerd.sh
+        run: .github/scripts/kubernetes.sh
 #      - name: Auto Sync image
 #        env:
 #          pre_registry: docker.io

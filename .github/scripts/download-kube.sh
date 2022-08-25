@@ -1,31 +1,33 @@
 #!/bin/bash
-mkdir -p .download/kube/${arch}
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubectl -O .download/kube/${arch}/kubectl
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubelet -O .download/kube/${arch}/kubelet
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${arch}/kubeadm -O .download/kube/${arch}/kubeadm
-if [ $? != 0 ]; then
-   echo "====download kube failed!===="
-   exit 1
-fi
-chmod a+x .download/kube/${arch}/*
 
+#!/bin/bash
 
-mkdir -p .download/kubeadm .download/images/
-wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/amd64/kubeadm -O .download/kubeadm/kubeadm
-if [ $? != 0 ]; then
-   echo "====download kubeadm failed!===="
-   exit 1
-fi
-sudo mv .download/kubeadm/kubeadm /usr/bin/
-chmod a+x /usr/bin/kubeadm
+set -e
 
-kubeadm config images list --kubernetes-version ${kubeVersion}  2>/dev/null>> .download/images/DefaultImageList
-if [ $? != 0 ]; then
-   echo "====get kubeadm images failed!===="
-   exit 1
-fi
-sed -i "s/v0.0.0/v${kubeVersion}/g" ${criType}/Kubefile
-if [ $? != 0 ]; then
-   echo "====sed kubernetes failed!===="
-   exit 1
+ARCH=${arch?}
+CRI_TYPE=${criType?}
+KUBE=${kubeVersion?}
+
+mkdir -p ".download/kube/$ARCH" && {
+  if wget -qP ".download/kube/$ARCH" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/$ARCH/kubectl" &&
+    wget -qP ".download/kube/$ARCH" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/$ARCH/kubelet" &&
+    wget -qP ".download/kube/$ARCH" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/$ARCH/kubeadm"; then
+    chmod a+x ".download/kube/$ARCH"/*
+  else
+    echo "====download kube failed!===="
+  fi
+}
+
+if wget -qP /usr/bin "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/amd64/kubeadm"; then
+  chmod a+x /usr/bin/kubeadm
+  mkdir -p .download/images && {
+    if ! kubeadm config images list --kubernetes-version "$KUBE" 2>/dev/null >>.download/images/DefaultImageList; then
+      echo "====get kubeadm images failed!===="
+    fi
+    if ! sed -i "s/v0.0.0/v$KUBE/g" "$CRI_TYPE/Kubefile"; then
+      echo "====sed kubernetes failed!===="
+    fi
+  }
+else
+  echo "====download kubeadm failed!===="
 fi

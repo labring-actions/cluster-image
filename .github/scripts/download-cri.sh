@@ -1,51 +1,83 @@
 #!/bin/bash
-mkdir -p .download/library/${arch}
-wget https://github.com/labring/cluster-image/releases/download/depend/library-2.5-linux-${arch}.tar.gz --no-check-certificate -O .download/library/${arch}/library.tar.gz
-if [ $? != 0 ]; then
-   echo "====download library failed!===="
-   exit 1
-fi
 
-mkdir -p .download/registry/${arch}
-wget https://github.com/labring/cluster-image/releases/download/depend/registry-${arch}.tar --no-check-certificate -O .download/registry/${arch}/registry.tar
-if [ $? != 0 ]; then
-   echo "====download registry failed!===="
-   exit 1
-fi
+set -e
 
+ARCH=${arch?}
+CRI_TYPE=${criType?}
 
-mkdir -p .download/containerd/${arch}
-wget https://github.com/containerd/containerd/releases/download/v${containerdVersion}/cri-containerd-cni-${containerdVersion}-linux-${arch}.tar.gz --no-check-certificate -O cri-containerd-cni-linux.tar.gz
-if [ $? != 0 ]; then
-   echo "====download and targz containerd failed!===="
-   exit 1
-fi
-tar -zxf  cri-containerd-cni-linux.tar.gz
-rm -rf etc opt && mkdir -p usr/bin
-cp -rf usr/local/bin/* usr/bin/
-cp -rf usr/local/sbin/* usr/bin/ && rm -rf usr/bin/critest && rm -rf cri-containerd-cni-linux.tar.gz usr/local
-tar -czf cri-containerd-linux.tar.gz usr && rm -rf usr
-mv cri-containerd-linux.tar.gz .download/containerd/${arch}/
+DOCKER=${dockerVersion}
+CRIDOCKER=${criDockerVersion}
+CONTAINERD=${containerdVersion}
+NERDCTL=${nerdctlVersion}
 
+case $CRI_TYPE in
+containerd)
+  mkdir -p ".download/containerd/$ARCH" && {
+    if wget -qO dl.tgz "https://github.com/containerd/containerd/releases/download/v$CRIDOCKER/cri-containerd-cni-$CRIDOCKER-linux-$ARCH.tar.gz"; then
+      mkdir -p usr/bin
+      tar -zxf dl.tgz usr/local/bin -C usr/bin --strip-components=3
+      tar -zxf dl.tgz usr/local/sbin -C usr/bin --strip-components=3
+      rm -rf usr/bin/critest
+      tar -zcf ".download/containerd/$ARCH/cri-containerd-cni-linux.tar.gz" usr
+      rm dl.tgz
+    else
+      echo "====download and targz containerd failed!===="
+    fi
+  }
+  mkdir -p ".download/nerdctl/$ARCH" && {
+    if wget -qO- "https://github.com/containerd/nerdctl/releases/download/v$NERDCTL/nerdctl-$NERDCTL-linux-$arch.tar.gz" |
+      tar -zx nerdctl -C ".download/nerdctl/$ARCH"; then
+      chmod a+x ".download/nerdctl/$ARCH/nerdctl"
+    else
+      echo "====download and targz nerdctl failed!===="
+    fi
+  }
+  ;;
+docker | cri-dockerd)
+  if [[ -n $CRIDOCKER ]]; then
+    mkdir -p ".download/docker/$ARCH" && {
+      if ! wget -qO ".download/docker/$ARCH/cri-dockerd.tgz" "https://github.com/Mirantis/cri-dockerd/releases/download/v$CRIDOCKERD/cri-dockerd-$CRIDOCKERD.$ARCH.tgz"; then
+        echo "====download and targz cri-dockerd failed!===="
+      fi
+    }
+  else
+    case $ARCH in
+    amd64)
+      DOCKER_ARCH=x86_64
+      ;;
+    arm64)
+      DOCKER_ARCH=aarch64
+      ;;
+    *)
+      echo "Unsupported architecture $ARCH"
+      exit
+      ;;
+    esac
+    mkdir -p ".download/docker/$ARCH" && {
+      if ! wget -qO ".download/docker/$ARCH/docker.tgz" "https://download.docker.com/linux/static/stable/$DOCKER_ARCH/docker-$DOCKER.tgz"; then
+        echo "====download and targz docker failed!===="
+      fi
+    }
+  fi
+  ;;
+esac
 
-mkdir -p .download/nerdctl/${arch}
-wget https://github.com/containerd/nerdctl/releases/download/v${nerdctlVersion}/nerdctl-${nerdctlVersion}-linux-${arch}.tar.gz -O  nerdctl.tar.gz
-if [ $? != 0 ]; then
-   echo "====download and targz nerdctl failed!===="
-   exit 1
-fi
-tar xf nerdctl.tar.gz nerdctl
-mv nerdctl .download/nerdctl/${arch}/
-chmod a+x .download/nerdctl/${arch}/nerdctl
-rm -rf nerdctl.tar.gz
+mkdir -p ".download/library/$ARCH" && {
+  if ! wget -qO ".download/library/$ARCH/library.tar.gz" "https://github.com/labring/cluster-image/releases/download/depend/library-2.5-linux-$ARCH.tar.gz"; then
+    echo "====download library failed!===="
+  fi
+}
 
+mkdir -p ".download/registry/$ARCH" && {
+  if ! wget -qO ".download/registry/$ARCH/registry.tar" "https://github.com/labring/cluster-image/releases/download/depend/registry-$ARCH.tar"; then
+    echo "====download registry failed!===="
+  fi
+}
 
-
-mkdir -p .download/lsof/${arch}
-wget https://github.com/labring/cluster-image/releases/download/depend/lsof-linux-${arch} --no-check-certificate -O .download/lsof/${arch}/lsof
-if [ $? != 0 ]; then
-   echo "====download lsof failed!===="
-   exit 1
-fi
-chmod a+x .download/lsof/${arch}/lsof
-
+mkdir -p ".download/lsof/$ARCH" && {
+  if ! wget -qO ".download/lsof/$ARCH/lsof" "https://github.com/labring/cluster-image/releases/download/depend/lsof-linux-$ARCH"; then
+    chmod a+x ".download/lsof/$ARCH/lsof"
+  else
+    echo "====download lsof failed!===="
+  fi
+}
