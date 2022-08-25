@@ -4,7 +4,7 @@ on:
     types:
       - created
 env:
-  sealos: 4.1.0-rc2
+  sealos: 4.1.0-rc3
   containerdVersion: 1.6.8
   nerdctlVersion: 0.22.2
   part: 4

@@ -27,7 +27,7 @@ ldconfig
 [ -d  /etc/containerd/certs.d/ ] || mkdir /etc/containerd/certs.d/  -p
 cp ../etc/containerd.service /etc/systemd/system/
 chmod -R 755 ../cri
-tar -zxf ../cri/cri-containerd-linux.tar.gz -C /
+tar -zxf ../cri/cri-containerd.tar.gz -C /
 cp -f ../cri/nerdctl /usr/bin/
 chmod a+x /usr/bin/*
 systemctl enable containerd.service
