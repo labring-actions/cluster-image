@@ -4,7 +4,7 @@ on:
     types:
       - created
 env:
-  sealos: 4.1.0-rc2
+  sealos: 4.1.0-rc3
   dockerVersion: 20.10.17
   criDockerVersion: 0.2.5
   part: docker1
@@ -49,7 +49,7 @@ jobs:
       - name: Download image-shim and cri and kube
         run: |
           .github/scripts/download-shim.sh
-          .github/scripts/download-cri-dockershim.sh
+          .github/scripts/download-cri.sh
           .github/scripts/download-kube.sh
         env:
           arch: ${{ matrix.arch }}
@@ -63,7 +63,7 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
-        run: .github/scripts/kube-docker.sh
+        run: .github/scripts/kubernetes.sh
 #      - name: Auto Sync image
 #        env:
 #          pre_registry: docker.io
