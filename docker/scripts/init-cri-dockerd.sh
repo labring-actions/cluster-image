@@ -15,13 +15,20 @@
 
 source common.sh
 storage=${1:-/var/lib/docker}
-chmod a+x clean-kube.sh
-chmod a+x clean-docker.sh
-chmod a+x clean-shim.sh
-chmod a+x clean-cri-dockerd.sh
+registry_domain=${2:-sealos.hub}
+registry_port=${3:-5000}
+username=${4:-}
+password=${5:-}
+mkdir -p $storage
+if ! command_exists cri-docker; then
+  cp ../etc/cri-docker.service /etc/systemd/system/
+  tar -zxvf ../cri/cri-dockerd.tgz -C /usr/bin
+  chmod a+x /usr/bin/cri-dockerd
+  systemctl enable cri-docker.service
+  systemctl restart cri-docker.service
+fi
+systemctl daemon-reload
+systemctl restart cri-docker.service
+check_status cri-docker
+logger "init docker success"
 
-bash clean-kube.sh
-bash clean-shim.sh
-bash clean-cri-dockerd.sh
-bash clean-docker.sh $storage
-logger "clean docker rootfs success"

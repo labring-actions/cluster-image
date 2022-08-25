@@ -37,7 +37,13 @@ if [ $? != 0 ]; then
 fi
 mv docker.tgz .download/docker/${arch}/
 
-# https://github.com/Mirantis/cri-dockerd
+
+wget https://github.com/Mirantis/cri-dockerd/releases/download/v${criDockerVersion}/cri-dockerd-${criDockerVersion}.${arch}.tgz --no-check-certificate -O cri-dockerd.tgz
+if [ $? != 0 ]; then
+   echo "====download and targz cri dockerd failed!===="
+   exit 1
+fi
+mv cri-dockerd.tgz .download/docker/${arch}/
 
 mkdir -p .download/lsof/${arch}
 wget https://github.com/labring/cluster-image/releases/download/depend/lsof-linux-${arch} --no-check-certificate -O .download/lsof/${arch}/lsof

@@ -14,14 +14,9 @@
 # limitations under the License.
 
 source common.sh
-storage=${1:-/var/lib/docker}
-chmod a+x clean-kube.sh
-chmod a+x clean-docker.sh
-chmod a+x clean-shim.sh
-chmod a+x clean-cri-dockerd.sh
-
-bash clean-kube.sh
-bash clean-shim.sh
-bash clean-cri-dockerd.sh
-bash clean-docker.sh $storage
-logger "clean docker rootfs success"
+systemctl stop cri-docker
+systemctl disable cri-docker
+rm -rf /etc/systemd/system/cri-docker.service
+systemctl daemon-reload
+rm -f /usr/bin/cri-dockerd
+logger "clean cri-docker success"

@@ -29,6 +29,12 @@ if [ $? != 0 ]; then
    error "====init docker failed!===="
 fi
 
+chmod a+x init-cri-dockerd.sh
+bash init-cri-dockerd.sh
+if [ $? != 0 ]; then
+   error "====init cri dockerd failed!===="
+fi
+
 chmod a+x init-shim.sh
 bash init-shim.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
 

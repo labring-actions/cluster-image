@@ -34,6 +34,11 @@ if [ $? != 0 ]; then
    echo "====cp cri failed!===="
    exit 1
 fi
+cp ${downloadDIR}/docker/${arch}/cri-dockerd.tgz $buildDir/cri/
+if [ $? != 0 ]; then
+   echo "====cp cri-dockerd failed!===="
+   exit 1
+fi
 # shim install
 cp ${downloadDIR}/shim/${arch}/image-cri-shim $buildDir/cri/
 if [ $? != 0 ]; then
@@ -60,8 +65,9 @@ if [ $? != 0 ]; then
    exit 1
 fi
 # replace
-pauseImage=$(cat ./$buildDir/images/shim/DefaultImageList  | grep k8s.gcr.io/pause)
-sed -i "s#__pause__#k8s.gcr.io/${pauseImage##k8s.gcr.io/}#g" ./$buildDir/etc/kubelet-flags.env
+pauseImage=$(cat ./$buildDir/images/shim/DefaultImageList  | grep /pause:)
+sed -i "s#__pause__#${pauseImage}#g" ./$buildDir/etc/kubelet-flags.env
+sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}:5000/${pauseImage#*/}#g" ./$buildDir/etc/cri-docker.service.tmpl
 cd $buildDir
 chmod  -R 0755  *
 cat Kubefile

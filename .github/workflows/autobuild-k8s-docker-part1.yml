@@ -6,6 +6,7 @@ on:
 env:
   sealos: 4.1.0-rc2
   dockerVersion: 20.10.17
+  criDockerVersion: 0.2.5
   part: docker1
   criType: docker
 jobs:
