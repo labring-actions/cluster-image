@@ -24,6 +24,7 @@ rm -rf $storage
 
 rm -f /usr/bin/containerd
 rm -f /usr/bin/containerd-shim
+rm -f /usr/bin/containerd-shim-runc-v2
 rm -f /usr/bin/ctr
 rm -f /usr/bin/docker
 rm -f /usr/bin/docker-init

@@ -34,7 +34,7 @@ if ! command_exists docker; then
   [ -d  /etc/docker/ ] || mkdir /etc/docker/  -p
   cp ../etc/docker.service /etc/systemd/system/
   chmod -R 755 ../cri
-  tar -zxvf ../cri/docker.tgz -C /usr/bin
+  tar --strip-components=1 -zxvf ../cri/docker.tgz -C /usr/bin
   chmod a+x /usr/bin/*
   systemctl enable docker.service
   systemctl restart docker.service
