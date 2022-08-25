@@ -20,6 +20,7 @@ REGISTRY_PORT=${3:-5000}
 REGISTRY_USERNAME=${4:-}
 REGISTRY_PASSWORD=${5:-}
 # Install docker
+iptables -P FORWARD ACCEPT
 chmod a+x init-docker.sh
 #./docker.sh  /var/docker/lib  127.0.0.1
 bash init-docker.sh ${STORAGE} ${REGISTRY_DOMAIN} ${REGISTRY_PORT} ${REGISTRY_USERNAME} ${REGISTRY_PASSWORD}
