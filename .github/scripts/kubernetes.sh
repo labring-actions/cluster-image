@@ -87,7 +87,7 @@ containerd)
   sed -i "s#__pause__#sealos.hub:5000/${pauseImage#*/}#g" ./$buildDir/etc/config.toml
   ;;
 docker)
-  sed -i "s#__pause__#sealos.hub:5000/${pauseImage#*/}#g" ./$buildDir/etc/cri-docker.service.tmpl
+  sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" ./$buildDir/etc/cri-docker.service.tmpl
   ;;
 esac
 
