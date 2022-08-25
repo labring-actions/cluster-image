@@ -22,7 +22,7 @@ sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/systemd/system/image-
 sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/image-cri-shim.yaml
 chmod -R 755 ../cri
 cp -rf ../cri/image-cri-shim /usr/bin
-cp -rf ../etc/crictl.yaml /etc
+[ -f ../etc/crictl.yaml  ] && cp -rf ../etc/crictl.yaml /etc
 chmod a+x /usr/bin/*
 systemctl enable image-cri-shim.service
 systemctl daemon-reload
