@@ -23,7 +23,7 @@ mkdir -p $storage
 if ! command_exists cri-docker; then
   cp ../etc/cri-docker.service /etc/systemd/system/
   cp ../etc/cri-docker.socket /etc/systemd/system/
-  tar -zxvf ../cri/cri-dockerd.tgz -C /usr/bin
+  tar --strip-components=1 -zxvf ../cri/cri-dockerd.tgz -C /usr/bin
   chmod a+x /usr/bin/cri-dockerd
   systemctl enable cri-docker.service
   systemctl restart cri-docker.service
