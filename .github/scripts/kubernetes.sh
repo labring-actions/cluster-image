@@ -69,7 +69,7 @@ cd "$ROOT" && {
     ;;
   docker)
     case $KUBE in
-     1.*.*)
+    1.*.*)
       cp -a "${downloadDIR}/$ARCH/cri-dockerd.tgz" cri/
       cp -a "${downloadDIR}/$ARCH/docker.tgz" cri/
       ;;
@@ -107,7 +107,12 @@ cd "$ROOT" && {
   esac
   tree
   chmod a+x bin/* opt/*
-  sudo sealos build -t "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$ARCH" --platform "linux/$ARCH" -f Kubefile .
+  if [[ -n "$tagsuffix" ]]; then
+    IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$ARCH-$tagsuffix"
+  else
+    IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$ARCH"
+  fi
+  sudo sealos build -t "$IMAGE_NAME" --platform "linux/$ARCH" -f Kubefile .
   sudo sealos login "$IMAGE_HUB_REGISTRY" -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD"
-  sudo sealos push "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$ARCH"
+  sudo sealos push "$IMAGE_NAME"
 }
