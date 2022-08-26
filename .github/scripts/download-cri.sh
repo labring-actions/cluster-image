@@ -33,8 +33,6 @@ cd "$ROOT" && {
     case $KUBE in
     1.*.*)
       wget -qO "cri-dockerd.tgz" "https://github.com/Mirantis/cri-dockerd/releases/download/v$CRIDOCKER/cri-dockerd-$CRIDOCKER.$ARCH.tgz"
-      ;;
-    *)
       case $ARCH in
       amd64)
         DOCKER_ARCH=x86_64

@@ -69,10 +69,8 @@ cd "$ROOT" && {
     ;;
   docker)
     case $KUBE in
-    1.[2-9][4-9].*)
+     1.*.*)
       cp -a "${downloadDIR}/$ARCH/cri-dockerd.tgz" cri/
-      ;;
-    *)
       cp -a "${downloadDIR}/$ARCH/docker.tgz" cri/
       ;;
     esac
