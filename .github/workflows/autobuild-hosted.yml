@@ -4,7 +4,7 @@ on:
     types:
       - created
 env:
-  sealos: 4.1.0-rc2
+  sealos: 4.1.0-rc3
 jobs:
   resolve-issue-var:
     if: startswith(github.event.comment.body, '/imagebuild_hosted')
