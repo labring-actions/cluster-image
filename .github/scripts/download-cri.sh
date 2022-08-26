@@ -10,6 +10,7 @@ readonly DOCKER=${dockerVersion:-$(date +%F)}
 readonly CRIDOCKER=${criDockerVersion:-$(date +%F)}
 readonly CONTAINERD=${containerdVersion:-$(date +%F)}
 readonly NERDCTL=${nerdctlVersion:-$(date +%F)}
+readonly CRICTL=${crictlVersion:-$(date +%F)}
 
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
@@ -33,6 +34,7 @@ cd "$ROOT" && {
     case $KUBE in
     1.*.*)
       wget -qO "cri-dockerd.tgz" "https://github.com/Mirantis/cri-dockerd/releases/download/v$CRIDOCKER/cri-dockerd-$CRIDOCKER.$ARCH.tgz"
+      wget -qO "crictl.tar.gz" "https://github.com/kubernetes-sigs/cri-tools/releases/download/$CRICTL/crictl-$CRICTL-linux-$ARCH.tar.gz"
       case $ARCH in
       amd64)
         DOCKER_ARCH=x86_64
@@ -46,6 +48,7 @@ cd "$ROOT" && {
         ;;
       esac
       wget -qO "docker.tgz" "https://download.docker.com/linux/static/stable/$DOCKER_ARCH/docker-$DOCKER.tgz"
+
       ;;
     esac
     ;;

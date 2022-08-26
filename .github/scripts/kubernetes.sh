@@ -72,6 +72,7 @@ cd "$ROOT" && {
     1.*.*)
       cp -a "${downloadDIR}/$ARCH/cri-dockerd.tgz" cri/
       cp -a "${downloadDIR}/$ARCH/docker.tgz" cri/
+      cp -a "${downloadDIR}/$ARCH/crictl.tar.gz" cri/
       ;;
     esac
     ;;
