@@ -54,3 +54,16 @@
 ##### 集群镜像手动构建
 
 把你要收到更新的集群镜像放到 `.github/schedule/part1.txt` 主要是一些latest的镜像需要手动操作
+
+
+##### 支持的命令
+
+- /imagebuild_k8s 构建k8s镜像
+  - /single_imagebuild_k8s_part1
+  - /single_imagebuild_k8s_part2
+  - /single_imagebuild_k8s_part3
+- /imagebuild_configs 构建配置
+- /imagebuild_apps 构建应用
+- /imagebuild_docker_k8s 构建k8s基于docker
+- /imagebuild_dockerimages 构建docker镜像
+- /imagebuild_hosted 构建大APP镜像
