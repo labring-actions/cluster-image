@@ -17,8 +17,8 @@
 source common.sh
 storage=${1:-/var/lib/registry}
 
-check_port
-check_cmd docker
-check_file /var/run/docker.sock
-check_file $storage
+check_port_inuse
+check_cmd_exits docker
+check_file_exits /var/run/docker.sock
+check_file_exits $storage
 logger "check root,port,cri success"

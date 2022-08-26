@@ -16,6 +16,6 @@
 
 source common.sh
 storage=${1:-/var/lib/registry}
-check_port
-check_file $storage
+check_port_inuse
+check_file_exits $storage
 logger "check root,port,cri success"

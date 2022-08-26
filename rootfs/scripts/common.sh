@@ -106,17 +106,17 @@ command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
 
-check_cmd() {
+check_cmd_exits() {
   for cmd; do
-    if ! which "$cmd"; then
+    if which "$cmd"; then
       error "The machine $cmd is not clean. Please clean $cmd the system."
     fi
   done
 }
 
-check_file() {
+check_file_exits() {
   for f; do
-    if ! [[ -f $f ]]; then
+    if [[ -f $f ]]; then
       error "The machine $f is not clean. Please clean $f the system."
     fi
   done
@@ -128,7 +128,7 @@ check_root() {
   fi
 }
 
-check_port() {
+check_port_inuse() {
   if ! command_exists lsof; then
     cp ../opt/lsof /usr/bin
   fi
