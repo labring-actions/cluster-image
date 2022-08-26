@@ -5,7 +5,7 @@ set -eu
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
 readonly KUBE=${kubeVersion?}
-readonly SEALOS=${sealos?}
+readonly SEALOS=${sealoslatest:-${sealos?}}
 
 readonly ipvsImage="ghcr.io/labring/lvscare:v$SEALOS"
 
@@ -107,11 +107,7 @@ cd "$ROOT" && {
   esac
   tree
   chmod a+x bin/* opt/*
-  if [[ -n "$tagsuffix" ]]; then
-    IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$ARCH-$tagsuffix"
-  else
-    IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$ARCH"
-  fi
+  IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-v$SEALOS-$ARCH"
   sudo sealos build -t "$IMAGE_NAME" --platform "linux/$ARCH" -f Kubefile .
   sudo sealos login "$IMAGE_HUB_REGISTRY" -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD"
   sudo sealos push "$IMAGE_NAME"

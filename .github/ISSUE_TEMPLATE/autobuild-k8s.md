@@ -8,9 +8,9 @@ assignees: ''
 
 ```
 Usage:
-   /imagebuild_k8s [dev/test/pre]
-   /single_imagebuild_k8s_part1 [dev/test/pre]
+   /imagebuild_k8s [sealosLatest]
+   /single_imagebuild_k8s_part1 [sealosLatest]
 Example:
-   /imagebuild_k8s [dev/test/pre]
-   /single_imagebuild_k8s_part1 [dev/test/pre]
+   /imagebuild_k8s [sealosLatest]
+   /single_imagebuild_k8s_part1 [sealosLatest]
 ```

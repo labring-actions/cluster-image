@@ -1,7 +1,7 @@
 #!/bin/bash
 prefix=$registry/$repo
-if [[ -n "$tagsuffix" ]]; then
-  version="$version-$tagsuffix"
+if [[ -n "$sealoslatest" ]]; then
+  version="$version-v$sealoslatest"
 fi
 sudo buildah rmi $prefix/$app:$version ||true
 sudo buildah login --username $username --password $password $registry
