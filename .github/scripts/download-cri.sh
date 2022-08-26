@@ -30,8 +30,6 @@ cd "$ROOT" && {
       tar -zx nerdctl
     ;;
   docker)
-    case $KUBE in
-    1.[2-9][4-9].*)
       wget -qO "cri-dockerd.tgz" "https://github.com/Mirantis/cri-dockerd/releases/download/v$CRIDOCKER/cri-dockerd-$CRIDOCKER.$ARCH.tgz"
       ;;
     *)
