@@ -6,7 +6,7 @@ PartOf=cri-docker.service
 ListenStream=%t/cri-dockerd.sock
 SocketMode=0660
 SocketUser=root
-SocketGroup=docker
+SocketGroup=root
 
 [Install]
 WantedBy=sockets.target
