@@ -94,7 +94,6 @@ jobs:
 #          repo: ${{ github.repository_owner }}
 #          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
 #          arch: ${{ matrix.arch }}
-#          app: kubernetes-docker
 #          version: v${{ matrix.version }}
 #        run: .github/scripts/sync.sh
 
@@ -122,7 +121,6 @@ jobs:
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-          app: kubernetes-docker
           version: v${{ matrix.version }}
         run: .github/scripts/manifest.sh
 
@@ -132,7 +130,6 @@ jobs:
 #          username: ${{ secrets.ALIY_REGISTRY_NAME }}
 #          repo: ${{ github.repository_owner }}
 #          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-#          app: kubernetes-docker
 #          version: v${{ matrix.version }}
 #        run: .github/scripts/manifest.sh
 
