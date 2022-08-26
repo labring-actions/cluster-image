@@ -1,8 +1,18 @@
 #!/bin/bash
 prefix=$registry/$repo
-if [[ -n "$tagsuffix" ]]; then
-  version="$version-$tagsuffix"
-fi
+
+readonly CRI_TYPE=${criType?}
+readonly version=${sealoslatest:-${version?}}
+
+case $CRI_TYPE in
+containerd)
+  app=kubernetes
+  ;;
+docker)
+  app=kubernetes-docker
+  ;;
+esac
+
 sudo buildah rmi $prefix/$app:$version ||true
 sudo buildah login --username $username --password $password $registry
 sudo buildah manifest create $prefix/$app:$version
