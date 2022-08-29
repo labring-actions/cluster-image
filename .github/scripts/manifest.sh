@@ -4,6 +4,14 @@ prefix=$registry/$repo
 readonly CRI_TYPE=${criType?}
 readonly version=${version?}
 
+readonly binDIR="/tmp/$(whoami)/bin"
+
+{
+  chmod a+x "$binDIR"/*
+  sudo cp -auv "$binDIR"/* /usr/bin
+}
+
+
 case $CRI_TYPE in
 containerd)
   app=kubernetes
