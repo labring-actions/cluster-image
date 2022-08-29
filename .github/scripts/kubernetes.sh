@@ -108,7 +108,7 @@ cd "$ROOT" && {
   esac
   tree
   chmod a+x bin/* opt/*
-  IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-v$SEALOS-$ARCH"
+  IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$SEALOS-$ARCH"
   sudo sealos build -t "$IMAGE_NAME" --platform "linux/$ARCH" -f Kubefile .
   sudo sealos login "$IMAGE_HUB_REGISTRY" -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD"
   sudo sealos push "$IMAGE_NAME"
