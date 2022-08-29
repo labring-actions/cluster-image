@@ -2,7 +2,7 @@
 prefix=$registry/$repo
 
 readonly CRI_TYPE=${criType?}
-readonly version=${sealoslatest:-${version?}}
+readonly version=${version?}
 
 case $CRI_TYPE in
 containerd)
