@@ -20,3 +20,10 @@ cd "$ROOT" && {
 
 echo "$0"
 tree "$ROOT"
+
+readonly binDIR="/tmp/$(whoami)/bin"
+
+{
+  chmod a+x "$binDIR"/*
+  sudo cp -auv "$binDIR"/* /usr/bin
+}
