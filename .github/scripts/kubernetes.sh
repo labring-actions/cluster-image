@@ -110,6 +110,17 @@ cd "$ROOT" && {
   chmod a+x bin/* opt/*
   IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$SEALOS-$ARCH"
   sudo sealos build -t "$IMAGE_NAME" --platform "linux/$ARCH" -f Kubefile .
-  sudo sealos login "$IMAGE_HUB_REGISTRY" -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD"
-  sudo sealos push "$IMAGE_NAME"
+  sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
+    sudo sealos push "$IMAGE_NAME"
+  if [[ $(wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/CHANGELOG-${KUBE%.*}.md" |
+    grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
+    cut -dv -f 2 | head -n 1) == "$KUBE" ]]; then
+    for IMAGE_NEW_NAME in \
+      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE-dev:v${KUBE%.*}-$ARCH" \
+      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE%.*}-$ARCH"; do
+      sudo sealos tag "$IMAGE_NAME" "$IMAGE_NEW_NAME"
+      sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
+        sudo sealos push "$IMAGE_NEW_NAME"
+    done
+  fi
 }
