@@ -8,7 +8,7 @@ readonly SEALOS=${sealos?}
 readonly ROOT="/tmp/$(whoami)/bin"
 mkdir -p "$ROOT"
 
-apt remove buildah -y || true
+sudo apt remove buildah -y || true
 
 cd "$ROOT" && {
   wget -qO- "https://github.com/labring/sealos/releases/download/v$SEALOS/sealos_${SEALOS}_linux_amd64.tar.gz" |
