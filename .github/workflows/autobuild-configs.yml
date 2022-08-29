@@ -34,15 +34,6 @@ jobs:
           app: ${{ steps.autobuild.outputs.app }}
           version: ${{ steps.autobuild.outputs.version }}
         run: .github/scripts/configs.sh
-      - name: Sync image
-        env:
-          registry: registry.cn-qingdao.aliyuncs.com
-          username: ${{ secrets.ALIY_REGISTRY_NAME }}
-          repo: ${{ github.repository_owner }}
-          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-          app: ${{ steps.autobuild.outputs.app }}
-          version: ${{ steps.autobuild.outputs.version }}
-        run: .github/scripts/configs.sh
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         with:
@@ -50,7 +41,6 @@ jobs:
           body: |
             ```
             image docker.io/${{ github.repository_owner }}/${{ steps.autobuild.outputs.app }}:${{ steps.autobuild.outputs.version }} build successfully!
-            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/${{ steps.autobuild.outputs.app }}:${{ steps.autobuild.outputs.version }} build successfully!
             ```
 
             detail log please view [autobuild-configs](https://github.com/labring/cluster-image/actions/workflows/autobuild-configs.yml)

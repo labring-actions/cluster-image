@@ -140,4 +140,4 @@ jobs:
             image docker.io/${{ github.repository_owner }}/kubernetes:v${{ matrix.version }} build successfully!
             ```
             
-            detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-part2.yml)
+            detail log please view [autobuild-k8s-part2](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-part2.yml)
