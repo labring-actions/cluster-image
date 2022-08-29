@@ -120,7 +120,7 @@ jobs:
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-          version: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}-v${{ matrix.version }}
+          version: v${{ matrix.version }}-${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
         run: .github/scripts/manifest.sh
 
 #      - name: Sync Manifest Image
