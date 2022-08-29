@@ -1,7 +1,7 @@
 #!/bin/bash
 prefix=$registry/$repo
 
-readonly CRI_TYPE=${criType?}
+readonly CRI_TYPE=${criType}
 readonly version=${version?}
 
 case $CRI_TYPE in
