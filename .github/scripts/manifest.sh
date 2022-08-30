@@ -29,7 +29,7 @@ sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-amd64"
 sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-arm64"
 sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
   sudo buildah manifest push --all "$IMAGE_NAME" docker://"$IMAGE_NAME"
-
+echo "$IMAGE_NAME push success"
 {
   KUBE="$(echo "${IMAGE_TAG%%-*}" | cut -dv -f 2)"
   if [[ $(wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/CHANGELOG-${KUBE%.*}.md" |
@@ -43,6 +43,7 @@ sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB
       sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-arm64"
       sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
         sudo buildah manifest push --all "$IMAGE_NAME" docker://"$IMAGE_NAME"
+        echo "$IMAGE_NAME push success"
     done
   fi
 }

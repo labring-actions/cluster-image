@@ -112,6 +112,7 @@ cd "$ROOT" && {
   sudo sealos build -t "$IMAGE_NAME" --platform "linux/$ARCH" -f Kubefile .
   sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
     sudo sealos push "$IMAGE_NAME"
+    echo "$IMAGE_NAME push success"
   if [[ $(wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/CHANGELOG-${KUBE%.*}.md" |
     grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
     cut -dv -f 2 | head -n 1) == "$KUBE" ]]; then
@@ -121,6 +122,7 @@ cd "$ROOT" && {
       sudo sealos tag "$IMAGE_NAME" "$IMAGE_NEW_NAME"
       sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
         sudo sealos push "$IMAGE_NEW_NAME"
+        echo "$IMAGE_NEW_NAME push success"
     done
   fi
 }
