@@ -21,4 +21,5 @@ rm -rf /etc/systemd/system/cri-docker.socket
 systemctl daemon-reload
 rm -f /usr/bin/cri-dockerd
 rm -f /usr/bin/crictl
+rm -f /var/run/cri-dockerd.sock
 logger "clean cri-docker success"
