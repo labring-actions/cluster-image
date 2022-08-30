@@ -37,7 +37,8 @@ sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB
     cut -dv -f 2 | head -n 1) == "$KUBE" ]]; then
     for IMAGE_NAME in \
       "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE-dev:v${KUBE%.*}" \
-      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE%.*}"; do
+      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v$KUBE"; do
+      echo "===== $IMAGE_NAME ====="
       sudo buildah manifest create "$IMAGE_NAME"
       sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-amd64"
       sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-arm64"
