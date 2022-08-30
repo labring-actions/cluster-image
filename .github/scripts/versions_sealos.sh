@@ -3,7 +3,7 @@
 set -e
 
 readonly commentVersion="$(echo "${commentbody?}" | awk '{print $2}')"
-readonly defaultVersion="${sealos?}"
+readonly defaultVersion="$(curl --silent "https://api.github.com/repos/labring/sealos/releases/latest" | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2)"
 
 if [[ -n "$commentVersion" ]]; then
   sealosVersion=$commentVersion

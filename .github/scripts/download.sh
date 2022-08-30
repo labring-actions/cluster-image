@@ -3,7 +3,7 @@
 set -eu
 
 readonly HELM=${helmVersion:-3.9.4}
-readonly SEALOS=${sealos?}
+readonly SEALOS=${sealoslatest?}
 
 readonly ROOT="/tmp/$(whoami)/bin"
 mkdir -p "$ROOT"

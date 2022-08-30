@@ -3,7 +3,7 @@
 set -eu
 
 readonly ARCH=${arch?}
-readonly SEALOS=${sealos?}
+readonly SEALOS=${sealoslatest?}
 
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"

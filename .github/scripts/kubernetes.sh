@@ -5,7 +5,7 @@ set -eu
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
 readonly KUBE=${kubeVersion?}
-readonly SEALOS=${sealoslatest:-${sealos?}}
+readonly SEALOS=${sealoslatest?}
 
 readonly ipvsImage="ghcr.io/labring/lvscare:v$SEALOS"
 
@@ -106,24 +106,29 @@ cd "$ROOT" && {
     IMAGE_KUBE=kubernetes-docker
     ;;
   esac
+
+  if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]]; then
+    IMAGE_KUBE="$IMAGE_KUBE-dev"
+    IMAGE_PUSH_NAME=(
+      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE%.*}-$ARCH"
+    )
+  else
+    IMAGE_PUSH_NAME=(
+      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v$KUBE-$SEALOS-$ARCH"
+      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v$KUBE-$ARCH"
+    )
+  fi
+
   tree
   chmod a+x bin/* opt/*
-  IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE}-$SEALOS-$ARCH"
-  sudo sealos build -t "$IMAGE_NAME" --platform "linux/$ARCH" -f Kubefile .
-  sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
-    sudo sealos push "$IMAGE_NAME"
-    echo "$IMAGE_NAME push success"
-  if [[ $(wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/CHANGELOG-${KUBE%.*}.md" |
-    grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
-    cut -dv -f 2 | head -n 1) == "$KUBE" ]]; then
-    for IMAGE_NEW_NAME in \
-      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE-dev:v${KUBE%.*}-$ARCH" \
-      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v$KUBE-$ARCH"; do
-      echo "===== $IMAGE_NEW_NAME ====="
-      sudo sealos tag "$IMAGE_NAME" "$IMAGE_NEW_NAME"
-      sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
-        sudo sealos push "$IMAGE_NEW_NAME"
-        echo "$IMAGE_NEW_NAME push success"
-    done
-  fi
+
+  IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
+  sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
+
+  for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
+    sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
+    sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
+      sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
+  done
+  sudo sealos images
 }

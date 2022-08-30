@@ -5,7 +5,7 @@ echo "Resolving versions in $(pwd)"
 mkdir -p .versions
 rm -rf .versions/versions.txt
 for file in $(pwd)/.github/versions/${part}/CHANGELOG*; do
-  if [[ -n "$sealoslatest" ]]; then
+  if ! [[ "$sealoslatest" =~ ^[0-9\.]+[0-9]$ ]]; then
     wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
       grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
       cut -dv -f 2 | head -n 1 |
