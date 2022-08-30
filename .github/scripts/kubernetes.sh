@@ -118,7 +118,8 @@ cd "$ROOT" && {
     cut -dv -f 2 | head -n 1) == "$KUBE" ]]; then
     for IMAGE_NEW_NAME in \
       "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE-dev:v${KUBE%.*}-$ARCH" \
-      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE%.*}-$ARCH"; do
+      "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v$KUBE-$ARCH"; do
+      echo "===== $IMAGE_NEW_NAME ====="
       sudo sealos tag "$IMAGE_NAME" "$IMAGE_NEW_NAME"
       sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
         sudo sealos push "$IMAGE_NEW_NAME"
