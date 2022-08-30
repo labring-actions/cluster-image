@@ -17,6 +17,7 @@ source common.sh
 systemctl stop cri-docker
 systemctl disable cri-docker
 rm -rf /etc/systemd/system/cri-docker.service
+rm -rf /etc/systemd/system/cri-docker.socket
 systemctl daemon-reload
 rm -f /usr/bin/cri-dockerd
 rm -f /usr/bin/crictl
