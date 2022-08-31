@@ -14,16 +14,10 @@
 # limitations under the License.
 
 source common.sh
-STORAGE=${1:-/var/lib/docker}
-REGISTRY_DOMAIN=${2:-sealos.hub}
-REGISTRY_PORT=${3:-5000}
-REGISTRY_USERNAME=${4:-}
-REGISTRY_PASSWORD=${5:-}
 # Install docker
 iptables -P FORWARD ACCEPT
 chmod a+x init-docker.sh
-#./docker.sh  /var/docker/lib  127.0.0.1
-bash init-docker.sh ${STORAGE} ${REGISTRY_DOMAIN} ${REGISTRY_PORT} ${REGISTRY_USERNAME} ${REGISTRY_PASSWORD}
+bash init-docker.sh
 
 if [ $? != 0 ]; then
    error "====init docker failed!===="
@@ -36,7 +30,7 @@ if [ $? != 0 ]; then
 fi
 
 chmod a+x init-shim.sh
-bash init-shim.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
+bash init-shim.sh
 
 if [ $? != 0 ]; then
    error "====init image-cri-shim failed!===="

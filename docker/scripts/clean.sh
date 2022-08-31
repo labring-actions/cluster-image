@@ -14,7 +14,8 @@
 # limitations under the License.
 
 source common.sh
-storage=${1:-/var/lib/docker}
+dockerStorage=${1:-/var/lib/docker}
+criDockerStorage=${2:-/var/lib/cri-dockerd}
 chmod a+x clean-kube.sh
 chmod a+x clean-docker.sh
 chmod a+x clean-shim.sh
@@ -22,6 +23,6 @@ chmod a+x clean-cri-dockerd.sh
 
 bash clean-kube.sh
 bash clean-shim.sh
-bash clean-cri-dockerd.sh
-bash clean-docker.sh $storage
+bash clean-cri-dockerd.sh $criDockerStorage
+bash clean-docker.sh $dockerStorage
 logger "clean docker rootfs success"

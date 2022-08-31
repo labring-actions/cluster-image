@@ -29,6 +29,7 @@ rm -f /usr/bin/containerd-shim
 rm -f /usr/bin/containerd-shim-runc-v1
 rm -f /usr/bin/containerd-shim-runc-v2
 rm -f /usr/bin/crictl
+rm -f /etc/crictl.yaml
 rm -f /usr/bin/ctr
 rm -f /usr/bin/ctd-decoder
 rm -f /usr/bin/runc

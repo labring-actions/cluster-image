@@ -10,7 +10,7 @@
     "native.cgroupdriver=systemd"
   ],
   "insecure-registries": [
-    "sealos.hub:5000"
+    "{{ .registryDomain }}:{{ .registryPort }}"
   ],
-  "data-root": "/var/lib/docker"
+  "data-root": "{{ .criData }}"
 }

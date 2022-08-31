@@ -14,11 +14,6 @@
 # limitations under the License.
 
 source common.sh
-storage=${1:-/var/lib/docker}
-registry_domain=${2:-sealos.hub}
-registry_port=${3:-5000}
-username=${4:-}
-password=${5:-}
 mkdir -p $storage
 if ! command_exists cri-docker; then
   cp ../etc/cri-docker.service /etc/systemd/system/

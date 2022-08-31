@@ -19,7 +19,6 @@ systemctl disable image-cri-shim
 rm -rf /etc/systemd/system/image-cri-shim.service
 systemctl daemon-reload
 rm -f /usr/bin/image-cri-shim
-rm -f /etc/crictl.yaml
 rm -f /etc/image-cri-shim.yaml
 rm -f /var/lib/image-cri-shim
 logger "clean shim success"

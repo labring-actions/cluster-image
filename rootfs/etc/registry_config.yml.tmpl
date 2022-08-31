@@ -20,9 +20,9 @@ storage:
   cache:
     blobdescriptor: inmemory
   filesystem:
-    rootdirectory: /var/lib/registry
+    rootdirectory: {{ .registryData }}
 http:
-  addr: :5000
+  addr: :{{ .registryPort }}
   headers:
     X-Content-Type-Options: [nosniff]
 proxy:

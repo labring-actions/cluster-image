@@ -14,12 +14,8 @@
 # limitations under the License.
 
 source common.sh
-registry=${1:-sealos.hub}
-registry_port=${2:-5000}
 cp -rf ../etc/image-cri-shim.service /etc/systemd/system/
 cp -rf ../etc/image-cri-shim.yaml /etc
-sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/systemd/system/image-cri-shim.service
-sed -i "s/sealos.hub:5000/$registry:$registry_port/g" /etc/image-cri-shim.yaml
 chmod -R 755 ../cri
 cp -rf ../cri/image-cri-shim /usr/bin
 [ -f ../etc/crictl.yaml  ] && cp -rf ../etc/crictl.yaml /etc

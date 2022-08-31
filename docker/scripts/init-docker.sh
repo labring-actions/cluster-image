@@ -14,12 +14,6 @@
 # limitations under the License.
 
 source common.sh
-storage=${1:-/var/lib/docker}
-registry_domain=${2:-sealos.hub}
-registry_port=${3:-5000}
-username=${4:-}
-password=${5:-}
-mkdir -p $storage
 if ! command_exists docker; then
   lsb_dist=$( get_distribution )
   lsb_dist="$(echo "$lsb_dist" | tr '[:upper:]' '[:lower:]')"
@@ -39,8 +33,6 @@ if ! command_exists docker; then
   systemctl enable docker.service
   systemctl restart docker.service
   cp ../etc/daemon.json /etc/docker
-  sed -i "s/sealos.hub:5000/$registry_domain:$registry_port/g" /etc/docker/daemon.json
-  sed -i "s#/var/lib/docker#$1#g" /etc/docker/daemon.json
 fi
 disable_selinux
 systemctl daemon-reload

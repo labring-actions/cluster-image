@@ -7,7 +7,7 @@ Requires=cri-docker.socket
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/cri-dockerd --pod-infra-container-image=__pause__  --network-plugin=cni --container-runtime-endpoint fd://
+ExecStart=/usr/bin/cri-dockerd --pod-infra-container-image=__pause__  --network-plugin=cni --container-runtime-endpoint fd:// --cri-dockerd-root-directory={{ .criDockerdData }}
 ExecReload=/bin/kill -s HUP $MAINPID
 TimeoutSec=0
 RestartSec=2

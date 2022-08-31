@@ -14,12 +14,15 @@
 # limitations under the License.
 
 source common.sh
+storage=${1:-/var/lib/cri-dockerd}
 systemctl stop cri-docker
 systemctl disable cri-docker
 rm -rf /etc/systemd/system/cri-docker.service
 rm -rf /etc/systemd/system/cri-docker.socket
 systemctl daemon-reload
+rm -rf $storage
 rm -f /usr/bin/cri-dockerd
 rm -f /usr/bin/crictl
+rm -f /etc/crictl.yaml
 rm -f /var/run/cri-dockerd.sock
 logger "clean cri-docker success"
