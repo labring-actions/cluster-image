@@ -4,27 +4,10 @@ on:
     types:
       - created
 jobs:
-  resolve-issue-sealoslatest:
-    runs-on: ubuntu-latest
-    if: startswith(github.event.comment.body, '/imagebuild_configs')
-    outputs:
-      sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set sealos LatestVersion
-        id: set-sealoslatest
-        run: |
-          export commentbody="${{github.event.comment.body}}"
-          .github/scripts/versions_sealos_default.sh
   issue_comment:
     name: Auto build config image
     if: startswith(github.event.comment.body, '/imagebuild_configs')
     runs-on: ubuntu-latest
-    needs:
-      - resolve-issue-sealoslatest
-    env:
-      sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     permissions:
       issues: write
     steps:
