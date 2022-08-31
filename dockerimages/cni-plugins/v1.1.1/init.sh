@@ -1,5 +1,9 @@
 #!/bin/bash
-arch=${1:-amd64}
-wget https://github.com/containernetworking/plugins/releases/download/v1.1.1/cni-plugins-linux-${arch}-v1.1.1.tgz
-mv cni-plugins-linux-${arch}-v1.1.1.tgz cni-plugins.tgz
-echo "download helm success"
+
+set -e
+
+readonly ARCH=${1:-amd64}
+readonly NAME=${2:-cni-plugins}
+readonly VERSION=${3:-v1.1.1}
+
+wget -qO cni-plugins.tgz "https://github.com/containernetworking/plugins/releases/download/$VERSION/$NAME-linux-$ARCH-$VERSION.tgz"

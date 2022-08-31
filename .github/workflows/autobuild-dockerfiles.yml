@@ -68,15 +68,17 @@ jobs:
           version: ${{ needs.resolve-issue-var.outputs.version }}
         run: .github/scripts/manifest-other.sh
 
-
+  add-tips:
+    needs:
+      - build_manifest
+    name: Auto add tips
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            ```
-            image docker.io/${{ github.repository_owner }}/docker-${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
-            image registry.cn-qingdao.aliyuncs.com/${{ github.repository_owner }}/docker-${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
-            ```
-            
             detail log please view [autobuild-dockerfiles](https://github.com/labring/cluster-image/actions/workflows/autobuild-dockerfiles.yml)
