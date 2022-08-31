@@ -41,6 +41,7 @@ for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
   sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-arm64"
   sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
     sudo buildah manifest push --all "$IMAGE_NAME" docker://"$IMAGE_NAME" && echo "$IMAGE_NAME push success"
+  sudo buildah manifest inspect $IMAGE_NAME
 done
 sudo buildah images
 

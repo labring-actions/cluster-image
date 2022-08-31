@@ -27,6 +27,6 @@ esac
 
 sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
     sudo buildah manifest push --all "$IMAGE_NAME_FULL" docker://"$IMAGE_NAME_FULL" && echo "$IMAGE_NAME_FULL push success"
-
+sudo buildah manifest inspect $IMAGE_NAME_FULL
 sudo buildah images
 sudo buildah rmi "$IMAGE_NAME_FULL" || true
