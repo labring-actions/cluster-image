@@ -85,16 +85,6 @@ jobs:
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
         run: .github/scripts/kubernetes.sh
-#      - name: Auto Sync image
-#        env:
-#          pre_registry: docker.io
-#          registry: registry.cn-qingdao.aliyuncs.com
-#          username: ${{ secrets.ALIY_REGISTRY_NAME }}
-#          repo: ${{ github.repository_owner }}
-#          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-#          arch: ${{ matrix.arch }}
-#          version: v${{ matrix.version }}
-#        run: .github/scripts/sync.sh
 
   build_manifest:
     needs:
@@ -122,16 +112,14 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           version: ${{ matrix.version }}-${{ env.sealoslatest }}
         run: .github/scripts/manifest.sh
-
-#      - name: Sync Manifest Image
-#        env:
-#          registry: registry.cn-qingdao.aliyuncs.com
-#          username: ${{ secrets.ALIY_REGISTRY_NAME }}
-#          repo: ${{ github.repository_owner }}
-#          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-#          version: v${{ matrix.version }}
-#        run: .github/scripts/manifest.sh
-
+  add-tips:
+    needs:
+      - build_manifest
+    name: Auto add tips
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         with:

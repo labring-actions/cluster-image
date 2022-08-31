@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -eu
-
+set -x
 readonly HELM=${helmVersion:-3.9.4}
 readonly SEALOS=${sealoslatest?}
 
