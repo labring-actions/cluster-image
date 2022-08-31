@@ -1,4 +1,4 @@
-name: Auto build image docker for k8s part1
+name: Auto build image docker for k8s part3
 on:
   issue_comment:
     types:
@@ -7,7 +7,7 @@ env:
   dockerVersion: 20.10.17
   criDockerVersion: 0.2.5
   crictlVersion: v1.24.2
-  part: 1
+  part: 3
   criType: docker
 jobs:
   resolve-issue-sealoslatest:
@@ -127,4 +127,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            detail log please view [autobuild-k8s-docker-part1](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-docker-part1.yml)
+            detail log please view [autobuild-k8s-docker-part3](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-docker-part3.yml)
