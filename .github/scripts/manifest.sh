@@ -2,7 +2,7 @@
 
 set -eu
 
-readonly CRI_TYPE=${criType}
+readonly CRI_TYPE=${criType?}
 
 readonly IMAGE_HUB_REGISTRY=${registry?}
 readonly IMAGE_HUB_REPO=${repo?}
