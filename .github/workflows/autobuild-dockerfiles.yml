@@ -3,10 +3,20 @@ on:
   issue_comment:
     types:
       - created
-env:
-  sealos: 4.1.0-rc3
-
 jobs:
+  resolve-issue-sealoslatest:
+    runs-on: ubuntu-latest
+    if: startswith(github.event.comment.body, '/imagebuild_dockerimages')
+    outputs:
+      sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set sealos LatestVersion
+        id: set-sealoslatest
+        run: |
+          export commentbody="${{github.event.comment.body}}"
+          .github/scripts/versions_sealos.sh
   resolve-issue-var:
     if: startswith(github.event.comment.body, '/imagebuild_dockerimages')
     runs-on: ubuntu-latest
@@ -26,6 +36,9 @@ jobs:
     name: Auto build app image
     needs:
       - resolve-issue-var
+      - resolve-issue-sealoslatest
+    env:
+      sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -47,22 +60,14 @@ jobs:
           version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
         run: .github/scripts/dockers.sh
-#      - name: Sync image
-#        env:
-#          pre_registry: docker.io
-#          registry: registry.cn-qingdao.aliyuncs.com
-#          username: ${{ secrets.ALIY_REGISTRY_NAME }}
-#          repo: ${{ github.repository_owner }}
-#          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-#          app: docker-${{ needs.resolve-issue-var.outputs.app }}
-#          version: ${{ needs.resolve-issue-var.outputs.version }}
-#          arch: ${{ matrix.arch }}
-#        run: .github/scripts/sync.sh
 
   build_manifest:
     needs:
       - resolve-issue-var
       - build_apps
+      - resolve-issue-sealoslatest
+    env:
+      sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     name: Auto manifest app image
     runs-on: ubuntu-latest
     permissions:
@@ -82,15 +87,6 @@ jobs:
           version: ${{ needs.resolve-issue-var.outputs.version }}
         run: .github/scripts/manifest.sh
 
-#      - name: Sync Manifest Image
-#        env:
-#          registry: registry.cn-qingdao.aliyuncs.com
-#          username: ${{ secrets.ALIY_REGISTRY_NAME }}
-#          repo: ${{ github.repository_owner }}
-#          password: ${{ secrets.ALIY_REGISTRY_PASSWD }}
-#          app: docker-${{ needs.resolve-issue-var.outputs.app }}
-#          version: ${{ needs.resolve-issue-var.outputs.version }}
-#        run: .github/scripts/manifest.sh
 
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1

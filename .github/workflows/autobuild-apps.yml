@@ -3,10 +3,20 @@ on:
   issue_comment:
     types:
       - created
-env:
-  sealos: 4.1.0-rc3
-
 jobs:
+  resolve-issue-sealoslatest:
+    if: startswith(github.event.comment.body, '/imagebuild_apps')
+    runs-on: ubuntu-latest
+    outputs:
+      sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set sealos LatestVersion
+        id: set-sealoslatest
+        run: |
+          export commentbody="${{github.event.comment.body}}"
+          .github/scripts/versions_sealos.sh
   resolve-issue-var:
     if: startswith(github.event.comment.body, '/imagebuild_apps')
     runs-on: ubuntu-latest
@@ -24,8 +34,11 @@ jobs:
           echo "::set-output name=version::$version"
   build_apps:
     name: Auto build app image
+    env:
+      sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     needs:
       - resolve-issue-var
+      - resolve-issue-sealoslatest
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -63,6 +76,9 @@ jobs:
     needs:
       - resolve-issue-var
       - build_apps
+      - resolve-issue-sealoslatest
+    env:
+      sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     name: Auto manifest app image
     runs-on: ubuntu-latest
     permissions:
