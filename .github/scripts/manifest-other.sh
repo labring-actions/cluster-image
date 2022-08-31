@@ -1,9 +1,8 @@
 #!/bin/bash
 
 set -eu
-set -x
 
-readonly ARCH=${arch}
+readonly ARCH=${arch:-}
 readonly IMAGE_NAME=${app?}
 readonly IMAGE_TAG=${version?}
 readonly IMAGE_HUB_REGISTRY=${registry?}
