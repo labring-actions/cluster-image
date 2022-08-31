@@ -14,7 +14,6 @@
 # limitations under the License.
 
 source common.sh
-mkdir -p $storage
 if ! command_exists cri-docker; then
   cp ../etc/cri-docker.service /etc/systemd/system/
   cp ../etc/cri-docker.socket /etc/systemd/system/
