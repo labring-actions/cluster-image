@@ -16,7 +16,7 @@ jobs:
         id: set-sealoslatest
         run: |
           export commentbody="${{github.event.comment.body}}"
-          .github/scripts/versions_sealos.sh
+          .github/scripts/versions_sealos_default.sh
   issue_comment:
     name: Auto build config image
     if: startswith(github.event.comment.body, '/imagebuild_configs')

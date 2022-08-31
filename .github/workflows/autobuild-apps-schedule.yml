@@ -17,7 +17,7 @@ jobs:
         id: set-sealoslatest
         run: |
           export commentbody="${{github.event.comment.body}}"
-          .github/scripts/versions_sealos.sh
+          .github/scripts/versions_sealos_default.sh
   resolve-versions-arch:
     runs-on: ubuntu-latest
     outputs:
