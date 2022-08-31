@@ -1,5 +1,5 @@
 #!/bin/bash
-readonly TYPE=${type?}
+readonly TYPE=${type}
 readonly IMAGE_NAME=${app?}
 readonly IMAGE_TAG=${version?}
 readonly IMAGE_HUB_REGISTRY=${registry?}
