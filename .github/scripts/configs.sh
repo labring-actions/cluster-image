@@ -15,3 +15,5 @@ if [ $? != 0 ]; then
    echo "====push app image failed!===="
    exit 1
 fi
+
+sudo buildah images
