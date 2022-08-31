@@ -4,7 +4,6 @@ on:
     types:
       - created
 env:
-  sealos: 4.1.0-rc3
   dockerVersion: 20.10.17
   criDockerVersion: 0.2.5
   crictlVersion: v1.24.2
@@ -104,6 +103,8 @@ jobs:
       - resolve-versions
       - build-images
     name: Auto manifest k8s image
+    env:
+      sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     strategy:
       matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
     runs-on: ubuntu-latest
@@ -120,7 +121,7 @@ jobs:
           username: ${{ github.repository_owner }}
           repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
-          version: v${{ matrix.version }}-${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
+          version: ${{ matrix.version }}-${{ env.sealoslatest }}
         run: .github/scripts/manifest.sh
 
 #      - name: Sync Manifest Image
