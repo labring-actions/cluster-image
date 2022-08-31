@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -eu
+set -x
 
 readonly ARCH=${arch}
 readonly IMAGE_NAME=${app?}
