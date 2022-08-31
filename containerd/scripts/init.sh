@@ -14,22 +14,19 @@
 # limitations under the License.
 
 source common.sh
-STORAGE=${1:-/var/lib/containerd}
-REGISTRY_DOMAIN=${2:-sealos.hub}
-REGISTRY_PORT=${3:-5000}
-REGISTRY_USERNAME=${4:-}
-REGISTRY_PASSWORD=${5:-}
+REGISTRY_DOMAIN=${1:-sealos.hub}
+REGISTRY_PORT=${2:-5000}
 
 # Install containerd
 chmod a+x init-containerd.sh
-bash init-containerd.sh ${STORAGE} ${REGISTRY_DOMAIN} ${REGISTRY_PORT}  ${REGISTRY_USERNAME} ${REGISTRY_PASSWORD}
+bash init-containerd.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
 
 if [ $? != 0 ]; then
    error "====init containerd failed!===="
 fi
 
 chmod a+x init-shim.sh
-bash init-shim.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
+bash init-shim.sh
 
 if [ $? != 0 ]; then
    error "====init image-cri-shim failed!===="

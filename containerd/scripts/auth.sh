@@ -12,7 +12,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-REGISTRY_DOMAIN=${2:-sealos.hub}
-REGISTRY_PORT=${3:-5000}
-REGISTRY_USERNAME=${4:-}
-REGISTRY_PASSWORD=${5:-}

@@ -90,7 +90,7 @@ cd "$ROOT" && {
   sed -i "s#__pause__#${pauseImage}#g" etc/kubelet-flags.env
   case $CRI_TYPE in
   containerd)
-    sed -i "s#__pause__#sealos.hub:5000/${pauseImage#*/}#g" etc/config.toml
+    sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/config.toml.tmpl
     ;;
   docker)
     sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/cri-docker.service.tmpl

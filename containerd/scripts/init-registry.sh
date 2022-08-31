@@ -3,9 +3,8 @@ source common.sh
 # prepare registry storage as directory
 cd $(dirname $0)
 
-REGISTRY_PORT=${1:-5000}
-VOLUME=${2:-/var/lib/registry}
-CONFIG=${3:-/etc/registry}
+VOLUME=${1:-/var/lib/registry}
+CONFIG=${2:-/etc/registry}
 container=sealos-registry
 htpasswd="$CONFIG/registry_htpasswd"
 config="$CONFIG/registry_config.yml"

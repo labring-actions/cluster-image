@@ -1,5 +1,5 @@
 version = 2
-root = "/var/lib/containerd"
+root = "{{ .criData }}"
 state = "/run/containerd"
 oom_score = 0
 
@@ -41,6 +41,6 @@ oom_score = 0
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
-          [plugins."io.containerd.grpc.v1.cri".registry.configs."sealos.hub:5000".auth]
-            username = "__username__"
-            password = "__password__"
+          [plugins."io.containerd.grpc.v1.cri".registry.configs."{{ .registryDomain }}:{{ .registryPort }}".auth]
+            username = "{{ .registryUsername }}"
+            password = "{{ .registryPassword }}"
