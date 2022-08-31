@@ -1,8 +1,13 @@
 #!/bin/bash
 
 set -eu
-readonly HELM=${helmVersion:-3.9.4}
-readonly SEALOS=${sealoslatest?}
+
+readonly HELM=${helmVersion:-$(
+  curl --silent "https://api.github.com/repos/helm/helm/releases/latest" | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
+)}
+readonly SEALOS=${sealoslatest:-$(
+  curl --silent "https://api.github.com/repos/labring/sealos/releases/latest" | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
+)}
 
 readonly ROOT="/tmp/$(whoami)/bin"
 mkdir -p "$ROOT"
