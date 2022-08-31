@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download buildah and sealos
-        run: .github/scripts/download.sh
+        run: .github/scripts/download/download.sh
       - name: Build Image
         env:
           registry: docker.io
@@ -58,7 +58,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download buildah and sealos
-        run: .github/scripts/download.sh
+        run: .github/scripts/download/download.sh
       - name: Manifest Image
         env:
           registry: docker.io

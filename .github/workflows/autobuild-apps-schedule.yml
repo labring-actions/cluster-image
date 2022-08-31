@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Resolve Versions
         id: set-versions
-        run: .github/scripts/versions_schedule_arch.sh
+        run: .github/scripts/versions/versions_schedule_arch.sh
   resolve-versions:
     runs-on: ubuntu-latest
     outputs:
@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Resolve Versions
         id: set-versions
-        run: .github/scripts/versions_schedule.sh
+        run: .github/scripts/versions/versions_schedule.sh
   build-images:
     name: Auto build schedule app image
     needs:
@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download buildah and sealos
-        run: .github/scripts/download.sh
+        run: .github/scripts/download/download.sh
 
       - name: Auto build image
         env:
@@ -65,7 +65,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download buildah and sealos
-        run: .github/scripts/download.sh
+        run: .github/scripts/download/download.sh
       - name: Manifest Image
         env:
           registry: docker.io
