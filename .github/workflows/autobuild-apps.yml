@@ -85,7 +85,7 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
-        run: .github/scripts/manifest.sh
+        run: .github/scripts/manifest-other.sh
 
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1

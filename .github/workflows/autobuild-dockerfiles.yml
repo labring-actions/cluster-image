@@ -85,7 +85,7 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           app: docker-${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
-        run: .github/scripts/manifest.sh
+        run: .github/scripts/manifest-other.sh
 
 
       - name: Success Commit

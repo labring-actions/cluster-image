@@ -92,4 +92,4 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           app: ${{ matrix.app }}
           version: ${{ matrix.version }}
-        run: .github/scripts/manifest.sh
+        run: .github/scripts/manifest-other.sh
