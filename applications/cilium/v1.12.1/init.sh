@@ -11,8 +11,14 @@ cd charts && {
   wget -qO- "https://github.com/$NAME/charts/raw/master/$NAME-${VERSION#*v}.tgz" | tar -zx
   find . -type f -name "*.tmpl" -exec mv -v {} {}.bak \;
   sed -i 's#useDigest: true#useDigest: false#g' "$NAME/values.yaml"
+  bash getImages.sh "$NAME" >"$NAME/Images"
   cd -
 }
+
+if [[ -s "charts/$NAME/Images" ]]; then
+  mkdir -p images/shim
+  cp "charts/$NAME/Images" "images/shim/${NAME}Images"
+fi
 
 mkdir -p opt
 cd opt && {
