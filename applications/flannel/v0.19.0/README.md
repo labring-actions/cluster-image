@@ -9,7 +9,7 @@ sealos build -f Dockerfile -t labring/flannel:v1.19.0 .
 manifests
 
 ```shell
-wget https://raw.githubusercontent.com/flannel-io/flannel/v0.19.0/Documentation/kube-flannel.yml
+wget https://raw.githubusercontent.com/flannel-io/flannel/v0.19.1/Documentation/kube-flannel.yml
 ```
 
 Notes: Need some additional configuration

@@ -122,22 +122,24 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni-plugin
-        image: flannelcni/flannel-cni-plugin:v1.1.0
+       #image: flannelcni/flannel-cni-plugin:v1.1.0 for ppc64le and mips64le (dockerhub limitations may apply)
+        image: rancher/mirrored-flannelcni-flannel-cni-plugin:v1.1.0
         command:
         - cp
         args:
-        - -auv
+        - -f
         - /flannel
         - /opt/cni/bin/flannel
         volumeMounts:
         - name: cni-plugin
           mountPath: /opt/cni/bin
       - name: install-cni
-        image: flannelcni/flannel:v0.19.1
+       #image: flannelcni/flannel:v0.18.1 for ppc64le and mips64le (dockerhub limitations may apply)
+        image: rancher/mirrored-flannelcni-flannel:v0.18.1
         command:
         - cp
         args:
-        - -afv
+        - -f
         - /etc/kube-flannel/cni-conf.json
         - /etc/cni/net.d/10-flannel.conflist
         volumeMounts:
@@ -145,19 +147,17 @@ spec:
           mountPath: /etc/cni/net.d
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
-      - name: install-cni-plugins
+      - name: install-cni-plugin-sealos
         image: docker.io/labring/docker-cni-plugins:v1.1.1
-        command:
-        - /bin/sh
-        args:
-        - -c
-        - cp -auv /cni-plugins/* /opt/cni/bin/
+        command: ["/bin/sh"]
+        args: ["-c", "cp -f /cni-plugins/* /opt/cni/bin/"]
         volumeMounts:
-        - name: cni-plugin
+        - name: cni-plugin-sealos
           mountPath: /opt/cni/bin
       containers:
       - name: kube-flannel
-        image: flannelcni/flannel:v0.19.1
+       #image: flannelcni/flannel:v0.18.1 for ppc64le and mips64le (dockerhub limitations may apply)
+        image: rancher/mirrored-flannelcni-flannel:v0.18.1
         command:
         - /opt/bin/flanneld
         args:
@@ -168,8 +168,8 @@ spec:
             cpu: "100m"
             memory: "50Mi"
           limits:
-            cpu: "1000m"
-            memory: "500Mi"
+            cpu: "100m"
+            memory: "50Mi"
         securityContext:
           privileged: false
           capabilities:
@@ -209,3 +209,6 @@ spec:
         hostPath:
           path: /run/xtables.lock
           type: FileOrCreate
+      - name: cni-plugin-sealos
+        hostPath:
+          path: /opt/cni/bin
