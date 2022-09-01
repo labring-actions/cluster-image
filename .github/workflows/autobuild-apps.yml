@@ -81,4 +81,8 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
+            ```
+            image docker.io/${{ github.repository_owner }}/${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
+            ```
+            
             detail log please view [autobuild-apps](https://github.com/labring/cluster-image/actions/workflows/autobuild-apps.yml)
