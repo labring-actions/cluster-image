@@ -55,6 +55,11 @@ cd "$ROOT" && {
   esac
   wget -qO "library.tar.gz" "https://github.com/labring/cluster-image/releases/download/depend/library-2.5-linux-$ARCH.tar.gz"
   wget -qO "registry.tar" "https://github.com/labring/cluster-image/releases/download/depend/registry-$ARCH.tar"
+  {
+    REGISTRY=$(curl --silent "https://api.github.com/repos/distribution/distribution/releases/latest" | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2)
+    wget -qO- "https://github.com/distribution/distribution/releases/download/v$REGISTRY/registry_${REGISTRY}_linux_$ARCH.tar.gz" |
+      tar -zx registry
+  }
   wget -qO "lsof" "https://github.com/labring/cluster-image/releases/download/depend/lsof-linux-$ARCH"
 }
 
