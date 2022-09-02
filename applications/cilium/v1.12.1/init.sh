@@ -10,8 +10,19 @@ mkdir -p charts
 cd charts && {
   wget -qO- "https://github.com/$NAME/charts/raw/master/$NAME-${VERSION#*v}.tgz" | tar -zx
   find . -type f -name "*.tmpl" -exec mv -v {} {}.bak \;
-  sed -i 's#useDigest: true#useDigest: false#g' "$NAME/values.yaml"
-  bash getImages.sh "$NAME" >"$NAME/Images"
+  sed -i 's#useDigest: true#useDigest: false#g;/sidecarImageRegex/d' "$NAME/values.yaml"
+  {
+    # https://github.com/cilium/cilium/blob/master/operator/Makefile
+    yq '.operator.image.override=.operator.image.repository +":"+ .operator.image.tag' --inplace "$NAME/values.yaml"
+    sed -i 's#- cilium-operator-.+#- cilium-operator#g' -E "$NAME/templates/cilium-operator/deployment.yaml"
+  }
+  {
+    # get Images
+    yq '... style=""' "$NAME/values.yaml" |
+      grep -E "(repository|tag):" | awk '{print $NF}' | awk -F@ '{print $1}' |
+      sed 's#^#    #g' | sed -E 's#    (.+)/(.+)#- \1/\2:#g' |
+      yq ".[]" | sed 's# ##g' >"$NAME/Images"
+  }
   cd -
 }
 
