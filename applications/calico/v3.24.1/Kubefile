@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["kubectl create namespace tigera-operator","helm install calico charts/calico --namespace tigera-operator"]
