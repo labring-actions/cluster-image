@@ -73,6 +73,7 @@ jobs:
   add-tips:
     needs:
       - build_manifest
+      - resolve-issue-var
     name: Auto add tips
     runs-on: ubuntu-latest
     permissions:
