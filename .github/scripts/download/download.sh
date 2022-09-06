@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -e
 
 readonly HELM=${helmVersion:-$(
   curl --silent "https://api.github.com/repos/helm/helm/releases/latest" | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
