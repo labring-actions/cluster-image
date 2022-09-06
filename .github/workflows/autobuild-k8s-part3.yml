@@ -1,5 +1,11 @@
 name: Auto build image k8s for part3
 on:
+  workflow_dispatch:
+    inputs:
+      sealosPatch:
+        description: 'sealos patch image for development.'
+        required: true
+        default: ghcr.io/labring/sealos-patch:dev
   issue_comment:
     types:
       - created
@@ -7,10 +13,11 @@ env:
   containerdVersion: 1.6.2
   nerdctlVersion: 0.22.2
   part: 3
+  sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: containerd
 jobs:
   resolve-issue-sealoslatest:
-    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part3')
+    if: startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part3') || contains(github.event.inputs.sealosPatch, 'sealos')
     runs-on: ubuntu-latest
     outputs:
       sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
@@ -113,6 +120,7 @@ jobs:
           version: ${{ matrix.version }}-${{ env.sealoslatest }}
         run: .github/scripts/manifest.sh
   add-tips:
+    if: contains(github.event.comment.body, 'imagebuild')
     needs:
       - build_manifest
     name: Auto add tips

@@ -7,15 +7,14 @@ readonly CRI_TYPE=${criType?}
 readonly KUBE=${kubeVersion?}
 readonly SEALOS=${sealoslatest?}
 
-readonly ipvsImage="ghcr.io/labring/lvscare:v$SEALOS"
-
 readonly IMAGE_HUB_REGISTRY=${registry?}
 readonly IMAGE_HUB_REPO=${repo?}
 readonly IMAGE_HUB_USERNAME=${username?}
 readonly IMAGE_HUB_PASSWORD=${password?}
 
 readonly ROOT="/tmp/$(whoami)/build"
-mkdir -p "$ROOT"
+readonly PATCH="/tmp/$(whoami)/patch"
+mkdir -p "$ROOT" "$PATCH"
 readonly downloadDIR="/tmp/$(whoami)/download"
 readonly binDIR="/tmp/$(whoami)/bin"
 
@@ -24,6 +23,14 @@ readonly binDIR="/tmp/$(whoami)/bin"
   chmod a+x "$binDIR"/*
   sudo cp -auv "$binDIR"/* /usr/bin
 }
+
+if [[ -n "$sealosPatch" ]]; then
+  sudo buildah from --name "$KUBE-$ARCH" "$sealosPatch-$ARCH"
+  rmdir "$PATCH"
+  sudo cp -a "$(sudo buildah mount "$KUBE-$ARCH")" "$PATCH"
+  sudo chown -R "$USER:$USER" "$PATCH"
+  sudo buildah umount "$KUBE-$ARCH"
+fi
 
 cp -a rootfs/* "$ROOT"
 cp -a "$CRI_TYPE"/* "$ROOT"
@@ -37,7 +44,6 @@ cd "$ROOT" && {
   mkdir -p cri/lib64
 
   # ImageList
-  echo "$ipvsImage" >images/shim/LvscareImageList
   kubeadm config images list --kubernetes-version "$KUBE" 2>/dev/null >images/shim/DefaultImageList
 
   # library
@@ -84,6 +90,14 @@ cd "$ROOT" && {
   cp -a "${downloadDIR}/$ARCH"/image-cri-shim cri/
   cp -a "${downloadDIR}/$ARCH"/sealctl opt/
   cp -a "${downloadDIR}/$ARCH"/lsof opt/
+  if ! rmdir "$PATCH"; then
+    cp -a "$PATCH"/* .
+    ipvsImage="localhost:5000/labring/lvscare:$(find "registry" -type d | grep -E "tags/.+-$ARCH$" | awk -F/ '{print $NF}')"
+    echo >images/shim/lvscareImage
+  else
+    ipvsImage="ghcr.io/labring/lvscare:v$SEALOS"
+    echo "$ipvsImage" >images/shim/LvscareImageList
+  fi
 
   # replace
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
@@ -108,8 +122,7 @@ cd "$ROOT" && {
     ;;
   esac
 
-  if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]]; then
-    IMAGE_KUBE="$IMAGE_KUBE-dev"
+  if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
     IMAGE_PUSH_NAME=(
       "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE%.*}-$ARCH"
     )
