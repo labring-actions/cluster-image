@@ -36,6 +36,7 @@ jobs:
         run: .github/scripts/configs.sh
 
   add-tips:
+    if: contains(github.event.comment.body, 'imagebuild')
     needs:
       - build_manifest
     name: Auto add tips

@@ -1,5 +1,11 @@
 name: Auto build image docker for k8s part2
 on:
+  workflow_dispatch:
+    inputs:
+      sealosPatch:
+        description: 'sealos patch image for development.'
+        required: true
+        default: ghcr.io/labring/sealos-patch:dev
   issue_comment:
     types:
       - created
@@ -8,10 +14,11 @@ env:
   criDockerVersion: 0.2.5
   crictlVersion: v1.24.2
   part: 2
+  sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: docker
 jobs:
   resolve-issue-sealoslatest:
-    if: startswith(github.event.comment.body, '/imagebuild_docker_k8s') || startswith(github.event.comment.body, '/single_imagebuild_docker_k8s_part2')
+    if: startswith(github.event.comment.body, '/imagebuild_docker_k8s') || startswith(github.event.comment.body, '/single_imagebuild_docker_k8s_part2') || contains(github.event.inputs.sealosPatch, 'sealos')
     runs-on: ubuntu-latest
     outputs:
       sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
@@ -115,6 +122,7 @@ jobs:
         run: .github/scripts/manifest.sh
 
   add-tips:
+    if: contains(github.event.comment.body, 'imagebuild')
     needs:
       - build_manifest
     name: Auto add tips

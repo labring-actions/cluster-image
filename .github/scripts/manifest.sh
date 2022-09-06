@@ -23,8 +23,7 @@ docker)
   ;;
 esac
 
-if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]]; then
-  IMAGE_KUBE="$IMAGE_KUBE-dev"
+if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
   IMAGE_PUSH_NAME=(
     "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v${KUBE%.*}"
   )

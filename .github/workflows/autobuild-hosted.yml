@@ -71,6 +71,7 @@ jobs:
         run: .github/scripts/manifest-other.sh
 
   add-tips:
+    if: contains(github.event.comment.body, 'imagebuild')
     needs:
       - build_manifest
       - resolve-issue-var
