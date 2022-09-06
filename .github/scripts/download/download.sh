@@ -42,4 +42,5 @@ tree "$ROOT"
 {
   chmod a+x "$ROOT"/*
   sudo cp -auv "$ROOT"/* /usr/bin
+  sudo sealos version
 }
