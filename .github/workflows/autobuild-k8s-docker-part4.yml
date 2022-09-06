@@ -11,7 +11,7 @@ env:
   criType: docker
 jobs:
   resolve-issue-sealoslatest:
-    if: startswith(github.event.comment.body, '/imagebuild_docker_k8s') || startswith(github.event.comment.body, '/single_imagebuild_docker_k8s_part1')
+    if: startswith(github.event.comment.body, '/imagebuild_docker_k8s') || startswith(github.event.comment.body, '/single_imagebuild_docker_k8s_part4')
     runs-on: ubuntu-latest
     outputs:
       sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
