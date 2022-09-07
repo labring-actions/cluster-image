@@ -10,7 +10,11 @@ readonly DOCKER=${dockerVersion:-$(date +%F)}
 readonly CRIDOCKER=${criDockerVersion:-$(date +%F)}
 readonly CONTAINERD=${containerdVersion:-$(date +%F)}
 readonly NERDCTL=${nerdctlVersion:-$(date +%F)}
-readonly CRICTL=${crictlVersion:-$(date +%F)}
+readonly CRICTL=$(
+  curl --silent https://api.github.com/repos/kubernetes-sigs/cri-tools/tags |
+    yq '.[].name' | grep "^v${KUBE%.*}." |
+    head -n 1
+)
 
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
@@ -20,7 +24,7 @@ cd "$ROOT" && {
   containerd)
     wget -qO "dl.tgz" "https://github.com/containerd/containerd/releases/download/v$CONTAINERD/cri-containerd-cni-$CONTAINERD-linux-$ARCH.tar.gz"
     {
-       mkdir -p usr/bin
+      mkdir -p usr/bin
       tar -zxf dl.tgz -C usr/bin --strip-components=3 usr/local/bin
       tar -zxf dl.tgz -C usr/bin --strip-components=3 usr/local/sbin
       rm -f dl.tgz usr/bin/critest

@@ -12,7 +12,6 @@ on:
 env:
   dockerVersion: 20.10.17
   criDockerVersion: 0.2.5
-  crictlVersion: v1.24.2
   part: 2
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: docker
