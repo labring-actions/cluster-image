@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm install tekton-operator charts/tekton --namespace kube-system"]
