@@ -1,0 +1,12 @@
+[Unit]
+Description=registry: The sealos registry
+Documentation=https://www.sealos.io/docs/Intro
+
+[Service]
+ExecStart=/usr/bin/registry server {{ .registryConfig }}/registry_config.yml
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
