@@ -34,6 +34,7 @@ fi
 
 cp -a rootfs/* "$ROOT"
 cp -a "$CRI_TYPE"/* "$ROOT"
+cp -a registry/* "$ROOT"
 
 tree "/tmp/$(whoami)"
 cd "$ROOT" && {
@@ -85,8 +86,8 @@ cd "$ROOT" && {
   esac
 
   cp -a "${downloadDIR}/$ARCH"/kube* bin/
-#  cp -a "${downloadDIR}/$ARCH"/registry bin/
-  cp -a "${downloadDIR}/$ARCH"/registry.tar images/
+  cp -a "${downloadDIR}/$ARCH"/registry cri/
+#  cp -a "${downloadDIR}/$ARCH"/registry.tar images/
   cp -a "${downloadDIR}/$ARCH"/image-cri-shim cri/
   cp -a "${downloadDIR}/$ARCH"/sealctl opt/
   cp -a "${downloadDIR}/$ARCH"/lsof opt/
