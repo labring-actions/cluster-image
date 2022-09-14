@@ -21,6 +21,7 @@ rm -rf /etc/containerd
 rm -rf /etc/systemd/system/containerd.service
 systemctl daemon-reload
 rm -rf $storage
+rm -rf /run/containerd/containerd.sock
 rm -rf /var/lib/nerdctl
 
 rm -f /usr/bin/containerd

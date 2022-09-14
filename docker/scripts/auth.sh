@@ -18,3 +18,4 @@ REGISTRY_USERNAME=${3:-}
 REGISTRY_PASSWORD=${4:-}
 
 docker login --username  ${REGISTRY_USERNAME}  --password ${REGISTRY_PASSWORD} ${REGISTRY_DOMAIN}:${REGISTRY_PORT}
+crictl pull __pause__

@@ -110,6 +110,7 @@ cd "$ROOT" && {
     ;;
   docker)
     sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/cri-docker.service.tmpl
+    sed -i "s#__pause__#${pauseImage}#g" scripts/auth.sh
     ;;
   esac
 
