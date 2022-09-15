@@ -1,6 +1,6 @@
 ## Overview
 
-Postgres operator creates and manages PostgreSQL clusters running in Kubernetes.
+[zalando](https://github.com/zalando/postgres-operator) Postgres operator creates and manages PostgreSQL clusters running in Kubernetes.
 
 ## Build
 
