@@ -1,7 +1,6 @@
-FROM labring/helm:v3.8.2
-ENV PATH=$PATH:/opt/
+FROM scratch
 COPY registry ./registry
 COPY charts ./charts
 COPY values ./values
-ENTRYPOINT["helm upgrade --install mysql-operator  charts/mysql-operator --namespace=mysql-operator --create-namespace"]
+ENTRYPOINT["values/oracle-mysql-operator-values.sh"]
 CMD ["helm upgrade -f values/oracle-mysql-operator-values.yaml --install mysql-mycluster  charts/mysql-innodbcluster --namespace=oracle-mysql-system --create-namespace "]
