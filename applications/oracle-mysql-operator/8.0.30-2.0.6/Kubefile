@@ -1,6 +1,5 @@
-FROM busybox:1.35.0
+FROM scratch
 COPY registry ./registry
 COPY charts ./charts
 COPY values ./values
-ENTRYPOINT["sh","-c","values/oracle-mysql-operator-values.sh"]
-CMD ["helm upgrade -f values/oracle-mysql-cluster-values.yaml --install mysql-mycluster  charts/mysql-innodbcluster --namespace=oracle-mysql-system --create-namespace "]
+CMD ["bash -c values/oracle-mysql-operator-values.sh","helm upgrade -f values/oracle-mysql-cluster-values.yaml --install mysql-mycluster  charts/mysql-innodbcluster --namespace=oracle-mysql-system --create-namespace "]
