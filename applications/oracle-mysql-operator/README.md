@@ -25,7 +25,7 @@ helm upgrade -f /root/values.yaml --install mysql-mycluster  charts/mysql-innodb
 A MySQL InnoDB Cluster `Service` is created inside the Kubernetes cluster:
 
 ```sh
-$> kubectl get service mycluster -n mysql-operator
+$> kubectl get service mysql-mycluster -n mysql-operator
 
 NAME        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                                                  AGE
 mysql-mycluster   ClusterIP   10.110.228.51   <none>        3306/TCP,33060/TCP,6446/TCP,6448/TCP,6447/TCP,6449/TCP   26h
@@ -60,7 +60,7 @@ Kubernetes port forwarding creates a redirection from your local machine to use 
 For example, for read-write connection to the primary using the MySQL protocol:
 
 ```sh
-$> kubectl port-forward  -n mysql-operator service/mycluster  mysql
+$> kubectl port-forward  -n mysql-operator service/mysql-mycluster  mysql
 
 Forwarding from 127.0.0.1:3306 -> 6446
 Forwarding from [::1]:3306 -> 6446
