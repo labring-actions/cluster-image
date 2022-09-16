@@ -8,7 +8,7 @@ image:
 credentials:
   root:
     user: root
-    password: supersecret
+#    password: sakila
     host: "%"
 
 tls:
@@ -23,29 +23,23 @@ routerInstances: 1
 baseServerId: 1000
 
 
-podSpec:
-  containers:
-  - name: mysql
-    resources:
-      requests:
-        memory: "2048Mi"  # adapt to your needs
-        cpu: "1800m"      # adapt to your needs
-      limits:
-        memory: "8192Mi"  # adapt to your needs
-        cpu: "3600m"      # adapt to your needs
+#podSpec:
+#  containers:
+#  - name: mysql
+#    resources:
+#      requests:
+#        memory: "2048Mi"  # adapt to your needs
+#        cpu: "1800m"      # adapt to your needs
+#      limits:
+#        memory: "8192Mi"  # adapt to your needs
+#        cpu: "3600m"      # adapt to your needs
 
 
-serverConfig:
-  mycnf: |
-    [mysqld]
-    character-set-client-handshake = FALSE
-    character-set-server = utf8mb4
-    collation-server = utf8mb4_general_ci
-    [client]
-    default-character-set = utf8mb4
-
-    [mysql]
-    default-character-set = utf8mb4
+#serverConfig:
+#  mycnf: |
+#    [mysqld]
+#    core_file
+#    local_infile=off
 
 
 #datadirVolumeClaimTemplate:
