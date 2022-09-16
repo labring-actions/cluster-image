@@ -1,4 +1,4 @@
 FROM scratch
 COPY . .
 ENTRYPOINT["helm upgrade --install mysql-operator  charts/mysql-operator --namespace=mysql-operator --create-namespace"]
-CMD ["helm upgrade --install mysql-mycluster  charts/mysql-innodbcluster --namespace=oracle-mysql-system --create-namespace --set credentials.root.user='root' --set credentials.root.password='supersecret' --set credentials.root.host='%' --set serverInstances=3 --set routerInstances=1"]
+CMD ["helm upgrade -f values/oracle-mysql-operator-values.yaml --install mysql-mycluster  charts/mysql-innodbcluster --namespace=oracle-mysql-system --create-namespace "]
