@@ -20,6 +20,7 @@ readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
 cd "$ROOT" && {
+  wget -qO "crictl.tar.gz" "https://github.com/kubernetes-sigs/cri-tools/releases/download/$CRICTL/crictl-$CRICTL-linux-$ARCH.tar.gz"
   case $CRI_TYPE in
   containerd)
     wget -qO "dl.tgz" "https://github.com/containerd/containerd/releases/download/v$CONTAINERD/cri-containerd-cni-$CONTAINERD-linux-$ARCH.tar.gz"
@@ -28,6 +29,7 @@ cd "$ROOT" && {
       tar -zxf dl.tgz -C usr/bin --strip-components=3 usr/local/bin
       tar -zxf dl.tgz -C usr/bin --strip-components=3 usr/local/sbin
       rm -f dl.tgz usr/bin/critest
+      tar -zxf crictl.tar.gz -C usr/bin
       tar -zcf "cri-containerd.tar.gz" usr
       rm -rf usr
     }
@@ -38,7 +40,6 @@ cd "$ROOT" && {
     case $KUBE in
     1.*.*)
       wget -qO "cri-dockerd.tgz" "https://github.com/Mirantis/cri-dockerd/releases/download/v$CRIDOCKER/cri-dockerd-$CRIDOCKER.$ARCH.tgz"
-      wget -qO "crictl.tar.gz" "https://github.com/kubernetes-sigs/cri-tools/releases/download/$CRICTL/crictl-$CRICTL-linux-$ARCH.tar.gz"
       case $ARCH in
       amd64)
         DOCKER_ARCH=x86_64
@@ -52,7 +53,6 @@ cd "$ROOT" && {
         ;;
       esac
       wget -qO "docker.tgz" "https://download.docker.com/linux/static/stable/$DOCKER_ARCH/docker-$DOCKER.tgz"
-
       ;;
     esac
     ;;
