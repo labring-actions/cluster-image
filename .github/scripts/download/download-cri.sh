@@ -6,10 +6,23 @@ readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
 readonly KUBE=${kubeVersion?}
 
-readonly DOCKER=${dockerVersion:-$(date +%F)}
-readonly CRIDOCKER=${criDockerVersion:-$(date +%F)}
-readonly CONTAINERD=${containerdVersion:-$(date +%F)}
-readonly NERDCTL=${nerdctlVersion:-$(date +%F)}
+readonly DOCKER=$(
+  echo 20.10.18 ||
+  curl --silent https://api.github.com/repos/moby/moby/tags |
+    yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" |
+    head -n 1 | cut -dv -f2
+)
+readonly CRIDOCKER=$(
+  curl --silent https://api.github.com/repos/Mirantis/cri-dockerd/tags |
+    yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" |
+    head -n 1 | cut -dv -f2
+)
+readonly CONTAINERD=$(
+  echo 1.6.2 ||
+  curl --silent https://api.github.com/repos/containerd/containerd/tags |
+    yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" |
+    head -n 1 | cut -dv -f2
+)
 readonly CRICTL=$(
   curl --silent https://api.github.com/repos/kubernetes-sigs/cri-tools/tags |
     yq '.[].name' | grep "^v${KUBE%.*}." |
@@ -33,8 +46,6 @@ cd "$ROOT" && {
       tar -zcf "cri-containerd.tar.gz" usr
       rm -rf usr
     }
-    wget -qO- "https://github.com/containerd/nerdctl/releases/download/v$NERDCTL/nerdctl-$NERDCTL-linux-$ARCH.tar.gz" |
-      tar -zx nerdctl
     ;;
   docker)
     case $KUBE in
@@ -58,7 +69,6 @@ cd "$ROOT" && {
     ;;
   esac
   wget -qO "library.tar.gz" "https://github.com/labring/cluster-image/releases/download/depend/library-2.5-linux-$ARCH.tar.gz"
-  wget -qO "registry.tar" "https://github.com/labring/cluster-image/releases/download/depend/registry-$ARCH.tar"
   {
     REGISTRY=$(curl --silent "https://api.github.com/repos/distribution/distribution/releases/latest" | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2)
     wget -qO- "https://github.com/distribution/distribution/releases/download/v$REGISTRY/registry_${REGISTRY}_linux_$ARCH.tar.gz" |

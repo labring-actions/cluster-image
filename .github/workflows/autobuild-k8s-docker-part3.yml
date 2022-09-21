@@ -10,8 +10,6 @@ on:
     types:
       - created
 env:
-  dockerVersion: 20.10.17
-  criDockerVersion: 0.2.5
   part: 3
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: docker
