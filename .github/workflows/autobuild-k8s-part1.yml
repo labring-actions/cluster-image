@@ -10,8 +10,6 @@ on:
     types:
       - created
 env:
-  containerdVersion: 1.6.2
-  nerdctlVersion: 0.22.2
   part: 1
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: containerd

@@ -72,7 +72,6 @@ cd "$ROOT" && {
   case $CRI_TYPE in
   containerd)
     cp -a "${downloadDIR}/$ARCH/cri-containerd.tar.gz" cri/
-    cp -a "${downloadDIR}/$ARCH/nerdctl" cri/
     ;;
   docker)
     case $KUBE in
