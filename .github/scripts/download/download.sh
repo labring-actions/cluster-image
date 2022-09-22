@@ -19,9 +19,9 @@ mkdir -p "$ROOT"
 sudo apt remove buildah -y || true
 
 cd "$ROOT" && {
-  wget -qO- "https://get.helm.sh/helm-v$HELM-linux-amd64.tar.gz" |
+  wget -t0 -T3 -qO- "https://get.helm.sh/helm-v$HELM-linux-amd64.tar.gz" |
     tar -zx linux-amd64/helm --strip-components=1
-  wget -qO "buildah" "https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64"
+  wget -t0 -T3 -qO "buildah" "https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64"
   if [[ -n "$sealosPatch" ]]; then
     chmod a+x "buildah"
     sudo cp -a "buildah" /usr/bin
@@ -30,10 +30,10 @@ cd "$ROOT" && {
     sudo chown -R "$USER:$USER" .
     sudo buildah umount "$SEALOS"
   else
-    wget -qO- "https://github.com/labring/sealos/releases/download/v$SEALOS/sealos_${SEALOS}_linux_amd64.tar.gz" |
+    wget -t0 -T3 -qO- "https://github.com/labring/sealos/releases/download/v$SEALOS/sealos_${SEALOS}_linux_amd64.tar.gz" |
       tar -zx sealos
   fi
-  wget -qO "yq" "https://github.com/mikefarah/yq/releases/download/v$YQ/yq_linux_amd64"
+  wget -t0 -T3 -qO "yq" "https://github.com/mikefarah/yq/releases/download/v$YQ/yq_linux_amd64"
 }
 
 echo "$0"
