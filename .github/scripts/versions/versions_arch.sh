@@ -30,7 +30,7 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
     else
       case $IMAGE_HUB_REGISTRY in
       docker.io)
-        if curl --silent "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/$vKUBE-$SEALOS" |
+        if until wget -qO- "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/$vKUBE-$SEALOS"; do sleep 3; done |
           grep digest >/dev/null; then
           echo "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:$vKUBE-$SEALOS already existed"
         else
@@ -43,7 +43,7 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
       esac
     fi
   done < <(
-    wget -t0 -T3 -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/$K8S_MD" |
+    until wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/$K8S_MD"; do sleep 3; done |
       grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' >".versions/$K8S_MD.cached"
     head -n 1 ".versions/$K8S_MD.cached" >".versions/$K8S_MD.latest"
     cat ".versions/$K8S_MD.cached"
