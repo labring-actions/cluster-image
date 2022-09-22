@@ -1,23 +1,65 @@
 #!/bin/bash
+
+set -e
+
+readonly CRI_TYPE=${criType?}
+
+readonly IMAGE_HUB_REGISTRY=${registry:-}
+readonly IMAGE_HUB_REPO=${repo?}
+readonly SEALOS=${sealoslatest?}
+
+case $CRI_TYPE in
+containerd)
+  IMAGE_KUBE=kubernetes
+  ;;
+docker)
+  IMAGE_KUBE=kubernetes-docker
+  ;;
+esac
+
 # Recursively finds all directories with a go.mod file and creates
 # a GitHub Actions JSON output option. This is used by the linter action.
 echo "Resolving versions in $(pwd)"
+rm -rf .versions
 mkdir -p .versions
-rm -rf .versions/versions.txt
-for file in $(pwd)/.github/versions/${part}/CHANGELOG*; do
-  if ! [[ "$sealoslatest" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
-    wget -t0 -T3 -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
-      grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
-      cut -dv -f 2 | head -n 1 |
+for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
+  K8S_MD=${file##*/}
+  while IFS= read vKUBE; do
+    if [[ "$allBuild" == true ]]; then
+      echo "$vKUBE" >>".versions/$K8S_MD"
+    else
+      case $IMAGE_HUB_REGISTRY in
+      docker.io)
+        if curl --silent "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/$vKUBE-$SEALOS" |
+          grep digest >/dev/null; then
+          echo "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:$vKUBE-$SEALOS already existed"
+        else
+          echo "$vKUBE" >>".versions/$K8S_MD"
+        fi
+        ;;
+      *)
+        echo "$vKUBE" >>".versions/$K8S_MD"
+        ;;
+      esac
+    fi
+  done < <(
+    wget -t0 -T3 -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/$K8S_MD" |
+      grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' >".versions/$K8S_MD.cached"
+    head -n 1 ".versions/$K8S_MD.cached" >".versions/$K8S_MD.latest"
+    cat ".versions/$K8S_MD.cached"
+  )
+  touch ".versions/$K8S_MD"
+  if [[ -z "$(cat ".versions/$K8S_MD")" ]]; then
+    mv ".versions/$K8S_MD.latest" ".versions/$K8S_MD"
+  fi
+  if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
+    cut -dv -f 2 ".versions/$K8S_MD" | head -n 1 |
       awk '{printf "{\"'version'\":\"%s\"},",$1}' >>.versions/versions.txt
   else
-    wget -t0 -T3 -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
-      grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
-      cut -dv -f 2 |
+    cut -dv -f 2 ".versions/$K8S_MD" |
       awk '{printf "{\"'version'\":\"%s\"},",$1}' >>.versions/versions.txt
   fi
 done
-VERSIONS=$(cat .versions/versions.txt)
-echo "versions is : {\"include\":[${VERSIONS%?}]}"
-
-echo "::set-output name=matrix::{\"include\":[${VERSIONS%?}]}"
+SET_MATRIX=$(cat .versions/versions.txt)
+echo "{\"include\":[${SET_MATRIX%?}]}" | yq -P
+echo "::set-output name=matrix::{\"include\":[${SET_MATRIX%?}]}"
