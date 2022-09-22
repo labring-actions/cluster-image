@@ -8,9 +8,15 @@ assignees: ''
 
 ```
 Usage:
-   /imagebuild_k8s [sealosLatest]
-   /single_imagebuild_k8s_part1 [sealosLatest]
+   /imagebuild_kube [sealosVersion]             # all containerd + all docker
+   /imagebuild_k8s [sealosVersion]              # all containerd
+   /imagebuild_docker_k8s [sealosVersion]       # all docker
+   /single_imagebuild_k8s_part1 [sealosVersion]        # containerd for part1
+   /single_imagebuild_docker_k8s_part1 [sealosVersion] # docker for part1
 Example:
-   /imagebuild_k8s [sealosLatest]
-   /single_imagebuild_k8s_part1 [sealosLatest]
+   /imagebuild_kube 4.1.3
+   /imagebuild_k8s 4.1.3
+   /imagebuild_docker_k8s 4.1.3
+   /single_imagebuild_k8s_part1 4.1.3
+   single_imagebuild_docker_k8s_part1 4.1.3
 ```
