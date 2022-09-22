@@ -19,7 +19,7 @@ readonly downloadDIR="/tmp/$(whoami)/download"
 readonly binDIR="/tmp/$(whoami)/bin"
 
 {
-  wget -qP "$binDIR" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/amd64/kubeadm"
+  wget -t0 -T3 -qP "$binDIR" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/amd64/kubeadm"
   chmod a+x "$binDIR"/*
   sudo cp -auv "$binDIR"/* /usr/bin
 }
@@ -72,7 +72,6 @@ cd "$ROOT" && {
   case $CRI_TYPE in
   containerd)
     cp -a "${downloadDIR}/$ARCH/cri-containerd.tar.gz" cri/
-    cp -a "${downloadDIR}/$ARCH/nerdctl" cri/
     ;;
   docker)
     case $KUBE in

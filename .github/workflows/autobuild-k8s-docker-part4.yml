@@ -10,9 +10,10 @@ on:
     types:
       - created
 env:
-  dockerVersion: 20.10.17
-  criDockerVersion: 0.2.5
   part: 4
+  allBuild: ${{ secrets.ALLBUILD }}
+  registry: docker.io
+  repo: ${{ github.repository_owner }}
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: docker
 jobs:
@@ -85,9 +86,7 @@ jobs:
 
       - name: Auto build image
         env:
-          registry: docker.io
           username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
@@ -113,9 +112,7 @@ jobs:
         run: .github/scripts/download/download.sh
       - name: Manifest Image
         env:
-          registry: docker.io
           username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           version: ${{ matrix.version }}-${{ env.sealoslatest }}
         run: .github/scripts/manifest.sh

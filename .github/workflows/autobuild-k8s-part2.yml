@@ -10,9 +10,10 @@ on:
     types:
       - created
 env:
-  containerdVersion: 1.6.2
-  nerdctlVersion: 0.22.2
   part: 2
+  allBuild: ${{ secrets.ALLBUILD }}
+  registry: docker.io
+  repo: ${{ github.repository_owner }}
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: containerd
 jobs:
@@ -85,9 +86,7 @@ jobs:
 
       - name: Auto build image
         env:
-          registry: docker.io
           username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
@@ -113,9 +112,7 @@ jobs:
         run: .github/scripts/download/download.sh
       - name: Manifest Image
         env:
-          registry: docker.io
           username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY }}
           version: ${{ matrix.version }}-${{ env.sealoslatest }}
         run: .github/scripts/manifest.sh
