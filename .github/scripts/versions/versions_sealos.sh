@@ -11,7 +11,7 @@ else
   sealosVersion=$defaultVersion
 fi
 
-if ! wget -qO /dev/null "https://github.com/labring/sealos/releases/download/v$sealosVersion/sealos_${sealosVersion}_linux_amd64.tar.gz"; then
+if ! wget -t0 -T3 -qO /dev/null "https://github.com/labring/sealos/releases/download/v$sealosVersion/sealos_${sealosVersion}_linux_amd64.tar.gz"; then
   echo "sealos version $sealosVersion does not exist"
   exit
 fi

@@ -6,12 +6,12 @@ mkdir -p .versions
 rm -rf .versions/versions_arch.txt
 for file in $(pwd)/.github/versions/${part}/CHANGELOG*; do
   if ! [[ "$sealoslatest" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
-    wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
+    wget -t0 -T3 -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
       grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
       cut -dv -f 2 | head -n 1 |
       awk '{printf "{\"'version'\":\"%s\",\"'arch'\":\"amd64\"},{\"'version'\":\"%s\",\"'arch'\":\"arm64\"},",$1,$1}' >>.versions/versions_arch.txt
   else
-    wget -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
+    wget -t0 -T3 -qO- "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/${file##*/}" |
       grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' |
       cut -dv -f 2 |
       awk '{printf "{\"'version'\":\"%s\",\"'arch'\":\"amd64\"},{\"'version'\":\"%s\",\"'arch'\":\"arm64\"},",$1,$1}' >>.versions/versions_arch.txt
