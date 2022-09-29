@@ -1,0 +1,124 @@
+#!/bin/bash
+
+set -e
+
+gen_images.sh() {
+  if [[ $# -ne 0 ]]; then
+    mkdir -p images/shim
+    cat <<EOF >"images/shim/${NAME}Images"
+$(
+      for image; do
+        echo "$image"
+      done
+    )
+EOF
+  fi
+}
+install_images.sh() {
+  echo "$0($#)"
+}
+
+gen_manifests.sh() {
+  if [[ $# -ne 0 ]]; then
+    mkdir -p "manifests/$NAME"
+    for obj; do
+      if [[ "${obj%=*}" =~ (tgz|tar.gz)$ ]]; then
+        wget -qO- "${obj%=*}" | tar -xz
+        cp -af "$NAME-"*/"${obj#*=}"/* "manifests/$NAME"
+        rm -rf "$NAME-"*
+      elif [[ "${obj%=*}" =~ y?ml$ ]]; then
+        wget -qP "manifests/$NAME" "${obj%=*}"
+      fi
+      if rmdir "manifests/$NAME" 2>/dev/null; then
+        echo -e "\033[31m ERROR [$0]$obj\033[0m"
+      else
+        echo -e "\033[32m INFO [$0]$obj\033[0m"
+      fi
+    done
+  fi
+}
+install_manifests.sh() {
+  if [[ -d manifests ]]; then
+    cat <<\EOF >install_app
+#!/bin/bash
+set -e
+install() {
+  local obj=$1 app version
+  shift
+  app=${obj%=*}
+  version=${obj#*=}
+  kubectl -n "$NAMESPACE" create -f "$app" 2>/dev/null || kubectl -n "$NAMESPACE" replace -f "$app"
+}
+# install $NAME=$VERSION
+pushd manifests
+install "$1"
+popd
+EOF
+  fi
+}
+
+gen_charts.sh() {
+  if [[ $# -ne 0 ]]; then
+    mkdir -p charts
+    helm version 2>/dev/null || {
+      echo https://github.com/helm/helm/tags
+      exit 1
+    }
+    local repo cv chart version
+    for obj; do
+      repo=${obj%=*}
+      cv=${obj#*=}
+      chart=${cv%:*}
+      version=${cv#*:}
+      helm repo add "$(hostname)" "${repo:-https://helm.elastic.co}" \
+        --insecure-skip-tls-verify --allow-deprecated-repos --force-update >/dev/null
+      helm repo up "$(hostname)" >/dev/null
+      if helm pull "$(hostname)/${chart:-eck-operator-crds}" --version "$version" \
+        --insecure-skip-tls-verify -d charts 2>/dev/null; then
+        echo -e "\033[32m INFO [$0]$obj\033[0m"
+      else
+        echo -e "\033[31m ERROR [$0]$obj\033[0m"
+      fi
+      helm repo rm "$(hostname)" >/dev/null
+    done
+  fi
+}
+install_charts.sh() {
+  if [[ -d charts ]]; then
+    cat <<\EOF >install_app
+#!/bin/bash
+set -e
+existed() {
+  local obj=$1 chart version
+  chart=${obj%=*}
+  version=${obj#*=}
+  helm -n "$NAMESPACE" list --short | grep "^$chart$" >/dev/null
+}
+released() {
+  local obj=$1 chart version
+  chart=${obj%=*}
+  version=${obj#*=}
+  helm -n "$NAMESPACE" list | grep "$chart-$version" >/dev/null && existed "$obj"
+}
+install() {
+  local obj=$1 chart version
+  shift
+  chart=${obj%=*}
+  version=${obj#*=v}
+  if released "$obj"; then
+    helm -n "$NAMESPACE" status "${obj%:*}"
+  else
+    if existed "$obj"; then
+      helm -n "$NAMESPACE" upgrade "$chart" "$chart-$version.tgz"
+    else
+      helm -n "$NAMESPACE" install "$chart" "$chart-$version.tgz"
+    fi
+  fi
+}
+# install $NAME=$VERSION
+pushd charts
+install "$1"
+popd
+EOF
+  fi
+}
