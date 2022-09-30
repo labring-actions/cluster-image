@@ -17,7 +17,7 @@ rm -rf $buildDir
 mkdir -p $buildDir
 
 if [[ -d "applications/$APP_NAME/latest" ]] && ! [[ -d "applications/$APP_NAME/$APP_VERSION" ]]; then
-  cp -af .github/scripts/apps /tmp/scripts_apps
+  cp -af .github/scripts/apps/ /tmp/scripts_apps
   cp -af "applications/$APP_NAME/latest" "applications/$APP_NAME/$APP_VERSION"
 fi
 

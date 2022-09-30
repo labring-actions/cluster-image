@@ -51,7 +51,7 @@ install() {
 }
 # install $NAME=$VERSION
 pushd manifests
-install "$1"
+install "$@"
 popd
 EOF
   fi
@@ -109,15 +109,15 @@ install() {
     helm -n "$NAMESPACE" status "${obj%:*}"
   else
     if existed "$obj"; then
-      helm -n "$NAMESPACE" upgrade "$chart" "$chart-$version.tgz"
+      helm -n "$NAMESPACE" --create-namespace upgrade "$chart" "$chart-$version.tgz" "$@"
     else
-      helm -n "$NAMESPACE" install "$chart" "$chart-$version.tgz"
+      helm -n "$NAMESPACE" --create-namespace install "$chart" "$chart-$version.tgz" "$@"
     fi
   fi
 }
 # install $NAME=$VERSION
 pushd charts
-install "$1"
+install "$@"
 popd
 EOF
   fi
