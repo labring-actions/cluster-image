@@ -1,0 +1,96 @@
+name: Auto build APP image
+on:
+  issue_comment:
+    types:
+      - created
+env:
+  registry: docker.io
+  repository: willdockerhub
+
+jobs:
+  build-var:
+    if: startswith(github.event.comment.body, '/imagebuild_apps helm')
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.set-appversion.outputs.app }}
+      version: ${{ steps.set-appversion.outputs.version }}
+    steps:
+      - name: Write vars
+        id: set-appversion
+        run: |
+          commentbody="${{github.event.comment.body}}"
+          app=`echo "$commentbody"| awk '{print $2}'`
+          version=`echo "$commentbody"| awk '{print $3}'`
+          echo "::set-output name=app::$app"
+          echo "::set-output name=version::$version"
+          
+  build-app:
+    runs-on: ubuntu-latest
+    needs: build-var
+    strategy:
+      matrix:
+        arch: [ amd64,arm64 ]
+    env:
+      app: ${{ needs.resolve-issue-var.outputs.app }}
+      version: ${{ needs.resolve-issue-var.outputs.version }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+ 
+      - name: Install sealos
+        run: |
+          sealos_version=`curl -s https://api.github.com/repos/labring/sealos/releases/latest | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2`
+          wget -q https://github.com/labring/sealos/releases/download/v${sealos_version}/sealos_${sealos_version}_linux_amd64.tar.gz
+          sudo tar -zxf sealos_${sealos_version}_linux_amd64.tar.gz -C /usr/bin sealos
+      - name: Install buildah
+        run: |
+          sudo apt remove buildah -y || true
+          sudo wget -qO "/usr/bin/buildah" "https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64"
+          sudo chmod a+x /usr/bin/buildah
+          
+      - name: Download app
+        working-directory: applications/${{ env.app }}/latest
+        run: |
+          mkdir -p opt
+          wget https://get.helm.sh/helm-${version}-linux-${{ matrix.arch }}.tar.gz
+          tar -zxf helm-${version}-linux-${{ matrix.arch }}.tar.gz --strip=1 -C opt/ linux-${{ matrix.arch }}/helm
+          rm -rf helm-${version}-linux-${{ matrix.arch }}.tar.gz
+          
+      - name: Build app cloud image
+        working-directory: applications/${{ env.app }}/latest
+        run: |
+          sudo sealos login ${registry} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          sudo sealos build -t ${registry}/${repository}/${app}:${version} --platform linux/${{ matrix.arch }} .
+          sudo sealos tag ${registry}/${repository}/${app}:${version} ${registry}/${repository}/${app}:${version}-${{ matrix.arch }}
+          sudo sealos push ${registry}/${repository}/${app}:${version}-${{ matrix.arch }}
+          
+  build-arch:
+    runs-on: ubuntu-latest
+    needs: 
+      - build-var
+      - build-app
+    env:
+      app: ${{ needs.resolve-issue-var.outputs.app }}
+      version: ${{ needs.resolve-issue-var.outputs.version }}
+
+    steps:
+      - name: Install sealos
+        run: |
+          sealos_version=`curl -s https://api.github.com/repos/labring/sealos/releases/latest | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2`
+          wget https://github.com/labring/sealos/releases/download/v${sealos_version}/sealos_${sealos_version}_linux_amd64.tar.gz
+          sudo tar -zxf sealos_${sealos_version}_linux_amd64.tar.gz -C /usr/bin sealos
+          
+      - name: Install buildah
+        run: |
+          sudo apt remove buildah -y || true
+          sudo wget -qO "/usr/bin/buildah" "https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64"
+          sudo chmod a+x /usr/bin/buildah
+ 
+      - name: manifest app cloud image
+        run: |
+          sudo buildah login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} ${registry}
+          sudo buildah manifest create ${registry}/${repository}/${app}:${version}
+          sudo buildah manifest add ${registry}/${repository}/${app}:${version} docker://${registry}/${repository}/${app}:${version}-amd64
+          sudo buildah manifest add ${registry}/${repository}/${app}:${version} docker://${registry}/${repository}/${app}:${version}-arm64
+          sudo buildah manifest push --all ${registry}/${repository}/${app}:${version} docker://${registry}/${repository}/${app}:${version}
