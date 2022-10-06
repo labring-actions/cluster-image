@@ -87,4 +87,6 @@ docker.io/kubegems/prometheus:v2.35.0
 quay.io/frrouting/frr:stable_7.5
 quay.io/metallb/speaker:v0.12.1
 registry.cn-beijing.aliyuncs.com/kubegems/nacos-peer-finder-plugin:1.1
-docker.io/kubegems/nacos-server:v2.1.1
+registry.cn-beijing.aliyuncs.com/kubegems/nacos-server:v2.1.0
+registry.cn-beijing.aliyuncs.com/kubegems/k8s-dns-node-cache:1.21.1
+registry.cn-beijing.aliyuncs.com/kubegems/node-problem-detector:v0.8.10
