@@ -5,6 +5,7 @@ prequires：openebs or other storage is needed by kubegems.
 sealos run \
   --masters xxx --nodes xxx -p xxx \
   labring/kubernetes:v1.23.10 \
+  labring/helm:v3.8.2 \
   labring/calico:v3.22.1 \
   labring/coredns:v0.0.1 \
   labring/openebs:v1.9.0 \
@@ -25,6 +26,7 @@ wget https://github.com/labring/sealos/releases/download/v4.1.3/sealos_4.1.3_lin
 sealos run \
   --masters xxx --nodes xxx,xxx,xxx -p pwd \
   labring/kubernetes:v1.23.10 \
+  labring/helm:v3.8.2 \
   labring/calico:v3.22.1 \
   labring/coredns:v0.0.1 \
   labring/openebs:v1.9.0 \
