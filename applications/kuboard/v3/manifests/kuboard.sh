@@ -1,5 +1,8 @@
 #!/bin/sh
 # entrypoint.sh
+readonly ETCD_CLIENT_PORT=${ETCD_CLIENT_PORT:-2379}
+readonly ETCD_PEER_PORT=${ETCD_PEER_PORT:-2380}
+
 if [ -n "${KUBOARD_SSO_CLIENT_SECRET}" ]; then
   echo "使用环境变量中的 KUBOARD_SSO_CLIENT_SECRET: ${KUBOARD_SSO_CLIENT_SECRET}"
 else
@@ -85,7 +88,7 @@ if [ -n "${KUBOARD_SERVER_NODE_PORT}" ]; then
     i=$(($i+1))
     host=$(eval echo "$"host$i)
     ip=$(eval echo "$"ip$i)
-    KUBOARD_ETCD_ENDPOINTS=${KUBOARD_ETCD_ENDPOINTS}${ip}:2381
+    KUBOARD_ETCD_ENDPOINTS=${KUBOARD_ETCD_ENDPOINTS}${ip}:${ETCD_CLIENT_PORT}
 
     if [ $i -ne $count ]; then
       KUBOARD_ETCD_ENDPOINTS="${KUBOARD_ETCD_ENDPOINTS},"
@@ -116,17 +119,17 @@ kuboard-agent-server -c /etc/kuboard/kuboard-agent-server.ini &
 
 if [ -n "${KUBOARD_SERVER_NODE_PORT}" ]; then
   echo "当前 Kuboard 在 K8S 中运行，etcd 独立部署"
-elif [ "${KUBOARD_ETCD_ENDPOINTS}" != "127.0.0.1:2379" ]; then
+elif [ "${KUBOARD_ETCD_ENDPOINTS}" != "127.0.0.1:${ETCD_CLIENT_PORT}" ]; then
   echo "使用独立部署的 ETCD  ${KUBOARD_ETCD_ENDPOINTS}"
 else
   etcd \
   --name=kuboard-01 \
   --data-dir=/data/etcd-data \
-  --listen-client-urls=http://0.0.0.0:2379 \
-  --advertise-client-urls=http://0.0.0.0:2379 \
-  --listen-peer-urls=http://0.0.0.0:2380 \
-  --initial-advertise-peer-urls=http://0.0.0.0:2380 \
-  --initial-cluster=kuboard-01=http://0.0.0.0:2380 \
+  --listen-client-urls=http://0.0.0.0:${ETCD_CLIENT_PORT} \
+  --advertise-client-urls=http://0.0.0.0:${ETCD_CLIENT_PORT} \
+  --listen-peer-urls=http://0.0.0.0:${ETCD_PEER_PORT} \
+  --initial-advertise-peer-urls=http://0.0.0.0:${ETCD_PEER_PORT} \
+  --initial-cluster=kuboard-01=http://0.0.0.0:${ETCD_PEER_PORT} \
   --initial-cluster-token=tkn \
   --initial-cluster-state=new \
   --snapshot-count=10000 \

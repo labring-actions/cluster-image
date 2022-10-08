@@ -3,7 +3,15 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: kuboard
-
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kuboard-v3-etcd
+  namespace: kuboard
+data:
+  ETCD_CLIENT_PORT: '2379'
+  ETCD_PEER_PORT: '2380'
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -30,7 +38,7 @@ data:
   # GITLAB_BASE_URL: "http://gitlab.mycompany.com"
   # GITLAB_APPLICATION_ID: "7c10882aa46810a0402d17c66103894ac5e43d6130b81c17f7f2d8ae182040b5"
   # GITLAB_CLIENT_SECRET: "77c149bd3a4b6870bffa1a1afaf37cba28a1817f4cf518699065f5a8fe958889"
-  
+
   # 关于如下参数的解释，请参考文档 https://kuboard.cn/install/v3/install-github.html
   # [github login]
   # KUBOARD_LOGIN_TYPE: "github"
@@ -123,23 +131,17 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.hostIP
+          envFrom:
+            - configMapRef:
+                name: kuboard-v3-etcd
           image: 'eipwork/etcd-host:3.4.16-2'
           imagePullPolicy: Always
           name: etcd
-          ports:
-            - containerPort: 2381
-              hostPort: 2381
-              name: server
-              protocol: TCP
-            - containerPort: 2382
-              hostPort: 2382
-              name: peer
-              protocol: TCP
           livenessProbe:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: 2381
+              port: 2379
               scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -148,6 +150,10 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: data
+            - mountPath: /docker-entrypoint.sh
+              name: kuboard-shell
+              subPath: etcd.sh
+              readOnly: false
       dnsPolicy: ClusterFirst
       hostNetwork: true
       restartPolicy: Always
@@ -162,6 +168,10 @@ spec:
         - hostPath:
             path: /usr/share/kuboard/etcd
           name: data
+        - configMap:
+            name: kuboard-shell
+            defaultMode: 0755
+          name: kuboard-shell
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -188,6 +198,11 @@ spec:
       labels:
         k8s.kuboard.cn/name: kuboard-v3
     spec:
+      volumes:
+        - configMap:
+            name: kuboard-shell
+            defaultMode: 0755
+          name: kuboard-shell
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -214,6 +229,8 @@ spec:
                   apiVersion: v1
                   fieldPath: spec.nodeName
           envFrom:
+            - configMapRef:
+                name: kuboard-v3-etcd
             - configMapRef:
                 name: kuboard-v3-config
           image: 'eipwork/kuboard:v3'
@@ -263,6 +280,11 @@ spec:
           #   periodSeconds: 10
           #   successThreshold: 1
           #   timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /entrypoint.sh
+              name: kuboard-shell
+              subPath: kuboard.sh
+              readOnly: false
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       serviceAccount: kuboard-boostrap

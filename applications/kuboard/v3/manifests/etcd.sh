@@ -1,5 +1,7 @@
 #!/bin/sh
 # docker-entrypoint.sh
+readonly ETCD_CLIENT_PORT=${ETCD_CLIENT_PORT:-2379}
+readonly ETCD_PEER_PORT=${ETCD_PEER_PORT:-2380}
 KUBERNETES_TOKEN=""
 if [ -f "/run/secrets/kubernetes.io/serviceaccount/token" ]
 then
@@ -68,7 +70,7 @@ do
   i=$(($i+1))
   host=$(eval echo "$"host$i)
   ip=$(eval echo "$"ip$i)
-  PEERS=${PEERS}${host}=http://${ip}:2382
+  PEERS=${PEERS}${host}=http://${ip}:${ETCD_PEER_PORT}
 
   if [ $i -ne $count ]; then
     PEERS="${PEERS},"
@@ -78,10 +80,10 @@ done
 echo ${PEERS}
 
 etcd --name ${HOSTNAME} \
-  --listen-peer-urls http://${HOSTIP}:2382 \
-  --listen-client-urls http://${HOSTIP}:2381 \
-  --advertise-client-urls http://${HOSTIP}:2381 \
-  --initial-advertise-peer-urls http://${HOSTIP}:2382 \
+  --listen-peer-urls http://${HOSTIP}:${ETCD_PEER_PORT} \
+  --listen-client-urls http://${HOSTIP}:${ETCD_CLIENT_PORT} \
+  --advertise-client-urls http://${HOSTIP}:${ETCD_CLIENT_PORT} \
+  --initial-advertise-peer-urls http://${HOSTIP}:${ETCD_PEER_PORT} \
   --initial-cluster-token kuboard-etcd-cluster-1 \
   --initial-cluster ${PEERS} \
   --initial-cluster-state new \
