@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade -i apisix charts/apisix --set gateway.type=NodePort,ingress-controller.enabled=true,ingress-controller.config.apisix.serviceNamespace=ingress-apisix -n ingress-apisix --create-namespace","helm upgrade -i apisix-dashboard charts/apisix-dashboard -n ingress-apisix --create-namespace --set service.type=NodePort"]
