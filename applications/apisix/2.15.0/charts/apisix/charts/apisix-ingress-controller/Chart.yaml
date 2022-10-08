@@ -1,0 +1,14 @@
+apiVersion: v2
+appVersion: 1.4.1
+description: Apache APISIX Ingress Controller for Kubernetes
+icon: https://apache.org/logos/res/apisix/apisix.png
+keywords:
+- ingress
+- apisix
+- nginx
+- crd
+maintainers:
+- name: tao12345666333
+name: apisix-ingress-controller
+type: application
+version: 0.9.3
