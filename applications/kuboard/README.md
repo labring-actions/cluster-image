@@ -1,6 +1,4 @@
 
-prequires：openebs or other storage is needed by kubegems.
-
 ```
 sealos run \
   --masters xxx --nodes xxx -p xxx \
