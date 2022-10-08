@@ -1,0 +1,4 @@
+eipwork/kuboard-agent:v3
+questdb/questdb:6.0.5
+quay.io/k8scsi/snapshot-controller:v3.0.2
+swr.cn-east-2.myhuaweicloud.com/kuboard/kuboard-pv-browser:v3.0.1

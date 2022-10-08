@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade -i mongodb charts/mongodb --set architecture=replicaset -n mongodb --create-namespace"]
