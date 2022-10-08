@@ -10,8 +10,8 @@ metadata:
   name: kuboard-v3-etcd
   namespace: kuboard
 data:
-  ETCD_CLIENT_PORT: '2379'
-  ETCD_PEER_PORT: '2380'
+  ETCD_CLIENT_PORT: '2385'
+  ETCD_PEER_PORT: '2386'
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -141,7 +141,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: 2379
+              port: 2385
               scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 10
