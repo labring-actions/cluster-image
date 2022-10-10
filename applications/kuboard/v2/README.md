@@ -92,3 +92,11 @@ deployment.apps/kuboard   1/1     1            1           3m23s
 NAME                                 DESIRED   CURRENT   READY   AGE
 replicaset.apps/kuboard-699dcd587c   1         1         1       3m15s
 ```
+
+## uninstall
+
+
+```
+cd /var/lib/sealos/data/default/rootfs
+kubectl delete -f manifests/kuboard-v2.yaml
+```

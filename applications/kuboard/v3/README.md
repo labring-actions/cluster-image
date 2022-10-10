@@ -87,3 +87,13 @@ NAME                          READY   STATUS    RESTARTS   AGE
 kuboard-etcd-v4flx            1/1     Running   0          52s
 kuboard-v3-55fc4444c6-rlplr   1/1     Running   0          75s
 ```
+
+## uninstall 
+
+
+```
+cd /var/lib/sealos/data/default/rootfs
+kubectl delete -f manifests/kuboard-v3.yaml
+kubectl delete -f manifests/kuboard-shell.yaml
+sealos exec  "rm -rf /usr/share/kuboard"
+```
