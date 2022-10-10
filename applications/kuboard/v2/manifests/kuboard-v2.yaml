@@ -1,8 +1,14 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuboard-v2
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kuboard
-  namespace: kube-system
+  namespace: kuboard-v2
   annotations:
     k8s.kuboard.cn/displayName: kuboard
     k8s.kuboard.cn/ingress: "true"
@@ -37,7 +43,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kuboard
-  namespace: kube-system
+  namespace: kuboard-v2
 spec:
   type: NodePort
   ports:
@@ -54,7 +60,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kuboard-user
-  namespace: kube-system
+  namespace: kuboard-v2
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -68,14 +74,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kuboard-user
-  namespace: kube-system
+  namespace: kuboard-v2
 
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kuboard-viewer
-  namespace: kube-system
+  namespace: kuboard-v2
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89,4 +95,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kuboard-viewer
-  namespace: kube-system
+  namespace: kuboard-v2
