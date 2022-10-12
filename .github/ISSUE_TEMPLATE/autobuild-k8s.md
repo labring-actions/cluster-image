@@ -18,5 +18,5 @@ Example:
    /imagebuild_k8s 4.1.3
    /imagebuild_docker_k8s 4.1.3
    /single_imagebuild_k8s_part1 4.1.3
-   single_imagebuild_docker_k8s_part1 4.1.3
+   /single_imagebuild_docker_k8s_part1 4.1.3
 ```
