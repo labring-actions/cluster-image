@@ -25,6 +25,7 @@ startRegistry() {
 
 [ -f ../images/registry.tar  ] && ctr image import ../images/registry.tar
 cp ../etc/registry_config.yml $config
+cp -f ../cri/nerdctl /usr/bin/ && chmod a+x /usr/bin/nerdctl
 [ -f ../etc/registry_htpasswd  ] && cp  ../etc/registry_htpasswd $htpasswd
 
 ## rm container if exist.

@@ -24,7 +24,6 @@ ldconfig
 cp ../etc/containerd.service /etc/systemd/system/
 chmod -R 755 ../cri
 tar -zxf ../cri/cri-containerd.tar.gz -C /
-cp -f ../cri/nerdctl /usr/bin/
 chmod a+x /usr/bin/*
 systemctl enable containerd.service
 cp ../etc/config.toml /etc/containerd
