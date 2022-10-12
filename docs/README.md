@@ -20,7 +20,7 @@
 - docker.io/labring/kubernetes-docker:$VERSION-amd64 是AMD64架构
 - docker.io/labring/kubernetes-docker:$VERSION-arm64 是ARM64架构
 
->`$VERSION`＝`k8sVersion`＋`sealosVersion`（详情见https://github.com/labring/cluster-image/issues/131）
+>`$VERSION`＝`k8sVersion`＋`sealosVersion`，详情见https://github.com/labring/cluster-image/issues/131
 >>`v1.24`(镜像Tag示例：v1.24-amd64/v1.24-arm64)
 >>>k8s是v1.24最新发布版本，sealos是最新开发版本（ghcr.io/labring/sealos-patch:dev）
 
