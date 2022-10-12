@@ -8,7 +8,7 @@ assignees: ''
 
 ```
 Usage:
-   /imagebuild_kube [sealosVersion]             # all containerd + all docker
+   /imagebuild_kube [sealosVersion]             # all containerd + all docker (increment)
    /imagebuild_k8s [sealosVersion]              # all containerd
    /imagebuild_docker_k8s [sealosVersion]       # all docker
    /single_imagebuild_k8s_part1 [sealosVersion]        # containerd for part1
