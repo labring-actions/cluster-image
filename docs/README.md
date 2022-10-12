@@ -7,9 +7,28 @@
 ##### k8s镜像
 
 1. containerd containerd相关的配置以及脚本
-2. rootfs 公共的rootfs相关的配置以及脚本
-3. .github/hack/containerd.sh 下载二进制以及其他的配置修改的脚本、
-4. .github/hack/build.sh 编译k8s的集群镜像同时build  x86和arm64架构的镜像
+2. docker docker相关的配置以及脚本
+3. rootfs 公共的rootfs相关的配置以及脚本
+4. .github/hack/containerd.sh 下载二进制以及其他的配置修改的脚本、
+5. .github/hack/build.sh 编译k8s的集群镜像同时build  x86和arm64架构的镜像
+
+支持containerd，最终会以 docker.io/labring/kubernetes:$VERSION 为最终的镜像名称。
+- docker.io/labring/kubernetes:$VERSION-amd64 是AMD64架构
+- docker.io/labring/kubernetes:$VERSION-arm64 是ARM64架构
+
+支持docker，最终会以 docker.io/labring/kubernetes-docker:$VERSION 为最终的镜像名称。
+- docker.io/labring/kubernetes-docker:$VERSION-amd64 是AMD64架构
+- docker.io/labring/kubernetes-docker:$VERSION-arm64 是ARM64架构
+
+>`$VERSION`＝`k8sVersion`＋`sealosVersion`（详情见https://github.com/labring/cluster-image/issues/131）
+>>`v1.24`(镜像Tag示例：v1.24-amd64/v1.24-arm64)
+>>>k8s是v1.24最新发布版本，sealos是最新开发版本（ghcr.io/labring/sealos-patch:dev）
+
+>>`v1.24.4`(镜像Tag示例：v1.24.4-amd64/v1.24.4-arm64)
+>>>k8s是v1.24.4历史发布版本，sealos是最新正式版本
+
+>>`v1.24.4-4.1.3`(镜像Tag示例：v1.24.4-4.1.3-amd64/v1.24.4-4.1.3-arm64)
+>>>k8s是v1.24.4历史发布版本，sealos是4.1.3历史发布版本
 
 ##### APP 镜像
 
