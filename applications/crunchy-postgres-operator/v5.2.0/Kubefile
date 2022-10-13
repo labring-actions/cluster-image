@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm install postgres-operator charts/crunchy-postgres-operator -n postgres-operator --create-namespace","kubectl apply --server-side -k manifests/postgres-operator-examples/kustomize/high-availability"]
