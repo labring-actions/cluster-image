@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["kubectl apply -f manifests/deploy/crds/","kubectl apply -f manifests/deploy/","kubectl apply -f manifests/example/rocketmq_v1alpha1_rocketmq_cluster.yaml","kubectl apply -f manifests/example/rocketmq_v1alpha1_cluster_service.yaml"]
