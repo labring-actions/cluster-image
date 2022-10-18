@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade -i kong charts/kong --set ingressController.installCRDs=false,proxy.type=NodePort -n kong --create-namespace"]
