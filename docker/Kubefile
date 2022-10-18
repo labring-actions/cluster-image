@@ -1,5 +1,5 @@
 FROM scratch
-MAINTAINER sealyun
+MAINTAINER sealos
 LABEL init="init.sh"
 LABEL version="v0.0.0"
 LABEL image="__lvscare__"
@@ -9,6 +9,7 @@ LABEL init-registry="init-registry.sh \$registryData \$registryConfig"
 LABEL clean-registry="clean-registry.sh \$registryData \$registryConfig"
 LABEL auth="auth.sh \$registryDomain \$registryPort \$registryUsername \$registryPassword"
 LABEL sealos.io.type="rootfs"
+LABEL sealos.io.version="v1beta1"
 ENV criData=/var/lib/docker
 ENV criDockerdData=/var/lib/cri-dockerd
 ENV registryData=/var/lib/registry
