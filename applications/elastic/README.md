@@ -36,5 +36,5 @@ kibana-kibana-95dc995b9-r5q86      1/1     Running   0          95m
 Access kibana dashboard and then go to `Management`--> `Stack Management` add index.
 
 ```
-https://<node-ip>:<nodeport>
+http://<node-ip>:<nodeport>
 ```
