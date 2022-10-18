@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade -i elastic-operator charts/eck-operator -n elastic-system --create-namespace","kubectl -n elastic-system apply -f manifests/filebeat_no_autodiscover.yaml"]
