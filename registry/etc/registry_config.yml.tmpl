@@ -22,7 +22,7 @@ storage:
   filesystem:
     rootdirectory: {{ .registryData }}
   delete:
-    enabled: false
+    enabled: true
 http:
   addr: :{{ .registryPort }}
   debug:
