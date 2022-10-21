@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM nginxinc/nginx-unprivileged:stable
 
 WORKDIR /home
 COPY static/ /home/static/
