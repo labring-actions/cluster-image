@@ -17,4 +17,5 @@ ENV registryDomain=sealos.hub
 ENV registryPort=5000
 ENV registryUsername=admin
 ENV registryPassword=passw0rd
+ENV disableApparmor=false
 COPY . .

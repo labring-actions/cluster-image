@@ -27,6 +27,7 @@ oom_score = 0
     sandbox_image = "__pause__"
     max_container_log_line_size = -1
     max_concurrent_downloads = 20
+    disable_apparmor = {{ .disableApparmor }}
     [plugins."io.containerd.grpc.v1.cri".containerd]
       snapshotter = "overlayfs"
       default_runtime_name = "runc"
