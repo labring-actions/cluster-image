@@ -22,13 +22,15 @@ gen_manifests.sh() {
   if [[ $# -ne 0 ]]; then
     mkdir -p "manifests/$NAME"
     for obj; do
+      pushd "manifests/$NAME"
       if [[ "${obj%=*}" =~ (tgz|tar.gz)$ ]]; then
-        wget -qO- "${obj%=*}" | tar -xz
-        cp -af "$NAME-"*/"${obj#*=}"/* "manifests/$NAME"
+        curl -sL "${obj%=*}" | tar -xz
+        cp -af "$NAME-"*/"${obj#*=}"/* .
         rm -rf "$NAME-"*
       elif [[ "${obj%=*}" =~ y?ml$ ]]; then
-        wget -qP "manifests/$NAME" "${obj%=*}"
+        curl -sLO "${obj%=*}"
       fi
+      popd
       if rmdir "manifests/$NAME" 2>/dev/null; then
         echo -e "\033[31m ERROR [$0]$obj\033[0m"
       else

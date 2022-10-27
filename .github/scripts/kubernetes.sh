@@ -19,7 +19,7 @@ readonly downloadDIR="/tmp/$(whoami)/download"
 readonly binDIR="/tmp/$(whoami)/bin"
 
 {
-  until wget -qO "$binDIR/kubeadm" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/amd64/kubeadm"; do sleep 3; done
+  until curl -sLo "$binDIR/kubeadm" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/amd64/kubeadm"; do sleep 3; done
   chmod a+x "$binDIR"/*
   sudo cp -auv "$binDIR"/* /usr/bin
 }
@@ -129,7 +129,7 @@ cd "$ROOT" && {
     )
   else
     if [[ "$SEALOS" == "$(
-      until wget -qO- "https://api.github.com/repos/labring/sealos/releases/latest"; do sleep 3; done | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
+      until curl -sL "https://api.github.com/repos/labring/sealos/releases/latest"; do sleep 3; done | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
     )" ]]; then
       IMAGE_PUSH_NAME=(
         "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:v$KUBE-$ARCH"
