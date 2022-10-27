@@ -149,6 +149,7 @@ cd "$ROOT" && {
   sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
 
   for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
+    sudo sealos pull "$IMAGE_NAME" && continue
     sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
     sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
       sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
