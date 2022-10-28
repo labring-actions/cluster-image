@@ -18,4 +18,4 @@ if ! until curl -sL https://api.github.com/repos/labring/sealos/tags; do sleep 3
 fi
 
 echo "sealos: $sealosVersion"
-echo "::set-output name=sealoslatest::$sealosVersion"
+echo "sealoslatest=$sealosVersion" >> $GITHUB_OUTPUT

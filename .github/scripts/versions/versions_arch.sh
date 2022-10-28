@@ -62,4 +62,4 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
 done
 SET_MATRIX=$(cat .versions/versions_arch.txt)
 echo "{\"include\":[${SET_MATRIX%?}]}" | yq -P
-echo "::set-output name=matrix::{\"include\":[${SET_MATRIX%?}]}"
+echo "matrix={\"include\":[${SET_MATRIX%?}]}" >> $GITHUB_OUTPUT

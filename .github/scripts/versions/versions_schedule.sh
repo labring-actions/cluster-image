@@ -12,4 +12,4 @@ do
 done
 VERSIONS=$(cat .versions/versions_schedule.txt)
 echo "versions is : {\"include\":[${VERSIONS%?}]}"
-echo "::set-output name=matrix::{\"include\":[${VERSIONS%?}]}"
+echo "matrix={\"include\":[${VERSIONS%?}]}" >> $GITHUB_OUTPUT

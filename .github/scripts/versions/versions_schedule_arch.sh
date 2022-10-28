@@ -14,4 +14,4 @@ do
 done
 VERSIONS_ARCH=$(cat .versions/versions_schedule_arch.txt)
 echo "versions arch is : {\"include\":[${VERSIONS_ARCH%?}]}"
-echo "::set-output name=matrix::{\"include\":[${VERSIONS_ARCH%?}]}"
+echo "matrix={\"include\":[${VERSIONS_ARCH%?}]}" >> $GITHUB_OUTPUT

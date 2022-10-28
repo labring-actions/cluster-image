@@ -23,8 +23,8 @@ jobs:
           commentbody="${{github.event.comment.body}}"
           app=`echo "$commentbody"| awk '{print $2}'`
           version=`echo "$commentbody"| awk '{print $3}'`
-          echo "::set-output name=app::$app"
-          echo "::set-output name=version::$version"
+          echo "app=$app" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
       - name: Build Image
         env:
           registry: docker.io
