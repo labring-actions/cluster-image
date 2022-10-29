@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade -i mssql-server charts/mssql-server -n mssql-server --create-namespace --set image.tag=2017-latest,ACCEPT_EULA.value=Y,service.type=NodePort,pvc.StorageClass=null"]

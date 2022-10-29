@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["kubectl apply -f manifests/cluster-operator.yml","kubectl  -n rabbitmq-system apply -f manifests/rabbitmq.yaml"]

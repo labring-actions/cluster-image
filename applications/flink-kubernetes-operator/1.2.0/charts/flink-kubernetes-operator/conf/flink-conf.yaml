@@ -1,0 +1,44 @@
+################################################################################
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
+# Flink job/cluster related configs
+taskmanager.numberOfTaskSlots: 2
+parallelism.default: 2
+
+# Flink operator related configs
+# kubernetes.operator.reconcile.interval: 60 s
+# kubernetes.operator.reconcile.parallelism: 5
+# kubernetes.operator.flink.client.cancel.timeout: 1 min
+# kubernetes.operator.resource.cleanup.timeout: 60 s
+# kubernetes.operator.observer.rest-ready.delay: 10 s
+# kubernetes.operator.observer.progress-check.interval: 10 s
+# kubernetes.operator.observer.savepoint.trigger.grace-period: 10 s
+# kubernetes.operator.flink.client.timeout: 10 s
+# kubernetes.operator.deployment.rollback.enabled: false
+# kubernetes.operator.deployment.readiness.timeout: 1min
+# kubernetes.operator.user.artifacts.base.dir: /opt/flink/artifacts
+# kubernetes.operator.job.upgrade.ignore-pending-savepoint: false
+# kubernetes.operator.watched.namespaces: ns1,ns2
+# kubernetes.operator.label.selector: flink=enabled
+# kubernetes.operator.dynamic.namespaces.enabled: false
+# kubernetes.operator.retry.initial.interval: 5 s
+# kubernetes.operator.retry.interval.multiplier: 2
+# kubernetes.operator.retry.max.attempts: 10
+
+# kubernetes.operator.metrics.reporter.slf4j.factory.class: org.apache.flink.metrics.slf4j.Slf4jReporterFactory
+# kubernetes.operator.metrics.reporter.slf4j.interval: 5 MINUTE

@@ -1,0 +1,83 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+     name: azure-disk
+provisioner: kubernetes.io/azure-disk
+parameters:
+  storageaccounttype: Standard_LRS
+  kind: Managed
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-data
+spec:
+  accessModes:
+  - {{ .Values.pvc.mssqldataaccessMode | quote}}
+  resources:
+    requests:
+      storage: {{ .Values.pvc.mssqldbsize}}
+{{- if .Values.pvc.StorageClass }}
+{{- if (eq "-" .Values.pvc.StorageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.pvc.StorageClass }}"
+{{- end }}
+{{- end }}
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-userdb
+spec:
+  accessModes:
+  - {{ .Values.pvc.userdbaccessMode | quote}}
+  resources:
+    requests:
+      storage: {{ .Values.pvc.userdbsize}}
+{{- if .Values.pvc.StorageClass }}
+{{- if (eq "-" .Values.pvc.StorageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.pvc.StorageClass }}"
+{{- end }}
+{{- end }}
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-log
+spec:
+  accessModes:
+   - {{ .Values.pvc.userlogaccessMode | quote}}
+  resources:
+    requests:
+      storage: {{ .Values.pvc.userlogsize}}
+{{- if .Values.pvc.StorageClass }}
+{{- if (eq "-" .Values.pvc.StorageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.pvc.StorageClass }}"
+{{- end }}
+{{- end }}
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-temp
+spec:
+  accessModes:
+   - {{ .Values.pvc.tempdbaccessMode | quote}}
+  resources:
+    requests:
+      storage: {{ .Values.pvc.tempsize}}
+{{- if .Values.pvc.StorageClass }}
+{{- if (eq "-" .Values.pvc.StorageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.pvc.StorageClass }}"
+{{- end }}
+{{- end }}
