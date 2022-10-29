@@ -9,7 +9,7 @@ on:
       toImage:
         description: 'to remote image name'
         required: true
-        default: "labring/testimage"
+        default: "testimage"
 #  schedule:
 #    - cron: '0 22 * * *'
 jobs:
