@@ -1,0 +1,43 @@
+name: Auto tag image
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      fromImage:
+        description: 'from remote image name'
+        required: true
+      toImage:
+        description: 'to remote image name'
+        required: true
+        default: "labring/testimage"
+#  schedule:
+#    - cron: '0 22 * * *'
+jobs:
+  build-images:
+    name: Auto tag  app image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download buildah and sealos
+        run: .github/scripts/download/download.sh
+
+      - name: Auto build image
+        env:
+          registry: docker.io
+          username: ${{ github.repository_owner }}
+          repo: ${{ github.repository_owner }}
+          password: ${{ secrets.REGISTRY }}
+          arch: ${{ matrix.arch }}
+          app: ${{ matrix.app }}
+          version: ${{ matrix.version }}
+        run: |
+          readonly IMAGE_HUB_REGISTRY=${registry?}
+          readonly IMAGE_HUB_REPO=${repo?}
+          readonly IMAGE_HUB_USERNAME=${username?}
+          readonly IMAGE_HUB_PASSWORD=${password?}
+          IMAGE_NAME="${registry}/${repo}/${{ github.event.inputs.toImage }}"
+          sudo sealos tag "${{ github.event.inputs.sealosPatch }}" ${IMAGE_NAME} 
+          sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" 
+          sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
