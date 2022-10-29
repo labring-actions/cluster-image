@@ -1,0 +1,151 @@
+################################################################################
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
+---
+
+# List of kubernetes namespaces to watch for FlinkDeployment changes, empty means all namespaces.
+# When enabled RBAC is only created for said namespaces, otherwise it is done for the cluster scope.
+# watchNamespaces: ["flink"]
+
+image:
+  repository: ghcr.io/apache/flink-kubernetes-operator
+  pullPolicy: IfNotPresent
+  tag: "1.2.0"
+
+imagePullSecrets: []
+
+rbac:
+  create: true
+  # kubernetes.rest-service.exposed.type: NodePort requires
+  # list permission for nodes at the cluster scope.
+  # Set create to true if you are using NodePort type.
+  nodesRule:
+    create: false
+  operatorRole:
+    create: true
+    name: "flink-operator"
+  operatorRoleBinding:
+    create: true
+    name: "flink-operator-role-binding"
+  jobRole:
+    create: true
+    name: "flink"
+  jobRoleBinding:
+    create: true
+    name: "flink-role-binding"
+
+operatorPod:
+  annotations: {}
+  labels: {}
+  env:
+  # - name: ""
+  #   value: ""
+  # dnsPolicy: ""
+  # dnsConfig: {}
+
+
+operatorServiceAccount:
+  create: true
+  annotations: {}
+  name: "flink-operator"
+
+jobServiceAccount:
+  create: true
+  annotations:
+    "helm.sh/resource-policy": keep
+  name: "flink"
+
+operatorVolumeMounts:
+  create: false
+  data:
+    - name: flink-artifacts
+      mountPath: /opt/flink/artifacts
+
+operatorVolumes:
+  create: false
+  data:
+    - name: flink-artifacts
+      hostPath:
+        path: /tmp/flink/artifacts
+        type: DirectoryOrCreate
+#    - name: flink-artifacts
+#      persistentVolumeClaim:
+#        claimName: flink-artifacts
+
+podSecurityContext:
+  runAsUser: 9999
+  runAsGroup: 9999
+  # fsGroup: 9999
+
+operatorSecurityContext: {}
+
+webhookSecurityContext: {}
+
+webhook:
+  create: true
+  # validator:
+  #   create: true
+  # mutator:
+  #   create: true
+  keystore:
+    useDefaultPassword: true
+  # passwordSecretRef:
+  #   name: jks-password-secret
+  #   key: password-key
+
+defaultConfiguration:
+  create: true
+  # Set append to false to replace configuration files
+  append: true
+  flink-conf.yaml: |+
+    # Flink Config Overrides
+    kubernetes.operator.metrics.reporter.slf4j.factory.class: org.apache.flink.metrics.slf4j.Slf4jReporterFactory
+    kubernetes.operator.metrics.reporter.slf4j.interval: 5 MINUTE
+
+    kubernetes.operator.reconcile.interval: 15 s
+    kubernetes.operator.observer.progress-check.interval: 5 s
+  log4j-operator.properties: |+
+    # Flink Operator Logging Overrides
+    # rootLogger.level = DEBUG
+    # logger.operator.name= org.apache.flink.kubernetes.operator
+    # logger.operator.level = DEBUG
+  log4j-console.properties: |+
+    # Flink Deployment Logging Overrides
+    # rootLogger.level = DEBUG
+
+# (Optional) Exposes metrics port on the container if defined
+metrics:
+  port:
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Set the jvm start up options for webhook and operator
+jvmArgs:
+  webhook: ""
+  operator: ""
+
+# Configure health probes for the operator
+operatorHealth:
+  port: 8085
+  livenessProbe:
+    periodSeconds: 10
+    initialDelaySeconds: 30
+  startupProbe:
+    failureThreshold: 30
+    periodSeconds: 10

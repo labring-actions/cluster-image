@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm upgrade -i flink-kubernetes-operator charts/flink-kubernetes-operator -n flink --create-namespace --set image.tag=1.2.0"]
