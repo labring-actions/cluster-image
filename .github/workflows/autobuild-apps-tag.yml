@@ -38,6 +38,7 @@ jobs:
           readonly IMAGE_HUB_USERNAME=${username?}
           readonly IMAGE_HUB_PASSWORD=${password?}
           IMAGE_NAME="${registry}/${repo}/${{ github.event.inputs.toImage }}"
-          sudo sealos tag "${{ github.event.inputs.sealosPatch }}" ${IMAGE_NAME} 
+          sudo sealos pull ${{ github.event.inputs.fromImage }}
+          sudo sealos tag "${{ github.event.inputs.fromImage }}" ${IMAGE_NAME} 
           sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" 
           sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
