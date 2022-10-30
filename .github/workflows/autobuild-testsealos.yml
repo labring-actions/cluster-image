@@ -1,4 +1,4 @@
-name: Auto build image k8s for part4
+name: Auto test for sealos action
 on:
   workflow_dispatch:
     inputs:
