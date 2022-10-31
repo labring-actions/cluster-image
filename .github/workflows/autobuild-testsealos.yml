@@ -29,28 +29,28 @@ jobs:
         with:
           type: version
       - name: Login sealos
-        uses: labring/sealos-action@v0.0.2-rc2
+        uses: labring/sealos-action@v0.0.2-rc1
         with:
           type: login
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GH_TOKEN }}
           registry: ghcr.io
       - name: Build sealos image by dockerfile
-        uses: labring/sealos-action@v0.0.2-rc2
+        uses: labring/sealos-action@v0.0.2-rc1
         with:
           type: build
           image: ghcr.io/${{ github.repository_owner }}/testactionimage:dockerfile
           debug: true
           working-directory: test/build-dockerfile
       - name: Build sealos image by kubefile
-        uses: labring/sealos-action@v0.0.2-rc2
+        uses: labring/sealos-action@v0.0.2-rc1
         with:
           type: build
           image: ghcr.io/${{ github.repository_owner }}/testactionimage:kubefile
           debug: true
           working-directory: test/build-kubefile
       - name: Run images
-        uses: labring/sealos-action@v0.0.2-rc2
+        uses: labring/sealos-action@v0.0.2-rc1
         with:
           type: images
           debug: true
