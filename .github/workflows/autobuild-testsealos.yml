@@ -69,3 +69,5 @@ jobs:
           echo "NodeName=$NODENAME,NodeIP=$NODEIP"
           sudo -u root kubectl taint node $NODENAME node-role.kubernetes.io/master-
           sudo -u root kubectl taint node $NODENAME node-role.kubernetes.io/control-plane-
+          sudo kubectl get nodes
+          sudo kubectl get pods -A
