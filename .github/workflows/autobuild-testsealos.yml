@@ -33,7 +33,7 @@ jobs:
         with:
           type: login
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GH_TOKEN }}
+          password: ${{ secrets.REGISTRY }}
           registry: ghcr.io
       - name: Build sealos image by dockerfile
         uses: labring/sealos-action@v0.0.2-rc1
