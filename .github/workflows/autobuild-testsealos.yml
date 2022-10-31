@@ -54,10 +54,9 @@ jobs:
         with:
           type: images
           debug: true
-#      - name: Auto install k8s using sealos
-#        uses: labring/sealos-action@v0.0.2-rc3
-#        with:
-#          image: labring/kubernetes:v1.24.0
-#          sealosVersion: 4.1.3
-#          buildah: false
-#          debug: true
+      - name: Auto install k8s using sealos
+        uses: labring/sealos-action@v0.0.2-rc3
+        with:
+          image: labring/kubernetes:v1.24.0
+          debug: true
+          type: run
