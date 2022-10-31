@@ -62,7 +62,8 @@ jobs:
           type: run-k8s
       - name: Trace memory
         run: |
-          sleep 150
+          sleep 60
+          sudo crictl ps -A
           sudo kubectl get nodes
           NODENAME=$(sudo kubectl get nodes -ojsonpath='{.items[0].metadata.name}')
           NODEIP=$(kubectl get nodes -ojsonpath='{.items[0].status.addresses[0].address}')
