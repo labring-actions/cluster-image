@@ -11,8 +11,8 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 rm -rf opt/ images/shim/
 rm -rf flux_*
 mkdir -p opt/ images/shim/
-wget -q https://github.com/fluxcd/flux2/releases/download/v${VERSION}/flux_${VERSION}_linux_${ARCH}.tar.gz
-tar -zxvf flux_${VERSION}_linux_${ARCH}.tar.gz -C opt/
+wget -q https://github.com/fluxcd/flux2/releases/download/v${VERSION}/flux_${VERSION}_linux_amd64.tar.gz
+tar -zxvf flux_${VERSION}_linux_amd64.tar.gz -C opt/
 ./opt/flux install --version v${VERSION} --export --components-extra="image-reflector-controller,image-automation-controller" |grep ghcr.io | awk '{print $2}' > images/shim/images-list.txt
 
 cat <<EOF >"Kubefile"
