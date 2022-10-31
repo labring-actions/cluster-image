@@ -24,7 +24,7 @@ jobs:
           buildah: true
           debug: true
           sealctl: false
-      - name: Auto install k8s using sealos
+      - name: Auto print sealos version
         uses: labring/sealos-action@v0.0.2
         with:
           type: version
@@ -60,7 +60,7 @@ jobs:
           image: labring/kubernetes:v1.24.0
           debug: true
           type: run-k8s
-      - name: Trace memory
+      - name: After k8s operation
         run: |
           sleep 60
           sudo -u root crictl ps -a
