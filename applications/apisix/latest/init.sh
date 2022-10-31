@@ -15,9 +15,9 @@ echo "support app_versions: $app_versions"
 
 rm -rf charts/ manifests/
 mkdir -p charts/ manifests/
-helm pull apisix/apisix --version=${charts_version} -d charts/ --untar
+helm pull apisix/apisix --version=${chart_version} -d charts/ --untar
 
-helm template apisix apisix/apisix -n ingress-apisix --create-namespace \
+helm template apisix --version=${chart_version} apisix/apisix -n ingress-apisix --create-namespace \
   --set gateway.type=NodePort,ingress-controller.enabled=true,dashboard.enabled=true,ingress-controller.config.apisix.serviceNamespace=ingress-apisix \
   > manifests/apisix-template.yaml
 
