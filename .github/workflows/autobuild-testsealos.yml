@@ -64,6 +64,9 @@ jobs:
         run: |
           sleep 60
           sudo crictl ps -a
+          sudo cat .kube/config
+          sudo cat /etc/hosts
+          sudo systemctl status kubelet
           sudo kubectl get nodes
           NODENAME=$(sudo kubectl get nodes -ojsonpath='{.items[0].metadata.name}')
           NODEIP=$(kubectl get nodes -ojsonpath='{.items[0].status.addresses[0].address}')
