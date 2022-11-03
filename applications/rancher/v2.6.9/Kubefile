@@ -1,0 +1,6 @@
+FROM scratch
+ENV hostname rancher.my.org
+ENV ingressClassName nginx
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i rancher charts/rancher -n cattle-system --create-namespace --set hostname=$(hostname),bootstrapPassword=rancher,ingress.ingressClassName=$(ingressClassName)"]

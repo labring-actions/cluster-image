@@ -1,0 +1,6 @@
+rancher/rancher:v2.6.8
+rancher/shell:v0.1.18
+rancher/rancher-webhook:v0.2.6
+rancher/fleet:v0.3.11
+rancher/gitjob:v0.1.30
+rancher/fleet-agent:v0.3.11
