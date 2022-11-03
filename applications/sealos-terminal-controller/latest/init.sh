@@ -1,6 +1,5 @@
 #!/bin/bash
 git clone https://github.com/labring/sealos.git
-cp -rf sealos/controllers/metering/deploy/* .
+cp -rf sealos/controllers/terminal/deploy/* .
 rm -rf sealos
 tree -L 3
-mv Dockerfile Kubefile
