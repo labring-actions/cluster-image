@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: affine-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: affine
+  namespace: "affine-system"
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 3000
+    name: http
+    targetPort: http
+  selector:
+    app: affine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: affine-np
+  namespace: "affine-system"
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+      name: http
+      targetPort: http
+  selector:
+    app: affine
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: affine
+  name: affine-pvc
+  namespace: "affine-system"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: affine
+  namespace: "affine-system"
+  labels:
+    app: affine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: affine
+  template:
+    metadata:
+      labels:
+        app: affine
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: affine-pvc
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: affine
+          image: ghcr.io/toeverything/affine:nightly-server-latest
+          imagePullPolicy: IfNotPresent
+          ports:
+          - name: http
+            protocol: TCP
+            containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /app/data
+              name: data
+          securityContext:
+            allowPrivilegeEscalation: false
+      nodeSelector:
+        kubernetes.io/os: linux
