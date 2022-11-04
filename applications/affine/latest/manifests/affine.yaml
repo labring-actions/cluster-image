@@ -70,7 +70,7 @@ spec:
           persistentVolumeClaim:
             claimName: affine-pvc
       securityContext:
-        runAsNonRoot: true
+        runAsNonRoot: false
       containers:
         - name: affine
           image: ghcr.io/toeverything/affine:nightly-server-latest
