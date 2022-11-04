@@ -22,5 +22,5 @@ fi
 cat <<EOF >>"Kubefile"
 FROM scratch
 COPY . .
-CMD ["helm upgrade -i trivy-operator  charts/trivy-operator -n trivy-operator --create-namespace --set=trivy.ignoreUnfixed=true"]
+CMD ["helm upgrade -i trivy-operator  charts/trivy-operator -n trivy-operator --create-namespace --set trivy.ignoreUnfixed=true --set trivy.tag=0.31.3"]
 EOF
