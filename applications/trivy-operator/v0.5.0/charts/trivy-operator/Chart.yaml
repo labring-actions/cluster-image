@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: 0.5.0
+description: Keeps security report resources updated
+keywords:
+- aquasecurity
+- trivyoperator
+- trivy
+name: trivy-operator
+sources:
+- https://github.com/aquasecurity/trivy-operator
+type: application
+version: 0.5.0
