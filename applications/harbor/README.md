@@ -31,7 +31,7 @@ mkdir -p /etc/docker/certs.d/192.168.72.50:30003/
 Copy ca.crt to the directory
 
 ```shell
-scp ca.crt /etc/docker/certs.d/192.168.72.15:30003/
+scp ca.crt 192.168.72.15:/etc/docker/certs.d/192.168.72.50:30003/
 ```
 
 Login harbor
