@@ -1,0 +1,6 @@
+FROM scratch
+ENV NODE_IP "core.harbor.domain"
+ENV NODE_PORT 30003
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i harbor charts/harbor -n harbor --create-namespace --set expose.type=nodePort,expose.tls.auto.commonName=$(NODE_IP),expose.nodePort.ports.https.nodePort=$(NODE_PORT),externalURL='https://$(NODE_IP):$(NODE_PORT)'"]
