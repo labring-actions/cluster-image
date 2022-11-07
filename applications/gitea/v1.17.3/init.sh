@@ -8,16 +8,15 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
+
 rm -rf charts/
 mkdir -p charts/
 
-# Remove `v` from image tag `vx.x.x`
+helm repo add gitea https://dl.gitea.io/charts
+
 VERSION=`echo ${VERSION} | sed 's/.//'`
 chart_version=`helm search repo --versions --regexp '\vgitea-charts/gitea\v' |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1`
 app_versions=`helm search repo --versions --regexp '\vgitea-charts/gitea\v' | awk '{print $3}' | grep -v VERSION`
-echo "support app_versions: $app_versions"
-
-helm repo add gitea https://dl.gitea.io/charts
 helm pull gitea-charts/gitea --version=${chart_version} -d charts/ --untar
 
 cat <<'EOF' >"Kubefile"

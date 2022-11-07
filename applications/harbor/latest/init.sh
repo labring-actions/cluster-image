@@ -11,13 +11,11 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 rm -rf charts/
 mkdir -p charts/
 
-# Remove `v` from image tag `vx.x.x`
+helm repo add harbor https://helm.goharbor.io
+
 VERSION=`echo ${VERSION} | sed 's/.//'`
 chart_version=`helm search repo --versions --regexp '\vharbor/harbor\v' |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1`
 app_versions=`helm search repo --versions --regexp '\vharbor/harbor\v' | awk '{print $3}' | grep -v VERSION`
-echo "support app_versions: $app_versions"
-
-helm repo add harbor https://helm.goharbor.io
 helm pull harbor/harbor --version=${chart_version} -d charts/ --untar
 
 cat <<'EOF' >"Kubefile"
