@@ -26,6 +26,7 @@ sealos run \
   labring/openebs:v1.9.0 \
   labring/kubegems:v1.22.0-ai1 \
   labring/kubegems:v1.22.0-ai2 \
+  labring/kubegems:v1.22.0-ai3 \
   labring/kubegems:v1.22.0
 ```
 
