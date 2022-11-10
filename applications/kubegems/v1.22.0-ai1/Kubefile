@@ -1,2 +1,3 @@
 FROM scratch
 COPY registry ./registry
+# 5.91 GB
