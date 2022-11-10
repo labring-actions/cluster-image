@@ -2,8 +2,3 @@ docker.io/seldonio/mlserver:1.1.0-sklearn
 docker.io/seldonio/mlserver:1.1.0-slim
 docker.io/seldonio/tfserving-proxy:1.15.0-dev
 docker.io/seldonio/mlserver:1.1.0-xgboost
-docker.io/seldonio/xgboostserver:1.15.0-dev
-docker.io/kubegems/mlserver:v1.2.0.dev3-huggingface-custom1
-docker.io/kubegems/mlserver:1.0.0-openmmlab
-docker.io/tensorflow/serving:2.1.0
-nvcr.io/nvidia/tritonserver:21.08-py3

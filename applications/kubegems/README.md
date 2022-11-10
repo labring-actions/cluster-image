@@ -1,6 +1,8 @@
 
 prequires：openebs or other storage is needed by kubegems.
 
+v1.21.4:
+
 ```
 sealos run \
   --masters xxx --nodes xxx -p xxx \
@@ -12,6 +14,20 @@ sealos run \
   labring/kubegems:v1.21.4
 ```
 
+v1.22.0
+
+```
+sealos run \
+  --masters xxx --nodes xxx -p xxx \
+  labring/kubernetes:v1.23.10 \
+  labring/helm:v3.8.2 \
+  labring/calico:v3.22.1 \
+  labring/coredns:v0.0.1 \
+  labring/openebs:v1.9.0 \
+  labring/kubegems:v1.22.0-ai1 \
+  labring/kubegems:v1.22.0-ai2 \
+  labring/kubegems:v1.22.0
+```
 
 ## how to use
 

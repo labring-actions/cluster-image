@@ -72,4 +72,5 @@
 #### ROADMAP
 
 - 拆分镜像构建（CRI和kubernetes拆分）
+- 优化镜像流程,全部使用模板替换
 - K3S/K0S
