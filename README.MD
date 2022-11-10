@@ -68,15 +68,7 @@
 - /imagebuild_dockerimages 构建docker镜像
 - /imagebuild_hosted 构建大APP镜像
 
-##### 构建好镜像后后需要在集群内部执行的命令
 
-```
-// 这里用docker.io/labring/user-controller:dev举例子，运行请更新自己构建的镜像
-sealos rmi -f docker.io/labring/user-controller:dev
-sealos run -f docker.io/labring/user-controller:dev
-```
-如果出现这个报错
-```
-The ClusterRoleBinding "user-manager-rolebinding" is invalid: roleRef: Invalid value: rbac.RoleRef{APIGroup:"rbac.authorization.k8s.io", Kind:"ClusterRole", Name:"user-manager-role"}: cannot change roleRef
-```
-使用kubectl get clusterrolebinding 查看，删除后再sealos run-f 创建就没有问题了
+#### ROADMAP
+
+- 拆分镜像构建（CRI和kubernetes拆分）
