@@ -1,9 +1,3 @@
-nvcr.io/nvidia/k8s/dcgm-exporter:2.4.6-2.6.9-ubuntu20.04
-docker.io/seldonio/alibiexplainer:1.15.0-dev
-docker.io/seldonio/mlserver:1.1.0-alibi-explain
-docker.io/seldonio/mlflowserver:1.15.0-dev
-docker.io/seldonio/mlserver:1.1.0-mlflow
-docker.io/seldonio/sklearnserver:1.15.0-dev
 docker.io/seldonio/mlserver:1.1.0-sklearn
 docker.io/seldonio/mlserver:1.1.0-slim
 docker.io/seldonio/tfserving-proxy:1.15.0-dev
