@@ -34,6 +34,13 @@ readonly CRICTL=$(
     head -n 1
 )
 
+readonly CRIO=$(
+  echo v1.25.1 ||
+  until curl -sL https://api.github.com/repos/containerd/cri-o/cri-o/tags; do sleep 3; done |
+    yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" |
+    head -n 1 | cut -f2
+)
+
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
@@ -50,6 +57,12 @@ cd "$ROOT" && {
       tar -zxf crictl.tar.gz -C usr/bin
       tar -zcf "cri-containerd.tar.gz" usr
       rm -rf usr
+    }
+    ;;
+  cri-o)
+    until curl -sLo "cri-o.tar.gz" "https://storage.googleapis.com/cri-o/artifacts/cri-o.$ARCH.$CRIO.tar.gz"; do sleep 3; done
+    {
+      echo "download finished!"
     }
     ;;
   docker)
@@ -83,3 +96,4 @@ cd "$ROOT" && {
 
 echo "$0"
 tree "$ROOT"
+

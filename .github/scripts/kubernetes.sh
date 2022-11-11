@@ -65,6 +65,16 @@ cd "$ROOT" && {
         cd -
       }
       ;;
+    cri-o)
+      cd cri/lib64 && {
+        tar -zxf "$TARGZ" library/lib64 --strip-components=2
+        mkdir -p lib
+        mv libseccomp.* lib
+        tar -czf crio-lib.tar.gz lib
+        rm -rf lib
+        cd -
+      }
+      ;;
     esac
   }
 
@@ -72,6 +82,9 @@ cd "$ROOT" && {
   case $CRI_TYPE in
   containerd)
     cp -a "${downloadDIR}/$ARCH/cri-containerd.tar.gz" cri/
+    ;;
+  cri-o)
+    cp -a "${downloadDIR}/$ARCH/cri-o.tar.gz" cri/
     ;;
   docker)
     case $KUBE in
@@ -107,6 +120,9 @@ cd "$ROOT" && {
   containerd)
     sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/config.toml.tmpl
     ;;
+  cri-o)
+    sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/99-crio.conf.tmpl
+    ;;
   docker)
     sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/cri-docker.service.tmpl
     sed -i "s#__pause__#${pauseImage}#g" scripts/auth.sh
@@ -117,6 +133,9 @@ cd "$ROOT" && {
   case $CRI_TYPE in
   containerd)
     IMAGE_KUBE=kubernetes
+    ;;
+  cri-o)
+    IMAGE_KUBE=kubernetes-crio
     ;;
   docker)
     IMAGE_KUBE=kubernetes-docker
