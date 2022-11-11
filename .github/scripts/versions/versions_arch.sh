@@ -15,6 +15,9 @@ containerd)
 docker)
   IMAGE_KUBE=kubernetes-docker
   ;;
+cri-o)
+  IMAGE_KUBE=kubernetes-crio
+  ;;
 esac
 
 # Recursively finds all directories with a go.mod file and creates

@@ -1,0 +1,9 @@
+[crio]
+root = "{{ .criData }}"
+runroot = "{{ .criData }}"
+[crio.image]
+global_auth_file = "/var/lib/kubelet/config.json"
+pause_image = "__pause__"
+insecure_registries = [
+"{{ .registryDomain }}:{{ .registryPort }}"
+]
