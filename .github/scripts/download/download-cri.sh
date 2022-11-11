@@ -36,7 +36,7 @@ readonly CRICTL=$(
 
 readonly CRIO=$(
   echo v1.25.1 ||
-  until curl -sL https://api.github.com/repos/containerd/cri-o/cri-o/tags; do sleep 3; done |
+  until curl -sL https://api.github.com/repos/cri-o/cri-o/tags; do sleep 3; done |
     yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" |
     head -n 1 | cut -f2
 )
