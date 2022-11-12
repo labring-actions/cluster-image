@@ -1,13 +1,13 @@
 FROM scratch
 MAINTAINER sealos
-LABEL init="init.sh"
+LABEL init="init-cri.sh && init.sh"
 LABEL version="v0.0.0"
 LABEL image="__lvscare__"
-LABEL clean="clean.sh \$criData \$criDockerdData"
+LABEL clean="clean.sh && clean-cri.sh \$criData \$criDockerdData"
 LABEL check="check.sh \$registryData"
 LABEL init-registry="init-registry.sh \$registryData \$registryConfig"
 LABEL clean-registry="clean-registry.sh \$registryData \$registryConfig"
-LABEL auth="auth.sh \$registryDomain \$registryPort \$registryUsername \$registryPassword"
+LABEL auth="auth.sh \$registryDomain \$registryPort \$registryUsername \$registryPassword \$sandboxImage"
 LABEL sealos.io.type="rootfs"
 LABEL sealos.io.version="v1beta1"
 ENV criData=/var/lib/docker
@@ -18,4 +18,5 @@ ENV registryDomain=sealos.hub
 ENV registryPort=5000
 ENV registryUsername=admin
 ENV registryPassword=passw0rd
+ENV sandboxImage=__pause__
 COPY . .

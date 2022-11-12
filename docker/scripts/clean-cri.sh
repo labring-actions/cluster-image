@@ -14,29 +14,11 @@
 # limitations under the License.
 
 source common.sh
-# Install docker
-iptables -P FORWARD ACCEPT
-chmod a+x init-docker.sh
-bash init-docker.sh
+dockerStorage=${1:-/var/lib/docker}
+criDockerStorage=${2:-/var/lib/cri-dockerd}
+chmod a+x clean-docker.sh
+chmod a+x clean-cri-dockerd.sh
 
-if [ $? != 0 ]; then
-   error "====init docker failed!===="
-fi
-
-chmod a+x init-cri-dockerd.sh
-bash init-cri-dockerd.sh
-if [ $? != 0 ]; then
-   error "====init cri dockerd failed!===="
-fi
-
-chmod a+x init-shim.sh
-bash init-shim.sh
-
-if [ $? != 0 ]; then
-   error "====init image-cri-shim failed!===="
-fi
-
-chmod a+x init-kube.sh
-bash init-kube.sh
-
-logger "init docker rootfs success"
+bash clean-cri-dockerd.sh $criDockerStorage
+bash clean-docker.sh $dockerStorage
+logger "clean docker success"

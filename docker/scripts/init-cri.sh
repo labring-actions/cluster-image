@@ -14,15 +14,19 @@
 # limitations under the License.
 
 source common.sh
-dockerStorage=${1:-/var/lib/docker}
-criDockerStorage=${2:-/var/lib/cri-dockerd}
-chmod a+x clean-kube.sh
-chmod a+x clean-docker.sh
-chmod a+x clean-shim.sh
-chmod a+x clean-cri-dockerd.sh
+# Install docker
+iptables -P FORWARD ACCEPT
+chmod a+x init-docker.sh
+bash init-docker.sh
 
-bash clean-kube.sh
-bash clean-shim.sh
-bash clean-cri-dockerd.sh $criDockerStorage
-bash clean-docker.sh $dockerStorage
-logger "clean docker rootfs success"
+if [ $? != 0 ]; then
+   error "====init docker failed!===="
+fi
+
+chmod a+x init-cri-dockerd.sh
+bash init-cri-dockerd.sh
+if [ $? != 0 ]; then
+   error "====init cri dockerd failed!===="
+fi
+
+logger "init docker  success"
