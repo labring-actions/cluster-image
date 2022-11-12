@@ -2,8 +2,7 @@
 root = "{{ .criData }}"
 runroot = "{{ .criData }}"
 [crio.image]
-global_auth_file = "/var/lib/kubelet/config.json"
-pause_image = "__pause__"
+pause_image = "{{ .registryDomain }}:{{ .registryPort }}/{{ .sandboxImage }}"
 insecure_registries = [
 "{{ .registryDomain }}:{{ .registryPort }}"
 ]

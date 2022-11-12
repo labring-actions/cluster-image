@@ -1,9 +1,9 @@
 FROM scratch
 MAINTAINER sealos
-LABEL init="init.sh \$registryDomain \$registryPort"
+LABEL init="init-cri.sh \$registryDomain \$registryPort && init.sh"
 LABEL version="v0.0.0"
 LABEL image="__lvscare__"
-LABEL clean="clean.sh \$criData"
+LABEL clean="clean.sh && clean-cri.sh \$criData"
 LABEL check="check.sh \$registryData"
 LABEL init-registry="init-registry.sh \$registryData \$registryConfig"
 LABEL clean-registry="clean-registry.sh \$registryData \$registryConfig"
@@ -17,5 +17,5 @@ ENV registryDomain=sealos.hub
 ENV registryPort=5000
 ENV registryUsername=admin
 ENV registryPassword=passw0rd
-ENV disableApparmor=false
+ENV sandboxImage=__pause__
 COPY . .

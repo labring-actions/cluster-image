@@ -25,14 +25,4 @@ if [ $? != 0 ]; then
    error "====init crio failed!===="
 fi
 
-chmod a+x init-shim.sh
-bash init-shim.sh
-
-if [ $? != 0 ]; then
-   error "====init image-cri-shim failed!===="
-fi
-
-chmod a+x init-kube.sh
-bash init-kube.sh
-
-logger "init crio rootfs success"
+logger "init crio success"
