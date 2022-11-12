@@ -15,12 +15,8 @@
 
 source common.sh
 storage=${1:-/var/lib/containerd}
-chmod a+x clean-kube.sh
 chmod a+x clean-containerd.sh
-chmod a+x clean-shim.sh
 
-bash clean-kube.sh
-bash clean-shim.sh
 bash clean-containerd.sh $storage
 
-logger "clean containerd rootfs success"
+logger "clean containerd cri success"

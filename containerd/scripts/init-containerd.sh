@@ -27,7 +27,6 @@ tar -zxf ../cri/cri-containerd.tar.gz -C /
 chmod a+x /usr/bin/*
 systemctl enable containerd.service
 cp ../etc/config.toml /etc/containerd
-sed -i "s#__options__##g" /etc/containerd/config.toml
 mkdir -p /etc/containerd/certs.d/$registry_domain:$registry_port
 cp ../etc/hosts.toml /etc/containerd/certs.d/$registry_domain:$registry_port
 systemctl daemon-reload

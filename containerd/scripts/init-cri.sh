@@ -17,6 +17,7 @@ source common.sh
 REGISTRY_DOMAIN=${1:-sealos.hub}
 REGISTRY_PORT=${2:-5000}
 
+
 # Install containerd
 chmod a+x init-containerd.sh
 bash init-containerd.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
@@ -24,15 +25,3 @@ bash init-containerd.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
 if [ $? != 0 ]; then
    error "====init containerd failed!===="
 fi
-
-chmod a+x init-shim.sh
-bash init-shim.sh
-
-if [ $? != 0 ]; then
-   error "====init image-cri-shim failed!===="
-fi
-
-chmod a+x init-kube.sh
-bash init-kube.sh
-
-logger "init containerd rootfs success"
