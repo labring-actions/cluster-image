@@ -115,20 +115,8 @@ cd "$ROOT" && {
   # replace
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(grep /pause: images/shim/DefaultImageList)
-  sed -i "s#__pause__#${pauseImage}#g" etc/kubelet-flags.env
-  case $CRI_TYPE in
-  containerd)
-    sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/config.toml.tmpl
-    ;;
-  cri-o)
-    sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/99-crio.conf.tmpl
-    ;;
-  docker)
-    sed -i "s#__pause__#{{ .registryDomain }}:{{ .registryPort }}/${pauseImage#*/}#g" etc/cri-docker.service.tmpl
-    sed -i "s#__pause__#${pauseImage}#g" scripts/auth.sh
-    ;;
-  esac
-
+  pauseImageName=${pauseImage#*/}
+  sed -i "s#__pause__#${pauseImageName}#g" Kubefile
   # build
   case $CRI_TYPE in
   containerd)

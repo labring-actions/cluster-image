@@ -14,15 +14,15 @@
 # limitations under the License.
 
 source common.sh
-dockerStorage=${1:-/var/lib/docker}
-criDockerStorage=${2:-/var/lib/cri-dockerd}
-chmod a+x clean-kube.sh
-chmod a+x clean-docker.sh
-chmod a+x clean-shim.sh
-chmod a+x clean-cri-dockerd.sh
+REGISTRY_DOMAIN=${1:-sealos.hub}
+REGISTRY_PORT=${2:-5000}
 
-bash clean-kube.sh
-bash clean-shim.sh
-bash clean-cri-dockerd.sh $criDockerStorage
-bash clean-docker.sh $dockerStorage
-logger "clean docker rootfs success"
+# Install cri-o
+chmod a+x init-crio.sh
+bash init-crio.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
+
+if [ $? != 0 ]; then
+   error "====init crio failed!===="
+fi
+
+logger "init crio success"

@@ -12,11 +12,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-REGISTRY_DOMAIN=${1:-sealos.hub}
-REGISTRY_PORT=${2:-5000}
-REGISTRY_USERNAME=${3:-}
-REGISTRY_PASSWORD=${4:-}
-SANDBOX_IMAGE=${5:-}
 
-docker login --username  ${REGISTRY_USERNAME}  --password ${REGISTRY_PASSWORD} ${REGISTRY_DOMAIN}:${REGISTRY_PORT}
-crictl pull ${REGISTRY_USERNAME}:${REGISTRY_PORT}/${SANDBOX_IMAGE}
+source common.sh
+dockerStorage=${1:-/var/lib/docker}
+criDockerStorage=${2:-/var/lib/cri-dockerd}
+chmod a+x clean-docker.sh
+chmod a+x clean-cri-dockerd.sh
+
+bash clean-cri-dockerd.sh $criDockerStorage
+bash clean-docker.sh $dockerStorage
+logger "clean docker success"

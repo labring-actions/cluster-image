@@ -17,22 +17,11 @@ source common.sh
 REGISTRY_DOMAIN=${1:-sealos.hub}
 REGISTRY_PORT=${2:-5000}
 
-# Install cri-o
-chmod a+x init-crio.sh
-bash init-crio.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
+
+# Install containerd
+chmod a+x init-containerd.sh
+bash init-containerd.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
 
 if [ $? != 0 ]; then
-   error "====init crio failed!===="
+   error "====init containerd failed!===="
 fi
-
-chmod a+x init-shim.sh
-bash init-shim.sh
-
-if [ $? != 0 ]; then
-   error "====init image-cri-shim failed!===="
-fi
-
-chmod a+x init-kube.sh
-bash init-kube.sh
-
-logger "init crio rootfs success"

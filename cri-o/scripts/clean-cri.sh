@@ -14,18 +14,9 @@
 # limitations under the License.
 
 source common.sh
-# prepare registry storage as directory
-cd $(dirname $0)
+storage=${1:-/var/lib/containers/storage}
+chmod a+x clean-crio.sh
 
-VOLUME=${1:-/var/lib/registry}
-CONFIG=${2:-/etc/registry}
-container=sealos-registry
+bash clean-crio.sh $storage
 
-## rm container if exist.
-if [ "$(nerdctl ps --format='{{json .Names}}' | grep \"$container\")" ]; then
-    nerdctl rm -f $container
-fi
-rm -rf $VOLUME
-rm -rf $CONFIG
-rm -rf /etc/registry.yml
-logger "clean registry success"
+logger "clean cri-o success"

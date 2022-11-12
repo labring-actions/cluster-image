@@ -29,14 +29,4 @@ if [ $? != 0 ]; then
    error "====init cri dockerd failed!===="
 fi
 
-chmod a+x init-shim.sh
-bash init-shim.sh
-
-if [ $? != 0 ]; then
-   error "====init image-cri-shim failed!===="
-fi
-
-chmod a+x init-kube.sh
-bash init-kube.sh
-
-logger "init docker rootfs success"
+logger "init docker  success"

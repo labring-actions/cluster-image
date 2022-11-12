@@ -14,13 +14,10 @@
 # limitations under the License.
 
 source common.sh
-storage=${1:-/var/lib/containerd}
 chmod a+x clean-kube.sh
-chmod a+x clean-crio.sh
 chmod a+x clean-shim.sh
 
 bash clean-kube.sh
 bash clean-shim.sh
-bash clean-crio.sh $storage
 
-logger "clean cri-o rootfs success"
+logger "clean containerd rootfs success"

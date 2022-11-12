@@ -24,7 +24,7 @@ oom_score = 0
 
 [plugins]
   [plugins."io.containerd.grpc.v1.cri"]
-    sandbox_image = "__pause__"
+    sandbox_image = "{{ .registryDomain }}:{{ .registryPort }}/{{ .sandboxImage }}"
     max_container_log_line_size = -1
     max_concurrent_downloads = 20
     disable_apparmor = {{ .disableApparmor }}
@@ -38,7 +38,6 @@ oom_score = 0
           runtime_root = ""
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
             SystemdCgroup = true
-            __options__
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
