@@ -14,7 +14,10 @@
 # limitations under the License.
 
 source common.sh
-
+registry_domain=${1:-sealos.hub}
+registry_port=${2:-5000}
+registry_username=${3:-}
+registry_password=${4:-}
 #mkdir -p /opt/crio && tar -zxf ../cri/lib64/crio-lib.tar.gz -C /opt/crio
 #echo "/opt/crio/lib" > /etc/ld.so.conf.d/containerd.conf
 #ldconfig
@@ -25,7 +28,17 @@ rm -rf /etc/cni/net.d/10-crio-bridge.conf
 systemctl enable crio.service
 cp ../etc/99-crio.conf /etc/crio/crio.conf.d/
 mkdir -p /var/lib/kubelet/
-cp ../etc/config.json /etc/crio/
+base64pwd=$(../opt/sealctl password containerd --username $registry_username --password $registry_password)
+logger "username: $registry_username, password: $registry_password, base64pwd: $base64pwd"
+cat > /etc/crio/config.json << eof
+{
+        "auths": {
+                "$registry_domain:$registry_port": {
+                        "auth": "$base64pwd"
+                }
+        }
+}
+eof
 systemctl daemon-reload
 systemctl restart crio.service
 check_status crio
