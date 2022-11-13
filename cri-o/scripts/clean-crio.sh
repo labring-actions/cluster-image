@@ -18,7 +18,6 @@ storage=${1:-/var/lib/crio}
 systemctl disable --now crio
 rm -rf /etc/cni/net.d/10-crio-bridge.conf
 rm -rf /usr/local/lib/systemd/system/crio.service
-rm -rf /etc/systemd/system/cri-o.service
 systemctl daemon-reload
 rm -rf $storage
 
@@ -31,12 +30,11 @@ rm -f /usr/local/bin/crun
 rm -f /usr/local/bin/runc
 
 rm -f /etc/crictl.yaml
-rm -f /var/lib/kubelet/config.json
 rm -rf /etc/crio
 rm -rf /etc/containers
 rm -rf /var/lib/cni/networks/crio/
-rm -rf /opt/cri-o
-m -rf /run/crio
+rm -rf /run/crio
+rm -rf /var/log/crio/
 ldconfig
 
 logger "clean crio success"
