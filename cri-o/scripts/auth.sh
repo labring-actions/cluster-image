@@ -12,15 +12,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-REGISTRY_DOMAIN=${1:-sealos.hub}
-REGISTRY_PORT=${2:-5000}
-REGISTRY_USERNAME=${3:-}
-REGISTRY_PASSWORD=${4:-}
-SANDBOX_IMAGE=${5:-}
-
-base64Pwd=$(echo $REGISTRY_USERNAME:$REGISTRY_PASSWORD | base64)
-
-sed -i "s#__base64pwd__#${base64Pwd}#g" /etc/crio/config.json
-
-crictl pull ${REGISTRY_DOMAIN}:${REGISTRY_PORT}/${SANDBOX_IMAGE}

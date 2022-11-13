@@ -65,16 +65,6 @@ cd "$ROOT" && {
         cd -
       }
       ;;
-    cri-o)
-      cd cri/lib64 && {
-        tar -zxf "$TARGZ" library/lib64 --strip-components=2
-        mkdir -p lib
-        mv libseccomp.* lib
-        tar -czf crio-lib.tar.gz lib
-        rm -rf lib
-        cd -
-      }
-      ;;
     esac
   }
 

@@ -18,16 +18,20 @@ registry_domain=${1:-sealos.hub}
 registry_port=${2:-5000}
 registry_username=${3:-}
 registry_password=${4:-}
-#mkdir -p /opt/crio && tar -zxf ../cri/lib64/crio-lib.tar.gz -C /opt/crio
-#echo "/opt/crio/lib" > /etc/ld.so.conf.d/containerd.conf
-#ldconfig
 
-tar -zxf ../cri/cri-o.tar.gz -C /opt/
-cd /opt/cri-o && ./install && cd -
+TARBALL=cri-o.tar.gz
+TMPDIR="$(mktemp -d)"
+trap 'rm -rf -- "$TMPDIR"' EXIT
+
+tar xfz ../cri/cri-o.tar.gz --strip-components=1 -C "$TMPDIR"
+pushd "$TMPDIR"
+echo Installing CRI-O
+./install
+popd
+# Use other network plugin, eg: calico.
 rm -rf /etc/cni/net.d/10-crio-bridge.conf
-systemctl enable crio.service
+
 cp ../etc/99-crio.conf /etc/crio/crio.conf.d/
-mkdir -p /var/lib/kubelet/
 base64pwd=$(echo -n "${registry_username}:${registry_password}" | base64)
 logger "username: $registry_username, password: $registry_password, base64pwd: $base64pwd"
 cat > /etc/crio/config.json << eof
@@ -39,7 +43,7 @@ cat > /etc/crio/config.json << eof
         }
 }
 eof
-systemctl daemon-reload
-systemctl restart crio.service
+
+systemctl enable --now crio.service
 check_status crio
 logger "init crio success"
