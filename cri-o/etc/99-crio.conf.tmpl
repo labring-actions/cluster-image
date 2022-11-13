@@ -2,6 +2,7 @@
 root = "{{ .criData }}"
 runroot = "{{ .criData }}"
 [crio.image]
+global_auth_file = "/etc/crio/config.json"
 pause_image = "{{ .registryDomain }}:{{ .registryPort }}/{{ .sandboxImage }}"
 insecure_registries = [
 "{{ .registryDomain }}:{{ .registryPort }}"

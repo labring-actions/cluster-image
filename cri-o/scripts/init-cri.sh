@@ -14,8 +14,6 @@
 # limitations under the License.
 
 source common.sh
-REGISTRY_DOMAIN=${1:-sealos.hub}
-REGISTRY_PORT=${2:-5000}
 
 # Install cri-o
 chmod a+x init-crio.sh

@@ -14,7 +14,7 @@
 # limitations under the License.
 
 source common.sh
-storage=${1:-/var/lib/containers/storage}
+storage=${1:-/var/lib/crio}
 systemctl disable --now crio
 rm -rf /etc/cni/net.d/10-crio-bridge.conf
 rm -rf /usr/local/lib/systemd/system/crio.service

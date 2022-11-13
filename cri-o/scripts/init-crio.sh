@@ -14,8 +14,6 @@
 # limitations under the License.
 
 source common.sh
-registry_domain=${1:-sealos.hub}
-registry_port=${2:-5000}
 
 #mkdir -p /opt/crio && tar -zxf ../cri/lib64/crio-lib.tar.gz -C /opt/crio
 #echo "/opt/crio/lib" > /etc/ld.so.conf.d/containerd.conf
@@ -27,7 +25,7 @@ rm -rf /etc/cni/net.d/10-crio-bridge.conf
 systemctl enable crio.service
 cp ../etc/99-crio.conf /etc/crio/crio.conf.d/
 mkdir -p /var/lib/kubelet/
-cp ../etc/config.json /var/lib/kubelet/
+cp ../etc/config.json /etc/crio/
 systemctl daemon-reload
 systemctl restart crio.service
 check_status crio

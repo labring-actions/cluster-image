@@ -14,7 +14,7 @@
 # limitations under the License.
 
 source common.sh
-storage=${1:-/var/lib/containers/storage}
+storage=${1:-/var/lib/crio}
 chmod a+x clean-crio.sh
 
 bash clean-crio.sh $storage

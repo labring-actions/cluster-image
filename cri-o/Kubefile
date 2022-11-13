@@ -1,16 +1,16 @@
 FROM scratch
 MAINTAINER sealos
-LABEL init="init-cri.sh \$registryDomain \$registryPort && bash init.sh"
+LABEL init="init-cri.sh && bash init.sh"
 LABEL version="v0.0.0"
 LABEL image="__lvscare__"
 LABEL clean="clean.sh && bash clean-cri.sh \$criData"
 LABEL check="check.sh \$registryData"
 LABEL init-registry="init-registry.sh \$registryData \$registryConfig"
 LABEL clean-registry="clean-registry.sh \$registryData \$registryConfig"
-LABEL auth="auth.sh"
+LABEL auth="auth.sh \$registryDomain \$registryPort \$registryUsername \$registryPassword \$sandboxImage"
 LABEL sealos.io.type="rootfs"
 LABEL sealos.io.version="v1beta1"
-ENV criData=/var/lib/containers/storage
+ENV criData=/var/lib/crio
 ENV registryData=/var/lib/registry
 ENV registryConfig=/etc/registry
 ENV registryDomain=sealos.hub
