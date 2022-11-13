@@ -14,10 +14,13 @@
 # limitations under the License.
 
 source common.sh
-
+registry_domain=${1:-sealos.hub}
+registry_port=${2:-5000}
+registry_username=${3:-}
+registry_password=${4:-}
 # Install cri-o
 chmod a+x init-crio.sh
-bash init-crio.sh ${REGISTRY_DOMAIN} ${REGISTRY_PORT}
+bash init-crio.sh ${registry_domain} ${registry_port} ${registry_username} ${registry_password}
 
 if [ $? != 0 ]; then
    error "====init crio failed!===="
