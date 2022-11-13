@@ -28,7 +28,7 @@ rm -rf /etc/cni/net.d/10-crio-bridge.conf
 systemctl enable crio.service
 cp ../etc/99-crio.conf /etc/crio/crio.conf.d/
 mkdir -p /var/lib/kubelet/
-base64pwd=$(../opt/sealctl password containerd --username $registry_username --password $registry_password)
+base64pwd=$(echo "${registry_username}:${registry_password}" | base64)
 logger "username: $registry_username, password: $registry_password, base64pwd: $base64pwd"
 cat > /etc/crio/config.json << eof
 {
