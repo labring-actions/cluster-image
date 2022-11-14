@@ -11,14 +11,16 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 rm -rf charts/
 mkdir -p charts/
 
-git clone https://github.com/solo-io/gloo.git -b ${VERSION} --depth=1
-cp -r gloo/install/helm/gloo/ charts/gloo
-rm -rf gloo
+helm repo add gloo --force-update https://storage.googleapis.com/solo-public-helm
+if [ $VERSION = "latest" ]
+then helm pull gloo/gloo --untar -d charts/
+else helm pull gloo/gloo --version=$VERSION --untar -d charts/
+fi
 
 cat <<'EOF' >"Kubefile"
 FROM scratch
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i gloo gloo/gloo -n gloo-system--create-namespace --set gateway.enabled=true,ingress.enabled=true"]
+CMD ["helm upgrade -i gloo charts/gloo -n gloo-system--create-namespace --set gateway.enabled=true,ingress.enabled=true"]
 EOF
 
