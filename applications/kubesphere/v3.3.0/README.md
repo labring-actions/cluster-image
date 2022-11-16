@@ -31,7 +31,7 @@ sealos run \
   labring/kubernetes:v1.22.11 \
   labring/calico:v3.22.1 \
   labring/openebs:v1.9.0 \
-  registry.cn-shenzhen.aliyuncs.com/cnmirror/kubesphere:v3.3.0
+  labring/kubesphere:v3.3.0
 ```
 
 
