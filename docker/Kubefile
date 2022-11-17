@@ -8,6 +8,7 @@ LABEL check="check.sh \$registryData"
 LABEL init-registry="init-registry.sh \$registryData \$registryConfig"
 LABEL clean-registry="clean-registry.sh \$registryData \$registryConfig"
 LABEL auth="auth.sh \$registryDomain \$registryPort \$registryUsername \$registryPassword \$sandboxImage"
+LABEL vip="\$defaultVIP"
 LABEL sealos.io.type="rootfs"
 LABEL sealos.io.version="v1beta1"
 ENV criData=/var/lib/docker
@@ -19,4 +20,5 @@ ENV registryPort=5000
 ENV registryUsername=admin
 ENV registryPassword=passw0rd
 ENV sandboxImage=__pause__
+ENV defaultVIP=10.103.97.2
 COPY . .
