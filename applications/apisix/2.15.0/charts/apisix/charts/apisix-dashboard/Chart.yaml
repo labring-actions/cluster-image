@@ -6,4 +6,4 @@ maintainers:
 - name: tao12345666333
 name: apisix-dashboard
 type: application
-version: 0.6.0
+version: 0.6.1

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
@@ -16,14 +15,13 @@ echo "support app_versions: $app_versions"
 rm -rf charts/ manifests/
 mkdir -p charts/ manifests/
 helm pull apisix/apisix --version=${chart_version} -d charts/ --untar
+helm template apisix charts/apisix ingress-controller.enabled=true,dashboard.enabled=true > manifests/apisix-template.yaml
 
-helm template apisix --version=${chart_version} apisix/apisix -n ingress-apisix --create-namespace \
-  --set gateway.type=NodePort,ingress-controller.enabled=true,dashboard.enabled=true,ingress-controller.config.apisix.serviceNamespace=ingress-apisix \
-  > manifests/apisix-template.yaml
-
-cat <<EOF >"Kubefile"
+cat <<'EOF' >"Kubefile"
 FROM scratch
+ENV SERVICE_TYPE "NodePort"
+ENV GATEWAY_TLS "false"
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i apisix charts/apisix -n ingress-apisix --create-namespace --set ingress-controller.enabled=true,dashboard.enabled=true,ingress-controller.config.apisix.serviceNamespace=ingress-apisix,gateway.type=NodePort,dashboard.service.type=NodePort"]
+CMD ["helm upgrade -i apisix charts/apisix -n apisix --create-namespace --set ingress-controller.enabled=true,dashboard.enabled=true,ingress-controller.config.apisix.serviceNamespace=ingress-apisix,gateway.type=$(SERVICE_TYPE),dashboard.service.type=$(SERVICE_TYPE),gateway.tls.enabled=$(GATEWAY_TLS)"]
 EOF
