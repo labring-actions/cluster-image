@@ -21,6 +21,6 @@ cat <<'EOF' >"Kubefile"
 FROM scratch
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i gloo charts/gloo -n gloo-system --create-namespace --set gateway.enabled=true,ingress.enabled=true,ingressProxy.service.type=NodePort"]
+CMD ["helm upgrade -i gloo charts/gloo -n gloo-system --create-namespace --set gateway.enabled=true,ingress.enabled=true,ingressProxy.service.type=NodePort,global.glooStats.serviceMonitorEnabled=true,gatewayProxies.gatewayProxy.service.externalTrafficPolicy=Local"]
 EOF
 
