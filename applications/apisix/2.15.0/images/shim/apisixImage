@@ -1,4 +1,0 @@
-apache/apisix:2.15.0-alpine
-busybox:1.28
-docker.io/bitnami/etcd:3.5.4-debian-11-r14
-apache/apisix-ingress-controller:1.4.1

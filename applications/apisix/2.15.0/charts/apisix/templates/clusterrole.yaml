@@ -13,20 +13,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-apiVersion: v1
-kind: Service
+
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
 metadata:
-  name: {{ include "apisix-dashboard.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-    {{- include "apisix-dashboard.labels" . | nindent 4 }}
-spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- include "apisix-dashboard.selectorLabels" . | nindent 4 }}
+  name: {{ include "apisix.fullname" . }}
+rules:
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch"]
+{{- end }}

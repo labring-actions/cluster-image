@@ -50,14 +50,16 @@ The following tables lists the configurable parameters of the apisix chart and t
 |---------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
 | `apisix.enabled`                                  | Enable or disable Apache APISIX itself                                                                                                                                                                                                                                                                                       | `true`                                                 |
 | `apisix.enableIPv6`                               | Enable nginx IPv6 resolver                                                                                                                                                                                                                                                                                                   | `true`                                                 |
-| `apisix.enableCustomizedConfig`                   | Enable full customized `config.yaml`                                                                                                                                                                                                                                                                                         | `false`                                                 |
-| `apisix.customizedConfig`                         | If `apisix.enableCustomizedConfig` is true, full customized `config.yaml`. Please note that other settings about APISIX config will be ignored                                                                                                                                                                               | `{}`                                                 |
+| `apisix.hostNetwork`                              | Use the host's network namespace                                                                                                                                                                                                                                                                                             | `false`                                                |
+| `apisix.enableCustomizedConfig`                   | Enable full customized `config.yaml`                                                                                                                                                                                                                                                                                         | `false`                                                |
+| `apisix.customizedConfig`                         | If `apisix.enableCustomizedConfig` is true, full customized `config.yaml`. Please note that other settings about APISIX config will be ignored                                                                                                                                                                               | `{}`                                                   |
 | `apisix.image.repository`                         | Apache APISIX image repository                                                                                                                                                                                                                                                                                               | `apache/apisix`                                        |
 | `apisix.image.tag`                                | Apache APISIX image tag                                                                                                                                                                                                                                                                                                      | `{TAG_NAME}` (the latest Apache APISIX image tag)      |
 | `apisix.image.pullPolicy`                         | Apache APISIX image pull policy                                                                                                                                                                                                                                                                                              | `IfNotPresent`                                         |
-| `apisix.kind`                                     | Apache APISIX kind use a `DaemonSet` or `Deployment`                                                                                                                                                                                                                                                                         | `Deployment`                                                     |
+| `apisix.kind`                                     | Apache APISIX kind use a `DaemonSet` or `Deployment`                                                                                                                                                                                                                                                                         | `Deployment`                                           |
 | `apisix.replicaCount`                             | Apache APISIX deploy replica count,kind is DaemonSet,replicaCount not become effective                                                                                                                                                                                                                                       | `1`                                                    |
 | `apisix.podAnnotations`                           | Annotations to add to each pod                                                                                                                                                                                                                                                                                               | `{}`                                                   |
+| `apisix.priorityClassName`                        | Set [priorityClassName](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#pod-priority) for Apache APISIX pods                                                                                                                                                                               | `""`                                                   |
 | `apisix.podSecurityContext`                       | Set the securityContext for Apache APISIX pods                                                                                                                                                                                                                                                                               | `{}`                                                   |
 | `apisix.securityContext`                          | Set the securityContext for Apache APISIX container                                                                                                                                                                                                                                                                          | `{}`                                                   |
 | `apisix.podDisruptionBudget.enabled`              | Enable or disable podDisruptionBudget                                                                                                                                                                                                                                                                                        | `false`                                                |
@@ -67,8 +69,8 @@ The following tables lists the configurable parameters of the apisix chart and t
 | `apisix.nodeSelector`                             | Node labels for Apache APISIX pod assignment                                                                                                                                                                                                                                                                                 | `{}`                                                   |
 | `apisix.tolerations`                              | List of node taints to tolerate                                                                                                                                                                                                                                                                                              | `{}`                                                   |
 | `apisix.affinity`                                 | Set affinity for Apache APISIX deploy                                                                                                                                                                                                                                                                                        | `{}`                                                   |
-| `apisix.podAntiAffinity.enabled`                  | Enable or disable podAntiAffinity                                                                                                                                                                                                                                                                                            | `false`                                                |
 | `apisix.setIDFromPodUID`                          | Whether to use the Pod UID as the APISIX instance id, see [apache/apisix#5417](https://github.com/apache/apisix/issues/5417) to decide whether you should enable this setting)                                                                                                                                               | `false` |
+| `apisix.enableServerTokens`                       | Set the `enable_server_tokens` (Whether the APISIX version number should be shown in Server header)                                                                                                                                                                                                                          | `Not Set`                                              |
 | `apisix.customLuaSharedDicts`                     | Add custom [lua_shared_dict](https://github.com/openresty/lua-nginx-module#toc88) settings, click [here](https://github.com/apache/apisix-helm-chart/blob/master/charts/apisix/values.yaml#L27-L30) to learn the format of a shared dict                                                                                     | `[]` |
 | `apisix.pluginAttrs`                              | Set APISIX plugin attributes, see [config-default.yaml](https://github.com/apache/apisix/blob/master/conf/config-default.yaml#L376) for more details                                                                                                                                                                         | `{}` |
 | `apisix.luaModuleHook.enabled`                    | Whether to add a custom lua module                                                                                                                                                                                                                                                                                           | `false` |
@@ -77,8 +79,10 @@ The following tables lists the configurable parameters of the apisix chart and t
 | `apisix.luaModuleHook.configMapRef.name`          | Name of the ConfigMap where the lua module codes store                                                                                                                                                                                                                                                                       | "" |
 | `apisix.luaModuleHook.configMapRef.mounts[].key`  | Name of the ConfigMap key, for setting the mapping relationship between ConfigMap key and the lua module code path.                                                                                                                                                                                                          | `""` |
 | `apisix.luaModuleHook.configMapRef.mounts[].path` | Filepath of the plugin code, for setting the mapping relationship between ConfigMap key and the lua module code path.                                                                                                                                                                                                        | `""` |
+| `apisix.httpRouter`                               | HTTP routing strategy. See [APISIX Router](https://apisix.apache.org/docs/apisix/terminology/router/) for the detail.                                                                                                                                                                                                    | `[]` |
 | `extraVolumes`                                    | Additional `volume`, See [Kubernetes Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) for the detail.                                                                                                                                                                                                          | `[]` |
 | `extraVolumeMounts`                               | Additional `volumeMounts`, See [Kubernetes Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) for the detail.                                                                                                                                                                                                    | `[]` |
+| `extraInitContainers`                             | Additional `initContainers`, See [Kubernetes initContainers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) for the detail.                                                                                                                                                                                                    | `[]` |
 
 ### gateway parameters
 
@@ -91,9 +95,12 @@ Apache APISIX service parameters, this determines how users can access itself.
 | `gateway.http`                  | Apache APISIX service settings for http                                                                                                                                             |            |
 | `gateway.tls`                   | Apache APISIX service settings for tls                                                                                                                                              |            |
 | `gateway.tls.existingCASecret`  | Specifies the name of Secret contains trusted CA certificates in the PEM format used to verify the certificate when APISIX needs to do SSL/TLS handshaking with external services (e.g. etcd) | `""`       |
-| `gateway.tls.certCAFilename`    | filename be used in the `gateway.tls.existingCASecret`                                                                                                                                          | `""`       |
+| `gateway.tls.certCAFilename`    | Filename be used in the `gateway.tls.existingCASecret`                                                                                                                                          | `""`       |
+| `gateway.tls.sslProtocols`    |   TLS protocols allowed to use.  | `"TLSv1.2 TLSv1.3"`       |
 | `gateway.stream`                | Apache APISIX service settings for stream                                                                                                                                           |            |
 | `gateway.ingress`               | Using ingress access Apache APISIX service                                                                                                                                          |            |
+| `gateway.ingress.annotations`   | Ingress annotations                                                                                                                                                                 | `[]`       |
+| `gateway.ingress.className`     | `ingressClassName` replaces `annotations kubernetes.io/ingress.class`, required Kubernetes `>=1.18`                                                                                   |            |
 
 ### admin parameters
 
@@ -107,7 +114,7 @@ Apache APISIX service parameters, this determines how users can access itself.
 | `admin.cors`               | Apache APISIX admin API support CORS response headers                            | `true`                                                  |
 | `admin.credentials.admin`  | Apache APISIX admin API admin role credentials                                   | `edd1c9f034335f136f87ad84b625c8f1`                      |
 | `admin.credentials.viewer` | Apache APISIX admin API viewer role credentials                                  | `4054f7cf07e344346cd3f287985e76a2`                      |
-| `admin.allow.ipList`       | the IP range allowed to Apache APISIX admin API                                  | `true`                                                  |
+| `admin.allow.ipList`       | The client IP CIDR allowed to access Apache APISIX Admin API service             | `["127.0.0.1/24"]`                                      |
 
 ### custom configuration snippet parameters
 
@@ -151,6 +158,48 @@ Default enabled plugins. See [configmap template](https://github.com/apache/apis
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
 | `extPlugin.enabled` | Enable External Plugins. See [external plugin](https://apisix.apache.org/docs/apisix/next/external-plugin/) | `false` |
 | `extPlugin.cmd` | the command and its arguements to run as a subprocess | `{}` |
+
+### wasm plugin parameters
+
+| Parameter                       | Description                                                                                                                                                      | Default                     |
+|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
+| `wasmPlugins.enabled` | Enable Wasm Plugins. See [wasm plugin](https://apisix.apache.org/docs/apisix/next/wasm/) | `false` |
+| `wasmPlugins.plugins[].name` | Set wasm plugin name | `""` |
+| `wasmPlugins.plugins[].priority` | Set wasm plugin priority | `7999` |
+| `wasmPlugins.plugins[].file` | Set path to wasm plugin | `""` |
+| `wasmPlugins.plugins[].http_request_phase` | Set which http request phase for the plugin to run in | `access` |
+
+Note:
+  - the easiest way to include your wasm custom plugin is to rebuild the apisix image with those custom plugins included within the directory you define and later on gets referenced to `wasmPlugins.plugins[].file`
+  - otherwise you could use `extraVolumes` and `extraVolumeMounts` option to include your plugin by creating your plugin via `ConfigMap` and mount it to apisix pod like example below
+    ```
+    #... more options omitted ...
+    ingress-controller:
+      enabled: true
+
+    dashboard:
+      enabled: true
+
+    # assuming you install apisix in `apisix` namespace,
+    # create the plugin by this command and had the wasm plugin
+    # kubectl create configmap --namespace apisix --from-file=./wasm_plugin_x.wasm wasm-plugin-x
+    # Note: there are also size limitation on `ConfigMap`
+
+    # these options are kubernetes
+    # Volume and VolumeMount api objects
+    extraVolumes:
+    - name: wasm-plugin-x
+      configMap:
+        name: wasm-plugin-x
+        items:
+        - key: wasm_plugin_x.wasm
+          path: wasm_plugin_x.wasm
+    extraVolumeMounts:
+    - name: wasm-plugin-x
+      mountPath: /var/local/wasm-plugins/ # later on reference to `wasmPlugins.plugins[].file` as its value
+      readOnly: true
+    #... more options omitted ...
+    ```
 
 ### custom plugin parameters
 
@@ -227,3 +276,14 @@ Configurations for Apache APISIX ingress-controller sub chart.
 |--------------------------------|----------------------|-----------|
 | `initContainer.image`          | Init container image | `busybox` |
 | `initContainer.tag`            | Init container tag   | `1.28`    |
+
+### vault integration parameters
+
+| Parameter                  | Description                                                                                      | Default                                                 |
+|----------------------------|--------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `vault.enabled`            | Enable or disable the vault integration                                                          | `false`                                                 |
+| `vault.host`               | The host address where the vault server is running.                                              |                                                         |
+| `vault.timeout`            | HTTP timeout for each request.                                                                   |                                                         |
+| `vault.token`              | The generated token from vault instance that can grant access to read data from the vault.       |                                                         |
+| `vault.prefix`             | Prefix allows you to better enforcement of policies.                                             |                                                         |
+

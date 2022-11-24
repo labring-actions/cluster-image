@@ -74,3 +74,36 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{- define "apisix.basePluginAttrs" -}}
+{{- if .Values.serviceMonitor.enabled }}
+prometheus:
+  export_addr:
+    ip: 0.0.0.0
+    port: {{ .Values.serviceMonitor.containerPort }}
+  export_uri: {{ .Values.serviceMonitor.path }}
+  metric_prefix: {{ .Values.serviceMonitor.metricPrefix }}
+{{- end }}
+{{- if .Values.customPlugins.enabled }}
+{{- range $plugin := .Values.customPlugins.plugins }}
+{{- if $plugin.attrs }}
+{{ $plugin.name }}: {{- $plugin.attrs | toYaml | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "apisix.pluginAttrs" -}}
+{{- merge .Values.pluginAttrs (include "apisix.basePluginAttrs" . | fromYaml) | toYaml -}}
+{{- end -}}
+
+{{/*
+Scheme to use while connecting etcd
+*/}}
+{{- define "apisix.etcd.auth.scheme" -}}
+{{- if .Values.etcd.auth.tls.enabled }}
+{{- "https" }}
+{{- else }}
+{{- "http" }}
+{{- end }}
+{{- end }}
