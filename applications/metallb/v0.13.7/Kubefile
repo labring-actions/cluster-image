@@ -1,0 +1,4 @@
+FROM scratch
+COPY registry registry
+COPY charts charts
+CMD ["kubectl get configmap kube-proxy -n kube-system -o yaml | sed -e 's/strictARP: false/strictARP: true/' | kubectl apply -f - -n kube-system","helm upgrade -i metallb charts/metallb -n metallb-system --create-namespace"]

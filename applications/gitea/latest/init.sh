@@ -15,9 +15,8 @@ mkdir -p charts/
 helm repo add gitea https://dl.gitea.io/charts
 
 VERSION=`echo ${VERSION} | sed 's/.//'`
-chart_version=`helm search repo --versions --regexp '\vgitea-charts/gitea\v' |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1`
-app_versions=`helm search repo --versions --regexp '\vgitea-charts/gitea\v' | awk '{print $3}' | grep -v VERSION`
-helm pull gitea-charts/gitea --version=${chart_version} -d charts/ --untar
+chart_version=`helm search repo --versions --regexp '\vgitea/gitea\v' |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1`
+helm pull gitea/gitea --version=${chart_version} -d charts/ --untar
 
 cat <<'EOF' >"Kubefile"
 FROM scratch

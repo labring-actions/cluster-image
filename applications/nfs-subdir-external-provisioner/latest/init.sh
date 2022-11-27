@@ -21,5 +21,5 @@ ENV NFS_SERVER "127.0.0.1"
 ENV NFS_PATH "/nfs-share"
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i nfs-subdir-external-provisioner charts/nfs-subdir-external-provisioner -n nfs-provisioner --create-namespace --set nfs.server=$(NFS_SERVER),nfs.path=$(NFS_PATH)"]
+CMD ["helm upgrade -i nfs-subdir-external-provisioner charts/nfs-subdir-external-provisioner -n nfs-provisioner --create-namespace --set storageClass.defaultClass=true,nfs.server=$(NFS_SERVER),nfs.path=$(NFS_PATH)"]
 EOF
