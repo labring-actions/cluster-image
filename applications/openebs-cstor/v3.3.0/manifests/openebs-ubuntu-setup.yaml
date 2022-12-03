@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: openebs-ubuntu-init
+  namespace: openebs
+  labels:
+    openebs.io/component-name: openebs-ubuntu-init
+  annotations:
+    command: &cmd apt-get update -qy && apt-get install -qy open-iscsi xfsprogs && sudo systemctl enable iscsid && sudo systemctl start iscsid
+spec:
+  selector:
+    matchLabels:
+      openebs.io/component-name: openebs-ubuntu-init
+  template:
+    metadata:
+      labels:
+        openebs.io/component-name: openebs-ubuntu-init
+    spec:
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - name: init-node
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - sh
+          - -c
+          - *cmd
+        image: alpine:3.7
+        securityContext:
+          privileged: true
+      containers:
+      - name: wait
+        image: k8s.gcr.io/pause:3.1
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+  updateStrategy:
+    type: RollingUpdate
