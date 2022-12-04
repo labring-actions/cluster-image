@@ -1,0 +1,6 @@
+quay.io/ansible/awx:21.9.0
+quay.io/ansible/awx-ee:latest
+docker.io/library/redis:7
+gcr.io/kubebuilder/kube-rbac-proxy:v0.13.0
+quay.io/ansible/awx-operator:1.1.0
+docker.io/library/postgres:13
