@@ -2,9 +2,11 @@
 
 set -e
 
-readonly ARCH=${1:-amd64}
-readonly NAME=${2:-calico}
-readonly VERSION=${3:-v3.24.1}
+cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
+
+export readonly ARCH=${1:-amd64}
+export readonly NAME=${2:-$(basename "${PWD%/*}")}
+export readonly VERSION=${3:-$(basename "$PWD")}
 
 mkdir -p charts
 cd charts && {
