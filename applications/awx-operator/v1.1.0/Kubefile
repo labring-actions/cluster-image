@@ -1,0 +1,4 @@
+FROM scratch
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i awx charts/awx-operator -n awx --create-namespace --set AWX.enabled=true,AWX.spec.service_type=NodePort,AWX.spec.projects_persistence=true,AWX.spec.projects_storage_access_mode=ReadWriteOnce"]

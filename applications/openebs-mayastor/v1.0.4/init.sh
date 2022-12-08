@@ -14,7 +14,6 @@ app_version=`echo ${VERSION} | sed 's/.//'`
 wget -qc https://github.com/openebs/mayastor-control-plane/archive/refs/tags/${VERSION}.tar.gz -O - | tar -xz
 wget -qc https://github.com/openebs/mayastor/archive/refs/tags/${VERSION}.tar.gz -O - | tar -xz 
 wget -q https://github.com/openebs/mayastor-control-plane/releases/download/${VERSION}/kubectl-mayastor-x86_64-linux-musl.zip
-apt install -y unzip
 unzip kubectl-mayastor-x86_64-linux-musl.zip
 chmod +x kubectl-mayastor
 popd
