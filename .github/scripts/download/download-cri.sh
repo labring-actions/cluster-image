@@ -12,7 +12,6 @@ readonly REGISTRY=$(
     head -n 1 | cut -dv -f2
 )
 readonly DOCKER=$(
-  echo 20.10.18 ||
   until curl -sL https://api.github.com/repos/moby/moby/tags; do sleep 3; done |
     yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" |
     head -n 1 | cut -dv -f2
@@ -30,15 +29,14 @@ readonly CONTAINERD=$(
 )
 readonly CRICTL=$(
   until curl -sL https://api.github.com/repos/kubernetes-sigs/cri-tools/tags; do sleep 3; done |
-    yq '.[].name' >$HOSTNAME.tags
+    yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" >$HOSTNAME.tags
     grep "^v${KUBE%.*}." $HOSTNAME.tags || head -n 1 $HOSTNAME.tags
 )
 
 readonly CRIO=$(
-  echo v1.25.1 ||
   until curl -sL https://api.github.com/repos/cri-o/cri-o/tags; do sleep 3; done |
-    yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" |
-    head -n 1 | cut -f2
+    yq '.[].name' | grep -E "^v[0-9\.]+[0-9]$" >$HOSTNAME.tags
+    grep "^v${KUBE%.*}." $HOSTNAME.tags || head -n 1 $HOSTNAME.tags
 )
 
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
