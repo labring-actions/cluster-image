@@ -19,8 +19,7 @@ mkdir -p "$ROOT"
 sudo apt remove buildah -y || true
 
 cd "$ROOT" && {
-  until curl -sL "https://get.helm.sh/helm-v$HELM-linux-amd64.tar.gz"; do sleep 3; done |
-    tar -zx linux-amd64/helm --strip-components=1
+  until curl -sL "https://get.helm.sh/helm-v$HELM-linux-amd64.tar.gz" | tar -zx linux-amd64/helm --strip-components=1; do sleep 3; done
   until curl -sLo "buildah" "https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64"; do sleep 3; done
   if [[ -n "$sealosPatch" ]]; then
     chmod a+x "buildah"
