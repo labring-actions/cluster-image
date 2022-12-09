@@ -37,8 +37,8 @@ jobs:
       - name: Build Image
         env:
           registry: docker.io
-          username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
+          username: ${{ secrets.REPOSITORY }}
+          repo: ${{ secrets.REPOSITORY }}
           password: ${{ secrets.REGISTRY }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
@@ -61,8 +61,8 @@ jobs:
       - name: Manifest Image
         env:
           registry: docker.io
-          username: ${{ github.repository_owner }}
-          repo: ${{ github.repository_owner }}
+          username: ${{ secrets.REPOSITORY }}
+          repo: ${{ secrets.REPOSITORY }}
           password: ${{ secrets.REGISTRY }}
           app: docker-${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
@@ -84,7 +84,7 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            image docker.io/${{ github.repository_owner }}/docker-${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
+            image docker.io/${{ secrets.REPOSITORY }}/docker-${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
             ```
             
-            detail log please view [autobuild-dockerfiles](https://github.com/labring/cluster-image/actions/workflows/autobuild-dockerfiles.yml)
+            detail log please view [autobuild-dockerfiles](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-dockerfiles.yml)

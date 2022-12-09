@@ -23,8 +23,8 @@ jobs:
       - name: Auto build image
         env:
           registry: docker.io
-          repo: ${{ github.repository_owner }}
-          username: ${{ github.repository_owner }}
+          repo: ${{ secrets.REPOSITORY }}
+          username: ${{ secrets.REPOSITORY }}
           password: ${{ secrets.REGISTRY }}
         run: |
           sudo podman run -it --rm -v ${PWD}:/workspace -w /workspace quay.io/skopeo/stable:latest \
