@@ -58,7 +58,7 @@ cd "$ROOT" && {
     }
     ;;
   cri-o)
-    until curl -sLo "cri-o.tar.gz" "https://storage.googleapis.com/cri-o/artifacts/cri-o.$ARCH.$CRIO.tar.gz"; do sleep 3; done
+    until curl -sLo "cri-o.tar.gz" "https://github.com/cri-o/cri-o/releases/download/$CRIO/cri-o.$ARCH.$CRIO.tar.gz"; do sleep 3; done
     {
       echo "download finished!"
     }
