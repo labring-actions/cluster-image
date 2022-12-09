@@ -29,9 +29,11 @@ readonly CONTAINERD=$(
     head -n 1 | cut -dv -f2
 )
 readonly CRICTL=$(
-  until curl -sL https://api.github.com/repos/kubernetes-sigs/cri-tools/tags; do sleep 3; done |
-    yq '.[].name' | grep "^v${KUBE%.*}." |
-    head -n 1
+  if ! until curl -sL https://api.github.com/repos/kubernetes-sigs/cri-tools/tags; do sleep 3; done |
+    yq '.[].name' | grep "^v${KUBE%.*}." | head -n 1; then
+    until curl -sL https://api.github.com/repos/kubernetes-sigs/cri-tools/tags; do sleep 3; done |
+    yq '.[].name' | head -n 1
+  fi
 )
 
 readonly CRIO=$(
