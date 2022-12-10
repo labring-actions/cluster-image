@@ -131,4 +131,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            detail log please view [autobuild-k8s-docker-part4](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-k8s-docker-part4.yml)
+            detail log please view [autobuild-k8s-crio-part1](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-k8s-crio-part1.yml)
