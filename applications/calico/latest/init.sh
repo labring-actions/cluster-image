@@ -32,5 +32,5 @@ EOF
 
 if [[ -s "charts/$NAME/Images" ]]; then
   mkdir -p images/shim
-  cp "charts/$NAME/Images" "images/shim/${NAME}Images"
+  mv "charts/$NAME/Images" "images/shim/${NAME}Images"
 fi
