@@ -1,4 +1,4 @@
-name: Auto build image docker for k8s part4
+name: Auto build image crio for k8s part1
 on:
   workflow_dispatch:
     inputs:
@@ -10,15 +10,15 @@ on:
     types:
       - created
 env:
-  part: 4
+  part: 1
   allBuild: ${{ secrets.ALLBUILD }}
   registry: docker.io
   repo: ${{ secrets.REPOSITORY }}
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
-  criType: docker
+  criType: crio
 jobs:
   resolve-issue-sealoslatest:
-    if: startswith(github.event.comment.body, '/imagebuild_kube') || startswith(github.event.comment.body, '/imagebuild_docker_k8s') || startswith(github.event.comment.body, '/single_imagebuild_docker_k8s_part4') || contains(github.event.inputs.sealosPatch, 'sealos')
+    if: startswith(github.event.comment.body, '/imagebuild_kube') || startswith(github.event.comment.body, '/imagebuild_crio_k8s') || startswith(github.event.comment.body, '/single_imagebuild_crio_k8s_part1') || contains(github.event.inputs.sealosPatch, 'sealos')
     runs-on: ubuntu-latest
     outputs:
       sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
