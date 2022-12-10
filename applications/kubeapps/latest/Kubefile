@@ -1,0 +1,5 @@
+FROM scratch
+COPY charts charts
+COPY registry registry
+COPY manifests manifests
+CMD ["helm upgrade -i kubeapps charts/kubeapps -n kubeapps --create-namespace --set frontend.service.type=NodePort","kubectl apply -k manifests/kubeapps/"]
