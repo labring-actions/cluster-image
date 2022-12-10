@@ -13,7 +13,7 @@ env:
   part: 4
   allBuild: ${{ secrets.ALLBUILD }}
   registry: docker.io
-  repo: ${{ github.repository_owner }}
+  repo: ${{ secrets.REPOSITORY }}
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
   criType: containerd
 jobs:
@@ -86,7 +86,7 @@ jobs:
 
       - name: Auto build image
         env:
-          username: ${{ github.repository_owner }}
+          username: ${{ secrets.REPOSITORY }}
           password: ${{ secrets.REGISTRY }}
           arch: ${{ matrix.arch }}
           kubeVersion: ${{ matrix.version }}
@@ -112,7 +112,7 @@ jobs:
         run: .github/scripts/download/download.sh
       - name: Manifest Image
         env:
-          username: ${{ github.repository_owner }}
+          username: ${{ secrets.REPOSITORY }}
           password: ${{ secrets.REGISTRY }}
           version: ${{ matrix.version }}-${{ env.sealoslatest }}
         run: .github/scripts/manifest.sh
@@ -131,4 +131,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            detail log please view [autobuild-k8s-part4](https://github.com/labring/cluster-image/actions/workflows/autobuild-k8s-part4.yml)
+            detail log please view [autobuild-k8s-part4](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-k8s-part4.yml)
