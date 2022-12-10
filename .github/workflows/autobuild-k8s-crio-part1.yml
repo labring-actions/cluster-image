@@ -1,4 +1,4 @@
-name: Auto build image k8s for part4
+name: Auto build image docker for k8s part4
 on:
   workflow_dispatch:
     inputs:
@@ -15,10 +15,10 @@ env:
   registry: docker.io
   repo: ${{ secrets.REPOSITORY }}
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
-  criType: containerd
+  criType: docker
 jobs:
   resolve-issue-sealoslatest:
-    if: startswith(github.event.comment.body, '/imagebuild_kube') || startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part4') || contains(github.event.inputs.sealosPatch, 'sealos')
+    if: startswith(github.event.comment.body, '/imagebuild_kube') || startswith(github.event.comment.body, '/imagebuild_docker_k8s') || startswith(github.event.comment.body, '/single_imagebuild_docker_k8s_part4') || contains(github.event.inputs.sealosPatch, 'sealos')
     runs-on: ubuntu-latest
     outputs:
       sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
@@ -131,4 +131,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            detail log please view [autobuild-k8s-part4](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-k8s-part4.yml)
+            detail log please view [autobuild-k8s-docker-part4](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-k8s-docker-part4.yml)
