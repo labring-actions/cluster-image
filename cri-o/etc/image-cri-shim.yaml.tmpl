@@ -18,6 +18,6 @@ address: http://{{ .registryDomain }}:{{ .registryPort }}
 force: true
 debug: false
 image: /var/lib/image-cri-shim
-version: {{ if ge .SEALOS_SYS_VERSION_MAJOR "126" }}v1{{ else }}v1alpha1{{ end }}
+version: {{ if ge .SEALOS_SYS_VERSION_MAJOR "126" }}v1{{ else }}v1alpha2{{ end }}
 timeout: 20m
 auth: {{ .registryUsername }}:{{ .registryPassword }}
