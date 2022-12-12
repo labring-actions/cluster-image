@@ -15,10 +15,10 @@ sudo buildah from --name "cri-$ARCH" "ghcr.io/labring-actions/cache:cri-$ARCH"
 readonly MOUNT_CRI="$(sudo buildah mount "cri-$ARCH")"
 
 cd "$ROOT" && {
-  sudo cp -a "$MOUNT_KUBE/v$KUBE/crictl.tar.gz .
+  sudo cp -a "$MOUNT_KUBE"/v$KUBE/crictl.tar.gz .
   case $CRI_TYPE in
   containerd)
-    sudo cp -a "$MOUNT_CRI/cri-containerd.tar.gz .
+    sudo cp -a "$MOUNT_CRI"/cri-containerd.tar.gz .
     ;;
   cri-o)
     sudo cp -a "$MOUNT_KUBE"/v$KUBE/cri-o.tar.gz .
