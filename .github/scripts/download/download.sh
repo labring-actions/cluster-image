@@ -11,7 +11,7 @@ readonly ROOT="/tmp/$(whoami)/bin"
 mkdir -p "$ROOT"
 
 sudo apt remove buildah -y || true
-until curl -sLo buildah "https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64"; do sleep 3; done && {
+until curl -sLo buildah "https://github.com/labring-actions/cluster-image/releases/download/depend/buildah.linux.amd64"; do sleep 3; done && {
   chmod a+x buildah
   sudo cp -auv buildah /usr/bin/
 }
