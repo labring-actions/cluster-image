@@ -24,7 +24,6 @@ cd "$ROOT" && {
     sudo cp -a $MOUNT_TOOLS .
     sudo mv merged/* .
     sudo rm -rf merged
-    sudo chmod 0755 *
     if [[ -n "$sealosPatch" ]]; then
       sudo buildah from --name $SEALOS_CONTAINER_NAME ghcr.io/labring/sealos:dev
       sudo cp -a "$(sudo buildah mount $SEALOS_CONTAINER_NAME)"/usr/bin/sealos .
@@ -32,6 +31,7 @@ cd "$ROOT" && {
       sudo buildah from --name $SEALOS_CONTAINER_NAME "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH"
       sudo cp -a "$(sudo buildah mount SEALOS_CONTAINER_NAME)"/v$SEALOS/sealos .
     fi
+    sudo chown $(whoami) *
 }
 
 sudo buildah umount "tools-$ARCH"
