@@ -18,6 +18,8 @@ until curl -sLo buildah "https://github.com/labring-actions/cluster-image/releas
 
 sudo buildah from --name "tools-$ARCH" "ghcr.io/labring-actions/cache:tools-$ARCH"
 readonly MOUNT_TOOLS=$(sudo buildah mount "tools-$ARCH")
+readonly SEALOS_CONTAINER_NAME="sealos-$SEALOS-$ARCH"
+readonly SEALOS_CONTAINER_DEV_NAME="sealos-dev-$ARCH"
 
 cd "$ROOT" && {
     sudo cp -a $MOUNT_TOOLS .
@@ -25,11 +27,11 @@ cd "$ROOT" && {
     sudo rm -rf merged
     sudo chmod 0755 *
     if [[ -n "$sealosPatch" ]]; then
-      sudo buildah from --name "sealos-$ARCH" ghcr.io/labring/sealos:dev
-      sudo cp -a "$(sudo buildah mount "sealos-$SEALOS")" /usr/bin/sealos .
+      sudo buildah from --name $SEALOS_CONTAINER_DEV_NAME ghcr.io/labring/sealos:dev
+      sudo cp -a "$(sudo buildah mount $SEALOS_CONTAINER_DEV_NAME)" /usr/bin/sealos .
     else
-      sudo buildah from --name "sealos-$ARCH" "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH"
-      sudo cp -a "$(sudo buildah mount "sealos-$SEALOS")" /v$SEALOS/sealos .
+      sudo buildah from --name $SEALOS_CONTAINER_NAME "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH"
+      sudo cp -a "$(sudo buildah mount SEALOS_CONTAINER_NAME)" /v$SEALOS/sealos .
     fi
 }
 
