@@ -26,10 +26,10 @@ cd "$ROOT" && {
     sudo chmod 0755 *
     if [[ -n "$sealosPatch" ]]; then
       sudo buildah from --name "sealos-$ARCH" ghcr.io/labring/sealos:dev
-      sudo cp -a "$(sudo buildah mount "$SEALOS")" /usr/bin/sealos .
+      sudo cp -a "$(sudo buildah mount "sealos-$SEALOS")" /usr/bin/sealos .
     else
       sudo buildah from --name "sealos-$ARCH" "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH"
-      sudo cp -a "$(sudo buildah mount "$SEALOS")" /v$SEALOS/sealos .
+      sudo cp -a "$(sudo buildah mount "sealos-$SEALOS")" /v$SEALOS/sealos .
     fi
 }
 
