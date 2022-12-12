@@ -10,6 +10,9 @@ readonly SEALOS=${sealoslatest:-$(
 readonly ROOT="/tmp/$(whoami)/bin"
 mkdir -p "$ROOT"
 
+sudo apt remove buildah -y || true
+until curl -sLo buildah "https://github.com/labring/cluster-image/releases/download/depend/buildah.linux.amd64"; do sleep 3; done && sudo mv buildah /usr/bin/
+
 sudo buildah from --name "tools-$ARCH" "ghcr.io/labring-actions/cache:tools-$ARCH"
 readonly MOUNT_TOOLS=$(sudo buildah mount "tools-$ARCH")
 
@@ -32,9 +35,6 @@ tree "$ROOT"
 
 {
   chmod a+x "$ROOT"/*
-  sudo buildah version
-  sudo apt remove buildah -y || true
   sudo cp -auv "$ROOT"/* /usr/bin
-  sudo buildah version
   sudo sealos version
 }
