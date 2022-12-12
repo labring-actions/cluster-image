@@ -21,7 +21,7 @@ readonly MOUNT_TOOLS=$(sudo buildah mount "tools-$ARCH")
 
 cd "$ROOT" && {
     sudo ls -l $MOUNT_TOOLS
-    sudo cp -a $MOUNT_TOOLS/* .
+    sudo cp -rf $MOUNT_TOOLS/* .
     if [[ -n "$sealosPatch" ]]; then
       sudo buildah from --name "sealos-$ARCH" ghcr.io/labring/sealos:dev
       sudo cp -a "$(sudo buildah mount "$SEALOS")" /usr/bin/sealos .
