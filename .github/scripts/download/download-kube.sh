@@ -9,9 +9,9 @@ readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
 cd "$ROOT" && {
-  until curl -sLo "kubectl" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/$ARCH/kubectl"; do sleep 3; done
-  until curl -sLo "kubelet" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/$ARCH/kubelet"; do sleep 3; done
-  until curl -sLo "kubeadm" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/$ARCH/kubeadm"; do sleep 3; done
+  sudo buildah from --name "kubernetes-v$KUBE-$ARCH" "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH"
+  sudo cp -a "$(sudo buildah mount "kubernetes-v$KUBE-$ARCH")"/v$KUBE/* .
+  sudo buildah umount "kubernetes-v$KUBE-$ARCH"
 }
 
 echo "$0"

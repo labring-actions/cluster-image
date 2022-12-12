@@ -9,10 +9,10 @@ readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
 cd "$ROOT" && {
-  until curl -sL "https://github.com/labring/sealos/releases/download/v$SEALOS/sealos_${SEALOS}_linux_${ARCH}.tar.gz"; do sleep 3; done |
-    tar -zx image-cri-shim
-  until curl -sL "https://github.com/labring/sealos/releases/download/v$SEALOS/sealos_${SEALOS}_linux_${ARCH}.tar.gz"; do sleep 3; done |
-    tar -zx sealctl
+  sudo buildah from --name "sealos-v$SEALOS-$ARCH" "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH"
+  sudo cp -a "$(sudo buildah mount "sealos-v$SEALOS-$ARCH")"/image-cri-shim .
+  sudo cp -a "$(sudo buildah mount "sealos-v$SEALOS-$ARCH")"/sealctl .
+  sudo buildah umount "sealos-v$SEALOS-$ARCH"
 }
 
 echo "$0"
