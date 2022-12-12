@@ -20,6 +20,7 @@ sudo buildah from --name "tools-$ARCH" "ghcr.io/labring-actions/cache:tools-$ARC
 readonly MOUNT_TOOLS=$(sudo buildah mount "tools-$ARCH")
 
 cd "$ROOT" && {
+    sudo chmod 0755 $MOUNT_TOOLS/*
     sudo ls -l $MOUNT_TOOLS
     sudo cp -rf $MOUNT_TOOLS/* .
     if [[ -n "$sealosPatch" ]]; then
