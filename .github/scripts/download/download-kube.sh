@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 readonly ARCH=${arch?}
 readonly KUBE=${kubeVersion?}
@@ -10,7 +10,9 @@ mkdir -p "$ROOT"
 
 cd "$ROOT" && {
   sudo buildah from --name "kubernetes-v$KUBE-$ARCH" "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH"
-  sudo cp -a "$(sudo buildah mount "kubernetes-v$KUBE-$ARCH")"/v$KUBE/* .
+  sudo cp -a "$(sudo buildah mount "kubernetes-v$KUBE-$ARCH")"/kube/kubeadm .
+  sudo cp -a "$(sudo buildah mount "kubernetes-v$KUBE-$ARCH")"/kube/kubectl .
+  sudo cp -a "$(sudo buildah mount "kubernetes-v$KUBE-$ARCH")"/kube/kubelet .
   sudo buildah umount "kubernetes-v$KUBE-$ARCH"
 }
 
