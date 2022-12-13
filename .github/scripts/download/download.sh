@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 readonly ARCH=amd64
 readonly SEALOS=${sealoslatest:-$(
