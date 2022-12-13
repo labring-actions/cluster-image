@@ -9,10 +9,10 @@ readonly KUBE=${kubeVersion?}
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
-sudo buildah from --name "kubernetes-v$KUBE-$ARCH" "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH"
-readonly MOUNT_KUBE=$(sudo buildah mount "kubernetes-v$KUBE-$ARCH")
-sudo buildah from --name "cri-$ARCH" "ghcr.io/labring-actions/cache:cri-$ARCH"
-readonly MOUNT_CRI="$(sudo buildah mount "cri-$ARCH")"
+FROM_KUBE=$(sudo buildah from --name "kubernetes-v$KUBE-$ARCH" "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH")
+readonly MOUNT_KUBE=$(sudo buildah mount "$FROM_KUBE")
+FROM_CRI=$(sudo buildah from --name "cri-$ARCH" "ghcr.io/labring-actions/cache:cri-$ARCH")
+readonly MOUNT_CRI=$(sudo buildah mount "$FROM_CRI")
 
 cd "$ROOT" && {
   sudo cp -a "$MOUNT_KUBE"/kube/crictl.tar.gz .
@@ -37,8 +37,7 @@ cd "$ROOT" && {
     sudo cp -a "$MOUNT_CRI"/cri/lsof .
 }
 
-sudo buildah umount "kubernetes-v$KUBE-$ARCH"
-sudo buildah umount "cri-$ARCH"
+sudo buildah umount "$FROM_KUBE" "$FROM_CRI"
 
 echo "$0"
 tree "$ROOT"

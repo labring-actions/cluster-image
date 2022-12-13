@@ -25,11 +25,11 @@ readonly binDIR="/tmp/$(whoami)/bin"
 }
 
 if [[ -n "$sealosPatch" ]]; then
-  sudo buildah from --name "$KUBE-$ARCH" "$sealosPatch-$ARCH"
+  FROM_KUBE=$(sudo buildah from "$sealosPatch-$ARCH")
   rmdir "$PATCH"
-  sudo cp -a "$(sudo buildah mount "$KUBE-$ARCH")" "$PATCH"
+  sudo cp -a "$(sudo buildah mount "$FROM_KUBE")" "$PATCH"
   sudo chown -R "$USER:$USER" "$PATCH"
-  sudo buildah umount "$KUBE-$ARCH"
+  sudo buildah umount "$FROM_KUBE"
 fi
 
 cp -a rootfs/* "$ROOT"
