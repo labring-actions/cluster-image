@@ -19,7 +19,9 @@ readonly downloadDIR="/tmp/$(whoami)/download"
 readonly binDIR="/tmp/$(whoami)/bin"
 
 {
-  until curl -sLo "$binDIR/kubeadm" "https://storage.googleapis.com/kubernetes-release/release/v$KUBE/bin/linux/amd64/kubeadm"; do sleep 3; done
+  FROM_KUBE=$(sudo buildah from "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-amd64")
+  sudo cp -a "$(sudo buildah mount "$FROM_KUBE")"/kube/kubeadm "$binDIR/kubeadm"
+  sudo buildah umount "$FROM_KUBE"
   chmod a+x "$binDIR"/*
   sudo cp -auv "$binDIR"/* /usr/bin
 }
