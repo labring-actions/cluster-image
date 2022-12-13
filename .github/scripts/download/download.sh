@@ -11,31 +11,17 @@ readonly ROOT="/tmp/$(whoami)/bin"
 mkdir -p "$ROOT"
 
 sudo apt remove buildah -y || true
-until curl -sLo buildah "https://github.com/labring-actions/cluster-image/releases/download/depend/buildah.linux.amd64"; do sleep 3; done && {
-  chmod a+x buildah
-  sudo cp -auv buildah /usr/bin/
-}
-
-sudo buildah from --name "tools-$ARCH" "ghcr.io/labring-actions/cache:tools-$ARCH"
-readonly MOUNT_TOOLS=$(sudo buildah mount "tools-$ARCH")
-readonly SEALOS_CONTAINER_NAME="sealos-$ARCH"
+docker run --rm -v "$ROOT:/pwd" -w /sealos "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH" sealos /pwd
 
 cd "$ROOT" && {
-    sudo cp -a $MOUNT_TOOLS .
-    sudo mv merged/* .
-    sudo rm -rf merged
+    docker run --rm -v "$PWD:/pwd" -w /tools --entrypoint /bin/sh "ghcr.io/labring-actions/cache:tools-$ARCH" -c "cp -auv . /pwd"
     if [[ -n "$sealosPatch" ]]; then
-      sudo buildah from --name $SEALOS_CONTAINER_NAME ghcr.io/labring/sealos:dev
-      sudo cp -a "$(sudo buildah mount $SEALOS_CONTAINER_NAME)"/usr/bin/sealos .
+      docker run --rm -v "$PWD:/pwd" -w /usr/bin --entrypoint /bin/sh ghcr.io/labring/sealos:dev -c "cp -auv sealos /pwd"
     else
-      sudo buildah from --name $SEALOS_CONTAINER_NAME "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH"
-      sudo cp -a "$(sudo buildah mount SEALOS_CONTAINER_NAME)"/v$SEALOS/sealos .
+      docker run --rm -v "$PWD:/pwd" -w /sealos --entrypoint /bin/sh "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH" -c "cp -auv sealos /pwd"
     fi
     sudo chown $(whoami) *
 }
-
-sudo buildah umount "tools-$ARCH"
-sudo buildah umount $SEALOS_CONTAINER_NAME
 
 echo "$0"
 tree "$ROOT"
