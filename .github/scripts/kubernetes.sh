@@ -21,7 +21,6 @@ readonly binDIR="/tmp/$(whoami)/bin"
 {
   FROM_KUBE=$(sudo buildah from "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-amd64")
   sudo cp -a "$(sudo buildah mount "$FROM_KUBE")"/kube/kubeadm "$binDIR/kubeadm"
-  sudo cp -a "$(sudo buildah mount "$FROM_KUBE")"/kube/registry "$ROOT"
   sudo buildah umount "$FROM_KUBE"
   sudo chown "$(whoami)" "$binDIR"/*
   chmod a+x "$binDIR"/*
@@ -168,6 +167,9 @@ cd "$ROOT" && {
 
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
   if [[ -s "$IMAGE_HUB_REGISTRY.images" ]]; then
+    FROM_KUBE=$(sudo buildah from "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH")
+    sudo cp -a "$(sudo buildah mount "$FROM_KUBE")"/kube/registry .
+    sudo buildah umount "$FROM_KUBE"
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     while read -r IMAGE_NAME; do
       sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
