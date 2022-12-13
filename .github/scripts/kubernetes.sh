@@ -141,7 +141,6 @@ cd "$ROOT" && {
     fi
   fi
 
-  tree
   chmod a+x bin/* opt/*
 
   echo -n >"$IMAGE_HUB_REGISTRY.images"
