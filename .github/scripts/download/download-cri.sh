@@ -9,27 +9,36 @@ readonly KUBE=${kubeVersion?}
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
+sudo buildah from --name "kubernetes-v$KUBE-$ARCH" "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH"
+readonly MOUNT_KUBE=$(sudo buildah mount "kubernetes-v$KUBE-$ARCH")
+sudo buildah from --name "cri-$ARCH" "ghcr.io/labring-actions/cache:cri-$ARCH"
+readonly MOUNT_CRI="$(sudo buildah mount "cri-$ARCH")"
+
 cd "$ROOT" && {
-  docker run --rm -v "$PWD:/pwd" -w /kube "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH" cp -auv crictl.tar.gz /pwd
+  sudo cp -a "$MOUNT_KUBE"/v$KUBE/crictl.tar.gz .
   case $CRI_TYPE in
   containerd)
-    docker run --rm -v "$PWD:/pwd" -w /cri "ghcr.io/labring-actions/cache:cri-$ARCH" cp -auv cri-containerd.tar.gz /pwd
+    sudo cp -a "$MOUNT_CRI"/cri-containerd.tar.gz .
     ;;
   cri-o)
-    docker run --rm -v "$PWD:/pwd" -w /kube "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH" cp -auv cri-o.tar.gz /pwd
+    sudo cp -a "$MOUNT_KUBE"/v$KUBE/cri-o.tar.gz .
     ;;
   docker)
     case $KUBE in
     1.*.*)
     sudo cp -a "$MOUNT_CRI"/cri-dockerd.tgz .
     sudo cp -a "$MOUNT_CRI"/docker.tgz .
-    docker run --rm -v "$PWD:/pwd" -w /cri "ghcr.io/labring-actions/cache:cri-$ARCH" cp -auv cri-dockerd.tgz docker.tgz /pwd
       ;;
     esac
     ;;
   esac
-    docker run --rm -v "$PWD:/pwd" -w /cri "ghcr.io/labring-actions/cache:cri-$ARCH" cp -auv registry library.tar.gz lsof /pwd
+    sudo cp -a "$MOUNT_CRI"/registry .
+    sudo cp -a "$MOUNT_CRI"/library.tar.gz .
+    sudo cp -a "$MOUNT_CRI"/lsof .
 }
+
+sudo buildah umount "kubernetes-v$KUBE-$ARCH"
+sudo buildah umount "cri-$ARCH"
 
 echo "$0"
 tree "$ROOT"

@@ -9,7 +9,10 @@ readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
 cd "$ROOT" && {
-  docker run --rm -v "$PWD:/pwd" -w /sealos "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH" cp -auv image-cri-shim sealctl /pwd
+  sudo buildah from --name "sealos-v$SEALOS-$ARCH" "ghcr.io/labring-actions/cache:sealos-v$SEALOS-$ARCH"
+  sudo cp -a "$(sudo buildah mount "sealos-v$SEALOS-$ARCH")"/v$SEALOS/image-cri-shim .
+  sudo cp -a "$(sudo buildah mount "sealos-v$SEALOS-$ARCH")"/v$SEALOS/sealctl .
+  sudo buildah umount "sealos-v$SEALOS-$ARCH"
 }
 
 echo "$0"
