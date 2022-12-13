@@ -40,7 +40,6 @@ cp -a rootfs/* "$ROOT"
 cp -a "$CRI_TYPE"/* "$ROOT"
 cp -a registry/* "$ROOT"
 
-tree "/tmp/$(whoami)"
 cd "$ROOT" && {
   mkdir -p bin
   mkdir -p opt
