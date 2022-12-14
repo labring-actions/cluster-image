@@ -105,6 +105,11 @@ cd "$ROOT" && {
   fi
 
   # replace
+  if [[ "${KUBE//./}" -ge 1260 ]]; then
+    sed -iE "s#^version: .+#version: v1#g" etc/image-cri-shim.yaml.tmpl
+  else
+    sed -iE "s#^version: .+#version: v1alpha2#g" etc/image-cri-shim.yaml.tmpl
+  fi
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(grep /pause: images/shim/DefaultImageList)
   pauseImageName=${pauseImage#*/}
