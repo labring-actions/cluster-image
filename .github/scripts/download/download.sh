@@ -10,7 +10,9 @@ readonly SEALOS=${sealoslatest:-$(
 readonly ROOT="/tmp/$(whoami)/bin"
 mkdir -p "$ROOT"
 
-sudo apt remove buildah -y || true
+until sudo docker run --rm -v "/usr/bin:/pwd" -w /tools --entrypoint /bin/sh "ghcr.io/$REPOSITORY:tools-amd64" -c "cp -a buildah /pwd"; do
+  sleep 1
+done
 
 cd "$ROOT" && {
   docker run --rm -v "$PWD:/pwd" -w /tools --entrypoint /bin/sh "ghcr.io/labring-actions/cache:tools-$ARCH" -c "cp -a . /pwd"
