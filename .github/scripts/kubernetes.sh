@@ -115,6 +115,7 @@ cd "$ROOT" && {
   # replace
   kube_major="${KUBE%.*}"
   if [[ "${kube_major//./}" -ge 126 ]]; then
+    exit # skip
     cri_shim_apiversion=v1
   else
     cri_shim_apiversion=v1alpha2
