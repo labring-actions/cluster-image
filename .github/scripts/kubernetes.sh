@@ -162,7 +162,7 @@ cd "$ROOT" && {
   chmod a+x bin/* opt/*
   tree -L 3
 
-  echo -n >"$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+  echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
   for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
     if [[ "$allBuild" != true ]]; then
       case $IMAGE_HUB_REGISTRY in
@@ -184,7 +184,7 @@ cd "$ROOT" && {
   done
 
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
-  if [[ -s "$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
+  if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
     rm -f images/shim/DefaultImageList
     sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
@@ -192,7 +192,7 @@ cd "$ROOT" && {
       sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
       sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
         sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
-    done <"$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+    done <"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
     sudo sealos images
   fi
 }
