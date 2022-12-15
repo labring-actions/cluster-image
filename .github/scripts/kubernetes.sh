@@ -160,6 +160,7 @@ cd "$ROOT" && {
   fi
 
   chmod a+x bin/* opt/*
+  tree -L 3
 
   echo -n >"$IMAGE_HUB_REGISTRY.images"
   for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
