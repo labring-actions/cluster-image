@@ -116,7 +116,7 @@ cd "$ROOT" && {
   kube_major="${KUBE%.*}"
   if [[ "${kube_major//./}" -ge 126 ]]; then
     sealos_major="${SEALOS%%-*}"
-    if [[ "${sealos_major//./}" -gt 413 ]]; then
+    if [[ "${sealos_major//./}" -le 413 ]]; then
       exit # skip
     fi
     cri_shim_apiversion=v1
