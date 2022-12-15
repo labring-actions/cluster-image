@@ -186,6 +186,7 @@ cd "$ROOT" && {
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
   if [[ -s "$IMAGE_HUB_REGISTRY.images" ]]; then
     sudo cp -a "$MOUNT_KUBE"/registry .
+    sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     while read -r IMAGE_NAME; do
       sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
