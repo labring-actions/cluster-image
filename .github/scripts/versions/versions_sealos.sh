@@ -11,8 +11,8 @@ else
   sealosVersion=$defaultVersion
 fi
 
-if ! until curl -sL https://api.github.com/repos/labring/sealos/tags; do sleep 3; done |
-  yq '.[].name' | grep "$sealosVersion" >/dev/null; then
+if ! until curl -sL https://api.github.com/repos/labring/sealos/tags | yq .[].name; do sleep 3; done |
+  grep "$sealosVersion" >/dev/null; then
   echo "sealos version $sealosVersion does not exist"
   exit 127
 fi

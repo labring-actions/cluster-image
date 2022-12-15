@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eux
+set -eu
 
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
@@ -195,6 +195,4 @@ cd "$ROOT" && {
   fi
 }
 
-for obj in $(env | grep ^FROM_); do
-  sudo buildah umount "$obj" || true
-done
+sudo buildah umount "$FROM_SEALOS" "$FROM_KUBE" "$FROM_CRIO" "$FROM_CRI" || true
