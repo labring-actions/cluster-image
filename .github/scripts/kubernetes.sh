@@ -119,13 +119,6 @@ cd "$ROOT" && {
     if [[ "${sealos_major//./}" -le 413 ]]; then
       exit # skip
     fi
-    cri_shim_apiversion=v1
-  else
-    cri_shim_apiversion=v1alpha2
-  fi
-  cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
-  if [[ -s "$cri_shim_tmpl" ]]; then
-    sed -i -E "s#^version: .+#version: $cri_shim_apiversion#g" "$cri_shim_tmpl"
   fi
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(grep /pause: images/shim/DefaultImageList)
