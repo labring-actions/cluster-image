@@ -109,8 +109,8 @@ cd "$ROOT" && {
     rm -f images/shim/lvscareImage
   else
     ipvsImage="ghcr.io/labring/lvscare:v$SEALOS"
-    echo "$ipvsImage" >images/shim/LvscareImageList
   fi
+  echo "$ipvsImage" >images/shim/LvscareImageList
 
   # replace
   kube_major="${KUBE%.*}"
@@ -184,7 +184,6 @@ cd "$ROOT" && {
 
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
   if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
-    rm -f images/shim/DefaultImageList
     sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
     tree -L 5
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
