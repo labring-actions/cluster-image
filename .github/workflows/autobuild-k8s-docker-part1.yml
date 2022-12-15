@@ -75,15 +75,6 @@ jobs:
       - name: Download buildah and sealos
         run: .github/scripts/download/download.sh
 
-      - name: Download image-shim and cri and kube
-        run: |
-          .github/scripts/download/download-shim.sh
-          .github/scripts/download/download-cri.sh
-          .github/scripts/download/download-kube.sh
-        env:
-          arch: ${{ matrix.arch }}
-          kubeVersion: ${{ matrix.version }}
-
       - name: Auto build image
         env:
           username: ${{ secrets.REPOSITORY }}

@@ -11,28 +11,38 @@ readonly IMAGE_HUB_REGISTRY=${registry?}
 readonly IMAGE_HUB_REPO=${repo?}
 readonly IMAGE_HUB_USERNAME=${username?}
 readonly IMAGE_HUB_PASSWORD=${password?}
+readonly IMAGE_CACHE_NAME="ghcr.io/labring-actions/cache"
 
-readonly ROOT="/tmp/$(whoami)/build"
-readonly PATCH="/tmp/$(whoami)/patch"
+ROOT="/tmp/$(whoami)/build"
+PATCH="/tmp/$(whoami)/patch"
 mkdir -p "$ROOT" "$PATCH"
-readonly downloadDIR="/tmp/$(whoami)/download"
-readonly binDIR="/tmp/$(whoami)/bin"
+downloadDIR="/tmp/$(whoami)/download"
+binDIR="/tmp/$(whoami)/bin"
 
 {
-  FROM_KUBE=$(sudo buildah from "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-amd64")
-  sudo cp -a "$(sudo buildah mount "$FROM_KUBE")"/bin/kubeadm "$binDIR/kubeadm"
-  sudo buildah umount "$FROM_KUBE"
-  sudo chown "$(whoami)" "$binDIR"/*
-  chmod a+x "$binDIR"/*
-  sudo cp -auv "$binDIR"/* /usr/bin
+  BUILD_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-amd64")
+  sudo cp -a "$(sudo buildah mount "$BUILD_KUBE")"/bin/kubeadm "/usr/bin/kubeadm"
+  sudo buildah umount "$BUILD_KUBE"
+  FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
+  MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
+  sudo chown -R "$(whoami)" "$MOUNT_SEALOS"
+  FROM_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH")
+  MOUNT_KUBE=$(sudo buildah mount "$FROM_KUBE")
+  sudo chown -R "$(whoami)" "$MOUNT_KUBE"
+  FROM_CRIO=$(sudo buildah from "$IMAGE_CACHE_NAME:cri-v${KUBE%.*}-$ARCH")
+  MOUNT_CRIO=$(sudo buildah mount "$FROM_CRIO")
+  sudo chown -R "$(whoami)" "$MOUNT_CRIO"
+  FROM_CRI=$(sudo buildah from "$IMAGE_CACHE_NAME:cri-$ARCH")
+  MOUNT_CRI=$(sudo buildah mount "$FROM_CRI")
+  sudo chown -R "$(whoami)" "$MOUNT_CRI"
 }
 
 if [[ -n "$sealosPatch" ]]; then
-  FROM_KUBE=$(sudo buildah from "$sealosPatch-$ARCH")
+  BUILD_PATCH=$(sudo buildah from "$sealosPatch-$ARCH")
   rmdir "$PATCH"
-  sudo cp -a "$(sudo buildah mount "$FROM_KUBE")" "$PATCH"
+  sudo cp -a "$(sudo buildah mount "$BUILD_PATCH")" "$PATCH"
   sudo chown -R "$USER:$USER" "$PATCH"
-  sudo buildah umount "$FROM_KUBE"
+  sudo buildah umount "$BUILD_PATCH"
 fi
 
 cp -a rootfs/* "$ROOT"
@@ -50,7 +60,7 @@ cd "$ROOT" && {
   kubeadm config images list --kubernetes-version "$KUBE" 2>/dev/null >images/shim/DefaultImageList
 
   # library
-  TARGZ="${downloadDIR}/$ARCH/library.tar.gz"
+  TARGZ="$MOUNT_CRI"/cri/library.tar.gz
   {
     cd bin && {
       tar -zxf "$TARGZ" library/bin --strip-components=2
@@ -73,27 +83,29 @@ cd "$ROOT" && {
   # cri
   case $CRI_TYPE in
   containerd)
-    cp -a "${downloadDIR}/$ARCH/cri-containerd.tar.gz" cri/
+    cp -a "$MOUNT_CRI"/cri/cri-containerd.tar.gz cri/
     ;;
   cri-o)
-    cp -a "${downloadDIR}/$ARCH/cri-o.tar.gz" cri/
+    cp -a "$MOUNT_CRIO"/cri/cri-o.tar.gz cri/
     ;;
   docker)
     case $KUBE in
     1.*.*)
-      cp -a "${downloadDIR}/$ARCH/cri-dockerd.tgz" cri/
-      cp -a "${downloadDIR}/$ARCH/docker.tgz" cri/
-      cp -a "${downloadDIR}/$ARCH/crictl.tar.gz" cri/
+      cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+      cp -a "$MOUNT_CRI"/cri/docker.tgz cri/
+      cp -a "$MOUNT_CRIO"/cri/crictl.tar.gz cri/
       ;;
     esac
     ;;
   esac
 
-  cp -a "${downloadDIR}/$ARCH"/kube* bin/
-  cp -a "${downloadDIR}/$ARCH"/registry cri/
-  cp -a "${downloadDIR}/$ARCH"/image-cri-shim cri/
-  cp -a "${downloadDIR}/$ARCH"/sealctl opt/
-  cp -a "${downloadDIR}/$ARCH"/lsof opt/
+  cp -a "$MOUNT_KUBE"/bin/kubeadm bin/
+  cp -a "$MOUNT_KUBE"/bin/kubectl bin/
+  cp -a "$MOUNT_KUBE"/bin/kubelet bin/
+  cp -a "$MOUNT_CRI"/cri/registry cri/
+  cp -a "$MOUNT_CRI"/cri/lsof opt/
+  cp -a "$MOUNT_SEALOS"/sealos/image-cri-shim cri/
+  cp -a "$MOUNT_SEALOS"/sealos/sealctl opt/
   if ! rmdir "$PATCH"; then
     cp -a "$PATCH"/* .
     ipvsImage="localhost:5000/labring/lvscare:$(find "registry" -type d | grep -E "tags/.+-$ARCH$" | awk -F/ '{print $NF}')"
@@ -175,9 +187,7 @@ cd "$ROOT" && {
 
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
   if [[ -s "$IMAGE_HUB_REGISTRY.images" ]]; then
-    FROM_KUBE=$(sudo buildah from "ghcr.io/labring-actions/cache:kubernetes-v$KUBE-$ARCH")
-    sudo cp -a "$(sudo buildah mount "$FROM_KUBE")"/registry .
-    sudo buildah umount "$FROM_KUBE"
+    sudo cp -a "$MOUNT_KUBE"/registry .
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     while read -r IMAGE_NAME; do
       sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
@@ -187,3 +197,7 @@ cd "$ROOT" && {
     sudo sealos images
   fi
 }
+
+for obj in $(env | grep ^FROM_); do
+  sudo buildah umount "$obj" || true
+done

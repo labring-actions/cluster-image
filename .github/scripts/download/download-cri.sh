@@ -5,13 +5,13 @@ set -eu
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
 readonly KUBE=${kubeVersion?}
-
+readonly IMAGE_CACHE_NAME="ghcr.io/labring-actions/cache"
 readonly ROOT="/tmp/$(whoami)/download/$ARCH"
 mkdir -p "$ROOT"
 
-FROM_KUBE=$(sudo buildah from --name "cri-v${KUBE%.*}-$ARCH" "ghcr.io/labring-actions/cache:cri-v${KUBE%.*}-$ARCH")
+FROM_KUBE=$(sudo buildah from --name "cri-v${KUBE%.*}-$ARCH" "$IMAGE_CACHE_NAME:cri-v${KUBE%.*}-$ARCH")
 readonly MOUNT_CRIO=$(sudo buildah mount "$FROM_KUBE")
-FROM_CRI=$(sudo buildah from --name "cri-$ARCH" "ghcr.io/labring-actions/cache:cri-$ARCH")
+FROM_CRI=$(sudo buildah from --name "cri-$ARCH" "$IMAGE_CACHE_NAME:cri-$ARCH")
 readonly MOUNT_CRI=$(sudo buildah mount "$FROM_CRI")
 
 cd "$ROOT" && {
