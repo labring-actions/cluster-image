@@ -188,7 +188,7 @@ cd "$ROOT" && {
     tree -L 6
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     {
-      FROM_BUILD=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
+      FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
       MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
       while IFS= read -r i; do
         j=${i%/_manifests*}
