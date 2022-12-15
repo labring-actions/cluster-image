@@ -89,9 +89,9 @@ cd "$ROOT" && {
     1.*.*)
       sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
       sudo cp -a "$MOUNT_CRI"/cri/docker.tgz cri/
-      sudo cp -a "$MOUNT_CRIO"/cri/crictl.tar.gz cri/
       ;;
     esac
+    sudo cp -a "$MOUNT_CRIO"/cri/crictl.tar.gz cri/
     ;;
   esac
 
@@ -122,7 +122,7 @@ cd "$ROOT" && {
   fi
   cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
   if [[ "${sealos_major//./}" -le 413 ]] ; then
-    sed -i -E "s#^\{\{.+#sync: 0#g" "$cri_shim_tmpl"
+    sed -i -E "s#.+v1.+v1alpha2.+#sync: 0#g" "$cri_shim_tmpl"
   fi
   cat "$cri_shim_tmpl"
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
@@ -187,8 +187,8 @@ cd "$ROOT" && {
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
   if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
     sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
-    tree -L 5
     echo "COPY bin/kubeImageList images/shim/DefaultImageList" >>Kubefile
+    tree -L 5
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     {
       FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
