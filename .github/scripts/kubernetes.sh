@@ -160,7 +160,6 @@ cd "$ROOT" && {
   fi
 
   chmod a+x bin/* opt/*
-  tree -L 3
 
   echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
   for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
@@ -187,7 +186,18 @@ cd "$ROOT" && {
   if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
     rm -f images/shim/DefaultImageList
     sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
+    tree -L 6
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
+    {
+      FROM_BUILD=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
+      MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
+      while IFS= read -r i; do
+        j=${i%/_manifests*}
+        image=${j##*/}
+        while IFS= read -r tag; do echo "$image:$tag"; done < <(ls "$i")
+      done < <(find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
+      sudo buildah umount "$FROM_BUILD" || true
+    }
     while read -r IMAGE_NAME; do
       sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
       sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
