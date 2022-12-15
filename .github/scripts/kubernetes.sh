@@ -54,7 +54,7 @@ cd "$ROOT" && {
   kubeadm config images list --kubernetes-version "$KUBE" 2>/dev/null >images/shim/DefaultImageList
 
   # library
-  TARGZ=library.tgz
+  TARGZ="$PWD/library.tgz"
   sudo cp -a "$MOUNT_CRI"/cri/library.tar.gz "$TARGZ"
   sudo chown -R "$(whoami)" "$TARGZ"
   {
