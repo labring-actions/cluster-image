@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
@@ -112,7 +112,7 @@ cd "$ROOT" && {
   fi
   cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
   if [[ -s "$cri_shim_tmpl" ]]; then
-    sed -iE "s#^version: .+#version: $cri_shim_apiversion#g" "$cri_shim_tmpl"
+    sed -i -E "s#^version: .+#version: $cri_shim_apiversion#g" "$cri_shim_tmpl"
   fi
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(grep /pause: images/shim/DefaultImageList)
