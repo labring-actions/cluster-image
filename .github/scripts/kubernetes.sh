@@ -114,12 +114,17 @@ cd "$ROOT" && {
 
   # replace
   kube_major="${KUBE%.*}"
+  sealos_major="${SEALOS%%-*}"
   if [[ "${kube_major//./}" -ge 126 ]]; then
-    sealos_major="${SEALOS%%-*}"
     if [[ "${sealos_major//./}" -le 413 ]]; then
       exit # skip
     fi
   fi
+  cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
+  if [[ "${sealos_major//./}" -le 413 ]] ; then
+    sed -i -E "s#^\{\{.+#sync: 0#g" "$cri_shim_tmpl"
+  fi
+  cat "$cri_shim_tmpl"
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(grep /pause: images/shim/DefaultImageList)
   pauseImageName=${pauseImage#*/}
