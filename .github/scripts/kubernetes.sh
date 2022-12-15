@@ -106,6 +106,7 @@ cd "$ROOT" && {
   if ! rmdir "$PATCH"; then
     cp -a "$PATCH"/* .
     ipvsImage="${sealosPatch%%/*}/labring/lvscare:$(find "registry" -type d | grep -E "tags/.+-$ARCH$" | awk -F/ '{print $NF}')"
+    rm -f images/shim/lvscareImage
   else
     ipvsImage="ghcr.io/labring/lvscare:v$SEALOS"
     echo "$ipvsImage" >images/shim/LvscareImageList
@@ -185,7 +186,7 @@ cd "$ROOT" && {
   if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
     rm -f images/shim/DefaultImageList
     sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
-    tree -L 6
+    tree -L 5
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     {
       FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
