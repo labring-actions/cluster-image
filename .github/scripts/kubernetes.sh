@@ -51,7 +51,7 @@ cd "$ROOT" && {
   mkdir -p cri/lib64
 
   # ImageList
-  kubeadm config images list --kubernetes-version "$KUBE" 2>/dev/null >images/shim/DefaultImageList
+  kubeadm config images list --kubernetes-version "$KUBE" 2>/dev/null >bin/kubeImageList
 
   # library
   TARGZ="$PWD/library.tgz"
@@ -126,7 +126,7 @@ cd "$ROOT" && {
   fi
   cat "$cri_shim_tmpl"
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
-  pauseImage=$(grep /pause: images/shim/DefaultImageList)
+  pauseImage=$(grep /pause: bin/kubeImageList)
   pauseImageName=${pauseImage#*/}
   sed -i "s#__pause__#${pauseImageName}#g" Kubefile
   # build
@@ -188,6 +188,7 @@ cd "$ROOT" && {
   if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
     sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
     tree -L 5
+    echo "COPY bin/kubeImageList images/shim/DefaultImageList" >>Kubefile
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     {
       FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
