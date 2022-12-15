@@ -6,7 +6,7 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-app_version=$(echo ${VERSION} | sed 's/.//')
+app_version=${VERSION#v} 
 rm -rf opt/ images/shim/
 rm -rf flux_*
 mkdir -p opt/ images/shim/

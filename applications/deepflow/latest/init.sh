@@ -11,7 +11,7 @@ repo_name="deepflow/deepflow"
 app_name="deepflow"
 
 # Delete v in version tag
-app_version=$(echo ${VERSION} | sed 's/.//')
+app_version=${VERSION#v}
 
 rm -rf opt/ charts/ && mkdir -p opt/ charts/
 wget -qO opt/deepflow-ctl https://deepflow-ce.oss-accelerate.aliyuncs.com/bin/ctl/latest/linux/${ARCH}/deepflow-ctl

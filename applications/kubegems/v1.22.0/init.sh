@@ -7,11 +7,9 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 rm -rf charts/ && mkdir -p charts/
-app_version=$(echo ${VERSION} | sed 's/.//')
-
 helm repo add kubegems https://charts.kubegems.io/kubegems
-helm pull kubegems/kubegems-installer --version=${app_version} --untar -d charts/
-helm pull kubegems/kubegems --version=${app_version} --untar -d charts/
+helm pull kubegems/kubegems-installer --version=${VERSION#v} --untar -d charts/
+helm pull kubegems/kubegems --version=${VERSION#v} --untar -d charts/
 
 cat <<EOF >"Kubefile"
 FROM scratch

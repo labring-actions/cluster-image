@@ -1,0 +1,5 @@
+FROM scratch
+COPY manifests manifests
+COPY registry registry
+COPY opt opt
+CMD ["sealos scp opt/ /opt/cni/bin/","kubectl apply -f manifests/kube-flannel.yml"]

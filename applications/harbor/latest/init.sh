@@ -13,8 +13,7 @@ mkdir -p charts/
 
 helm repo add harbor https://helm.goharbor.io
 
-VERSION=`echo ${VERSION} | sed 's/.//'`
-chart_version=`helm search repo --versions --regexp '\vharbor/harbor\v' |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1`
+chart_version=`helm search repo --versions --regexp '\vharbor/harbor\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 app_versions=`helm search repo --versions --regexp '\vharbor/harbor\v' | awk '{print $3}' | grep -v VERSION`
 helm pull harbor/harbor --version=${chart_version} -d charts/ --untar
 

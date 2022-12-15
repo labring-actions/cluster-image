@@ -7,8 +7,7 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 helm repo add openebs https://openebs.github.io/charts
-app_version=`echo ${VERSION} | sed 's/.//'`
-chart_version=`helm search repo --versions --regexp '\vopenebs/openebs\v' |grep ${app_version} | awk '{print $2}' | sort -rn | head -n1`
+chart_version=`helm search repo --versions --regexp '\vopenebs/openebs\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 rm -rf charts/
 helm pull openebs/openebs --version=${chart_version} -d charts/ --untar
 
