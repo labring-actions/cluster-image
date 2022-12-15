@@ -171,28 +171,28 @@ cd "$ROOT" && {
           grep digest >/dev/null; then
           echo "$IMAGE_NAME already existed"
         else
-          echo "$IMAGE_NAME" >>"$IMAGE_HUB_REGISTRY.images"
+          echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
         fi
         ;;
       *)
-        echo "$IMAGE_NAME" >>"$IMAGE_HUB_REGISTRY.images"
+        echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
         ;;
       esac
     else
-      echo "$IMAGE_NAME" >>"$IMAGE_HUB_REGISTRY.images"
+      echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
     fi
   done
 
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
-  if [[ -s "$IMAGE_HUB_REGISTRY.images" ]]; then
-    sudo cp -a "$MOUNT_KUBE"/registry .
+  if [[ -s "$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
+    rm -f images/shim/DefaultImageList
     sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
     while read -r IMAGE_NAME; do
       sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
       sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
         sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
-    done <"$IMAGE_HUB_REGISTRY.images"
+    done <"$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
     sudo sealos images
   fi
 }
