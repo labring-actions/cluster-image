@@ -106,11 +106,11 @@ cd "$ROOT" && {
   if ! rmdir "$PATCH" 2>/dev/null; then
     cp -a "$PATCH"/* .
     ipvsImage="${sealosPatch%%/*}/labring/lvscare:$(find "registry" -type d | grep -E "tags/.+-$ARCH$" | awk -F/ '{print $NF}')"
-    cat images/shim/lvscareImage || true
+    rm -f images/shim/lvscareImage
   else
     ipvsImage="ghcr.io/labring/lvscare:v$SEALOS"
-    echo "$ipvsImage" >images/shim/LvscareImageList
   fi
+  echo "$ipvsImage" >images/shim/LvscareImageList
 
   # replace
   kube_major="${KUBE%.*}"
