@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eux
+set -eu
 
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
@@ -91,7 +91,6 @@ cd "$ROOT" && {
 
   cp -a "${downloadDIR}/$ARCH"/kube* bin/
   cp -a "${downloadDIR}/$ARCH"/registry cri/
-#  cp -a "${downloadDIR}/$ARCH"/registry.tar images/
   cp -a "${downloadDIR}/$ARCH"/image-cri-shim cri/
   cp -a "${downloadDIR}/$ARCH"/sealctl opt/
   cp -a "${downloadDIR}/$ARCH"/lsof opt/
@@ -107,11 +106,14 @@ cd "$ROOT" && {
   # replace
   kube_major="${KUBE%.*}"
   if [[ "${kube_major//./}" -ge 126 ]]; then
-    sed -i -E "s#^version: .+#version: v1#g" etc/image-cri-shim.yaml.tmpl
+    cri_shim_apiversion=v1
   else
-    sed -i -E "s#^version: .+#version: v1alpha2#g" etc/image-cri-shim.yaml.tmpl
+    cri_shim_apiversion=v1alpha2
   fi
-  cat etc/image-cri-shim.yaml.tmpl
+  cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
+  if [[ -s "$cri_shim_tmpl" ]]; then
+    sed -iE "s#^version: .+#version: $cri_shim_apiversion#g" "$cri_shim_tmpl"
+  fi
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(grep /pause: images/shim/DefaultImageList)
   pauseImageName=${pauseImage#*/}
