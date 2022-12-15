@@ -162,7 +162,7 @@ cd "$ROOT" && {
   chmod a+x bin/* opt/*
   tree -L 3
 
-  echo -n >"$IMAGE_HUB_REGISTRY.images"
+  echo -n >"$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
   for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
     if [[ "$allBuild" != true ]]; then
       case $IMAGE_HUB_REGISTRY in
