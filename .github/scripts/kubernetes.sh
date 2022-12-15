@@ -16,8 +16,6 @@ readonly IMAGE_CACHE_NAME="ghcr.io/labring-actions/cache"
 ROOT="/tmp/$(whoami)/build"
 PATCH="/tmp/$(whoami)/patch"
 mkdir -p "$ROOT" "$PATCH"
-downloadDIR="/tmp/$(whoami)/download"
-binDIR="/tmp/$(whoami)/bin"
 
 {
   BUILD_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-amd64")
@@ -25,16 +23,12 @@ binDIR="/tmp/$(whoami)/bin"
   sudo buildah umount "$BUILD_KUBE"
   FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
   MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
-  sudo chown -R "$(whoami)" "$MOUNT_SEALOS"
   FROM_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH")
   MOUNT_KUBE=$(sudo buildah mount "$FROM_KUBE")
-  sudo chown -R "$(whoami)" "$MOUNT_KUBE"
   FROM_CRIO=$(sudo buildah from "$IMAGE_CACHE_NAME:cri-v${KUBE%.*}-$ARCH")
   MOUNT_CRIO=$(sudo buildah mount "$FROM_CRIO")
-  sudo chown -R "$(whoami)" "$MOUNT_CRIO"
   FROM_CRI=$(sudo buildah from "$IMAGE_CACHE_NAME:cri-$ARCH")
   MOUNT_CRI=$(sudo buildah mount "$FROM_CRI")
-  sudo chown -R "$(whoami)" "$MOUNT_CRI"
 }
 
 if [[ -n "$sealosPatch" ]]; then
@@ -60,12 +54,13 @@ cd "$ROOT" && {
   kubeadm config images list --kubernetes-version "$KUBE" 2>/dev/null >images/shim/DefaultImageList
 
   # library
-  TARGZ="$MOUNT_CRI"/cri/library.tar.gz
+  TARGZ=library.tgz
+  sudo cp -a "$MOUNT_CRI"/cri/library.tar.gz "$TARGZ"
+  sudo chown -R "$(whoami)" "$TARGZ"
   {
-    cd bin && {
-      tar -zxf "$TARGZ" library/bin --strip-components=2
-      cd -
-    }
+    pushd bin
+    tar -zxf "$TARGZ" library/bin --strip-components=2
+    popd
     case $CRI_TYPE in
     containerd)
       cd cri/lib64 && {
@@ -78,34 +73,35 @@ cd "$ROOT" && {
       }
       ;;
     esac
+    rm -f "$TARGZ"
   }
 
   # cri
   case $CRI_TYPE in
   containerd)
-    cp -a "$MOUNT_CRI"/cri/cri-containerd.tar.gz cri/
+    sudo cp -a "$MOUNT_CRI"/cri/cri-containerd.tar.gz cri/
     ;;
   cri-o)
-    cp -a "$MOUNT_CRIO"/cri/cri-o.tar.gz cri/
+    sudo cp -a "$MOUNT_CRIO"/cri/cri-o.tar.gz cri/
     ;;
   docker)
     case $KUBE in
     1.*.*)
-      cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
-      cp -a "$MOUNT_CRI"/cri/docker.tgz cri/
-      cp -a "$MOUNT_CRIO"/cri/crictl.tar.gz cri/
+      sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+      sudo cp -a "$MOUNT_CRI"/cri/docker.tgz cri/
+      sudo cp -a "$MOUNT_CRIO"/cri/crictl.tar.gz cri/
       ;;
     esac
     ;;
   esac
 
-  cp -a "$MOUNT_KUBE"/bin/kubeadm bin/
-  cp -a "$MOUNT_KUBE"/bin/kubectl bin/
-  cp -a "$MOUNT_KUBE"/bin/kubelet bin/
-  cp -a "$MOUNT_CRI"/cri/registry cri/
-  cp -a "$MOUNT_CRI"/cri/lsof opt/
-  cp -a "$MOUNT_SEALOS"/sealos/image-cri-shim cri/
-  cp -a "$MOUNT_SEALOS"/sealos/sealctl opt/
+  sudo cp -a "$MOUNT_KUBE"/bin/kubeadm bin/
+  sudo cp -a "$MOUNT_KUBE"/bin/kubectl bin/
+  sudo cp -a "$MOUNT_KUBE"/bin/kubelet bin/
+  sudo cp -a "$MOUNT_CRI"/cri/registry cri/
+  sudo cp -a "$MOUNT_CRI"/cri/lsof opt/
+  sudo cp -a "$MOUNT_SEALOS"/sealos/image-cri-shim cri/
+  sudo cp -a "$MOUNT_SEALOS"/sealos/sealctl opt/
   if ! rmdir "$PATCH"; then
     cp -a "$PATCH"/* .
     ipvsImage="localhost:5000/labring/lvscare:$(find "registry" -type d | grep -E "tags/.+-$ARCH$" | awk -F/ '{print $NF}')"
