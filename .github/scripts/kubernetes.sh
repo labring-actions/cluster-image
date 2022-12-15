@@ -102,6 +102,7 @@ cd "$ROOT" && {
   sudo cp -a "$MOUNT_CRI"/cri/lsof opt/
   sudo cp -a "$MOUNT_SEALOS"/sealos/image-cri-shim cri/
   sudo cp -a "$MOUNT_SEALOS"/sealos/sealctl opt/
+  sudo chown -R "$(whoami)" bin cri opt
   if ! rmdir "$PATCH"; then
     cp -a "$PATCH"/* .
     ipvsImage="localhost:5000/labring/lvscare:$(find "registry" -type d | grep -E "tags/.+-$ARCH$" | awk -F/ '{print $NF}')"
