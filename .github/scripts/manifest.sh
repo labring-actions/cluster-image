@@ -11,7 +11,7 @@ readonly IMAGE_HUB_PASSWORD=${password?}
 
 readonly IMAGE_TAG=${version?}
 readonly KUBE="${IMAGE_TAG%%-*}"
-readonly sealoslatest="${IMAGE_TAG##*-}"
+readonly sealoslatest="${sealoslatest:-IMAGE_TAG#*-}"
 readonly SEALOS=${sealoslatest?}
 
 readonly kube_major="${KUBE%.*}"
