@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 readonly CRI_TYPE=${criType?}
 
