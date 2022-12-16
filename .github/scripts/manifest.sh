@@ -14,6 +14,14 @@ readonly KUBE="${IMAGE_TAG%%-*}"
 readonly sealoslatest="${IMAGE_TAG##*-}"
 readonly SEALOS=${sealoslatest?}
 
+readonly kube_major="${KUBE%.*}"
+readonly sealos_major="${SEALOS%%-*}"
+if [[ "${kube_major//./}" -ge 126 ]]; then
+  if [[ "${sealos_major//./}" -le 413 ]]; then
+    exit # skip
+  fi
+fi
+
 case $CRI_TYPE in
 containerd)
   IMAGE_KUBE=kubernetes

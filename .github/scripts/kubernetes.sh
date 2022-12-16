@@ -7,6 +7,14 @@ readonly CRI_TYPE=${criType?}
 readonly KUBE=${kubeVersion?}
 readonly SEALOS=${sealoslatest?}
 
+readonly kube_major="${KUBE%.*}"
+readonly sealos_major="${SEALOS%%-*}"
+if [[ "${kube_major//./}" -ge 126 ]]; then
+  if [[ "${sealos_major//./}" -le 413 ]]; then
+    exit # skip
+  fi
+fi
+
 readonly IMAGE_HUB_REGISTRY=${registry?}
 readonly IMAGE_HUB_REPO=${repo?}
 readonly IMAGE_HUB_USERNAME=${username?}
@@ -113,15 +121,8 @@ cd "$ROOT" && {
   echo "$ipvsImage" >images/shim/LvscareImageList
 
   # replace
-  kube_major="${KUBE%.*}"
-  sealos_major="${SEALOS%%-*}"
-  if [[ "${kube_major//./}" -ge 126 ]]; then
-    if [[ "${sealos_major//./}" -le 413 ]]; then
-      exit # skip
-    fi
-  fi
   cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
-  if [[ "${sealos_major//./}" -le 413 ]] ; then
+  if [[ "${sealos_major//./}" -le 413 ]]; then
     sed -i -E "s#.+v1.+v1alpha2.+#sync: 0#g" "$cri_shim_tmpl"
   fi
   cat "$cri_shim_tmpl"
