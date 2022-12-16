@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
@@ -198,7 +198,7 @@ cd "$ROOT" && {
         j=${i%/_manifests*}
         image=${j##*/}
         while IFS= read -r tag; do echo "$image:$tag"; done < <(ls "$i")
-      done < <(find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
+      done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
       sudo buildah umount "$FROM_BUILD" || true
     }
     while read -r IMAGE_NAME; do
