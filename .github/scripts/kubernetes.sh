@@ -191,21 +191,27 @@ cd "$ROOT" && {
     echo "COPY bin/kubeImageList images/shim/DefaultImageList" >>Kubefile
     tree -L 5
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
-    {
-      FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
-      MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
-      while IFS= read -r i; do
-        j=${i%/_manifests*}
-        image=${j##*/}
-        while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
-      done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
-      sudo buildah umount "$FROM_BUILD" || true
-    }
-    while read -r IMAGE_NAME; do
-      sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
-      sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
-        sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
-    done <"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+    if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
+      sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
+      {
+        FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
+        MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
+        while IFS= read -r i; do
+          j=${i%/_manifests*}
+          image=${j##*/}
+          while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
+        done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
+        sudo buildah umount "$FROM_BUILD" || true
+      }
+      while read -r IMAGE_NAME; do
+        sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
+        sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
+          sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
+      done <"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+    else
+      sudo buildah inspect "$IMAGE_BUILD" | yq -CP
+      exit 127
+    fi
     sudo sealos images
   fi
 }
