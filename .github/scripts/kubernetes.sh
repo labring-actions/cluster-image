@@ -60,7 +60,7 @@ if [[ "${kube_major//./}" -ge 126 ]]; then
   esac
 fi
 
-if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
+if [[ -n "$sealosPatch" ]]; then
   BUILD_PATCH=$(sudo buildah from "$sealosPatch-$ARCH")
   rmdir "$PATCH"
   sudo cp -a "$(sudo buildah mount "$BUILD_PATCH")" "$PATCH"
