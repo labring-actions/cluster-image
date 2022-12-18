@@ -22,20 +22,6 @@ if [[ "${kube_major//./}" -ge 126 ]]; then
   else
     exit
   fi
-  case $CRI_TYPE in
-  containerd)
-    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CONTAINERD | awk -F= '{print $NF}')" =~ v1\.([6-9]|[0-9][0-9])\.[0-9]+ ]]; then
-      echo https://kubernetes.io/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal
-      exit
-    fi
-    ;;
-  docker)
-    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CRIDOCKER | awk -F= '{print $NF}')" =~ v0\.[3-9]\.[0-9]+ ]]; then
-      echo https://github.com/Mirantis/cri-dockerd/issues/125
-      exit
-    fi
-    ;;
-  esac
 fi
 
 case $CRI_TYPE in

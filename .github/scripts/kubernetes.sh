@@ -17,20 +17,6 @@ if [[ "${kube_major//./}" -ge 126 ]]; then
   else
     exit
   fi
-  case $CRI_TYPE in
-  containerd)
-    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CONTAINERD | awk -F= '{print $NF}')" =~ v1\.([6-9]|[0-9][0-9])\.[0-9]+ ]]; then
-      echo https://kubernetes.io/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal
-      exit
-    fi
-    ;;
-  docker)
-    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CRIDOCKER | awk -F= '{print $NF}')" =~ v0\.[3-9]\.[0-9]+ ]]; then
-      echo https://github.com/Mirantis/cri-dockerd/issues/125
-      exit
-    fi
-    ;;
-  esac
 fi
 
 readonly IMAGE_HUB_REGISTRY=${registry?}
@@ -64,6 +50,23 @@ mkdir -p "$ROOT" "$PATCH"
   FROM_CRI=$(sudo buildah from "$IMAGE_CACHE_NAME:cri-$ARCH")
   MOUNT_CRI=$(sudo buildah mount "$FROM_CRI")
 }
+
+if [[ "${kube_major//./}" -ge 126 ]]; then
+  case $CRI_TYPE in
+  containerd)
+    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CONTAINERD | awk -F= '{print $NF}')" =~ v1\.([6-9]|[0-9][0-9])\.[0-9]+ ]]; then
+      echo https://kubernetes.io/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal
+      exit
+    fi
+    ;;
+  docker)
+    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CRIDOCKER | awk -F= '{print $NF}')" =~ v0\.[3-9]\.[0-9]+ ]]; then
+      echo https://github.com/Mirantis/cri-dockerd/issues/125
+      exit
+    fi
+    ;;
+  esac
+fi
 
 cp -a rootfs/* "$ROOT"
 cp -a "$CRI_TYPE"/* "$ROOT"
