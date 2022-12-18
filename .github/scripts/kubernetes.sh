@@ -192,7 +192,7 @@ cd "$ROOT" && {
   sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
-      sudo apt-get remove -y moby-engine moby-cli moby-buildx
+      sudo apt-get remove -y moby-engine moby-cli moby-buildx >/dev/null
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         systemctl status kubelet || true
         journalctl -xeu kubelet || true
@@ -203,11 +203,12 @@ cd "$ROOT" && {
         until ! kubectl get pods --all-namespaces | grep Pending; do
           sleep 5
         done
-        kubectl get nodes -owide
+        kubectl get pods -owide --all-namespaces
+        kubectl get node -owide
       fi
       sudo sealos reset --force
-      sudo apt-get update
-      sudo apt-get install --no-install-recommends -y moby-engine moby-cli moby-buildx
+      sudo apt-get update >/dev/null
+      sudo apt-get install --no-install-recommends -y moby-engine moby-cli moby-buildx >/dev/null
     fi
   fi
   if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
