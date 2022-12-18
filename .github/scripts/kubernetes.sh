@@ -193,14 +193,16 @@ cd "$ROOT" && {
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       sudo apt-get remove -y moby-engine moby-cli moby-buildx
-      sudo sealos run "$IMAGE_BUILD" --single --debug
-      {
+      if ! sudo sealos run "$IMAGE_BUILD" --single --debug; then
+        systemctl status kubelet
+        journalctl -xeu kubelet
+      else
         mkdir -p "$HOME/.kube"
         sudo cp -a /etc/kubernetes/admin.conf "$HOME/.kube/config"
         sudo chown "$(whoami)" "$HOME/.kube/config"
-      }
-      kubectl get nodes
-      kubectl get pods --all-namespaces
+        kubectl get nodes
+        kubectl get pods --all-namespaces
+      fi
       sudo sealos reset --force
       sudo apt-get update
       sudo apt-get install --no-install-recommends -y moby-engine moby-cli moby-buildx
