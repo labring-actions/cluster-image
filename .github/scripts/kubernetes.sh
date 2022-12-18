@@ -213,20 +213,19 @@ cd "$ROOT" && {
   else
     export readonly SEALOS_RUN="skipped"
   fi
+  {
+    FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
+    MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
+    while IFS= read -r i; do
+      j=${i%/_manifests*}
+      image=${j##*/}
+      while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
+    done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
+    sudo buildah umount "$FROM_BUILD" || true
+  }
   if [[ failed != "$SEALOS_RUN" ]]; then
     if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
       sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
-      {
-        FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
-        MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
-        while IFS= read -r i; do
-          j=${i%/_manifests*}
-          image=${j##*/}
-          while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
-        done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
-        sudo buildah umount "$FROM_BUILD" || true
-      }
-
       echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
       for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
         if [[ "$allBuild" != true ]]; then
