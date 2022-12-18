@@ -37,11 +37,11 @@ mkdir -p "$ROOT" "$PATCH"
     FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
     MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
   else
-    BUILD_PATCH=$(sudo buildah from "$sealosPatch-$ARCH")
+    FROM_SEALOS=$(sudo buildah from "$sealosPatch-$ARCH")
+    MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
     rmdir "$PATCH"
-    sudo cp -a "$(sudo buildah mount "$BUILD_PATCH")" "$PATCH"
-    sudo chown -R "$USER:$USER" "$PATCH"
-    sudo buildah umount "$BUILD_PATCH"
+    sudo cp -a "$MOUNT_SEALOS" "$PATCH"
+    sudo chown -R "$(whoami)" "$PATCH"
   fi
   FROM_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH")
   MOUNT_KUBE=$(sudo buildah mount "$FROM_KUBE")
