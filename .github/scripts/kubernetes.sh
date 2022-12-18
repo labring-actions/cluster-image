@@ -33,8 +33,16 @@ mkdir -p "$ROOT" "$PATCH"
   BUILD_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-amd64")
   sudo cp -a "$(sudo buildah mount "$BUILD_KUBE")"/bin/kubeadm "/usr/bin/kubeadm"
   sudo buildah umount "$BUILD_KUBE"
-  FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
-  MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
+  if [[ -z "$sealosPatch" ]]; then
+    FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
+    MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
+  else
+    BUILD_PATCH=$(sudo buildah from "$sealosPatch-$ARCH")
+    rmdir "$PATCH"
+    sudo cp -a "$(sudo buildah mount "$BUILD_PATCH")" "$PATCH"
+    sudo chown -R "$USER:$USER" "$PATCH"
+    sudo buildah umount "$BUILD_PATCH"
+  fi
   FROM_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH")
   MOUNT_KUBE=$(sudo buildah mount "$FROM_KUBE")
   FROM_CRIO=$(sudo buildah from "$IMAGE_CACHE_NAME:cri-v${KUBE%.*}-$ARCH")
@@ -58,14 +66,6 @@ if [[ "${kube_major//./}" -ge 126 ]]; then
     fi
     ;;
   esac
-fi
-
-if [[ -n "$sealosPatch" ]]; then
-  BUILD_PATCH=$(sudo buildah from "$sealosPatch-$ARCH")
-  rmdir "$PATCH"
-  sudo cp -a "$(sudo buildah mount "$BUILD_PATCH")" "$PATCH"
-  sudo chown -R "$USER:$USER" "$PATCH"
-  sudo buildah umount "$BUILD_PATCH"
 fi
 
 cp -a rootfs/* "$ROOT"
@@ -129,11 +129,14 @@ cd "$ROOT" && {
   sudo cp -a "$MOUNT_KUBE"/bin/kubelet bin/
   sudo cp -a "$MOUNT_CRI"/cri/registry cri/
   sudo cp -a "$MOUNT_CRI"/cri/lsof opt/
-  sudo cp -a "$MOUNT_SEALOS"/sealos/image-cri-shim cri/
-  sudo cp -a "$MOUNT_SEALOS"/sealos/sealctl opt/
+  if [[ -z "$sealosPatch" ]]; then
+    sudo cp -a "$MOUNT_SEALOS"/sealos/image-cri-shim cri/
+    sudo cp -a "$MOUNT_SEALOS"/sealos/sealctl opt/
+  else
+    cp -a "$PATCH"/* .
+  fi
   sudo chown -R "$(whoami)" bin cri opt
   if ! rmdir "$PATCH" 2>/dev/null; then
-    cp -a "$PATCH"/* .
     ipvsImage="${sealosPatch%%/*}/labring/lvscare:$(find "registry" -type d | grep -E "tags/.+-$ARCH$" | awk -F/ '{print $NF}')"
     rm -f images/shim/lvscareImage
   else
