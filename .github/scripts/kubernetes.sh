@@ -33,7 +33,7 @@ mkdir -p "$ROOT" "$PATCH"
   BUILD_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-amd64")
   sudo cp -a "$(sudo buildah mount "$BUILD_KUBE")"/bin/kubeadm "/usr/bin/kubeadm"
   sudo buildah umount "$BUILD_KUBE"
-  FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$sealos_major-$ARCH")
+  FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
   MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
   FROM_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH")
   MOUNT_KUBE=$(sudo buildah mount "$FROM_KUBE")
