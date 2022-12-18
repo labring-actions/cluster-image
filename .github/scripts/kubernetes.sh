@@ -39,7 +39,7 @@ mkdir -p "$ROOT" "$PATCH"
   MOUNT_CRI=$(sudo buildah mount "$FROM_CRI")
 }
 
-if [[ -n "$sealosPatch" ]]; then
+if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
   BUILD_PATCH=$(sudo buildah from "$sealosPatch-$ARCH")
   rmdir "$PATCH"
   sudo cp -a "$(sudo buildah mount "$BUILD_PATCH")" "$PATCH"
@@ -191,6 +191,13 @@ cd "$ROOT" && {
     echo "COPY bin/kubeImageList images/shim/DefaultImageList" >>Kubefile
     tree -L 5
     sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
+    if [[ amd64 == "$ARCH" ]]; then
+      if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
+        sudo sealos run "$IMAGE_BUILD" --single --debug
+        kubectl get nodes
+        kubectl get pods --all-namespaces
+      fi
+    fi
     if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
       sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
       {
