@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eux
+set -e
 
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
