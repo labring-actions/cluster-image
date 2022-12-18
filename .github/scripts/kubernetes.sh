@@ -194,7 +194,8 @@ cd "$ROOT" && {
   sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
-      sudo apt-get remove -y moby-engine moby-cli moby-buildx >/dev/null
+      sudo apt list --installed | grep "$CRI_TYPE"
+      sudo apt remove -y moby-engine moby-cli moby-buildx >/dev/null
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
       else
@@ -209,8 +210,8 @@ cd "$ROOT" && {
         kubectl get node -owide
       fi
       sudo sealos reset --force
-      sudo apt-get update >/dev/null
-      sudo apt-get install --no-install-recommends -y moby-engine moby-cli moby-buildx >/dev/null
+      sudo apt update >/dev/null
+      sudo apt install --no-install-recommends -y moby-engine moby-cli moby-buildx >/dev/null
     fi
   else
     export readonly SEALOS_RUN="skipped"
