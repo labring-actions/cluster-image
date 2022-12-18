@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 readonly ARCH=${arch?}
 readonly CRI_TYPE=${criType?}
@@ -33,7 +33,7 @@ mkdir -p "$ROOT" "$PATCH"
   BUILD_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-amd64")
   sudo cp -a "$(sudo buildah mount "$BUILD_KUBE")"/bin/kubeadm "/usr/bin/kubeadm"
   sudo buildah umount "$BUILD_KUBE"
-  FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$SEALOS-$ARCH")
+  FROM_SEALOS=$(sudo buildah from "$IMAGE_CACHE_NAME:sealos-v$sealos_major-$ARCH")
   MOUNT_SEALOS=$(sudo buildah mount "$FROM_SEALOS")
   FROM_KUBE=$(sudo buildah from "$IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH")
   MOUNT_KUBE=$(sudo buildah mount "$FROM_KUBE")
@@ -194,9 +194,9 @@ cd "$ROOT" && {
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       sudo apt-get remove -y moby-engine moby-cli moby-buildx >/dev/null
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
-        systemctl status kubelet || true
-        journalctl -xeu kubelet || true
+        export readonly SEALOS_RUN="failed"
       else
+        export readonly SEALOS_RUN="succeed"
         mkdir -p "$HOME/.kube"
         sudo cp -a /etc/kubernetes/admin.conf "$HOME/.kube/config"
         sudo chown "$(whoami)" "$HOME/.kube/config"
@@ -211,49 +211,54 @@ cd "$ROOT" && {
       sudo apt-get install --no-install-recommends -y moby-engine moby-cli moby-buildx >/dev/null
     fi
   fi
-  if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
-    sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
-    {
-      FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
-      MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
-      while IFS= read -r i; do
-        j=${i%/_manifests*}
-        image=${j##*/}
-        while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
-      done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
-      sudo buildah umount "$FROM_BUILD" || true
-    }
+  if [[ succeed == "$SEALOS_RUN" ]]; then
+    if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
+      sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
+      {
+        FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
+        MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
+        while IFS= read -r i; do
+          j=${i%/_manifests*}
+          image=${j##*/}
+          while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
+        done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
+        sudo buildah umount "$FROM_BUILD" || true
+      }
 
-    echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-    for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
-      if [[ "$allBuild" != true ]]; then
-        case $IMAGE_HUB_REGISTRY in
-        docker.io)
-          if until curl -sL "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/${IMAGE_NAME##*:}"; do sleep 3; done |
-            grep digest >/dev/null; then
-            echo "$IMAGE_NAME already existed"
-          else
+      echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+      for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
+        if [[ "$allBuild" != true ]]; then
+          case $IMAGE_HUB_REGISTRY in
+          docker.io)
+            if until curl -sL "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/${IMAGE_NAME##*:}"; do sleep 3; done |
+              grep digest >/dev/null; then
+              echo "$IMAGE_NAME already existed"
+            else
+              echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+            fi
+            ;;
+          *)
             echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-          fi
-          ;;
-        *)
+            ;;
+          esac
+        else
           echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-          ;;
-        esac
-      else
-        echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+        fi
+      done
+      if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
+        sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY"
+        while read -r IMAGE_NAME; do
+          sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
+          until sudo sealos push "$IMAGE_NAME"; do sleep 3; done
+        done <"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
       fi
-    done
-    if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
-      sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY"
-      while read -r IMAGE_NAME; do
-        sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
-        until sudo sealos push "$IMAGE_NAME"; do sleep 3; done
-      done <"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+    else
+      sudo buildah inspect "$IMAGE_BUILD" | yq -CP
+      exit 127
     fi
   else
-    sudo buildah inspect "$IMAGE_BUILD" | yq -CP
-    exit 127
+    systemctl status kubelet || true
+    journalctl -xeu kubelet || true
   fi
   sudo sealos images
 
