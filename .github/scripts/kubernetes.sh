@@ -200,8 +200,10 @@ cd "$ROOT" && {
         mkdir -p "$HOME/.kube"
         sudo cp -a /etc/kubernetes/admin.conf "$HOME/.kube/config"
         sudo chown "$(whoami)" "$HOME/.kube/config"
-        kubectl get nodes
-        kubectl get pods --all-namespaces
+        until ! kubectl get pods --all-namespaces | grep Pending; do
+          sleep 5
+        done
+        kubectl get nodes -owide
       fi
       sudo sealos reset --force
       sudo apt-get update
