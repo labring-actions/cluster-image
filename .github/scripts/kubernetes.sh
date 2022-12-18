@@ -146,7 +146,7 @@ cd "$ROOT" && {
 
   # replace
   cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
-  if [[ "${sealos_major//./}" -le 413 ]]; then
+  if [[ "${sealos_major//./}" -le 413 ]] && [[ -z "$sealosPatch" ]]; then
     sed -i -E "s#.+v1.+v1alpha2.+#sync: 0#g" "$cri_shim_tmpl"
   fi
   cat "$cri_shim_tmpl"
