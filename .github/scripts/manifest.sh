@@ -17,9 +17,25 @@ readonly SEALOS=${sealoslatest?}
 readonly kube_major="${KUBE%.*}"
 readonly sealos_major="${SEALOS%%-*}"
 if [[ "${kube_major//./}" -ge 126 ]]; then
-  if [[ "${sealos_major//./}" -le 413 ]]; then
-    exit # skip
+  if ! [[ "${sealos_major//./}" -le 413 ]] || [[ -n "$sealosPatch" ]]; then
+    echo "Verifying the availability of unstable"
+  else
+    exit
   fi
+  case $CRI_TYPE in
+  containerd)
+    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CONTAINERD | awk -F= '{print $NF}')" =~ v1\.([6-9]|[0-9][0-9])\.[0-9]+ ]]; then
+      echo https://kubernetes.io/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal
+      exit
+    fi
+    ;;
+  docker)
+    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CRIDOCKER | awk -F= '{print $NF}')" =~ v0\.[3-9]\.[0-9]+ ]]; then
+      echo https://github.com/Mirantis/cri-dockerd/issues/125
+      exit
+    fi
+    ;;
+  esac
 fi
 
 case $CRI_TYPE in
@@ -56,8 +72,7 @@ for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
   sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-arm64"
   sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
     sudo buildah manifest push --all "$IMAGE_NAME" docker://"$IMAGE_NAME" && echo "$IMAGE_NAME push success"
-  sudo buildah manifest inspect $IMAGE_NAME
+  sudo buildah manifest inspect "$IMAGE_NAME" | yq -CP
 done
-sudo buildah images
 
-sudo buildah rmi "$IMAGE_NAME" || true
+sudo buildah images

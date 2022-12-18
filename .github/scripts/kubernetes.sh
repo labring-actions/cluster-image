@@ -12,13 +12,25 @@ readonly SEALOS=${sealoslatest?}
 readonly kube_major="${KUBE%.*}"
 readonly sealos_major="${SEALOS%%-*}"
 if [[ "${kube_major//./}" -ge 126 ]]; then
-  if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
-    echo "Verifying the availability of unofficial sealos"
+  if ! [[ "${sealos_major//./}" -le 413 ]] || [[ -n "$sealosPatch" ]]; then
+    echo "Verifying the availability of unstable"
   else
-    if [[ "${sealos_major//./}" -le 413 ]]; then
-      exit # skip
-    fi
+    exit
   fi
+  case $CRI_TYPE in
+  containerd)
+    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CONTAINERD | awk -F= '{print $NF}')" =~ v1\.([6-9]|[0-9][0-9])\.[0-9]+ ]]; then
+      echo https://kubernetes.io/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal
+      exit
+    fi
+    ;;
+  docker)
+    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CRIDOCKER | awk -F= '{print $NF}')" =~ v0\.[3-9]\.[0-9]+ ]]; then
+      echo https://github.com/Mirantis/cri-dockerd/issues/125
+      exit
+    fi
+    ;;
+  esac
 fi
 
 readonly IMAGE_HUB_REGISTRY=${registry?}
@@ -52,23 +64,6 @@ mkdir -p "$ROOT" "$PATCH"
   FROM_CRI=$(sudo buildah from "$IMAGE_CACHE_NAME:cri-$ARCH")
   MOUNT_CRI=$(sudo buildah mount "$FROM_CRI")
 }
-
-if [[ "${kube_major//./}" -ge 126 ]]; then
-  case $CRI_TYPE in
-  containerd)
-    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CONTAINERD | awk -F= '{print $NF}')" =~ v1\.([6-9]|[0-9][0-9])\.[0-9]+ ]]; then
-      echo https://kubernetes.io/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal
-      exit $ERR_CODE
-    fi
-    ;;
-  docker)
-    if ! [[ "$(sudo cat "$MOUNT_CRI"/cri/.versions | grep CRIDOCKER | awk -F= '{print $NF}')" =~ v0\.[3-9]\.[0-9]+ ]]; then
-      echo https://github.com/Mirantis/cri-dockerd/issues/125
-      exit $ERR_CODE
-    fi
-    ;;
-  esac
-fi
 
 cp -a rootfs/* "$ROOT"
 cp -a "$CRI_TYPE"/* "$ROOT"
@@ -151,7 +146,6 @@ cd "$ROOT" && {
   if [[ "${sealos_major//./}" -le 413 ]] && [[ -z "$sealosPatch" ]]; then
     sed -i -E "s#.+v1.+v1alpha2.+#sync: 0#g" "$cri_shim_tmpl"
   fi
-  cat "$cri_shim_tmpl"
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(grep /pause: bin/kubeImageList)
   pauseImageName=${pauseImage#*/}
@@ -267,8 +261,7 @@ cd "$ROOT" && {
     systemctl status kubelet || true
     journalctl -xeu kubelet || true
   fi
-  sudo sealos images
-
 }
 
 sudo buildah umount "$FROM_SEALOS" "$FROM_KUBE" "$FROM_CRIO" "$FROM_CRI" || true
+sudo sealos images
