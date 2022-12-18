@@ -195,7 +195,7 @@ cd "$ROOT" && {
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       dpkg-query --search "$(command -v containerd)" "$(command -v docker)"
-      sudo apt-get remove -y moby-containerd moby-engine moby-cli moby-buildx
+      sudo apt-get remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine
       sudo systemctl unmask docker
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
