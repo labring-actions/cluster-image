@@ -193,9 +193,9 @@ cd "$ROOT" && {
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       sudo apt-get remove -y moby-engine moby-cli moby-buildx
-      if ! sudo sealos run "$IMAGE_BUILD" --single --debug; then
-        systemctl status kubelet
-        journalctl -xeu kubelet
+      if ! sudo sealos run "$IMAGE_BUILD" --single; then
+        systemctl status kubelet || true
+        journalctl -xeu kubelet || true
       else
         mkdir -p "$HOME/.kube"
         sudo cp -a /etc/kubernetes/admin.conf "$HOME/.kube/config"
