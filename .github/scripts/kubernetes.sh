@@ -210,8 +210,10 @@ cd "$ROOT" && {
       sudo apt-get update >/dev/null
       sudo apt-get install --no-install-recommends -y moby-engine moby-cli moby-buildx >/dev/null
     fi
+  else
+    export readonly SEALOS_RUN="skipped"
   fi
-  if [[ succeed == "$SEALOS_RUN" ]]; then
+  if [[ failed != "$SEALOS_RUN" ]]; then
     if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
       sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
       {
