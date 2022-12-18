@@ -194,6 +194,7 @@ cd "$ROOT" && {
   sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
+      dpkg-query --search "$(command -v containerd)" "$(command -v docker)"
       sudo apt-get remove -y containerd moby-engine moby-cli moby-buildx >/dev/null
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
