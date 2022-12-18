@@ -195,7 +195,8 @@ cd "$ROOT" && {
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       dpkg-query --search "$(command -v containerd)" "$(command -v docker)"
-      sudo apt-get remove -y moby-containerd moby-engine moby-cli moby-buildx >/dev/null
+      sudo apt-get remove -y moby-containerd moby-engine moby-cli moby-buildx
+      sudo systemctl unmask docker
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
       else
@@ -210,8 +211,6 @@ cd "$ROOT" && {
         kubectl get node -owide
       fi
       sudo sealos reset --force
-      sudo apt-get update >/dev/null
-      sudo apt-get install --no-install-recommends -y moby-containerd moby-engine moby-cli moby-buildx >/dev/null
     fi
   else
     export readonly SEALOS_RUN="skipped"
