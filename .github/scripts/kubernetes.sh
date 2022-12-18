@@ -10,8 +10,12 @@ readonly SEALOS=${sealoslatest?}
 readonly kube_major="${KUBE%.*}"
 readonly sealos_major="${SEALOS%%-*}"
 if [[ "${kube_major//./}" -ge 126 ]]; then
-  if [[ "${sealos_major//./}" -le 413 ]]; then
-    exit # skip
+  if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
+    echo "Verifying the availability of unofficial sealos"
+  else
+    if [[ "${sealos_major//./}" -le 413 ]]; then
+      exit # skip
+    fi
   fi
 fi
 
@@ -188,9 +192,12 @@ cd "$ROOT" && {
   sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
+      apt-get remove -y moby-engine moby-cli moby-buildx
       sudo sealos run "$IMAGE_BUILD" --single --debug
       kubectl get nodes
       kubectl get pods --all-namespaces
+      apt-get update
+      apt-get install --no-install-recommends -y moby-engine moby-cli moby-buildx
     fi
   fi
   if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
