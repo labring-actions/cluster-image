@@ -194,6 +194,7 @@ cd "$ROOT" && {
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       sudo apt-get remove -y moby-engine moby-cli moby-buildx
       sudo sealos run "$IMAGE_BUILD" --single --debug
+      export KUBECONFIG=/etc/kubernetes/admin.conf
       kubectl get nodes
       kubectl get pods --all-namespaces
       sudo sealos reset --force
