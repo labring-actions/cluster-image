@@ -181,63 +181,64 @@ cd "$ROOT" && {
 
   chmod a+x bin/* opt/*
 
-  echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-  for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
-    if [[ "$allBuild" != true ]]; then
-      case $IMAGE_HUB_REGISTRY in
-      docker.io)
-        if until curl -sL "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/${IMAGE_NAME##*:}"; do sleep 3; done |
-          grep digest >/dev/null; then
-          echo "$IMAGE_NAME already existed"
-        else
-          echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-        fi
-        ;;
-      *)
-        echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-        ;;
-      esac
-    else
-      echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-    fi
-  done
-
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
-  if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
-    sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
-    echo "COPY bin/kubeImageList images/shim/DefaultImageList" >>Kubefile
-    tree -L 5
-    sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
-    if [[ amd64 == "$ARCH" ]]; then
-      if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
-        sudo sealos run "$IMAGE_BUILD" --single --debug
-        kubectl get nodes
-        kubectl get pods --all-namespaces
-      fi
+  sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
+  echo "COPY bin/kubeImageList images/shim/DefaultImageList" >>Kubefile
+  tree -L 5
+  sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
+  if [[ amd64 == "$ARCH" ]]; then
+    if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
+      sudo sealos run "$IMAGE_BUILD" --single --debug
+      kubectl get nodes
+      kubectl get pods --all-namespaces
     fi
-    if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
-      sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
-      {
-        FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
-        MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
-        while IFS= read -r i; do
-          j=${i%/_manifests*}
-          image=${j##*/}
-          while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
-        done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
-        sudo buildah umount "$FROM_BUILD" || true
-      }
+  fi
+  if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
+    sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
+    {
+      FROM_BUILD=$(sudo buildah from "$IMAGE_BUILD")
+      MOUNT_BUILD=$(sudo buildah mount "$FROM_BUILD")
+      while IFS= read -r i; do
+        j=${i%/_manifests*}
+        image=${j##*/}
+        while IFS= read -r tag; do echo "$image:$tag"; done < <(sudo ls "$i")
+      done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
+      sudo buildah umount "$FROM_BUILD" || true
+    }
+
+    echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+    for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
+      if [[ "$allBuild" != true ]]; then
+        case $IMAGE_HUB_REGISTRY in
+        docker.io)
+          if until curl -sL "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/${IMAGE_NAME##*:}"; do sleep 3; done |
+            grep digest >/dev/null; then
+            echo "$IMAGE_NAME already existed"
+          else
+            echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+          fi
+          ;;
+        *)
+          echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+          ;;
+        esac
+      else
+        echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+      fi
+    done
+    if [[ -s "/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images" ]]; then
+      sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY"
       while read -r IMAGE_NAME; do
         sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME"
-        sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
-          sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
+        until sudo sealos push "$IMAGE_NAME"; do sleep 3; done
       done <"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
-    else
-      sudo buildah inspect "$IMAGE_BUILD" | yq -CP
-      exit 127
     fi
-    sudo sealos images
+  else
+    sudo buildah inspect "$IMAGE_BUILD" | yq -CP
+    exit 127
   fi
+  sudo sealos images
+
 }
 
 sudo buildah umount "$FROM_SEALOS" "$FROM_KUBE" "$FROM_CRIO" "$FROM_CRI" || true
