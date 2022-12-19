@@ -211,6 +211,8 @@ cd "$ROOT" && {
         kubectl get node -owide
       fi
       sudo sealos reset --force
+    else
+      export readonly SEALOS_RUN="stable"
     fi
   else
     export readonly SEALOS_RUN="skipped"
