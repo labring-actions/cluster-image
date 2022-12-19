@@ -14,6 +14,17 @@ readonly KUBE="${IMAGE_TAG%%-*}"
 readonly sealoslatest="${sealoslatest:-IMAGE_TAG#*-}"
 readonly SEALOS=${sealoslatest?}
 
+readonly kube_major="${KUBE%.*}"
+readonly sealos_major="${SEALOS%%-*}"
+if [[ "${kube_major//./}" -ge 126 ]]; then
+  if ! [[ "${sealos_major//./}" -le 413 ]] || [[ -n "$sealosPatch" ]]; then
+    echo "Verifying the availability of unstable"
+  else
+    echo "INFO::skip kube(>=1.26) building when sealos <= 4.1.3"
+    exit
+  fi
+fi
+
 case $CRI_TYPE in
 containerd)
   IMAGE_KUBE=kubernetes
