@@ -59,7 +59,7 @@ jobs:
         id: set-versions
         run: .github/scripts/versions/versions.sh
   build-images:
-    name: Auto build k8s image
+    name: building
     needs:
       - resolve-issue-sealoslatest
       - resolve-versions-arch
@@ -88,7 +88,7 @@ jobs:
       - resolve-issue-sealoslatest
       - resolve-versions
       - build-images
-    name: Auto manifest k8s image
+    name: manifest
     env:
       sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     strategy:

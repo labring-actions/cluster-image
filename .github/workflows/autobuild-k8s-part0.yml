@@ -1,4 +1,4 @@
-name: Auto build image k8s for part1
+name: Auto build image k8s for part0
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +18,7 @@ env:
   criType: containerd
 jobs:
   resolve-issue-sealoslatest:
-    if: startswith(github.event.comment.body, '/imagebuild_kube') || startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part1') || contains(github.event.inputs.sealosPatch, 'sealos')
+    if: startswith(github.event.comment.body, '/imagebuild_kube') || startswith(github.event.comment.body, '/imagebuild_k8s') || startswith(github.event.comment.body, '/single_imagebuild_k8s_part0') || contains(github.event.inputs.sealosPatch, 'sealos')
     runs-on: ubuntu-latest
     outputs:
       sealoslatest: ${{ steps.set-sealoslatest.outputs.sealoslatest }}
@@ -59,7 +59,7 @@ jobs:
         id: set-versions
         run: .github/scripts/versions/versions.sh
   build-images:
-    name: Auto build k8s image
+    name: building
     needs:
       - resolve-issue-sealoslatest
       - resolve-versions-arch
@@ -88,7 +88,7 @@ jobs:
       - resolve-issue-sealoslatest
       - resolve-versions
       - build-images
-    name: Auto manifest k8s image
+    name: manifest
     env:
       sealoslatest: ${{ needs.resolve-issue-sealoslatest.outputs.sealoslatest }}
     strategy:
@@ -121,4 +121,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            detail log please view [autobuild-k8s-part1](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-k8s-part1.yml)
+            detail log please view [autobuild-k8s-part0](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-k8s-part0.yml)
