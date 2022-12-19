@@ -17,7 +17,7 @@
 source common.sh
 storage=${1:-/var/lib/registry}
 if command_exists containerd && ! command_exists docker; then
-    error "Please using containerd image: labring/kubernetes:v1.23.10 or uninstall containerd retry"
+    error "containerd already exist, uninstall containerd and retry"
 fi
 check_port_inuse
 check_file_exits $storage
