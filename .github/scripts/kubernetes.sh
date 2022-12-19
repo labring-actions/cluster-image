@@ -228,7 +228,7 @@ cd "$ROOT" && {
     done < <(sudo find "${MOUNT_BUILD:-$PWD}" -name tags -type d | grep _manifests/tags)
     sudo buildah umount "$FROM_BUILD" || true
   }
-  if [[ amd64 == "$ARCH" ]] && [[ failed != "$SEALOS_RUN" ]]; then
+  if [[ failed != "$SEALOS_RUN" ]]; then
     if sudo buildah inspect "$IMAGE_BUILD" | yq .OCIv1.architecture | grep "$ARCH" ||
       sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
       echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
