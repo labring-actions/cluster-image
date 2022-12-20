@@ -117,7 +117,13 @@ cd "$ROOT" && {
   docker)
     case $KUBE in
     1.*.*)
-      sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+      if [[ "${kube_major//./}" -ge 119 ]]; then
+        # cri-dockerd v0.3.x
+        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+      else
+        # cri-dockerd v0.2.x
+        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tar.gz cri/cri-dockerd.tgz
+      fi
       sudo cp -a "$MOUNT_CRI"/cri/docker.tgz cri/
       ;;
     esac
