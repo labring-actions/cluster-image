@@ -59,7 +59,7 @@ for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
   sudo buildah manifest create "$IMAGE_NAME"
   sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-amd64"
   sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-arm64"
-  if [[ $(sudo buildah inspect "$IMAGE_NAME" | yq .manifests[].platform.architecture | uniq | grep 64 -) -ne 2 ]]; then
+  if [[ $(sudo buildah inspect "$IMAGE_NAME" | yq .manifests[].platform.architecture | uniq | grep 64 -c) -ne 2 ]]; then
     sudo buildah manifest inspect "$IMAGE_NAME" | yq -CP
     echo "ERROR::TARGETARCH for sealos build"
     exit $ERR_CODE
