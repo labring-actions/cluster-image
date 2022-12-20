@@ -117,14 +117,16 @@ cd "$ROOT" && {
   docker)
     case $KUBE in
     1.*.*)
-      if [[ "${kube_major//./}" -ge 119 ]]; then
-        # cri-dockerd v0.3.x
-        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
-      else
-        # cri-dockerd v0.2.x
-        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tar.gz cri/cri-dockerd.tgz
-      fi
-      sudo cp -a "$MOUNT_CRI"/cri/docker.tgz cri/
+      sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+      docker_major=$(until curl -sL "https://github.com/kubernetes/kubernetes/raw/release-${KUBE%.*}/build/dependencies.yaml" | yq '.dependencies[]|select(.name == "docker")|.version'; do sleep 30; done)
+      case $docker_major in
+      18.09 | 19.03)
+        sudo cp -a "$MOUNT_CRI/cri/docker-$docker_major.tgz" cri/docker.tgz
+        ;;
+      20.10 | *)
+        sudo cp -a "$MOUNT_CRI/cri/docker.tgz" cri/
+        ;;
+      esac
       ;;
     esac
     sudo cp -a "$MOUNT_CRIO"/cri/crictl.tar.gz cri/
