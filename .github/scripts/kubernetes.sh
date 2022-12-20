@@ -274,8 +274,8 @@ cd "$ROOT" && {
       exit $ERR_CODE
     fi
   else
-    systemctl status kubelet || true
-    journalctl -xeu kubelet || true
+    systemctl status kubelet docker || true
+    journalctl -xeu kubelet docker || true
   fi
 }
 
