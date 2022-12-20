@@ -2,6 +2,8 @@
 
 set -eu
 
+readonly ERR_CODE=127
+
 readonly CRI_TYPE=${criType?}
 
 readonly IMAGE_HUB_REGISTRY=${registry?}
@@ -56,10 +58,17 @@ fi
 for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
   sudo buildah manifest create "$IMAGE_NAME"
   sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-amd64"
-  sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-arm64"
-  sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
-    sudo buildah manifest push --all "$IMAGE_NAME" docker://"$IMAGE_NAME" && echo "$IMAGE_NAME push success"
-  sudo buildah manifest inspect "$IMAGE_NAME" | yq -CP
+  if ! sudo buildah inspect "$IMAGE_NAME-amd64" | yq .OCIv1.architecture | grep "amd64" ||
+    ! sudo buildah inspect "$IMAGE_NAME-amd64" | yq .Docker.architecture | grep "amd64" ||
+    ! sudo buildah inspect "$IMAGE_NAME-arm64" | yq .OCIv1.architecture | grep "arm64" ||
+    ! sudo buildah inspect "$IMAGE_NAME-arm64" | yq .Docker.architecture | grep "arm64"; then
+    sudo buildah manifest inspect "$IMAGE_NAME" | yq -CP
+    echo "ERROR::TARGETARCH for sealos build"
+    exit $ERR_CODE
+  else
+    sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
+      sudo buildah manifest push --all "$IMAGE_NAME" docker://"$IMAGE_NAME" && echo "$IMAGE_NAME push success"
+  fi
 done
 
 sudo buildah images
