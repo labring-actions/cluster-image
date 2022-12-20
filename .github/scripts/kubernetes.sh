@@ -206,6 +206,8 @@ cd "$ROOT" && {
       dpkg-query --search "$(command -v containerd)" "$(command -v docker)"
       sudo apt-get remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine
       sudo systemctl unmask containerd docker || true
+      containerd --version || true
+      dockerd --version || true
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
       else
