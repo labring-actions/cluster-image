@@ -197,7 +197,7 @@ cd "$ROOT" && {
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       dpkg-query --search "$(command -v containerd)" "$(command -v docker)"
       sudo apt-get remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine
-      sudo systemctl unmask docker
+      sudo systemctl unmask containerd docker || true
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
       else
@@ -233,7 +233,7 @@ cd "$ROOT" && {
       sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
       echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
       for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
-        if [[ "$allBuild" != true ]]; then
+        if [[ "$allBuild" != true ]] || [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]]; then
           case $IMAGE_HUB_REGISTRY in
           docker.io)
             if until curl -sL "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/${IMAGE_NAME##*:}"; do sleep 3; done |
