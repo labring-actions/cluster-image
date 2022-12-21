@@ -208,6 +208,11 @@ cd "$ROOT" && {
       sudo systemctl unmask containerd docker || true
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
+        docker ps -a || crictl ps -a || true
+        systemctl status docker || systemctl status containerd || true
+        journalctl -xeu docker || journalctl -xeu containerd || true
+        systemctl status kubelet || true
+        journalctl -xeu kubelet || true
       else
         export readonly SEALOS_RUN="succeed"
         mkdir -p "$HOME/.kube"
@@ -221,11 +226,6 @@ cd "$ROOT" && {
       fi
       dockerd info || true
       containerd --version || true
-      docker ps -a || crictl ps -a
-      systemctl status docker || systemctl status containerd
-      journalctl -xeu docker || journalctl -xeu containerd
-      systemctl status kubelet || true
-      journalctl -xeu kubelet || true
       sudo sealos reset --force
     else
       export readonly SEALOS_RUN="stable"
