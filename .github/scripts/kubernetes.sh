@@ -221,7 +221,7 @@ cd "$ROOT" && {
       fi
       dockerd info || true
       containerd --version || true
-      crictl ps -a
+      docker ps -a || crictl ps -a
       systemctl status docker || true
       journalctl -xeu docker || true
       sudo sealos reset --force
