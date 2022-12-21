@@ -222,8 +222,10 @@ cd "$ROOT" && {
       dockerd info || true
       containerd --version || true
       docker ps -a || crictl ps -a
-      systemctl status docker || true
-      journalctl -xeu docker || true
+      systemctl status docker || systemctl status containerd
+      journalctl -xeu docker || journalctl -xeu containerd
+      systemctl status kubelet || true
+      journalctl -xeu kubelet || true
       sudo sealos reset --force
     else
       export readonly SEALOS_RUN="stable"
@@ -277,8 +279,7 @@ cd "$ROOT" && {
       exit $ERR_CODE
     fi
   else
-    systemctl status kubelet || true
-    journalctl -xeu kubelet || true
+    sudo sealos version
   fi
 }
 
