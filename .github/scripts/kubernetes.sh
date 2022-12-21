@@ -219,8 +219,11 @@ cd "$ROOT" && {
         kubectl get pods -owide --all-namespaces
         kubectl get node -owide
       fi
+      dockerd info || true
       containerd --version || true
-      dockerd --version || true
+      crictl ps -a
+      systemctl status docker || true
+      journalctl -xeu docker || true
       sudo sealos reset --force
     else
       export readonly SEALOS_RUN="stable"
@@ -274,9 +277,8 @@ cd "$ROOT" && {
       exit $ERR_CODE
     fi
   else
-    crictl ps -a
-    systemctl status kubelet docker || true
-    journalctl -xeu kubelet docker || true
+    systemctl status kubelet || true
+    journalctl -xeu kubelet || true
   fi
 }
 
