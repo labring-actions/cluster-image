@@ -1,0 +1,4 @@
+FROM scratch
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i neuvector charts/core -n neuvector --create-namespace --set crio.enabled=true"]
