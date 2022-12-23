@@ -47,9 +47,10 @@ disable_selinux
 
 chmod -R 755 ../bin/*
 chmod 644 ../bin
-cp ../bin/* /usr/bin
-cp ../scripts/kubelet-pre-start.sh /usr/bin
-cp ../scripts/kubelet-post-stop.sh /usr/bin
+rm -f ../bin/kubeImageList
+cp -a ../bin/* /usr/bin
+cp -a  ../scripts/kubelet-pre-start.sh /usr/bin
+cp -a ../scripts/kubelet-post-stop.sh /usr/bin
 mkdir -p /etc/systemd/system
 cp ../etc/kubelet.service /etc/systemd/system/
 [ -d /etc/systemd/system/kubelet.service.d ] || mkdir /etc/systemd/system/kubelet.service.d
