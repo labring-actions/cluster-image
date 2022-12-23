@@ -1,0 +1,4 @@
+FROM scratch
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i loki -n loki-stack --create-namespace charts/loki-stack --set grafana.adminPassword=admin,grafana.service.type=NodePort,fluent-bit.enabled=true,promtail.enabled=false,grafana.enabled=true,loki.persistence.enabled=true,loki.persistence.size=20Gi,loki.config.table_manager.retention_deletes_enabled=true,loki.config.table_manager.retention_period=7d"]
