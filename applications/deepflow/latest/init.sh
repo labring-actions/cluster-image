@@ -31,10 +31,3 @@ else
   chart_version=`helm search repo --versions --regexp "\v${repo_name}\v" |grep ${app_version} | awk '{print $2}' | sort -rn | head -n1`
   helm pull ${repo_name} --version=${chart_version} --untar -d charts/
 fi
-
-cat <<EOF >"Kubefile"
-FROM scratch
-COPY charts charts
-COPY registry registry
-CMD ["mv opt/deepflow-ctl /usr/bin/","helm upgrade -i deepflow charts/deepflow -n deepflow --create-namespace"]
-EOF
