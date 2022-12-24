@@ -58,7 +58,7 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
     head -n 1 ".versions/$K8S_MD.cached" >".versions/$K8S_MD.latest"
     cat ".versions/$K8S_MD.cached"
   )
-  touch ".versions/$K8S_MD"
+  [[ -s ".versions/$K8S_MD" ]] || cp ".versions/$K8S_MD.latest" ".versions/$K8S_MD"
   if [[ -z "$(cat ".versions/$K8S_MD")" ]]; then
     mv ".versions/$K8S_MD.latest" ".versions/$K8S_MD"
   fi
