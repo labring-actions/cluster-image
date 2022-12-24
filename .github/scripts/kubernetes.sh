@@ -200,7 +200,6 @@ cd "$ROOT" && {
   IMAGE_BUILD="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE:build-$(date +%s)"
   sed -i -E "s#^FROM .+#FROM $IMAGE_CACHE_NAME:kubernetes-v$KUBE-$ARCH#" Kubefile
   echo "COPY tmp/DefaultImageList images/shim/DefaultImageList" >>Kubefile
-  rm -rf tmp
   tree -L 5
   sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$ARCH" -f Kubefile .
   if [[ amd64 == "$ARCH" ]]; then
