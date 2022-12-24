@@ -25,4 +25,4 @@ fi
 chmod a+x init-kube.sh
 bash init-kube.sh
 
-logger "init containerd rootfs success"
+logger "init rootfs success"

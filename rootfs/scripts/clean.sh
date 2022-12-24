@@ -20,4 +20,4 @@ chmod a+x clean-shim.sh
 bash clean-kube.sh
 bash clean-shim.sh
 
-logger "clean containerd rootfs success"
+logger "clean rootfs success"
