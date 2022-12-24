@@ -28,7 +28,7 @@ mkdir -p .versions
 for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
   K8S_MD=${file##*/}
   if [[ docker == $CRI_TYPE ]]; then
-    case in $K8S_MD in
+    case $K8S_MD in
     CHANGELOG-1.1[5-7].md)
       continue
       ;;
