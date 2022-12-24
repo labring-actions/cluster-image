@@ -211,10 +211,10 @@ cd "$ROOT" && {
         export readonly SEALOS_RUN="failed"
         case $CRI_TYPE in
         containerd)
-          crictl ps -a || true
+          sudo crictl ps -a || true
         ;;
         docker)
-          docker ps -a || true
+          sudo docker ps -a || true
         ;;
         esac
         systemctl status $CRI_TYPE || true
