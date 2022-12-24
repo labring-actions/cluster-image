@@ -49,7 +49,11 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
     until curl -sL "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/$K8S_MD"; do sleep 3; done |
       grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' >".versions/$K8S_MD.cached"
     head -n 1 ".versions/$K8S_MD.cached" >".versions/$K8S_MD.latest"
-    cat ".versions/$K8S_MD.cached"
+    if [[ docker == $CRI_TYPE ]]; then
+      grep -vE "v1\.1(5-7)\..+" ".versions/$K8S_MD.cached"
+    else
+      cat ".versions/$K8S_MD.cached"
+    fi
   )
   touch ".versions/$K8S_MD"
   if [[ -z "$(cat ".versions/$K8S_MD")" ]]; then
@@ -63,10 +67,6 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
       awk '{printf "{\"'version'\":\"%s\",\"'arch'\":\"amd64\"},{\"'version'\":\"%s\",\"'arch'\":\"arm64\"},",$1,$1}' >>.versions/versions_arch.txt
   fi
 done
-if [[ docker == $CRI_TYPE ]]; then
-  grep -vE "v1\.1(5-7)\..+" .versions/versions_arch.txt >"$0"
-  mv -f "$0" .versions/versions_arch.txt
-fi
 SET_MATRIX=$(cat .versions/versions_arch.txt)
 echo "{\"include\":[${SET_MATRIX%?}]}" | yq -P
 echo "matrix={\"include\":[${SET_MATRIX%?}]}" >> $GITHUB_OUTPUT
