@@ -49,12 +49,13 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
     until curl -sL "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/$K8S_MD"; do sleep 3; done |
       grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' >".versions/$K8S_MD.cached"
     head -n 1 ".versions/$K8S_MD.cached" >".versions/$K8S_MD.latest"
-    cat ".versions/$K8S_MD.cached"
+    if [[ docker == $CRI_TYPE ]]; then
+      grep -vE "v1\.1(5-7)\..+" ".versions/$K8S_MD.cached"
+    else
+      cat ".versions/$K8S_MD.cached"
+    fi
   )
   touch ".versions/$K8S_MD"
-  if [[ -z "$(cat ".versions/$K8S_MD")" ]]; then
-    mv ".versions/$K8S_MD.latest" ".versions/$K8S_MD"
-  fi
   if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
     cut -dv -f 2 ".versions/$K8S_MD" | head -n 1 |
       awk '{printf "{\"'version'\":\"%s\"},",$1}' >>.versions/versions.txt
