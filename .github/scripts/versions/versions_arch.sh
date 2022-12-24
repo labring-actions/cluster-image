@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 readonly CRI_TYPE=${criType?}
 
