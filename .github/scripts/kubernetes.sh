@@ -209,9 +209,16 @@ cd "$ROOT" && {
       sudo systemctl unmask containerd docker || true
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
-        docker ps -a || crictl ps -a || true
-        systemctl status docker || systemctl status containerd || true
-        journalctl -xeu docker || journalctl -xeu containerd || true
+        case $CRI_TYPE in
+        containerd)
+          crictl ps -a || true
+        ;;
+        docker)
+          docker ps -a || true
+        ;;
+        esac
+        systemctl status $CRI_TYPE || true
+        journalctl -xeu $CRI_TYPE || true
         systemctl status kubelet || true
         journalctl -xeu kubelet || true
       else
