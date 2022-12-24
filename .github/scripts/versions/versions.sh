@@ -27,6 +27,13 @@ rm -rf .versions
 mkdir -p .versions
 for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
   K8S_MD=${file##*/}
+  if [[ docker == $CRI_TYPE ]]; then
+    case in $K8S_MD in
+    CHANGELOG-1.1[5-7].md)
+      continue
+      ;;
+    esac
+  fi
   while IFS= read vKUBE; do
     if [[ "$allBuild" == true ]]; then
       echo "$vKUBE" >>".versions/$K8S_MD"
@@ -49,11 +56,7 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
     until curl -sL "https://github.com/kubernetes/kubernetes/raw/master/CHANGELOG/$K8S_MD"; do sleep 3; done |
       grep -E '^- \[v[0-9\.]+\]' | awk '{print $2}' | awk -F\[ '{print $2}' | awk -F\] '{print $1}' >".versions/$K8S_MD.cached"
     head -n 1 ".versions/$K8S_MD.cached" >".versions/$K8S_MD.latest"
-    if [[ docker == $CRI_TYPE ]]; then
-      grep -vE "v1\.1(5-7)\..+" ".versions/$K8S_MD.cached"
-    else
-      cat ".versions/$K8S_MD.cached"
-    fi
+    cat ".versions/$K8S_MD.cached"
   )
   touch ".versions/$K8S_MD"
   if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
