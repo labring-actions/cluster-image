@@ -64,8 +64,8 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
   fi
 done
 if [[ docker == $CRI_TYPE ]]; then
-  grep -vE "v1\.1(5-7)\..+" .versions/versions_arch.txt >"$0"
-  mv -f "$0" .versions/versions_arch.txt
+  grep -vE "v1\.1(5-7)\..+" .versions/versions.txt >"$0"
+  mv -f "$0" .versions/versions.txt
 fi
 SET_MATRIX=$(cat .versions/versions.txt)
 echo "{\"include\":[${SET_MATRIX%?}]}" | yq -P
