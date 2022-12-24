@@ -58,7 +58,7 @@ for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
     head -n 1 ".versions/$K8S_MD.cached" >".versions/$K8S_MD.latest"
     cat ".versions/$K8S_MD.cached"
   )
-  touch ".versions/$K8S_MD"
+  [[ -s ".versions/$K8S_MD" ]] || cp ".versions/$K8S_MD.latest" ".versions/$K8S_MD"
   if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
     cut -dv -f 2 ".versions/$K8S_MD" | head -n 1 |
       awk '{printf "{\"'version'\":\"%s\"},",$1}' >>.versions/versions.txt
