@@ -249,7 +249,7 @@ cd "$ROOT" && {
       sudo buildah inspect "$IMAGE_BUILD" | yq .Docker.architecture | grep "$ARCH"; then
       echo -n >"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
       for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
-        if [[ "$allBuild" != true ]] || [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]]; then
+        if [[ "$allBuild" != true ]]; then
           case $IMAGE_HUB_REGISTRY in
           docker.io)
             if until curl -sL "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/${IMAGE_NAME##*:}"; do sleep 3; done |
