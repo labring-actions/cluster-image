@@ -27,13 +27,11 @@ rm -rf .versions
 mkdir -p .versions
 for file in $(pwd)/.github/versions/${part:-*}/CHANGELOG*; do
   K8S_MD=${file##*/}
-  if [[ docker == $CRI_TYPE ]]; then
-    case $K8S_MD in
-    CHANGELOG-1.1[5-7].md)
-      continue
-      ;;
-    esac
-  fi
+  case $K8S_MD in
+  CHANGELOG-1.1[5-7].md)
+    continue
+    ;;
+  esac
   while IFS= read vKUBE; do
     if [[ "$allBuild" == true ]]; then
       echo "$vKUBE" >>".versions/$K8S_MD"
