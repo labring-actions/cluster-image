@@ -72,6 +72,7 @@ else
   fi
 fi
 
+until [[ $(sudo buildah images | grep -c "$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$IMAGE_KUBE") -eq ${#IMAGE_PUSH_NAME[@]} ]]; do
 for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
   sudo buildah manifest create "$IMAGE_NAME"
   sudo buildah manifest add "$IMAGE_NAME" docker://"$IMAGE_NAME-amd64"
@@ -84,6 +85,8 @@ for IMAGE_NAME in "${IMAGE_PUSH_NAME[@]}"; do
     sudo buildah login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
       sudo buildah manifest push --all "$IMAGE_NAME" docker://"$IMAGE_NAME" && echo "$IMAGE_NAME push success"
   fi
+done
+sleep 3
 done
 
 sudo buildah images

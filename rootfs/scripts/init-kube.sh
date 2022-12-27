@@ -47,7 +47,6 @@ disable_selinux
 
 chmod -R 755 ../bin/*
 chmod 644 ../bin
-rm -f ../bin/kubeImageList
 cp -a ../bin/* /usr/bin
 cp -a  ../scripts/kubelet-pre-start.sh /usr/bin
 cp -a ../scripts/kubelet-post-stop.sh /usr/bin
