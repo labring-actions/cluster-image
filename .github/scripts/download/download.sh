@@ -4,7 +4,7 @@ set -e
 
 readonly ARCH=amd64
 readonly SEALOS=${sealoslatest:-$(
-  until curl -sL "https://api.github.com/repos/labring/sealos/releases/latest"; do sleep 3; done | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
+  until curl -sL "https://api.github.com/repos/labring/sealos/releases/latest" | grep tarball_url; do sleep 3; done | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
 )}
 readonly IMAGE_CACHE_NAME="ghcr.io/labring-actions/cache"
 readonly ROOT="/tmp/$(whoami)/bin"
