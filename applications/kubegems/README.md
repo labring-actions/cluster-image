@@ -14,7 +14,20 @@ sealos run \
   labring/kubegems:v1.21.4
 ```
 
-v1.22.0
+v1.22.2
+
+```
+sealos run \
+  --masters xxx --nodes xxx -p xxx \
+  labring/kubernetes:v1.23.10 \
+  labring/helm:v3.8.2 \
+  labring/calico:v3.22.1 \
+  labring/coredns:v0.0.1 \
+  labring/openebs:v1.9.0 \
+  labring/kubegems:v1.22.2
+```
+
+v1.22.2  (optional: with AI Serving framework)
 
 ```
 sealos run \
@@ -27,17 +40,25 @@ sealos run \
   labring/kubegems:v1.22.0-ai1 \
   labring/kubegems:v1.22.0-ai2 \
   labring/kubegems:v1.22.0-sealos-part3 \
-  labring/kubegems:v1.22.0
+  labring/kubegems:v1.22.2
 ```
 
 ## how to use
 
+
+### [KubeGems installation with SealOS Online](https://www.kubegems.io/docs/installation/kubegems-install/sealos)
+
+### [KubeGems installation with SealOS Offline](https://www.kubegems.io/docs/installation/kubegems-install/offline)
+
+### Manual installation 
+  
 Start kubegems with one click:
 1. install sealos
 ```
 wget https://github.com/labring/sealos/releases/download/v4.1.3/sealos_4.1.3_linux_amd64.tar.gz \
    && tar zxvf sealos_4.1.3_linux_amd64.tar.gz sealos && chmod +x sealos && mv sealos /usr/bin
 ```
+
 2. install kubegems with k8s
 ```
 sealos run \
@@ -47,8 +68,9 @@ sealos run \
   labring/calico:v3.22.1 \
   labring/coredns:v0.0.1 \
   labring/openebs:v1.9.0 \
-  labring/kubegems:v1.21.4
+  labring/kubegems:v1.22.2
 ```
+
 3. print success info
 
 ```
