@@ -14,7 +14,7 @@ cd charts && {
   wget -qO- "https://github.com/projectcalico/$NAME/releases/download/$VERSION/tigera-operator-$VERSION.tgz" | tar -zx
   mv tigera-operator "$NAME"
   find . -type f -name "*.tmpl" -exec mv -v {} {}.bak \;
-  yq '.installation.calicoNetwork.nodeAddressAutodetectionV4.interface="eth.*|en.*"' --inplace "$NAME/values.yaml"
+  yq e -n '.installation.calicoNetwork.nodeAddressAutodetectionV4.interface="eth.*|en.*"' > "calico.values.yaml"
   cat <<EOF >"$NAME/Images"
 docker.io/calico/apiserver:$VERSION
 docker.io/calico/cni:$VERSION
@@ -32,5 +32,5 @@ EOF
 
 if [[ -s "charts/$NAME/Images" ]]; then
   mkdir -p images/shim
-  mv "charts/$NAME/Images" "images/shim/${NAME}Images"
+  cp "charts/$NAME/Images" "images/shim/${NAME}Images"
 fi

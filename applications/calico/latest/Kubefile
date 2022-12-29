@@ -1,3 +1,3 @@
 FROM scratch
 COPY . .
-CMD ["helm upgrade -i calico charts/calico -n tigera-operator --create-namespace"]
+CMD ["helm upgrade -i calico charts/calico -f charts/calico.values.yaml -n tigera-operator --create-namespace"]
