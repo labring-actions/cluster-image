@@ -22,7 +22,6 @@ if ! command_exists cri-docker; then
   systemctl enable cri-docker.service
   systemctl restart cri-docker.service
 fi
-tar zxvf ../cri/crictl.tar.gz -C /usr/bin
 systemctl daemon-reload
 systemctl restart cri-docker.service
 check_status cri-docker

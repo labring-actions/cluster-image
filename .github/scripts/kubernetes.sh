@@ -114,7 +114,11 @@ cd "$ROOT" && {
   docker)
     case $KUBE in
     1.*.*)
-      sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+      if [[ "${kube_major//./}" -ge 126 ]]; then
+        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+      else
+        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgzv125 cri/cri-dockerd.tgz
+      fi
       docker_major=$(until curl -sL "https://github.com/kubernetes/kubernetes/raw/release-${KUBE%.*}/build/dependencies.yaml" | yq '.dependencies[]|select(.name == "docker")|.version'; do sleep 30; done)
       case $docker_major in
       18.09 | 19.03)
@@ -126,10 +130,10 @@ cd "$ROOT" && {
       esac
       ;;
     esac
-    sudo cp -a "$MOUNT_CRIO"/cri/crictl.tar.gz cri/
     ;;
   esac
 
+  sudo tar -xzf "$MOUNT_CRIO"/cri/crictl.tar.gz -C bin/
   sudo cp -a "$MOUNT_KUBE"/bin/kubeadm bin/
   sudo cp -a "$MOUNT_KUBE"/bin/kubectl bin/
   sudo cp -a "$MOUNT_KUBE"/bin/kubelet bin/
@@ -207,10 +211,10 @@ cd "$ROOT" && {
         case $CRI_TYPE in
         containerd)
           sudo crictl ps -a || true
-        ;;
+          ;;
         docker)
           sudo docker ps -a || true
-        ;;
+          ;;
         esac
         systemctl status $CRI_TYPE || true
         journalctl -xeu $CRI_TYPE || true
