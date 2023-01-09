@@ -74,36 +74,12 @@ cp -a "$CRI_TYPE"/* "$ROOT"
 cp -a registry/* "$ROOT"
 
 cd "$ROOT" && {
-  mkdir -p bin
-  mkdir -p opt
+  mkdir -p bin cri opt
   mkdir -p registry
   mkdir -p images/shim
-  mkdir -p cri/lib64
-
-  # library
-  TARGZ="$PWD/library.tgz"
-  sudo cp -a "$MOUNT_CRI"/cri/library.tar.gz "$TARGZ"
-  sudo chown -R "$(whoami)" "$TARGZ"
-  {
-    pushd bin
-    tar -zxf "$TARGZ" library/bin --strip-components=2
-    popd
-    case $CRI_TYPE in
-    containerd)
-      cd cri/lib64 && {
-        tar -zxf "$TARGZ" library/lib64 --strip-components=2
-        mkdir -p lib
-        mv libseccomp.* lib
-        tar -czf containerd-lib.tar.gz lib
-        rm -rf lib
-        cd -
-      }
-      ;;
-    esac
-    rm -f "$TARGZ"
-  }
 
   # cri
+  sudo cp -a "$MOUNT_CRI"/cri/libseccomp.tar.gz cri/
   case $CRI_TYPE in
   containerd)
     sudo cp -a "$MOUNT_CRI"/cri/cri-containerd.tar.gz cri/
@@ -137,6 +113,7 @@ cd "$ROOT" && {
   sudo cp -a "$MOUNT_KUBE"/bin/kubeadm bin/
   sudo cp -a "$MOUNT_KUBE"/bin/kubectl bin/
   sudo cp -a "$MOUNT_KUBE"/bin/kubelet bin/
+  sudo cp -a "$MOUNT_CRI"/cri/conntrack bin/
   sudo cp -a "$MOUNT_CRI"/cri/registry cri/
   sudo cp -a "$MOUNT_CRI"/cri/lsof opt/
   if [[ -z "$sealosPatch" ]]; then

@@ -17,7 +17,7 @@ source common.sh
 registry_domain=${1:-sealos.hub}
 registry_port=${2:-5000}
 
-mkdir -p /opt/containerd && tar -zxf ../cri/lib64/containerd-lib.tar.gz -C /opt/containerd
+mkdir -p /opt/containerd && tar -zxf ../cri/libseccomp.tar.gz -C /opt/containerd
 echo "/opt/containerd/lib" > /etc/ld.so.conf.d/containerd.conf
 ldconfig
 [ -d  /etc/containerd/certs.d/ ] || mkdir /etc/containerd/certs.d/  -p
