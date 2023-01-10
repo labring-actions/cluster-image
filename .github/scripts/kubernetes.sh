@@ -202,7 +202,9 @@ cd "$ROOT" && {
         mkdir -p "$HOME/.kube"
         sudo cp -a /etc/kubernetes/admin.conf "$HOME/.kube/config"
         sudo chown "$(whoami)" "$HOME/.kube/config"
-        until ! kubectl get pods --all-namespaces | grep Pending; do
+        # shellcheck disable=SC2046
+        kubectl taint nodes $(kubectl get nodes --no-headers -l node-role.kubernetes.io/control-plane= | awk '{print $1}') node-role.kubernetes.io/master- || true
+        until ! kubectl get pods --no-headers --all-namespaces | grep -vE Running; do
           sleep 5
         done
         kubectl get pods -owide --all-namespaces
