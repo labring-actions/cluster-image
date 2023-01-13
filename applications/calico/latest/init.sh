@@ -15,7 +15,9 @@ cd charts && {
   mv tigera-operator "$NAME"
   find . -type f -name "*.tmpl" -exec mv -v {} {}.bak \;
   tigeraOperator_default=$(yq .tigeraOperator.version "$NAME/values.yaml")
-  tigeraOperator_version=$(until curl -sL "https://api.github.com/repos/tigera/operator/tags" | yq '.[].name' | grep -E "^v.+$" 2>/dev/null; do sleep 3; done | grep "${tigeraOperator_default%.*}" | head -n 1) yq '.tigeraOperator.version=strenv(tigeraOperator_version)' --inplace "$NAME/values.yaml"
+  until curl -sL "https://api.github.com/repos/tigera/operator/tags" | yq '.[].name' | grep -E "^v.+$" 2>/dev/null; do sleep 3; done >tigeraOperator.tags
+  tigeraOperator_version=$(grep "${tigeraOperator_default%.*}" tigeraOperator.tags | head -n 1 || head -n 1 tigeraOperator.tags) yq '.tigeraOperator.version=strenv(tigeraOperator_version)' --inplace "$NAME/values.yaml"
+  rm tigeraOperator.tags
   yq e -n '.installation.calicoNetwork.nodeAddressAutodetectionV4.interface="bond.*|eth.*|en.*"' >"calico.values.yaml"
   cat <<EOF >"$NAME/Images"
 docker.io/calico/apiserver:$VERSION
