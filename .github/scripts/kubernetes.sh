@@ -85,7 +85,9 @@ cd "$ROOT" && {
     sudo cp -a "$MOUNT_CRI"/cri/cri-containerd.tar.gz cri/
     ;;
   cri-o)
-    sudo cp -a "$MOUNT_CRIO"/cri/cri-o.tar.gz cri/
+    if [[ -s "$MOUNT_CRIO"/cri/cri-o.tar.gz ]]; then
+      sudo cp -a "$MOUNT_CRIO"/cri/cri-o.tar.gz cri/
+    fi
     ;;
   docker)
     case $KUBE in
