@@ -13,7 +13,7 @@ sealos run labring/openebs:v3.3.0
 Get pods status
 
 ```shell
-root@ubuntu:~# root@ubuntu:~# kubectl -n openebs get pods 
+$ kubectl -n openebs get pods 
 NAME                                          READY   STATUS    RESTARTS   AGE
 openebs-localpv-provisioner-7b4db8497-68xpr   1/1     Running   0          9m18s
 ```
@@ -21,7 +21,7 @@ openebs-localpv-provisioner-7b4db8497-68xpr   1/1     Running   0          9m18s
 Get StorageClass status
 
 ```shell
-root@ubuntu:~# kubectl get sc
+$ kubectl get sc
 NAME                         PROVISIONER        RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
 openebs-hostpath (default)   openebs.io/local   Delete          WaitForFirstConsumer   false                  9m22s
 ```
