@@ -29,7 +29,7 @@ Now it is ready to provide dynamic PV.
 
 ## Uninstall
 
-Uninstall with helm comand.
+Uninstall with helm command.
 
 ```shell
 helm -n openebs uninstall openebs
