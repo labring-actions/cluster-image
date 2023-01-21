@@ -1,0 +1,7 @@
+FROM scratch
+COPY charts charts
+COPY manifests manifests
+COPY opt opt
+COPY scripts scripts
+COPY registry registry
+CMD ["cp opt/jq /usr/local/bin","kubectl apply -f manifests/longhorn/ && bash scripts/environment_check.sh","helm upgrade -i longhorn charts/longhorn -n longhorn-system --create-namespace"]
