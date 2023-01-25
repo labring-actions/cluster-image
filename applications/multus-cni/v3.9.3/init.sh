@@ -7,4 +7,4 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 mkdir -p manifests
-wget -qP manifests/ https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/${VERSION}/deployments/multus-daemonset-thick.yml
+wget -qP manifests/ https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/v3.9.3/deployments/multus-daemonset-thick-plugin.yml
