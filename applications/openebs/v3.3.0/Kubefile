@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["helm upgrade -i openebs charts/openebs -n openebs --create-namespace --set localprovisioner.hostpathClass.isDefaultClass=true"]
