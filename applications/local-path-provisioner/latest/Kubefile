@@ -1,0 +1,4 @@
+FROM scratch
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i local-path-storage charts/local-path-provisioner -n local-path-storage --create-namespace"]

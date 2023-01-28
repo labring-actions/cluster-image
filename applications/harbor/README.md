@@ -1,20 +1,43 @@
-## Usage
+## Overview
 
-1. Install harbor
+This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster. 
 
-limitation: only support expose with nodeport, so you must provide one node ip of your kubernetes cluster.
+## Install
+
+1. Prerequisites:
+
+- default storageclass is ready in your cluster.
+- ingress-nginx is ready in your cluster, and expose with loadbalancer or hostnetwork.
+
+2. Install harbor
 
 ```shell
-sealos run labring/harbor:v2.6.1 --env NODE_IP=192.168.72.50
+$ sealos run labring/harbor:v2.7.0
 ```
 
-2. Access harbor in Brower, the default nodeport is 30003.
+Get pods status
+
+```
+$ kubectl -n harbor get pods
+```
+
+Get ingress rule
+
+```
+$ kubectl -n harbor get ingress
+```
+
+Notes: harbor defalut expose type is ingress with ingress-nginx.
+
+## Access harbor with UI
+
+Access harbor in Brower， default username and password is `admin/Harbor12345`.
 
 ```shell
-https://<node-ip>:30003
+https://core.harbor.domain
 ```
 
-3. Get harbor ca.crt
+## Access harbor with CLI
 
 Get ca.crt and copy it to your docker client nodes.
 
@@ -22,35 +45,34 @@ Get ca.crt and copy it to your docker client nodes.
 kubectl -n harbor get secrets harbor-nginx -o jsonpath="{.data.ca\.crt}" | base64 -d >ca.crt
 ```
 
-Create certs directory in docker client node, the `192.168.72.50` is your `NODE_IP`and `30003` is your nodePort.
+Create certs directory in docker client node
 
 ```shell
-mkdir -p /etc/docker/certs.d/192.168.72.50:30003/
+mkdir -p /etc/docker/certs.d/core.harbor.domain/
 ```
 
 Copy ca.crt to the directory
 
 ```shell
-scp ca.crt 192.168.72.15:/etc/docker/certs.d/192.168.72.50:30003/
+scp ca.crt /etc/docker/certs.d/core.harbor.domain/
 ```
 
 Login harbor
 
 ```shell
-docker login -u admin -p Harbor12345 https://192.168.72.50:30003
+docker login -u admin -p Harbor12345 https://core.harbor.domain
 ```
 
 Push images
 
 ```shell
-docker tag coredns/coredns:1.9.1 192.168.72.50:30003/library/coredns:1.9.1
-docker push 192.168.72.50:30003/library/coredns:1.9.1
+docker tag coredns/coredns:1.9.1 core.harbor.domain/library/coredns:1.9.1
+docker push core.harbor.domain/library/coredns:1.9.1
 ```
 
-## Custome nodePort
-
-Custome `INGRESS_CLASS_NAME` with deferente ingress controller, you can use `-f` option to force update your application.
+## Uninstall
 
 ```shell
-sealos run -f labring/harbor:v2.6.1 --env NODE_IP=192.168.72.50 --env NODE_PORT=30010
+helm -n harbor uninstall harbor
 ```
+

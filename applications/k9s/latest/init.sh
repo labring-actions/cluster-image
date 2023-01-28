@@ -7,6 +7,5 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 mkdir opt
-wget -qO- "https://github.com/derailed/k9s/releases/download/${VERSION}/k9s_Linux_${ARCH}.tar.gz" |
-  tar -zx -C opt
+wget -qO- "https://github.com/derailed/k9s/releases/download/${VERSION}/k9s_Linux_${ARCH}.tar.gz" | tar -xz -C opt
 chmod a+x opt/k9s
