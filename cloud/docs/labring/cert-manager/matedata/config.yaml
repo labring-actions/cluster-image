@@ -1,0 +1,26 @@
+apiVersion: imagehub.sealos.io/v1
+kind: Image
+metadata:
+  name: labring.cert-manager.v1.8.0-arm64
+spec:
+  name: labring/cert-manager:v1.8.0-arm64
+  detail:
+    keywords: [ Network, Kubernetes, Storage ]
+    description: Cloud native certificate management. X.509 certificate management for Kubernetes and OpenShift
+    icon: https://cert-manager.io/images/cert-manager-logo-icon.svg
+    docs: |
+      # Cert-manager
+
+      ## Basic sealos cluster installation
+
+      Refer to [Cluster installation Kubernetes](https://www.sealos.io/docs/getting-started/kuberentes-life-cycle)
+
+
+      ## How to install
+
+      run command
+      ```shell
+      sealos run labring/cert-manager:v1.8.0
+      ```
+
+      For more information, please visit [the official website](https://cert-manager.io/)
