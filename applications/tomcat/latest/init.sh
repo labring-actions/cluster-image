@@ -6,10 +6,11 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://kubernetes-sigs.github.io/metrics-server"
-repo_name="metrics-server/metrics-server"
-chart_name="metrics-server"
+repo_url="https://charts.bitnami.com/bitnami"
+repo_name="bitnami/tomcat"
+chart_name="tomcat"
 
 helm repo add ${chart_name} $repo_url
 chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
 helm pull ${repo_name} --version=${chart_version} -d charts --untar
+yq e -i '.service.type="NodePort"' charts/tomcat/values.yaml
