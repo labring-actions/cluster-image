@@ -183,8 +183,10 @@ cd "$ROOT" && {
   if [[ amd64 == "$ARCH" ]]; then
     if ! [[ "$SEALOS" =~ ^[0-9\.]+[0-9]$ ]] || [[ -n "$sealosPatch" ]]; then
       dpkg-query --search "$(command -v containerd)" "$(command -v docker)"
-      sudo apt-get remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine
+      sudo apt-get remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine >/dev/null
       sudo systemctl unmask containerd docker || true
+      sudo mkdir -p /sys/fs/cgroup/systemd
+      sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
         case $CRI_TYPE in
@@ -199,6 +201,7 @@ cd "$ROOT" && {
         journalctl -xeu $CRI_TYPE || true
         systemctl status kubelet || true
         journalctl -xeu kubelet || true
+        exit $ERR_CODE
       else
         export readonly SEALOS_RUN="succeed"
         mkdir -p "$HOME/.kube"
