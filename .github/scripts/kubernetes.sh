@@ -90,22 +90,18 @@ cd "$ROOT" && {
     fi
     ;;
   docker)
-    case $KUBE in
-    1.*.*)
-      if [[ "${kube_major//./}" -ge 126 ]]; then
-        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
-      else
-        sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgzv125 cri/cri-dockerd.tgz
-      fi
-      docker_major=$(until curl -sL "https://github.com/kubernetes/kubernetes/raw/release-${KUBE%.*}/build/dependencies.yaml" | yq '.dependencies[]|select(.name == "docker")|.version'; do sleep 30; done)
-      case $docker_major in
-      18.09 | 19.03)
-        sudo cp -a "$MOUNT_CRI/cri/docker-19.03.tgz" cri/docker.tgz
-        ;;
-      20.10 | *)
-        sudo cp -a "$MOUNT_CRI/cri/docker.tgz" cri/
-        ;;
-      esac
+    if [[ "${kube_major//./}" -ge 126 ]]; then
+      sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgz cri/
+    else
+      sudo cp -a "$MOUNT_CRI"/cri/cri-dockerd.tgzv125 cri/cri-dockerd.tgz
+    fi
+    docker_major=$(until curl -sL "https://github.com/kubernetes/kubernetes/raw/release-${KUBE%.*}/build/dependencies.yaml" | yq '.dependencies[]|select(.name == "docker")|.version'; do sleep 3; done)
+    case $docker_major in
+    18.09 | 19.03 | 20.10)
+      sudo cp -a "$MOUNT_CRI/cri/docker-$docker_major.tgz" cri/docker.tgz
+      ;;
+    *)
+      sudo cp -a "$MOUNT_CRI/cri/docker.tgz" cri/
       ;;
     esac
     ;;
@@ -134,10 +130,6 @@ cd "$ROOT" && {
   echo "$ipvsImage" >images/shim/LvscareImageList
 
   # replace
-  cri_shim_tmpl="etc/image-cri-shim.yaml.tmpl"
-  if [[ "${sealos_major//./}" -le 413 ]] && [[ -z "$sealosPatch" ]]; then
-    sed -i -E "s#.+v1.+v1alpha2.+#sync: 0#g" "$cri_shim_tmpl"
-  fi
   sed -i "s#__lvscare__#$ipvsImage#g;s/v0.0.0/v$KUBE/g" "Kubefile"
   pauseImage=$(sudo grep /pause: "$MOUNT_KUBE/images/shim/DefaultImageList")
   pauseImageName=${pauseImage#*/}
@@ -186,7 +178,7 @@ cd "$ROOT" && {
       sudo apt-get remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine >/dev/null
       sudo systemctl unmask containerd docker || true
       sudo mkdir -p /sys/fs/cgroup/systemd
-      sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
+      sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd || true
       if ! sudo sealos run "$IMAGE_BUILD" --single; then
         export readonly SEALOS_RUN="failed"
         case $CRI_TYPE in
