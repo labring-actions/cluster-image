@@ -1,0 +1,22 @@
+apiVersion: imagehub.sealos.io/v1
+kind: Image
+metadata:
+  name: labring.calico.v3.25.0-arm64
+spec:
+  name: labring/calico:v3.25.0-arm64
+  detail:
+    keywords: [ Network ]
+    description: Calico is an open source networking and network security solution for containers, virtual machines, and native host-based workloads. Calico supports a broad range of platforms including Kubernetes, OpenShift, Mirantis Kubernetes Engine (MKE), OpenStack, and bare metal services.
+    icon: https://projectcalico.docs.tigera.io/images/felix_icon.png
+    docs: |
+      # Calico
+
+      ## Basic sealos cluster installation
+
+      Refer to [Cluster installation Kubernetes](https://www.sealos.io/docs/getting-started/kuberentes-life-cycle)
+
+      ## How to build
+
+      Refer to [Build Calico image](https://www.sealos.io/docs/examples/build-calico-image)
+
+      For more information, please visit [the official website](https://projectcalico.docs.tigera.io/about/about-calico/)

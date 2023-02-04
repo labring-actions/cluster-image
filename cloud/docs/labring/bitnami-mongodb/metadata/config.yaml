@@ -1,0 +1,28 @@
+apiVersion: imagehub.sealos.io/v1
+kind: Image
+metadata:
+  name: labring.bitnami-mongodb.6.0.2-arm64
+spec:
+  name: labring/bitnami-mongodb:6.0.2-arm64
+  detail:
+    keywords: [ Database ]
+    description: MongoDB is a scalable, high-performance, and document-oriented NoSQL database system. It stores data in JSON, allowing for flexible and dynamic schemas. It is used by some of the largest companies in the world and tuned to deliver high performance without any loss of flexibility.
+    icon: https://avatars.githubusercontent.com/u/5446553?s=200&v=4
+    docs: |
+      # bitnami-mongodb
+
+      ## Basic sealos cluster installation
+
+      Refer to [Cluster installation Kubernetes](https://www.sealos.io/docs/getting-started/kuberentes-life-cycle)
+
+      ## Usage
+      ```
+      sealos run labring/bitnami-mongodb:6.0.2
+      ```
+
+      ## How to build
+      ```
+      sealos build -t labring/bitnami-mongodb:6.0.2 .
+      ```
+
+      For more information, please visit [the official website](https://bitnami.com/stack/mongodb)
