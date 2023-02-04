@@ -44,11 +44,19 @@ spec:
           volumeMounts:
             - name: cni-plugin-sealos
               mountPath: /opt/cni/bin
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "15Mi"
       containers:
         - name: sleep
           image: busybox:1.35.0
           command: [ "/bin/sh" ]
           args: [ "-c", "sleep 3600 && ls -l /opt/cni/bin" ]
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "15Mi"
           volumeMounts:
             - name: cni-plugin-sealos
               mountPath: /opt/cni/bin
