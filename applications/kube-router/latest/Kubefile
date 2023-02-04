@@ -1,0 +1,5 @@
+FROM scratch
+COPY manifests manifests
+COPY opt opt
+COPY registry registry
+CMD ["mkdir -p /opt/cni/bin && sealos scp opt/ /opt/cni/bin/","KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f manifests/kubeadm-kuberouter-all-features.yaml"]
