@@ -1,0 +1,49 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kube-cni
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cni-plugin-ds
+  namespace: kube-cni
+  labels:
+    app: cni-plugin
+spec:
+  template:
+    metadata:
+      labels:
+        app: cni-plugin
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: install-cni-plugin-sealos
+          image: docker.io/labring/docker-cni-plugins:v1.1.1
+          command: ["/bin/sh"]
+          args: ["-c", "cp -f /cni-plugins/* /opt/cni/bin/"]
+          volumeMounts:
+            - name: cni-plugin-sealos
+              mountPath: /opt/cni/bin
+      volumes:
+        - name: cni-plugin-sealos
+          hostPath:
+            path: /opt/cni/bin
+  parallelism: 1
+  completions: 1
+  backoffLimit: 1
