@@ -6,14 +6,17 @@ metadata:
   labels:
     pod-security.kubernetes.io/enforce: privileged
 ---
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: DaemonSet
 metadata:
   name: cni-plugin-ds
   namespace: kube-cni
   labels:
     app: cni-plugin
 spec:
+  selector:
+    matchLabels:
+      app: cni-plugin
   template:
     metadata:
       labels:
@@ -28,11 +31,12 @@ spec:
                     operator: In
                     values:
                       - linux
+      hostNetwork: true
       priorityClassName: system-node-critical
       tolerations:
         - operator: Exists
           effect: NoSchedule
-      containers:
+      initContainers:
         - name: install-cni-plugin-sealos
           image: docker.io/labring/docker-cni-plugins:v1.1.1
           command: ["/bin/sh"]
@@ -40,10 +44,15 @@ spec:
           volumeMounts:
             - name: cni-plugin-sealos
               mountPath: /opt/cni/bin
+      containers:
+        - name: sleep
+          image: busybox:1.35.0
+          command: [ "/bin/sh" ]
+          args: [ "-c", "sleep 3600 && ls -l /opt/cni/bin" ]
+          volumeMounts:
+            - name: cni-plugin-sealos
+              mountPath: /opt/cni/bin
       volumes:
         - name: cni-plugin-sealos
           hostPath:
             path: /opt/cni/bin
-  parallelism: 1
-  completions: 1
-  backoffLimit: 1
