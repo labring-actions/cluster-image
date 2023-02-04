@@ -38,6 +38,24 @@ debug() {
   echo -e "\033[32m DEBUG [$flag] >> $* \033[0m"
 }
 
+check_service() {
+  local action=$1
+  shift
+  systemctl daemon-reload
+  case $action in
+  start)
+    systemctl enable "$@"
+    ;;
+  stop)
+    systemctl disable "$@"
+    ;;
+  *)
+    error "service action error, only start/stop."
+    ;;
+  esac
+  systemctl "$action" "$@"
+}
+
 check_status() {
   for unit; do
     logger "Health check $unit!"
