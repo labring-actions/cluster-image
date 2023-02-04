@@ -27,7 +27,7 @@ config="$CONFIG/registry_config.yml"
 [ -d $CONFIG ] || mkdir $CONFIG
 
 cp ../etc/registry_config.yml $config
-[ -f ../etc/registry_htpasswd  ] && cp  ../etc/registry_htpasswd $htpasswd
+[ -f ../etc/registry_htpasswd ] && cp ../etc/registry_htpasswd $htpasswd
 
 cp -rf ../etc/registry.service /etc/systemd/system/
 chmod -R 755 ../cri

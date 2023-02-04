@@ -16,17 +16,13 @@
 source common.sh
 # Install docker
 iptables -P FORWARD ACCEPT
-chmod a+x init-docker.sh
-bash init-docker.sh
 
-if [ $? != 0 ]; then
-   error "====init docker failed!===="
+if ! bash init-docker.sh; then
+  error "====init docker failed!===="
 fi
 
-chmod a+x init-cri-dockerd.sh
-bash init-cri-dockerd.sh
-if [ $? != 0 ]; then
-   error "====init cri dockerd failed!===="
+if ! bash init-cri-dockerd.sh; then
+  error "====init cri-dockerd failed!===="
 fi
 
-logger "init docker  success"
+logger "init docker success"

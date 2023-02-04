@@ -26,4 +26,3 @@ systemctl daemon-reload
 systemctl restart cri-docker.service
 check_status cri-docker
 logger "init docker success"
-

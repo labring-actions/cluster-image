@@ -22,14 +22,14 @@ modprobe -- ip_vs_sh
 modprobe -- br_netfilter
 modprobe -- bridge
 
-version_ge(){
-    test "$(echo "$@" | tr ' ' '\n' | sort -rV | head -n 1)" == "$1"
+version_ge() {
+  test "$(echo "$@" | tr ' ' '\n' | sort -rV | head -n 1)" == "$1"
 }
-disable_selinux(){
-    if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
-        sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
-        setenforce 0
-    fi
+disable_selinux() {
+  if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
+    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    setenforce 0
+  fi
 }
 
 kernel_version=$(uname -r | cut -d- -f1)
@@ -39,7 +39,7 @@ else
   modprobe -- nf_conntrack_ipv4
 fi
 
-cat <<EOF >  /etc/sysctl.d/k8s.conf
+cat <<EOF >/etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.conf.all.rp_filter=0

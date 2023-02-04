@@ -18,5 +18,5 @@ REGISTRY_USERNAME=${3:-}
 REGISTRY_PASSWORD=${4:-}
 SANDBOX_IMAGE=${5:-}
 
-docker login --username  ${REGISTRY_USERNAME}  --password ${REGISTRY_PASSWORD} ${REGISTRY_DOMAIN}:${REGISTRY_PORT}
+docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD} ${REGISTRY_DOMAIN}:${REGISTRY_PORT}
 crictl pull k8s.gcr.io/${SANDBOX_IMAGE}

@@ -34,7 +34,7 @@ rm -rf /etc/cni/net.d/10-crio-bridge.conf
 cp ../etc/99-crio.conf /etc/crio/crio.conf.d/
 base64pwd=$(echo -n "${registry_username}:${registry_password}" | base64)
 logger "username: $registry_username, password: $registry_password, base64pwd: $base64pwd"
-cat > /etc/crio/config.json << eof
+cat >/etc/crio/config.json <<eof
 {
         "auths": {
                 "$registry_domain:$registry_port": {

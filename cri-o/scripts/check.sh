@@ -13,13 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 source common.sh
 storage=${1:-/var/lib/registry}
 
 check_port_inuse
 if command_exists docker; then
-    error "Please using docker image: labring/kubernetes-docker:v1.23.10 or uninstall docker retry"
+  error "Please using docker image: labring/kubernetes-docker:v1.23.10 or uninstall docker retry"
 fi
 check_cmd_exits crio
 check_file_exits /var/run/crio/crio.sock

@@ -15,17 +15,17 @@
 
 source common.sh
 if ! command_exists docker; then
-  lsb_dist=$( get_distribution )
+  lsb_dist=$(get_distribution)
   lsb_dist="$(echo "$lsb_dist" | tr '[:upper:]' '[:lower:]')"
   echo "current system is $lsb_dist"
   case "$lsb_dist" in
-    alios)
-      ip link add name docker0 type bridge
-      ip addr add dev docker0 172.17.0.1/16
+  alios)
+    ip link add name docker0 type bridge
+    ip addr add dev docker0 172.17.0.1/16
     ;;
   esac
 
-  [ -d  /etc/docker/ ] || mkdir /etc/docker/  -p
+  [ -d /etc/docker/ ] || mkdir /etc/docker/ -p
   cp ../etc/docker.service /etc/systemd/system/
   chmod -R 755 ../cri
   tar --strip-components=1 -zxvf ../cri/docker.tgz -C /usr/bin
@@ -39,4 +39,3 @@ systemctl daemon-reload
 systemctl restart docker.service
 check_status docker
 logger "init docker success"
-

@@ -13,19 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 source common.sh
 storage=${1:-/var/lib/registry}
 
 check_port_inuse
 if command_exists docker; then
-    error "docker already exist, uninstall docker and retry"
+  error "docker already exist, uninstall docker and retry"
 fi
 check_cmd_exits docker
 check_file_exits /var/run/docker.sock
 check_file_exits $storage
 if ! command_exists apparmor_parser; then
-    sed -i 's/disable_apparmor = false/disable_apparmor = true/g' ../etc/config.toml
-    warn "Replace disable_apparmor = false to disable_apparmor = true"
+  sed -i 's/disable_apparmor = false/disable_apparmor = true/g' ../etc/config.toml
+  warn "Replace disable_apparmor = false to disable_apparmor = true"
 fi
 logger "check root,port,cri success"

@@ -13,11 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 source common.sh
 storage=${1:-/var/lib/registry}
 if command_exists containerd && ! command_exists docker; then
-    error "containerd already exist, uninstall containerd and retry"
+  error "containerd already exist, uninstall containerd and retry"
 fi
 check_port_inuse
 check_file_exits $storage

@@ -21,46 +21,46 @@ rules:
   # The following requests were manually identified as high-volume and low-risk,
   # so drop them.
   - level: None
-    users: ["system:kube-proxy"]
-    verbs: ["watch"]
+    users: [ "system:kube-proxy" ]
+    verbs: [ "watch" ]
     resources:
       - group: "" # core
-        resources: ["endpoints", "services"]
+        resources: [ "endpoints", "services" ]
   - level: None
-    users: ["system:unsecured"]
-    namespaces: ["kube-system"]
-    verbs: ["get"]
+    users: [ "system:unsecured" ]
+    namespaces: [ "kube-system" ]
+    verbs: [ "get" ]
     resources:
       - group: "" # core
-        resources: ["configmaps"]
+        resources: [ "configmaps" ]
   - level: None
-    users: ["kubelet"] # legacy kubelet identity
-    verbs: ["get"]
+    users: [ "kubelet" ] # legacy kubelet identity
+    verbs: [ "get" ]
     resources:
       - group: "" # core
-        resources: ["nodes"]
+        resources: [ "nodes" ]
   - level: None
-    userGroups: ["system:nodes"]
-    verbs: ["get"]
+    userGroups: [ "system:nodes" ]
+    verbs: [ "get" ]
     resources:
       - group: "" # core
-        resources: ["nodes"]
+        resources: [ "nodes" ]
   - level: None
     users:
       - system:kube-controller-manager
       - system:kube-scheduler
       - system:serviceaccount:kube-system:endpoint-controller
-    verbs: ["get", "update"]
-    namespaces: ["kube-system"]
+    verbs: [ "get", "update" ]
+    namespaces: [ "kube-system" ]
     resources:
       - group: "" # core
-        resources: ["endpoints"]
+        resources: [ "endpoints" ]
   - level: None
-    users: ["system:apiserver"]
-    verbs: ["get"]
+    users: [ "system:apiserver" ]
+    verbs: [ "get" ]
     resources:
       - group: "" # core
-        resources: ["namespaces"]
+        resources: [ "namespaces" ]
   # Don't log these read-only URLs.
   - level: None
     nonResourceURLs:
@@ -71,18 +71,18 @@ rules:
   - level: None
     resources:
       - group: "" # core
-        resources: ["events"]
+        resources: [ "events" ]
   # Secrets, ConfigMaps, and TokenReviews can contain sensitive & binary data,
   # so only log at the Metadata level.
   - level: Metadata
     resources:
       - group: "" # core
-        resources: ["secrets", "configmaps"]
+        resources: [ "secrets", "configmaps" ]
       - group: authentication.k8s.io
-        resources: ["tokenreviews"]
+        resources: [ "tokenreviews" ]
   # Get repsonses can be large; skip them.
   - level: Request
-    verbs: ["get", "list", "watch"]
+    verbs: [ "get", "list", "watch" ]
     resources:
       - group: "" # core
       - group: "admissionregistration.k8s.io"

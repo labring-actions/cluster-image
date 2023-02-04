@@ -15,14 +15,12 @@
 
 source common.sh
 
-chmod a+x init-shim.sh
-bash init-shim.sh
-
-if [ $? != 0 ]; then
-   error "====init image-cri-shim failed!===="
+if ! bash init-shim.sh; then
+  error "====init image-cri-shim failed!===="
 fi
 
-chmod a+x init-kube.sh
-bash init-kube.sh
+if ! bash init-kube.sh; then
+  error "====init kubelet failed!===="
+fi
 
 logger "init rootfs success"

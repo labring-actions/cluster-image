@@ -23,7 +23,7 @@ chmod a+x init-crio.sh
 bash init-crio.sh ${registry_domain} ${registry_port} ${registry_username} ${registry_password}
 
 if [ $? != 0 ]; then
-   error "====init crio failed!===="
+  error "====init crio failed!===="
 fi
 
 logger "init crio success"

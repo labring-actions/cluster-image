@@ -34,7 +34,7 @@ fi
 grep 127.0.0.1 <(grep localhost /etc/hosts) || echo "127.0.0.1 localhost" >>/etc/hosts
 grep ::1 <(grep localhost /etc/hosts) || echo "::1 localhost" >>/etc/hosts
 
-cat <<EOF >  /etc/sysctl.d/k8s.conf
+cat <<EOF >/etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.conf.all.rp_filter=0
@@ -48,7 +48,7 @@ disable_selinux
 chmod -R 755 ../bin/*
 chmod 644 ../bin
 cp -a ../bin/* /usr/bin
-cp -a  ../scripts/kubelet-pre-start.sh /usr/bin
+cp -a ../scripts/kubelet-pre-start.sh /usr/bin
 cp -a ../scripts/kubelet-post-stop.sh /usr/bin
 mkdir -p /etc/systemd/system
 cp ../etc/kubelet.service /etc/systemd/system/
@@ -57,4 +57,4 @@ cp ../etc/10-kubeadm.conf /etc/systemd/system/kubelet.service.d/
 [ -d /var/lib/kubelet ] || mkdir /var/lib/kubelet
 cp ../etc/kubelet-flags.env /var/lib/kubelet
 systemctl enable kubelet
-logger "init kube success"
+logger "init kubelet success"
