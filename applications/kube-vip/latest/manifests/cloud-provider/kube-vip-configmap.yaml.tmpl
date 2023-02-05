@@ -4,5 +4,9 @@ metadata:
   name: kubevip
   namespace: kube-system
 data:
+{{- if .cidr_global }}
   cidr-global: {{ .cidr_global }}
+{{- end }}
+{{- if .range_global }}
   range-global: {{ .range_global }}
+{{- end }}
