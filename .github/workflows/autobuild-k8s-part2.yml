@@ -1,4 +1,4 @@
-name: Auto build image k8s for part2
+name: Auto build image for k8s 1.21-23
 on:
   workflow_dispatch:
     inputs:
@@ -11,7 +11,7 @@ on:
       - created
 env:
   part: 2
-  allBuild: ${{ secrets.ALLBUILD }}
+  allBuild: false
   registry: docker.io
   repo: ${{ secrets.REPOSITORY }}
   sealosPatch: ${{ github.event.inputs.sealosPatch }}
