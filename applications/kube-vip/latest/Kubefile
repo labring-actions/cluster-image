@@ -1,6 +1,4 @@
 FROM scratch
-ENV cidr_global=null
-ENV range_global=null
 COPY manifests manifests
 COPY registry registry
-CMD ["sealos scp -r master manifests/kube-vip.yaml /etc/kubernetes/manifests/kube-vip.yaml","if [ ! -z ${svc_enable} ];then kubectl apply -f manifests/kube-vip-cloud-controller.yaml;fi","if [ ! -z ${cidr_global} ] || [ ! -z ${range_global} ];then kubectl apply -f manifests/kube-vip-configmap.yaml;fi"]
+CMD ["sealos scp -r master manifests/kube-vip.yaml /etc/kubernetes/manifests/kube-vip.yaml","if [ ! -z ${svc_enable} ];then kubectl apply -f manifests/cloud-provider;fi"]

@@ -6,7 +6,6 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-mkdir manifests
 docker run --network host --rm ghcr.io/kube-vip/kube-vip:${VERSION} \
   manifest pod \
   --interface _INTERFACE_ \
@@ -20,4 +19,5 @@ docker run --network host --rm ghcr.io/kube-vip/kube-vip:${VERSION} \
 sed -i "s#_INTERFACE_#{{ .kube_vip_interface }}#g" manifests/kube-vip.yaml.tmpl
 sed -i "s#_ADDRESS_#{{ .kube_vip_address }}#g" manifests/kube-vip.yaml.tmpl
 
-wget -q -P manifests/ https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml
+mkdir -p manifests/cloud-provider
+wget -q -N -P manifests/cloud-provider https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml

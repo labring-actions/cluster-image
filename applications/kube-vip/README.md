@@ -11,7 +11,7 @@ Kube-vip allows you to connect to the kubernetes apiserver through the highly av
 Enable control plane loadbalancer
 
 ```shell
-sealos run labring/kube-vip:v0.5.8 \
+sealos run labring/kube-vip:v0.5.7 \
   -e kube_vip_interface=ens160 \
   -e kube_vip_address=192.168.72.240
 ```
