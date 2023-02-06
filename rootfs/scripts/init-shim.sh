@@ -16,10 +16,8 @@
 source common.sh
 cp -rf ../etc/image-cri-shim.service /etc/systemd/system/
 cp -rf ../etc/image-cri-shim.yaml /etc
-chmod -R 755 ../cri
 cp -rf ../cri/image-cri-shim /usr/bin
 [ -f ../etc/crictl.yaml ] && cp -rf ../etc/crictl.yaml /etc
-chmod a+x /usr/bin/*
 systemctl enable image-cri-shim.service
 systemctl daemon-reload
 systemctl restart image-cri-shim.service

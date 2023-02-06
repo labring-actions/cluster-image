@@ -15,7 +15,6 @@
 
 source common.sh
 storage=${1:-/var/lib/containerd}
-chmod a+x clean-containerd.sh
 
 bash clean-containerd.sh $storage
 

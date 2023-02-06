@@ -18,7 +18,8 @@ if ! command_exists cri-docker; then
   cp ../etc/cri-docker.service /etc/systemd/system/
   cp ../etc/cri-docker.socket /etc/systemd/system/
   tar --strip-components=1 -zxvf ../cri/cri-dockerd.tgz -C /usr/bin
-  chmod a+x /usr/bin/cri-dockerd
+  # shellcheck disable=SC2046
+  chmod a+x $(tar -tf ../cri/cri-dockerd.tgz | while read -r binary; do echo "/usr/bin/${binary##*/}"; done | xargs)
   systemctl enable cri-docker.service
   systemctl restart cri-docker.service
 fi

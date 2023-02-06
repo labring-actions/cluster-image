@@ -14,8 +14,6 @@
 # limitations under the License.
 
 source common.sh
-chmod a+x clean-kube.sh
-chmod a+x clean-shim.sh
 
 bash clean-kube.sh
 bash clean-shim.sh

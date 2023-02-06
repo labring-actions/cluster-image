@@ -16,8 +16,6 @@
 source common.sh
 dockerStorage=${1:-/var/lib/docker}
 criDockerStorage=${2:-/var/lib/cri-dockerd}
-chmod a+x clean-docker.sh
-chmod a+x clean-cri-dockerd.sh
 
 bash clean-cri-dockerd.sh $criDockerStorage
 bash clean-docker.sh $dockerStorage

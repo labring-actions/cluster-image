@@ -22,9 +22,9 @@ echo "/opt/containerd/lib" >/etc/ld.so.conf.d/containerd.conf
 ldconfig
 [ -d /etc/containerd/certs.d/ ] || mkdir /etc/containerd/certs.d/ -p
 cp ../etc/containerd.service /etc/systemd/system/
-chmod -R 755 ../cri
 tar -zxf ../cri/cri-containerd.tar.gz -C /
-chmod a+x /usr/bin/*
+# shellcheck disable=SC2046
+chmod a+x $(tar -tf ../cri/cri-containerd.tar.gz | while read -r binary; do echo "/usr/bin/${binary##*/}"; done | xargs)
 systemctl enable containerd.service
 cp ../etc/config.toml /etc/containerd
 mkdir -p /etc/containerd/certs.d/$registry_domain:$registry_port

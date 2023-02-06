@@ -27,9 +27,9 @@ if ! command_exists docker; then
 
   [ -d /etc/docker/ ] || mkdir /etc/docker/ -p
   cp ../etc/docker.service /etc/systemd/system/
-  chmod -R 755 ../cri
   tar --strip-components=1 -zxvf ../cri/docker.tgz -C /usr/bin
-  chmod a+x /usr/bin/*
+  # shellcheck disable=SC2046
+  chmod a+x $(tar -tf ../cri/docker.tgz | while read -r binary; do echo "/usr/bin/${binary##*/}"; done | xargs)
   systemctl enable docker.service
   systemctl restart docker.service
   cp ../etc/daemon.json /etc/docker
