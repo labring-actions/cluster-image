@@ -236,7 +236,12 @@ cd "$ROOT" && {
           docker.io)
             if until curl -sL "https://hub.docker.com/v2/repositories/$IMAGE_HUB_REPO/$IMAGE_KUBE/tags/${IMAGE_NAME##*:}"; do sleep 3; done |
               grep digest >/dev/null; then
-              echo "$IMAGE_NAME already existed"
+              if ! grep "$KUBE" <<<"$${IMAGE_NAME##*:}" &>/dev/null;then
+                # always push for kube 1.xx(DEV)
+                echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
+              else
+                echo "$IMAGE_NAME already existed"
+              fi
             else
               echo "$IMAGE_NAME" >>"/tmp/$IMAGE_HUB_REGISTRY.v$KUBE-$ARCH.images"
             fi
