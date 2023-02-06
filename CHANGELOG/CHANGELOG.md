@@ -1,3 +1,0 @@
-# CHANGELOGs
-
-- [CHANGELOG-1.0.0.md](./CHANGELOG-1.0.0.md)

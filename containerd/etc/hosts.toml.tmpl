@@ -1,5 +1,0 @@
-server = "http://{{ .registryDomain }}:{{ .registryPort }}"
-
-[host."http://{{ .registryDomain }}:{{ .registryPort }}"]
-  capabilities = ["pull", "resolve", "push"]
-  skip_verify = true
