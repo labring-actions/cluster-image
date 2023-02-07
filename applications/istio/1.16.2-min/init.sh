@@ -13,5 +13,5 @@ rm -rf istio
 cat <<EOF >"Kubefile"
 FROM scratch
 COPY . .
-CMD ["cp opt/istioctl /usr/bin/","istioctl install"]
+CMD ["cp opt/istioctl /usr/bin/","istioctl install --set profile=default -y"]
 EOF
