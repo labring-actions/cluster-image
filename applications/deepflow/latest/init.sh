@@ -6,7 +6,7 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://deepflowys.github.io/deepflow-charts"
+repo_url="https://deepflowio.github.io/deepflow-charts"
 repo_name="deepflow/deepflow"
 app_name="deepflow"
 
