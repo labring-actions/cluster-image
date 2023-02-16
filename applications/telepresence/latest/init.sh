@@ -8,8 +8,8 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-rm -rf charts/ images/shim/
-mkdir -p charts/ images/shim/
+rm -rf charts/
+mkdir -p charts/
 
 # Remove `v` from image tag `vx.x.x`
 chart_version=`echo ${VERSION} | sed 's/.//'`
