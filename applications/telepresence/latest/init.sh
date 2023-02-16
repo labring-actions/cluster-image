@@ -11,11 +11,8 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 rm -rf charts/
 mkdir -p charts/
 
-# Remove `v` from image tag `vx.x.x`
-chart_version=`echo ${VERSION} | sed 's/.//'`
-
 helm repo add datawire  https://app.getambassador.io
-helm pull datawire/telepresence --version=${chart_version} -d charts/ --untar
+helm pull datawire/telepresence --version=${VERSION} -d charts/ --untar
 
 cat <<EOF >"Kubefile"
 FROM scratch
