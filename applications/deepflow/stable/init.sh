@@ -1,5 +1,5 @@
 #!/bin/bash
-helm repo add deepflow https://deepflowys.github.io/deepflow
+helm repo add deepflow https://deepflowio.github.io/deepflow
 helm pull deepflow/deepflow --untar -d charts/
 arch=${1:-amd64}
 mkdir -p opt
