@@ -25,18 +25,18 @@ sed -i s#10.244.0.0/16#100.64.0.0/10#g manifests/kube-flannel.yml
 
 ## Usage
 
-install flannle app,example:
+install flannel app,example:
 ```shell
 sealos run  \
   --masters 192.168.72.50 \
   --nodes 192.168.72.51,192.168.72.52 -p 123456 \
   labring/kubernetes:v1.24.2 \
-  labring/flannel:v1.19.0
+  labring/flannel:v0.18.1
 ```
 
 2. verify pods status
 
-```shll
+```shell
 root@node01:~# kubectl -n kube-flannel get pods
 NAME                    READY   STATUS    RESTARTS   AGE
 kube-flannel-ds-2l2rq   1/1     Running   0          17h
