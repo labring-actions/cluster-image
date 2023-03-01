@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["kubectl apply -f https://openebs.github.io/charts/lvm-operator.yaml"]
