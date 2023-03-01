@@ -15,5 +15,5 @@ cat <<EOF >"Kubefile"
 FROM scratch
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i redis-cluster charts/redis-cluster -n redis-cluster --create-namespace --set replicaCount=3,persistence.enabled=true"]
+CMD ["helm upgrade -i redis-cluster charts/redis-cluster -n redis-cluster --create-namespace"]
 EOF
