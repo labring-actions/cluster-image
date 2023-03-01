@@ -1168,7 +1168,7 @@ metadata:
   namespace: kube-system
   labels:
     openebs.io/component-name: openebs-lvm-controller
-    openebs.io/version: 0.8.2
+    openebs.io/version: 1.0.0
 spec:
   selector:
     matchLabels:
@@ -1182,7 +1182,7 @@ spec:
         app: openebs-lvm-controller
         role: openebs-lvm
         openebs.io/component-name: openebs-lvm-controller
-        openebs.io/version: 0.8.2
+        openebs.io/version: 1.0.0
     spec:
       affinity:
         podAntiAffinity:
@@ -1198,7 +1198,7 @@ spec:
       serviceAccount: openebs-lvm-controller-sa
       containers:
         - name: csi-resizer
-          image: docker.io/cdjianghan/csi-resizer:v1.2.0
+          image: k8s.gcr.io/sig-storage/csi-resizer:v1.2.0
           args:
             - "--v=5"
             - "--csi-address=$(ADDRESS)"
@@ -1211,7 +1211,7 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: csi-snapshotter
-          image: docker.io/cdjianghan/csi-snapshotter:v4.0.0
+          image: k8s.gcr.io/sig-storage/csi-snapshotter:v4.0.0
           imagePullPolicy: IfNotPresent
           args:
             - "--csi-address=$(ADDRESS)"
@@ -1223,13 +1223,13 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: snapshot-controller
-          image: docker.io/cdjianghan/snapshot-controller:v4.0.0
+          image: k8s.gcr.io/sig-storage/snapshot-controller:v4.0.0
           args:
             - "--v=5"
             - "--leader-election=true"
           imagePullPolicy: IfNotPresent
         - name: csi-provisioner
-          image: docker.io/cdjianghan/csi-provisioner:v3.0.0
+          image: k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0
           imagePullPolicy: IfNotPresent
           args:
             - "--csi-address=$(ADDRESS)"
@@ -1255,7 +1255,7 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: openebs-lvm-plugin
-          image: docker.io/cdjianghan/lvm-driver:0.8.2
+          image: openebs/lvm-driver:1.0.0
           imagePullPolicy: IfNotPresent
           env:
             - name: OPENEBS_CONTROLLER_DRIVER
@@ -1399,7 +1399,7 @@ metadata:
   namespace: kube-system
   labels:
     openebs.io/component-name: openebs-lvm-node
-    openebs.io/version: 0.8.2
+    openebs.io/version: 1.0.0
 spec:
   selector:
     matchLabels:
@@ -1414,14 +1414,14 @@ spec:
         app: openebs-lvm-node
         role: openebs-lvm
         openebs.io/component-name: openebs-lvm-node
-        openebs.io/version: 0.8.2
+        openebs.io/version: 1.0.0
     spec:
       priorityClassName: openebs-lvm-localpv-csi-node-critical
       serviceAccount: openebs-lvm-node-sa
       hostNetwork: true
       containers:
         - name: csi-node-driver-registrar
-          image: docker.io/cdjianghan/csi-node-driver-registrar:v2.3.0
+          image: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0
           imagePullPolicy: IfNotPresent
           args:
             - "--v=5"
@@ -1451,7 +1451,7 @@ spec:
           securityContext:
             privileged: true
             allowPrivilegeEscalation: true
-          image: docker.io/cdjianghan/lvm-driver:0.8.2
+          image: openebs/lvm-driver:1.0.0
           imagePullPolicy: IfNotPresent
           args:
             - "--nodeid=$(OPENEBS_NODE_ID)"
