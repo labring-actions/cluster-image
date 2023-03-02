@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-lvmpv
+allowVolumeExpansion: true
+parameters:
+  storage: "lvm"
+  volgroup: "lvmvg"
+provisioner: local.csi.openebs.io
