@@ -1,0 +1,4 @@
+FROM scratch
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i prometheus charts/kube-prometheus-stack -n monitoring --create-namespace -f charts/kube-prometheus-stack.values.yaml"]
