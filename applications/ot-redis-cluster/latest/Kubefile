@@ -1,0 +1,4 @@
+FROM scratch
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i redis-operator charts/redis-operator --namespace ot-operators --create-namespace","helm upgrade -i redis-cluster charts/redis-cluster --namespace redis-operator --create-namespace --set redisCluster.clusterSize=3"]

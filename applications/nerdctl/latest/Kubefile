@@ -1,0 +1,4 @@
+FROM scratch
+COPY opt opt
+COPY etc etc
+CMD ["systemctl stop buildkit.socket >/dev/nul 2>&1 || true","sealos scp etc /etc/systemd/system","sealos scp opt /usr/local/bin","sealos exec 'systemctl enable --now buildkit'"]
