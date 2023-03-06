@@ -1,3 +1,0 @@
-FROM scratch
-COPY opt opt
-CMD ["cp -a opt/k9s /usr/local/bin"]
