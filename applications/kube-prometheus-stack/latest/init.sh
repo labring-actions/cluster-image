@@ -7,18 +7,12 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-chart_version=`helm search repo --versions --regexp '\vprometheus-community/kube-prometheus-stack\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
+chart_version=`helm search repo --versions --regexp '\vprometheus-community/kube-prometheus-stack\v' | grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1`
 rm -rf charts/ && mkdir -p charts/
 helm pull prometheus-community/kube-prometheus-stack --version=${chart_version} -d charts/ --untar
-prometheusConfigReloader_tag=$(helm show values charts/kube-prometheus-stack --jsonpath {.prometheusOperator.prometheusConfigReloader.image.tag})
-mkdir -p images/shim 
-echo "quay.io/prometheus-operator/prometheus-config-reloader:$prometheusConfigReloader_tag" >images/shim/kube-prometheus-stackImages
+mkdir -p images/shim
+echo "quay.io/prometheus-operator/prometheus-config-reloader:${VERSION}" > images/shim/kube-prometheus-stackImages
 
-cat >charts/kube-prometheus-stack.values.yaml<<EOF
-prometheus:
-  prometheusSpec:
-    serviceMonitorSelectorNilUsesHelmValues: false
-grafana:
-  service:
-    type: NodePort
-EOF
+# custome values.yaml
+yq e -i '.prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues="false"' charts/kube-prometheus-stack/values.yaml
+yq e -i '.grafana.service.type="NodePort"' charts/kube-prometheus-stack/values.yaml
