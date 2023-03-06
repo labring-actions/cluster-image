@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ez
+set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 export readonly ARCH=${1:-amd64}
@@ -8,8 +8,8 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 
 
 rm -rf opt/ charts/ && mkdir -p opt/ charts/
-wget -qO- "https://github.com/karmada-io/karmada/releases/download/v${VERSION}/kubectl-karmada-linux-${ARCH}.tgz"
-sudo tar -C opt/ -zxvf kubectl-karmada-linux-${ARCH}.tgz kubectl-karmada
+wget   "https://github.com/karmada-io/karmada/releases/download/${VERSION}/kubectl-karmada-linux-${ARCH}.tgz"
+tar -C opt/ -zxvf kubectl-karmada-linux-${ARCH}.tgz kubectl-karmada
 chmod a+x opt/kubectl-karmada
 
 repo_url="https://raw.githubusercontent.com/karmada-io/karmada/master/charts"
