@@ -18,7 +18,7 @@ if [ $? != 0 ]; then
    exit 1
 fi
 
-sudo sealos login $registry -u $username -p $password
+sudo sealos login  -u $username -p $password $registry
 sudo sealos push $prefix/docker-$app:$version-$arch
 if [ $? != 0 ]; then
    echo "====push docker image failed!===="

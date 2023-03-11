@@ -4,7 +4,7 @@ filename=Kubefile
 if  [ -f Dockerfile ]; then
   filename=Dockerfile
 fi
-sudo sealos login $registry  -u $username -p  $password
+sudo sealos login -u $username -p  $password $registry
 sudo sealos build -t $registry/$repo/$app:$version -f $filename .
 if [ $? != 0 ]; then
    echo "====build config image failed!===="
