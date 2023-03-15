@@ -12,6 +12,8 @@ mkdir -p charts
 cd charts && {
   wget -qO- "https://github.com/$NAME/charts/raw/master/$NAME-${VERSION#*v}.tgz" | tar -zx
   find . -type f -name "*.tmpl" -exec mv -v {} {}.bak \;
+  # fix manifest schema v1 unsupported
+  yq e -i '.etcd.image.repository="docker.io/cilium/cilium-etcd-operator"' "$NAME/values.yaml"
   sed -i 's#useDigest: true#useDigest: false#g;/sidecarImageRegex/d' "$NAME/values.yaml"
   {
     # https://github.com/cilium/cilium/blob/master/operator/Makefile
