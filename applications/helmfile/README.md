@@ -30,7 +30,7 @@ $ which helmfile
 
 ## Uninstalling the app
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `helmfile` app:
 
 ```bash
 sealos run docker.io/labring/helmfile:v0.151.0 -e uninstall=true
