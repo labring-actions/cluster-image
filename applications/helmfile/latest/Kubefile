@@ -1,4 +1,5 @@
 FROM scratch
+COPY entrypoint.sh entrypoint.sh
 COPY opt opt
 COPY scripts scripts
-CMD ["if [ -z ${uninstall} ];then bash scripts/enable.sh;elif [ ${uninstall} == 'true' ];then bash scripts/disable.sh;fi"]
+CMD ["bash entrypoint.sh"]

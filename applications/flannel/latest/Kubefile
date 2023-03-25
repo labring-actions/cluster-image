@@ -1,5 +1,6 @@
 FROM scratch
-COPY manifests manifests
+COPY entrypoint.sh entrypoint.sh
+COPY charts charts
+COPY scripts scripts
 COPY registry registry
-COPY opt opt
-CMD ["sealos scp opt/ /opt/cni/bin/","kubectl apply -f manifests/kube-flannel.yml"]
+CMD ["bash entrypoint.sh"]
