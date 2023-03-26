@@ -17,5 +17,5 @@ chmod a+x opt/helm
 cat <<EOF >>"Kubefile"
 FROM scratch
 COPY opt opt
-CMD ["cp -a opt/helm /usr/bin/"]
+CMD ["sealos scp -r master opt/helm /usr/bin/helm"]
 EOF
