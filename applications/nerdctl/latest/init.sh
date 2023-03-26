@@ -17,9 +17,9 @@ mv nerdctl opt/
 chmod a+x opt/nerdctl
 
 # download buildkit
-LATEST_TAG=$(curl -s https://api.github.com/repos/moby/buildkit/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-wget -qO- https://github.com/moby/buildkit/releases/download/${LATEST_TAG}/buildkit-${LATEST_TAG}.linux-amd64.tar.gz |
+buildkit_version=$(curl -s https://api.github.com/repos/moby/buildkit/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+wget -qO- https://github.com/moby/buildkit/releases/download/${buildkit_version}/buildkit-${buildkit_version}.linux-amd64.tar.gz |
   tar -zx  -C opt/ --strip=1
 [ ! -d etc ] && mkdir etc
-wget -N -qP etc/ https://raw.githubusercontent.com/moby/buildkit/${LATEST_TAG}/examples/systemd/system/buildkit.service
-wget -N -qP etc/ https://raw.githubusercontent.com/moby/buildkit/${LATEST_TAG}/examples/systemd/system/buildkit.socket
+wget -N -qP etc/ https://raw.githubusercontent.com/moby/buildkit/${buildkit_version}/examples/systemd/system/buildkit.service
+wget -N -qP etc/ https://raw.githubusercontent.com/moby/buildkit/${buildkit_version}/examples/systemd/system/buildkit.socket

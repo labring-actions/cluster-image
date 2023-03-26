@@ -7,7 +7,8 @@ Flannel is a simple and easy way to configure a layer 3 network fabric designed 
 - Kubernetes (depends on the app requirements)
 - sealos v4.x
 - helm v3.x
-
+- latest cni-plugin image prebuild
+ 
 ## Installing the app
 
 To install the app with sealos run  command:
