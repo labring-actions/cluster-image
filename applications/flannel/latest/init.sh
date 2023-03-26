@@ -6,11 +6,31 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-mkdir opt/ manifests/
-readonly cni=${cnilatest:-$(
+rm -rf charts && mkdir -p charts
+wget -qO- https://github.com/flannel-io/flannel/releases/download/${VERSION}/flannel.tgz | tar -xz -C charts
+
+# delete "---" for merge support
+mv charts/flannel/values.yaml{,.bak}
+yq -N charts/flannel/values.yaml.bak > charts/flannel/values.yaml
+rm -rf charts/flannel/values.yaml.bak
+yq e -i '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
+
+# insert cni-plugin init-container config to helm chart
+readonly cni_latest_version=v${cnilatest:-$(
   until curl -sL "https://api.github.com/repos/containernetworking/plugins/releases/latest"; do sleep 3; done | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
 )}
-
-curl -sL "https://github.com/containernetworking/plugins/releases/download/v$cni/cni-plugins-linux-$ARCH-v$cni.tgz" | tar xz -C opt/
-wget -qP manifests/ https://raw.githubusercontent.com/flannel-io/flannel/${VERSION}/Documentation/kube-flannel.yml
-sed -i s#10.244.0.0/16#100.64.0.0/10#g manifests/kube-flannel.yml
+cni_plugin_image="docker.io/labring/docker-cni-plugins:${cni_latest_version}"
+cat << EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
+      - name: install-cni-plugin-sealos
+        image: "${cni_plugin_image}"
+        command: ["/bin/sh"]
+        args: ["-c", "cp -f /cni-plugins/* /opt/cni/bin/"]
+        volumeMounts:
+        - name: cni-plugin-sealos
+          mountPath: /opt/cni/bin
+EOF
+cat << EOF | sed -i '/^\s*volumes/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
+      - name: cni-plugin-sealos
+        hostPath:
+          path: /opt/cni/bin
+EOF
