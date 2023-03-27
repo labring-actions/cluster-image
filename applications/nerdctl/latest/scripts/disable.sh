@@ -14,6 +14,7 @@ if command -v nerdctl > /dev/null 2>&1;then
   systemctl disable --now buildkit.socket >/dev/null 2>&1 || true
   systemctl disable --now buildkit.service >/dev/null 2>&1 || true
   rm -rf /etc/systemd/system/buildkit.service
+  rm -rf /etc/systemd/system/buildkit.socket
   rm -rf /etc/buildkit/buildkitd.toml
   rm -rf /usr/local/bin/buildctl
   rm -rf /usr/local/bin/buildkitd

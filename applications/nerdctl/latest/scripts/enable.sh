@@ -12,6 +12,7 @@ log::info "installing ${app_name}"
 sealos exec "systemctl stop buildkit.socket >/dev/null 2>&1 || true"
 sealos exec "mkdir -p /etc/buildkit"
 sealos scp ../etc/buildkit.service /etc/systemd/system/buildkit.service
+sealos scp ../etc/buildkit.socket /etc/systemd/system/buildkit.socket
 sealos scp ../etc/buildkitd.toml /etc/buildkit/buildkitd.toml
 sealos scp ../opt /usr/local/bin
 sealos exec "systemctl enable --now buildkit"
