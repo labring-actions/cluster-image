@@ -49,7 +49,7 @@ jobs:
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
-          build_args: ${{ needs.resolve-issue-var.outputs.build_args }}
+          build_args: "${{ needs.resolve-issue-var.outputs.build_args }}"
         run: .github/scripts/dockers.sh
 
   build_manifest:
