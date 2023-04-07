@@ -35,7 +35,7 @@ cd $buildDir && {
   IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/docker-$APP_NAME:$APP_VERSION-$APP_ARCH"
 
   IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
-  build_args=$(echo "$BUILD_ARGS" | awk -F ';' '{ for(i=1; i<=NF; i++) { printf "--build-arg %s ", $i } }')
+  build_args=$(echo "$BUILD_ARGS" | awk -F ',' '{ for(i=1; i<=NF; i++) { printf "--build-arg %s ", $i } }')
   sudo docker build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" --build-arg ARCH=$APP_ARCH $build_args  -f $filename .
 
   sudo docker tag "$IMAGE_BUILD" "$IMAGE_NAME" && sudo docker rmi -f "$IMAGE_BUILD"

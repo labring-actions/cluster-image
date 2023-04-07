@@ -12,8 +12,8 @@ Usage:
 Available Args:
    appName:  current app dir
    appVersion: current app version
-   buildArgs:  build args, split by ';'
+   buildArgs:  build args, split by ','
 
 Example:
-   /imagebuild_dockerimages helm v3.8.2 Key1=Value1;Key2=Value2
+   /imagebuild_dockerimages helm v3.8.2 Key1=Value1,Key2=Value2
 ```
