@@ -10,6 +10,7 @@ readonly IMAGE_HUB_REGISTRY=${registry?}
 readonly IMAGE_HUB_REPO=${repo?}
 readonly IMAGE_HUB_USERNAME=${username?}
 readonly IMAGE_HUB_PASSWORD=${password?}
+readonly BUILD_ARGS=${build_args:-}
 
 readonly buildDir=.build-image
 
@@ -34,7 +35,8 @@ cd $buildDir && {
   IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/docker-$APP_NAME:$APP_VERSION-$APP_ARCH"
 
   IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
-  sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" -f $filename .
+  build_args=$(echo "$BUILD_ARGS" | awk -F ';' '{ for(i=1; i<=NF; i++) { printf "--build-arg %s ", $i } }')
+  sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" --build-arg ARCH=$APP_ARCH "$build_args"  -f $filename .
 
   sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME" && sudo sealos rmi -f "$IMAGE_BUILD"
 

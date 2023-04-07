@@ -17,8 +17,8 @@ jobs:
           commentbody="${{github.event.comment.body}}"
           app=`echo "$commentbody"| awk '{print $2}'`
           version=`echo "$commentbody"| awk '{print $3}'`
-          echo "app=$app" >> $GITHUB_OUTPUT
-          echo "version=$version" >> $GITHUB_OUTPUT
+          build_args=`echo "$commentbody"| awk '{print $4}'`
+          echo -e "app=$app\nversion=$version\nbuild_args=$build_args" >> $GITHUB_OUTPUT
   build_apps:
     name: Auto build app image
     needs:
@@ -43,6 +43,7 @@ jobs:
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
+          build_args: ${{ needs.resolve-issue-var.outputs.build_args }}
         run: .github/scripts/dockers.sh
 
   build_manifest:
