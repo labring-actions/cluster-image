@@ -10,6 +10,7 @@ jobs:
     outputs:
       app: ${{ steps.set-appversion.outputs.app }}
       version: ${{ steps.set-appversion.outputs.version }}
+      build_args: ${{ steps.set-appversion.outputs.build_args }}
     steps:
       - name: Write vars
         id: set-appversion
