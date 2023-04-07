@@ -36,8 +36,8 @@ cd $buildDir && {
 
   IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
   build_args=$(echo "$BUILD_ARGS" | awk -F ';' '{ for(i=1; i<=NF; i++) { printf "--build-arg %s ", $i } }')
-  sudo docker build --help
-  sudo docker build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" --build-arg ARCH=$APP_ARCH "$build_args"  -f $filename .
+  set -ex
+  sudo docker build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" --build-arg ARCH=$APP_ARCH $build_args  -f $filename .
 
   sudo docker tag "$IMAGE_BUILD" "$IMAGE_NAME" && sudo sealos rmi -f "$IMAGE_BUILD"
 
