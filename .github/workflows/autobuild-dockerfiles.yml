@@ -18,7 +18,9 @@ jobs:
           app=`echo "$commentbody"| awk '{print $2}'`
           version=`echo "$commentbody"| awk '{print $3}'`
           build_args=`echo "$commentbody"| awk '{print $4}'`
-          echo -e "app=$app\nversion=$version\nbuild_args=$build_args" >> $GITHUB_OUTPUT
+          echo "app=$app" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "build_args=$build_args" >> $GITHUB_OUTPUT
   build_apps:
     name: Auto build app image
     needs:
