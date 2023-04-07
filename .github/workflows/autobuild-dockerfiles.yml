@@ -35,8 +35,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download buildah and sealos
-        run: .github/scripts/download.sh
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         # https://github.com/docker/setup-buildx-action
@@ -65,8 +63,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download buildah and sealos
-        run: .github/scripts/download.sh
       - name: Manifest Image
         env:
           registry: docker.io
@@ -75,7 +71,7 @@ jobs:
           password: ${{ secrets.REGISTRY }}
           app: docker-${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
-        run: .github/scripts/manifest-other.sh
+        run: .github/scripts/manifest-docker.sh
 
   add-tips:
     if: contains(github.event.comment.body, 'imagebuild')
