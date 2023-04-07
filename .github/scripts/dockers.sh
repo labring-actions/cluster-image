@@ -36,12 +36,12 @@ cd $buildDir && {
 
   IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
   build_args=$(echo "$BUILD_ARGS" | awk -F ';' '{ for(i=1; i<=NF; i++) { printf "--build-arg %s ", $i } }')
-  sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" --build-arg ARCH=$APP_ARCH "$build_args"  -f $filename .
+  sudo docker build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" --build-arg ARCH=$APP_ARCH "$build_args"  -f $filename .
 
-  sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME" && sudo sealos rmi -f "$IMAGE_BUILD"
+  sudo docker tag "$IMAGE_BUILD" "$IMAGE_NAME" && sudo sealos rmi -f "$IMAGE_BUILD"
 
-  sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
-    sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
+  sudo docker login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
+    sudo docker push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
 }
 
-sudo buildah images
+sudo docker images
