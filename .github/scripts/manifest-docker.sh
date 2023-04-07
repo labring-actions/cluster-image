@@ -16,10 +16,13 @@ sudo docker rmi "$IMAGE_NAME_FULL" || true
 
 case $ARCH in
 amd64 | arm64)
+  sudo docker pull "$IMAGE_NAME_FULL-$ARCH"
   sudo docker manifest create "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-$ARCH"
   sudo docker manifest annotate "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-$ARCH" --arch $ARCH
   ;;
 *)
+  sudo docker pull "$IMAGE_NAME_FULL-amd64"
+  sudo docker pull "$IMAGE_NAME_FULL-arm64"
   sudo docker manifest create "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-amd64"
   sudo docker manifest annotate "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-amd64" --arch amd64
   sudo docker manifest create "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-arm64"
