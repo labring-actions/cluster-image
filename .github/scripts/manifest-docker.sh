@@ -13,7 +13,7 @@ readonly IMAGE_NAME_FULL=${IMAGE_HUB_REGISTRY}/${IMAGE_HUB_REPO}/${IMAGE_NAME}:$
 
 # for host action ,Don't delete this code
 sudo docker rmi "$IMAGE_NAME_FULL" || true
-
+set -ex
 case $ARCH in
 amd64 | arm64)
   sudo docker pull "$IMAGE_NAME_FULL-$ARCH"
