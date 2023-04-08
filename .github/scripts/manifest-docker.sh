@@ -23,10 +23,9 @@ amd64 | arm64)
 *)
   sudo docker pull "$IMAGE_NAME_FULL-amd64"
   sudo docker pull "$IMAGE_NAME_FULL-arm64"
-  sudo docker manifest create "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-amd64"
+  sudo docker manifest create "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-amd64" "$IMAGE_NAME_FULL-arm64"
   sudo docker manifest annotate "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-amd64" --arch amd64
-  sudo docker manifest create "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-arm64"
-  sudo docker manifest annotate "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-arm64" --arch amd64
+  sudo docker manifest annotate "$IMAGE_NAME_FULL" "$IMAGE_NAME_FULL-arm64" --arch arm64
   ;;
 esac
 sudo docker images
