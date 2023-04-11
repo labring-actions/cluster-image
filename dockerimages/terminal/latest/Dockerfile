@@ -6,6 +6,7 @@ USER root
 ENV HOME /root
 ARG kubeVersion=1.24.3
 ARG ttydVersion=1.6.3
+ARG helmVersion=3.8.2
 
 ARG ARCH
 
