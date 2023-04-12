@@ -4,9 +4,17 @@ set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 
-export readonly ARCH=${1:-amd64}
-export readonly NAME=${2:-$(basename "${PWD%/*}")}
-export readonly VERSION=${3:-$(basename "$PWD")}
+declare -r ARCH=${1:-amd64}
+declare -r NAME=${2:-$(basename "${PWD%/*}")}
+
+inVERSION=${3:-$(basename "$PWD")}
+
+if [[ $inVERSION =~ ^v[.0-9]+$ ]]; then
+  declare -r VERSION=$inVERSION
+else
+  declare -r VERSION="v$inVERSION"
+  declare -r XY_LATEST=true
+fi
 
 mkdir -p charts
 cd charts && {
@@ -14,23 +22,22 @@ cd charts && {
   wget -qO- "https://github.com/projectcalico/$NAME/releases/download/$VERSION/tigera-operator-$VERSION.tgz" | tar -zx
   mv tigera-operator "$NAME"
   find . -type f -name "*.tmpl" -exec mv -v {} {}.bak \;
-  tigeraOperator_default=$(yq .tigeraOperator.version "$NAME/values.yaml")
-  until curl -sL "https://api.github.com/repos/tigera/operator/tags" | yq '.[].name' | grep -E "^v.+$" 2>/dev/null; do sleep 3; done >tigeraOperator.tags
-  tigeraOperator_version=$(grep -w "${tigeraOperator_default}" tigeraOperator.tags | head -n 1 || head -n 1 tigeraOperator.tags) yq '.tigeraOperator.version=strenv(tigeraOperator_version)' --inplace "$NAME/values.yaml"
-  rm tigeraOperator.tags
   yq e -n '.installation.calicoNetwork.nodeAddressAutodetectionV4.interface="bond.*|eth.*|en.*"' >"calico.values.yaml"
-  cat <<EOF >"$NAME/Images"
-docker.io/calico/apiserver:$VERSION
-docker.io/calico/cni:$VERSION
-docker.io/calico/csi:$VERSION
-docker.io/calico/ctl:$VERSION
-docker.io/calico/dikastes:$VERSION
-docker.io/calico/kube-controllers:$VERSION
-docker.io/calico/node-driver-registrar:$VERSION
-docker.io/calico/node:$VERSION
-docker.io/calico/pod2daemon-flexvol:$VERSION
-docker.io/calico/typha:$VERSION
-EOF
+
+  tigeraOperator_default=$(yq .tigeraOperator.version "$NAME/values.yaml")
+  if [[ "$XY_LATEST" == true ]]; then
+    tigeraOperator_version=$(until git ls-remote --refs --sort="version:refname" --tags "https://github.com/tigera/operator.git" | cut -d/ -f3- | grep -E "^v[0-9.]+$"; do sleep 3; done | grep "${tigeraOperator_default%.*}" | tail -n 1)
+  else
+    tigeraOperator_version=$tigeraOperator_default
+  fi
+  tigeraOperator=$tigeraOperator_version yq '.tigeraOperator.version=strenv(tigeraOperator)' --inplace "$NAME/values.yaml"
+  for file in common calico; do
+    wget -qO- "https://github.com/tigera/operator/raw/$tigeraOperator_version/pkg/components/$file.go" | grep -B1 Image: | sed "s/version.VERSION/\"$tigeraOperator_version\"/g" |
+      awk -F\" '/[IV]+/{str[NR]=$(NF-1);if(str[NR]!~/v[0-9.]+/)if(str[NR]~/calico\/.+/){printf("docker.io/%s:%s\n",$(NF-1),str[NR-1])}else{printf("quay.io/%s:%s\n",$(NF-1),str[NR-1])}}'
+  done |
+    grep -v windows-upgrade: |
+    grep -v fips |
+    sort >"$NAME/Images"
   cd -
 }
 
