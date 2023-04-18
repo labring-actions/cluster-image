@@ -13,6 +13,7 @@ ARG ARCH
 WORKDIR /root
 
 COPY vim/ .
+COPY index.html /usr/bin/
 
 COPY scripts/start-terminal.sh /usr/bin/
 COPY scripts/ttyd-kubectl.sh /usr/bin/
