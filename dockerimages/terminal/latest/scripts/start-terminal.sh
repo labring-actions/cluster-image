@@ -24,4 +24,8 @@ users:
     token: $USER_TOKEN
 EOF
 
-ttyd -p 8080 bash
+if [ -e index.html ] 
+then
+    ttyd -p 8080 --index index.html  bash
+else
+    ttyd -p 8080 bash
