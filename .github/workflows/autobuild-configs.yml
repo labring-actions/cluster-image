@@ -53,4 +53,4 @@ jobs:
             image docker.io/${{ secrets.REPOSITORY }}/${{ steps.autobuild.outputs.app }}:${{ needs.build_manifest.outputs.version }} build successfully!
             ```
 
-            detail log please view [autobuild-configs](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-configs.yml)
+            See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

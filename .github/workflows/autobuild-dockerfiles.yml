@@ -92,4 +92,4 @@ jobs:
             image docker.io/${{ secrets.REPOSITORY }}/docker-${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
             ```
             
-            detail log please view [autobuild-dockerfiles](https://github.com/labring-actions/cluster-image/actions/workflows/autobuild-dockerfiles.yml)
+            See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
