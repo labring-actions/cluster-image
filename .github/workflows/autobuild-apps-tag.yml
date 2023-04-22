@@ -55,11 +55,16 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: Set fromImage environment variable
+        id: set_fromImage
+        run: |
+          FROM_IMAGE=$(echo ${{ github.event.comment.body }} | cut -d' ' -f2)
+          echo "FROM_IMAGE=$FROM_IMAGE" >> $GITHUB_ENV
       - name: Success Commit
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            🤖 says: Hooray! The action sync image ${{ needs.build-images.outputs.fromImage }} has been completed successfully. 🎉
+            🤖 says: Hooray! The action sync image ${{ env.FROM_IMAGE }} has been completed successfully. 🎉
 
             See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
