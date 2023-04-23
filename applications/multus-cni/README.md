@@ -7,7 +7,7 @@ Multus CNI enables attaching multiple network interfaces to pods in Kubernetes.
 Default installation.
 
 ```shell
-sealos run labring/multus-cni:v3.9.3
+sealos run docker.io/labring/multus-cni:v4.0.1
 ```
 
 Get the pods status
@@ -20,19 +20,10 @@ kube-multus-ds-jxqvt   1/1     Running   0          2m49s
 
 Then refer to official [quickstart](https://github.com/k8snetworkplumbingwg/multus-cni/blob/master/docs/quickstart.md#creating-additional-interfaces) using Multus CNI to create Kubernetes pods with multiple interfaces. 
 
-And maybe you need to install additional  [cni-plugin](https://github.com/containernetworking/plugins) before using Multus CNI.
-
-```shell
-wget https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-amd64-v1.2.0.tgz
-tar -zxvf cni-plugins-linux-amd64-v1.2.0.tgz
-cp macvlan /opt/cni/bin
-```
+You need to install additional [cni-plugin](https://github.com/containernetworking/plugins) before using Multus CNI, this image will install it by default.
 
 ## Uninstall
 
-Here's no official uninstall method, but you can try this.
-
 ```shell
-kubectl -n <xx> delete NetworkAttachmentDefinition
-kubectl -n kube-system delete ds kube-multus-ds
+sealos run docker.io/labring/multus-cni:v4.0.1 -e uninstall=true
 ```

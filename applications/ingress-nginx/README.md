@@ -8,12 +8,18 @@ The main expose type for ingress-nginx service:
 - nodeport
 - hostnetwork
 
+## Prerequisites
+
+- Kubernetes(depends on the app requirements)
+- sealos v4.x
+- helm v3.x
+
 ## Get started
 
 Install with sealos run
 
 ```shell
-sealos run labring/ingress-nginx:v1.5.1
+sealos run docker.io/labring/ingress-nginx:v1.6.4
 ```
 
 Get pods status
@@ -35,6 +41,15 @@ ingress-nginx-controller-admission   ClusterIP      10.96.2.141   <none>        
 
 Bare-metal considerations:  [metallb](https://metallb.universe.tf/) or other load-balancer implementation need installed to your bare metal Kubernetes clusters for LoadBalancer service type of ingress-nginx.
 
+## Custome configuraton
+
+Custome  metallb helm values with --set.
+
+```bash
+sealos run docker.io/labring/ingress-nginx:v1.6.4 \
+  -e HELM_OPTS="--set controller.hostNetwork=true --set controller.service.enabled=false"
+```
+
 ## Expose with hostnetwork
 
 1、Create a sealos config file, the content of the `data` section will merge into ingress-nginx helm values file.
@@ -47,7 +62,7 @@ metadata:
   name: ingress-nginx-config
 spec:
   path: charts/ingress-nginx/values.yaml
-  match: labring/ingress-nginx:v1.5.1
+  match: docker.io/labring/ingress-nginx:v1.5.1
   strategy: merge
   data: |
     controller:
@@ -113,12 +128,12 @@ Notes: The value of the `path` field is bound to the installation command and is
 2. Install ingress-nginx with custome config.
 
 ```shell
-sealos run labring/ingress-nginx:v1.5.1 --config-file ingress-nginx-config.yaml
+sealos run labring/ingress-nginx:v1.6.4 --config-file ingress-nginx-config.yaml
 ```
 ## Uninstall
 
-Uninstall with helm comand.
+Uninstall with helm command.
 
 ```shell
-helm -n ingress-nginx uninstall ingress-nginx
+sealos run docker.io/labring/ingress-nginx:v1.6.4 -e uninstall=true
 ```

@@ -1,4 +1,6 @@
 FROM scratch
+COPY entrypoint.sh entrypoint.sh
+COPY scripts scripts
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i nginx charts/nginx -n nginx --create-namespace"]
+CMD ["bash entrypoint.sh"]
