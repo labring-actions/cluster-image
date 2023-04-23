@@ -34,7 +34,7 @@ jobs:
           type: login
           username: labring
           password: ${{ secrets.D_REGISTRY_TOKEN }}
-          registry: ${{ vars.HUB_ADDR }}
+          registry: ${{ vars.D_REGISTRY_NAME }}
       - name: Build sealos image by dockerfile
         uses: labring/sealos-action@v0.0.2
         with:

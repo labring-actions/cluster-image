@@ -42,9 +42,9 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Build Image
         env:
-          registry: ${{ vars.HUB_ADDR }}
-          username: ${{ vars.REPOSITORY }}
-          repo: ${{ vars.REPOSITORY }}
+          registry: ${{ vars.D_REGISTRY_NAME }}
+          username: ${{ vars.D_REGISTRY_REPOSITORY }}
+          repo: ${{ vars.D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_REGISTRY_TOKEN }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
@@ -65,9 +65,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Manifest Image
         env:
-          registry: ${{ vars.HUB_ADDR }}
-          username: ${{ vars.REPOSITORY }}
-          repo: ${{ vars.REPOSITORY }}
+          registry: ${{ vars.D_REGISTRY_NAME }}
+          username: ${{ vars.D_REGISTRY_REPOSITORY }}
+          repo: ${{ vars.D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_REGISTRY_TOKEN }}
           app: docker-${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
@@ -89,7 +89,7 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            image docker.io/${{ vars.REPOSITORY }}/docker-${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
+            image docker.io/${{ vars.D_REGISTRY_REPOSITORY }}/docker-${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
             ```
             
             See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
