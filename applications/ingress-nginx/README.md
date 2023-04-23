@@ -62,7 +62,7 @@ metadata:
   name: ingress-nginx-config
 spec:
   path: charts/ingress-nginx/values.yaml
-  match: docker.io/labring/ingress-nginx:v1.5.1
+  match: docker.io/labring/ingress-nginx:v1.6.4
   strategy: merge
   data: |
     controller:
@@ -86,7 +86,7 @@ kubectl label nodes ubuntu node=ingress-gateway
 3、Install ingress-nginx with custome config.
 
 ```shell
-sealos run labring/ingress-nginx:v1.5.1 --config-file ingress-nginx-config.yaml
+sealos run labring/ingress-nginx:v1.6.4 --config-file ingress-nginx-config.yaml
 ```
 
 Check the operator pods status.
@@ -114,7 +114,7 @@ metadata:
   name: ingress-nginx-config
 spec:
   path: charts/ingress-nginx/values.yaml
-  match: labring/ingress-nginx:v1.5.1
+  match: docker.io/labring/ingress-nginx:v1.6.4
   strategy: merge
   data: |
     controller:

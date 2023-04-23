@@ -1,8 +1,5 @@
 FROM scratch
-COPY . .
-ENV IFACE "eth.*,en.*"
-ENV POD_CIDR "100.64.0.0/10"
-ENV POD_GATEWAY "100.64.0.1"
-ENV JOIN_CIDR "20.65.0.0/16"
-ENV SVC_CIDR "10.96.0.0/22"
-CMD ["IFACE=$(IFACE) SVC_CIDR=$(SVC_CIDR) POD_CIDR=$(POD_CIDR) POD_GATEWAY=$(POD_GATEWAY) JOIN_CIDR=$(JOIN_CIDR) bash ovn-install.sh"]
+COPY entrypoint.sh entrypoint.sh
+COPY scripts scripts
+COPY registry registry
+CMD ["bash entrypoint.sh"]
