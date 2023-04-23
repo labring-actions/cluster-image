@@ -13,7 +13,7 @@ on:
 #    - cron: '0 22 * * *'
 jobs:
   build-images:
-    if: startswith(github.event.comment.body, '/imagesync')  || github.event.inputs.fromImage != ''
+    if: (startswith(github.event.comment.body, '/imagesync') &&  github.event.comment.user.login=='sealos-ci-robot' ) || (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu')
     name: Auto tag  app image
     runs-on: ubuntu-latest
     steps:
