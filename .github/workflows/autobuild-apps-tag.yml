@@ -36,10 +36,10 @@ jobs:
 
       - name: Auto build image
         env:
-          registry: docker.io
-          repo: ${{ secrets.REPOSITORY }}
-          username: ${{ secrets.REPOSITORY }}
-          password: ${{ secrets.REGISTRY }}
+          registry: ${{ vars.HUB_ADDR }}
+          repo: ${{ vars.REPOSITORY }}
+          username: ${{ vars.REPOSITORY }}
+          password: ${{ secrets.D_REGISTRY_TOKEN }}
         run: |
           sudo podman run -it --rm -v ${PWD}:/workspace -w /workspace quay.io/skopeo/stable:latest \
             sync --src docker --dest docker --all ${{ env.FROM_IMAGE }} ${registry}/${repo} \
@@ -67,6 +67,6 @@ jobs:
           body: |
             🤖 says: Hooray! The action sync image has been completed successfully. 🎉
             
-            ${{ env.FROM_IMAGE }} to ${{ vars.REGISTRY }}/${{ vars.REPOSITORY }}
+            ${{ env.FROM_IMAGE }} to ${{ vars.HUB_ADDR }}/${{ vars.REPOSITORY }}
             
             See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
