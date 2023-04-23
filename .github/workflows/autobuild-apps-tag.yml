@@ -65,6 +65,8 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            🤖 says: Hooray! The action sync image ${{ env.FROM_IMAGE }} to ${{ vars.REGISTRY }}/${{ vars.REPOSITORY }} has been completed successfully. 🎉
+            🤖 says: Hooray! The action sync image has been completed successfully. 🎉
+            
+            ${{ env.FROM_IMAGE }} to ${{ vars.REGISTRY }}/${{ vars.REPOSITORY }}
             
             See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
