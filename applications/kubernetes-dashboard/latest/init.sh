@@ -1,51 +1,13 @@
 #!/bin/bash
-
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
+export readonly NAME=${1:-$(basename "${PWD%/*}")}
+export readonly VERSION=${2:-$(basename "$PWD")}
 
-export readonly ARCH=${1:-amd64}
-export readonly NAME=${2:-$(basename "${PWD%/*}")}
-export readonly VERSION=${3:-$(basename "$PWD")}
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+chart_version=`helm search repo --versions --regexp '\vkubernetes-dashboard/kubernetes-dashboard\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 
-manifests=(
-  "https://github.com/${NAME//-/\/}/raw/$VERSION/aio/deploy/recommended.yaml"
-)
-charts=(
-  #"https://kubernetes.github.io/dashboard=$NAME:$VERSION"
-)
-images=(
-)
-
-if [[ $((${#manifests[@]} + ${#charts[@]} + ${#images[@]})) -ne 0 ]]; then
-  cat <<EOF >"Kubefile"
-FROM scratch
-COPY registry registry
-EOF
-cp -af /tmp/scripts_apps/common* .
-else
-  echo "manifests,charts,images none at all."
-  exit 1
-fi
-
-rm -f {manifests,charts,images}.sh
-if [[ ${#manifests[@]} -ne 0 ]]; then
-  ln -sf common.sh manifests.sh
-  bash -e manifests.sh "${manifests[@]}" || true
-fi
-if [[ ${#charts[@]} -ne 0 ]]; then
-  ln -sf common.sh charts.sh
-  bash -e charts.sh "${charts[@]}" || true
-fi
-if [[ ${#images[@]} -ne 0 ]]; then
-  ln -sf common.sh images.sh
-  bash -e images.sh "${images[@]}"
-fi
-rm -f {manifests,charts,images}.sh
-
-if [[ -s install_app ]]; then
-  cat <<EOF >>"Kubefile"
-COPY install_app .
-CMD ["NAMESPACE=kubernetes-dashboard bash -e install_app $NAME=$VERSION"]
-EOF
-fi
+rm -rf charts && mkdir -p charts
+helm pull kubernetes-dashboard/kubernetes-dashboard --version=${chart_version} -d charts/ --untar
+yq e -i '.service.type="NodePort"' charts/kubernetes-dashboard/values.yaml

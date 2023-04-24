@@ -11,7 +11,7 @@ Kube-vip allows you to connect to the kubernetes apiserver through the highly av
 Enable control plane loadbalancer
 
 ```shell
-sealos run labring/kube-vip:v0.5.7 \
+sealos run docker.io/labring/kube-vip:v0.5.10 \
   -e kube_vip_interface=ens160 \
   -e kube_vip_address=192.168.72.240
 ```
@@ -75,10 +75,10 @@ This `svc_enable` env will install `kube-vip-cloud-provider` for loadbalancer ty
 The `cidr_global` or `range_global` env assign IP addresses to service of type loadbalance.
 
 ```shell
-sealos run labring/kube-vip:v0.5.8 \
+sealos run docker.io/labring/kube-vip:v0.5.8 \
   -e kube_vip_interface=ens160 \
   -e kube_vip_address=192.168.72.240 \
-  -e svc_enable=true \
+  -e controller_enabled=true \
   #-e cidr_global=192.168.72.200/29 \
   -e range_global=192.168.72.150-192.168.72.190
 ```
@@ -103,14 +103,14 @@ ipvs:
   - 192.168.72.240/32
 ```
 
-Install cluster with kube-vip
+Install cluster with custome config
 
 ```shell
-sealos apply -f Clusterfile -e kube_vip_interface=ens160 -e kube_vip_address=192.168.72.240
+sealos apply -f Clusterfile
 ```
 
 ## Uninstall
 
 ```shell
-rm -rf /etc/kubernetes/manifests/kube-vip.yaml
+sealos run docker.io/labring/kube-vip:v0.5.10 -e uninstall=true
 ```

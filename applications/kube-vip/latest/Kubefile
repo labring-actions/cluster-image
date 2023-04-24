@@ -1,4 +1,9 @@
 FROM scratch
+
+ENV kube_vip_address apiserver.cluster.local
+
+COPY entrypoint.sh entrypoint.sh
+COPY scripts scripts
 COPY manifests manifests
 COPY registry registry
-CMD ["sealos scp -r master manifests/kube-vip.yaml /etc/kubernetes/manifests/kube-vip.yaml","if [ ! -z ${svc_enable} ];then kubectl apply -f manifests/cloud-provider;fi"]
+CMD ["bash entrypoint.sh"]

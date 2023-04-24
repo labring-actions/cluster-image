@@ -1,4 +1,6 @@
 FROM scratch
+COPY entrypoint.sh entrypoint.sh
+COPY scripts scripts
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i sriov-network-operator charts/sriov-network-operator -n sriov-network-operator --create-namespace"]
+CMD ["bash entrypoint.sh"]

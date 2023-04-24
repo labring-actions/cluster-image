@@ -14,5 +14,11 @@ mkdir -p images/shim
 echo "quay.io/prometheus-operator/prometheus-config-reloader:${VERSION}" > images/shim/kube-prometheus-stackImages
 
 # custome values.yaml
-yq e -i '.prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues="false"' charts/kube-prometheus-stack/values.yaml
-yq e -i '.grafana.service.type="NodePort"' charts/kube-prometheus-stack/values.yaml
+cat >charts/kube-prometheus-stack.values.yaml<<EOF
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: "false"
+grafana:
+  service:
+    type: "NodePort"
+EOF
