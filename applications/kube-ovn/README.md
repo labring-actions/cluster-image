@@ -25,6 +25,7 @@ kubectl -n kube-system get pods
 
 Custome  kube-ovn config,
 
+**method1**
 ```bash
 sealos run docker.io/labring/kube-ovn:v1.11.3 \
   -e IFACE="eth.*,en.*" \
@@ -32,6 +33,29 @@ sealos run docker.io/labring/kube-ovn:v1.11.3 \
   -e POD_CIDR="100.64.0.0/10" \
   -e POD_GATEWAY="100.64.0.1" \
   -e JOIN_CIDR="20.65.0.0/16"
+```
+**method2**
+
+create config-file
+```
+$ vim kube-ovn-config.yaml
+apiVersion: apps.sealos.io/v1beta1
+kind: Config
+metadata:
+  name: kube-ovn
+spec:
+  path: scripts/kube-ovn.env
+  match: docker.io/labring/kube-ovn:v1.11.3
+  strategy: append
+  data: |
+    SVC_CIDR="10.96.0.0/22"
+    POD_CIDR="100.64.0.0/10"
+    POD_GATEWAY="100.64.0.1"
+    JOIN_CIDR="20.65.0.0/16"
+```
+run with config-file
+```
+selaos run docker.io/labring/kube-ovn:v1.11.3 --config-file=kube-ovn-config.yaml
 ```
 
 Warn: The kube-ovn `POD_CIDR` must same with ClusterConfiguration, the default podSubnet of sealos is `100.64.0.0/10`, so do not change `POD_CIDR` if you are not custome `networking.podSubnet`  of ClusterConfiguration.
