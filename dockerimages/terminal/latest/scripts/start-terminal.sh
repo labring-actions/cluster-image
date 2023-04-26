@@ -29,3 +29,4 @@ then
     ttyd -p 8080 --index index.html  bash
 else
     ttyd -p 8080 bash
+fi
