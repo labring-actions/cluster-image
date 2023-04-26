@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+source scripts/kube-ovn.env
 
 IPV6=${IPV6:-false}
 DUAL_STACK=${DUAL_STACK:-false}

@@ -8,7 +8,7 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 
 repo_url="https://charts.bitnami.com/bitnami"
 repo_name="bitnami/nginx"
-chart_name="nginx"
+chart_name="bitnami"
 
 rm -rf charts && mkdir -p charts
 helm repo add ${chart_name} ${repo_url}

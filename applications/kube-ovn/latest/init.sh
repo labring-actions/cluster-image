@@ -6,11 +6,13 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
+# downlaod scripts
 mkdir -p scripts
 wget -qO scripts/install.sh https://raw.githubusercontent.com/kubeovn/kube-ovn/${VERSION}/dist/images/install.sh
 wget -qO scripts/cleanup.sh https://raw.githubusercontent.com/kubeovn/kube-ovn/${VERSION}/dist/images/cleanup.sh
 chmod +x scripts/*.sh
 
+# replace env
 install_scripts="scripts/install.sh"
 sed -i '/^POD_CIDR.*/c POD_CIDR=${POD_CIDR:-"100.64.0.0/10"}' ${install_scripts}
 sed -i '/^POD_GATEWAY.*/c POD_GATEWAY=${POD_GATEWAY:-"100.64.0.1"}' ${install_scripts}
@@ -35,6 +37,13 @@ sed -i '/^VLAN_INTERFACE_NAME.*/c VLAN_INTERFACE_NAME=${VLAN_INTERFACE_NAME:-}' 
 sed -i '/^VLAN_NAME.*/c VLAN_NAME=${VLAN_NAME:-"ovn-vlan"}' ${install_scripts}
 sed -i '/^VLAN_ID.*/c VLAN_ID=${VLAN_ID:-"100"}' ${install_scripts}
 
+# support define env with --config-file
+echo "#!/bin/bash" >scripts/kube-ovn.env
+chmod +x scripts/kube-ovn.env
+sed -i '/^set -euo pipefail$/a source scripts/kube-ovn.env' scripts/install.sh
+
+# generate image list
 mkdir -p images/shim
 image_tag=$(cat scripts/install.sh |grep "^VERSION=" | awk -F "[\"\"]" '{print $2}')
 echo "docker.io/kubeovn/kube-ovn:${image_tag}" > images/shim/kubeovnImageList
+echo "docker.io/kubeovn/vpc-nat-gateway:${image_tag}" >>images/shim/kubeovnImageList
