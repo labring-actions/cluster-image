@@ -30,7 +30,7 @@ if [ $? != 0 ]; then
    exit 1
 fi
 
-wget -qO- "https://get.helm.sh/helm-${helmVersion}-linux-$ARCH.tar.gz" | tar -zx "linux-$ARCH/helm" && chmod +x linux-$ARCH/helm && mv linux-$ARCH/helm /usr/bin/helm
+wget -qO- "https://get.helm.sh/helm-v${helmVersion}-linux-$ARCH.tar.gz" | tar -zx "linux-$ARCH/helm" && chmod +x linux-$ARCH/helm && mv linux-$ARCH/helm /usr/bin/helm
 if [ $? != 0 ]; then
    echo "====download helm failed!===="
    exit 1

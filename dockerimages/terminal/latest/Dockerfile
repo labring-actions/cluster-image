@@ -1,4 +1,11 @@
 ARG goVersion=1.19.4
+
+FROM node:18 AS buildhtml
+WORKDIR /root
+COPY html .
+RUN yarn install
+RUN yarn run build
+
 FROM golang:$goVersion
 MAINTAINER labring
 
@@ -11,10 +18,8 @@ ARG helmVersion=3.8.2
 ARG ARCH
 
 WORKDIR /root
-
+COPY --from=buildhtml /root/dist/inline.html ./index.html
 COPY vim/ .
-COPY index.html /usr/bin/
-
 COPY scripts/start-terminal.sh /usr/bin/
 COPY scripts/ttyd-kubectl.sh /usr/bin/
 # install pagkages
