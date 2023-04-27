@@ -14,6 +14,7 @@ mkdir -p charts/
 helm repo add datawire  https://app.getambassador.io
 helm pull datawire/telepresence --version=${VERSION} -d charts/ --untar
 rm -rf charts/telepresence/templates/tests
+mkdir -p manifests
 helm template traffic-manager charts/telepresence --debug > manifests/telepresence-charts.yaml
 
 mkdir -p "opt/$NAME"
