@@ -14,6 +14,7 @@ mkdir -p charts/
 helm repo add datawire  https://app.getambassador.io
 helm pull datawire/telepresence --version=${VERSION} -d charts/ --untar
 rm -rf charts/telepresence/templates/tests
+helm install traffic-manager  charts/telepresence --dry-run
 cat <<EOF >"Kubefile"
 FROM scratch
 COPY charts charts

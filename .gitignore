@@ -8,3 +8,4 @@
 bin
 app.log
 .versions
+*charts
