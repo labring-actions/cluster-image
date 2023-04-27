@@ -14,10 +14,19 @@ mkdir -p charts/
 helm repo add datawire  https://app.getambassador.io
 helm pull datawire/telepresence --version=${VERSION} -d charts/ --untar
 rm -rf charts/telepresence/templates/tests
-helm install --dry-run traffic-manager  charts/telepresence
+helm template traffic-manager charts/telepresence --debug > manifests/telepresence-charts.yaml
+
+mkdir -p "opt/$NAME"
+pushd "opt/$NAME" && {
+  [ -s telepresence ] || wget -qO telepresence "https://app.getambassador.io/download/tel2/linux/""${ARCH}""/${VERSION}/telepresence"
+  chmod a+x ./*
+}
+popd
+
 cat <<EOF >"Kubefile"
 FROM scratch
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i traffic-manager charts/telepresence -n ambassador --create-namespace"]
+COPY opt opt
+CMD ["cp opt/telepresence /usr/bin/","helm upgrade -i traffic-manager charts/telepresence -n ambassador --create-namespace"]
 EOF
