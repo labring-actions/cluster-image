@@ -51,7 +51,7 @@
     "decko": "^1.2.0",
     "file-saver": "^2.0.5",
     "preact": "^10.11.2",
-    "trzsz": "^0.4.3",
+    "trzsz": "^1.1.0",
     "whatwg-fetch": "^3.6.2",
     "xterm": "^5.1.0",
     "xterm-addon-canvas": "^0.3.0",
@@ -63,5 +63,6 @@
   },
   "resolutions": {
     "zmodem.js@^0.1.10": "patch:zmodem.js@npm%3A0.1.10#./.yarn/patches/zmodem.js-npm-0.1.10-e5537fa2ed.patch"
-  }
+  },
+  "packageManager": "yarn@3.5.0"
 }

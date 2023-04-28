@@ -44,6 +44,7 @@ export interface ClientOptions {
     enableTrzsz: boolean;
     enableSixel: boolean;
     titleFixed?: string;
+    isWindows: boolean;
 }
 
 export interface FlowControl {
@@ -199,13 +200,13 @@ export class Xterm {
             terminal.write(data, () => {
                 this.pending = Math.max(this.pending - 1, 0);
                 if (this.pending < lowWater) {
-                    this.socket?.send(textEncoder.encode(Command.PAUSE));
+                    this.socket?.send(textEncoder.encode(Command.RESUME));
                 }
             });
             this.pending++;
             this.written = 0;
             if (this.pending > highWater) {
-                this.socket?.send(textEncoder.encode(Command.RESUME));
+                this.socket?.send(textEncoder.encode(Command.PAUSE));
             }
         } else {
             terminal.write(data);
@@ -218,7 +219,10 @@ export class Xterm {
         if (socket?.readyState !== WebSocket.OPEN) return;
 
         if (typeof data === 'string') {
-            socket.send(textEncoder.encode(Command.INPUT + data));
+            const payload = new Uint8Array(data.length * 3 + 1);
+            payload[0] = Command.INPUT.charCodeAt(0);
+            const stats = textEncoder.encodeInto(data, payload.subarray(1));
+            socket.send(payload.subarray(0, (stats.written as number) + 1));
         } else {
             const payload = new Uint8Array(data.length + 1);
             payload[0] = Command.INPUT.charCodeAt(0);
@@ -320,6 +324,7 @@ export class Xterm {
             this.zmodemAddon = new ZmodemAddon({
                 zmodem: prefs.enableZmodem,
                 trzsz: prefs.enableTrzsz,
+                windows: prefs.isWindows,
                 onSend: this.sendCb,
                 sender: this.sendData,
                 writer: this.writeData,
@@ -369,6 +374,9 @@ export class Xterm {
                     console.log(`[ttyd] setting fixed title: ${value}`);
                     this.titleFixed = value;
                     document.title = value;
+                    break;
+                case 'isWindows':
+                    if (value) console.log('[ttyd] is windows');
                     break;
                 default:
                     console.log(`[ttyd] option: ${key}=${JSON.stringify(value)}`);

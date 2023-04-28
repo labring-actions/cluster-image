@@ -1,7 +1,7 @@
 node_modules
+dist
 *.log
 
-dist
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
