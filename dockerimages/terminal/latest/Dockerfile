@@ -1,8 +1,7 @@
 ARG goVersion=1.19.4
-FROM node@shaImageId AS buildhtml
+FROM --platform=linux/amd64 node:18 AS buildhtml
 ARG ARCH
 WORKDIR /root
-RUN arch
 COPY html .
 RUN yarn install
 RUN yarn run build
