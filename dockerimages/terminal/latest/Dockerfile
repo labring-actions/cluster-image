@@ -1,6 +1,7 @@
 ARG goVersion=1.19.4
 
 FROM node:18 AS buildhtml
+ARG ARCH
 WORKDIR /root
 RUN arch
 COPY html .
