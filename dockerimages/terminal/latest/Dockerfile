@@ -2,6 +2,7 @@ ARG goVersion=1.19.4
 
 FROM node:18 AS buildhtml
 WORKDIR /root
+RUN arch
 COPY html .
 RUN yarn install
 RUN yarn run build
