@@ -1,10 +1,11 @@
 ARG goVersion=1.19.4
-FROM --platform=linux/amd64 node:18 AS buildhtml
-ARG ARCH
-WORKDIR /root
-COPY html .
-RUN yarn install
-RUN yarn run build
+
+# FROM node:18 AS buildhtml
+# ARG ARCH
+# WORKDIR /root
+# COPY html .
+# RUN yarn install
+# RUN yarn run build
 
 FROM golang:$goVersion
 MAINTAINER labring
@@ -18,7 +19,7 @@ ARG helmVersion=3.8.2
 ARG ARCH
 
 WORKDIR /root
-COPY --from=buildhtml /root/dist/inline.html ./index.html
+# COPY --from=buildhtml /root/dist/inline.html ./index.html
 COPY vim/ .
 COPY scripts/start-terminal.sh /usr/bin/
 COPY scripts/ttyd-kubectl.sh /usr/bin/
