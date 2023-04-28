@@ -1,5 +1,5 @@
 ARG goVersion=1.19.4
-FROM --platform=defaultArch node:18 AS buildhtml
+FROM --platform=linux/defaultArch node:18 AS buildhtml
 WORKDIR /root
 RUN arch
 COPY html .
