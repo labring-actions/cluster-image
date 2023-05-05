@@ -1,0 +1,5 @@
+FROM scratch
+COPY ceph-csi-cephfs.sh ceph-csi-cephfs.sh
+COPY charts charts
+COPY registry registry
+CMD ["bash ceph-csi-cephfs.sh"]
