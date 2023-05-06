@@ -9,6 +9,7 @@ sealos run \
   labring/kuboard:v3
 ```
 
+> Kuboard max kubernetes version 1.23
 
 ## how to use
 
