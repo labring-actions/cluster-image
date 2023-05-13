@@ -32,7 +32,7 @@ cd $buildDir && {
   IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$APP_NAME:$APP_VERSION-$APP_ARCH"
 
   IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
-  sudo sealos build -t "$IMAGE_BUILD" --platform "linux/$APP_ARCH" -f $Kubefile .
+  sudo sealos build -t "$IMAGE_BUILD" --isolation=chroot --platform "linux/$APP_ARCH" -f $Kubefile .
 
   sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME" && sudo sealos rmi -f "$IMAGE_BUILD"
 

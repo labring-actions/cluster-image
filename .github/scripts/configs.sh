@@ -5,7 +5,7 @@ if  [ -f Dockerfile ]; then
   filename=Dockerfile
 fi
 sudo sealos login -u $username -p  $password $registry
-sudo sealos build -t $registry/$repo/$app:$version -f $filename .
+sudo sealos build -t $registry/$repo/$app:$version --isolation=chroot -f $filename .
 if [ $? != 0 ]; then
    echo "====build config image failed!===="
    exit 1
