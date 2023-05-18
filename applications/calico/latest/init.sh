@@ -14,6 +14,7 @@ if [[ $inVERSION =~ ^v[.0-9]+$ ]]; then
 else
   declare -r VERSION="v$inVERSION"
   declare -r XY_LATEST=true
+  sed -i 's~ tigera-operator ~ kube-system ~g' Kubefile
 fi
 
 mkdir -p charts
