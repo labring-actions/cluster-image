@@ -1,4 +1,4 @@
-ARG goVersion=1.19.4
+ARG goVersion=1.20.4
 
 # FROM node:18 AS buildhtml
 # ARG ARCH
@@ -8,13 +8,13 @@ ARG goVersion=1.19.4
 # RUN yarn run build
 
 FROM golang:$goVersion
-MAINTAINER labring
+LABEL org.opencontainers.image.authors="labring"
 
 USER root
 ENV HOME /root
-ARG kubeVersion=1.24.3
-ARG ttydVersion=1.6.3
-ARG helmVersion=3.8.2
+ARG kubeVersion=1.25.6
+ARG ttydVersion=1.7.3
+ARG helmVersion=3.12.0
 
 ARG ARCH
 
