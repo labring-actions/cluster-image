@@ -94,6 +94,11 @@ class ClickLogin {
 		$server = $matches[7];
 		$database = isset( $matches[9] ) ? $matches[9] : "";
 
+		// Fix for mysql:
+		if ( $driver == 'mysql' ) {
+			$driver = 'server';
+		}
+
 		$params = [ 
 			'driver' => $driver,
 			'username' => $username,
@@ -112,6 +117,7 @@ class ClickLogin {
 	 */
 	private function formatDriver( $driver ) {
 		static $drivers = [ 
+		'server' => 'MySQL',
 		'mysql' => 'MySQL',
 		'pgsql' => 'PostgreSQL',
 		'mongo' => 'MongoDB',
