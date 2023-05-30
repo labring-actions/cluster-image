@@ -30,7 +30,7 @@ RUN arch                                                                        
     apt-get update                                                               && \
     apt-get install -y mongodb-org                                               && \
     apt-get install -y default-mysql-client                                      && \
-    t-get install -y postgresql-client                                           && \ 
+    apt-get install -y postgresql-client                                         && \ 
     apt-get install -y ncurses-dev libtolua-dev exuberant-ctags gdb              && \
     apt-get install -y ca-certificates curl wget bind9-utils                     && \
     apt-get install -y git g++ gcc libc6-dev make pkg-config vim                 && \
