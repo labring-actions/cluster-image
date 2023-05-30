@@ -25,10 +25,10 @@ COPY scripts/start-terminal.sh /usr/bin/
 COPY scripts/ttyd-kubectl.sh /usr/bin/
 # install pagkages
 RUN arch                                                                         && \
-    wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
-    echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
+    wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - && \
+    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list && \
     apt-get update                                                               && \
-    apt-get install -y mongodb-org                                               && \
+    apt-get install -y mongodb-mongosh                                           && \
     apt-get install -y default-mysql-client                                      && \
     apt-get install -y postgresql-client                                         && \ 
     apt-get install -y ncurses-dev libtolua-dev exuberant-ctags gdb              && \
