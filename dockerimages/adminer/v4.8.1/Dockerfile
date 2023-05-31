@@ -4,10 +4,11 @@ FROM adminer:$adminerVersion
 LABEL maintainer="labring"
 
 USER root
-
-RUN apk add autoconf gcc g++ make libffi-dev openssl-dev
-RUN pecl install mongodb
-RUN echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini
+RUN apt-get update && \
+    apt-get install -y autoconf gcc g++ make libffi-dev libssl-dev && \
+    pecl install mongodb && \
+    echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER adminer
 
