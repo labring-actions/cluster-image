@@ -19,7 +19,7 @@ ARG helmVersion=3.12.0
 ARG ARCH
 
 WORKDIR /root
-# COPY --from=buildhtml /root/dist/inline.html ./index.html
+COPY ./inline.html ./index.html
 COPY vim/ .
 COPY scripts/start-terminal.sh /usr/bin/
 COPY scripts/ttyd-kubectl.sh /usr/bin/
