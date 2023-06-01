@@ -4,12 +4,10 @@ FROM adminer:$adminerVersion
 LABEL maintainer="labring"
 
 USER root
-RUN apt-get update && \
-    apt-get install -y autoconf gcc g++ make libffi-dev libssl-dev && \
-    pecl install mongodb && \
-    echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
+RUN apt-get update \
+&&  buildDeps='php7.4-mongodb' \
+&&  apt-get install -y $buildDeps --no-install-recommends \
+&&  apt-get purge -y --auto-remove $buildDeps
 USER adminer
 
 COPY themes/bilal-dark.css /var/www/html/adminer.css
