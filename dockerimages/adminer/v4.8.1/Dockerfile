@@ -10,6 +10,6 @@ RUN apt-get update \
 &&  apt-get purge -y --auto-remove $buildDeps
 USER adminer
 
-COPY themes/bilal-dark.css /var/www/html/adminer.css
+COPY themes/adminer.css /var/www/html/adminer.css
 COPY plugins-enabled/AdminerCollations.php plugins-enabled/AdminerJsonPreview.php plugins-enabled/AdminerSimpleMenu.php plugins-enabled/LoginServer.php /var/www/html/plugins-enabled/
 COPY plugins/ClickLogin.php /var/www/html/plugins/ClickLogin.php

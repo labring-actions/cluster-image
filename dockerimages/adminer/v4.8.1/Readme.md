@@ -4,7 +4,7 @@
 
 ### theme: 
 
-* [Dark theme for Adminer](https://github.com/vrana/adminer/pull/435)
+* [pappu687/adminer-theme](https://github.com/pappu687/adminer-theme) with font customize
 
 ### plugins:
 
