@@ -437,6 +437,8 @@ export class Xterm {
                 disposeWebglRenderer();
                 enableCanvasRenderer();
             }
+            const customReady = new CustomEvent('custom:ttydReady');
+            window.dispatchEvent(customReady);
         };
 
         switch (value) {
