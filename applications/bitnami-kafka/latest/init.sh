@@ -11,7 +11,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 chart_version=`helm search repo --versions --regexp '\vbitnami/kafka\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 helm pull bitnami/kafka --version=${chart_version} -d charts/ --untar
 mkdir -p charts/ manifests/
-helm template bitnami-kafka charts/kafka > manifests/kafka-template.yaml
+helm template bitnami-kafka charts/kafka --set zookeeper.enabled=true,kraft.enabled=false > manifests/kafka-template.yaml
 
 cat <<EOF >"Kubefile"
 FROM scratch
