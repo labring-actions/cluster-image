@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{include "openIM.push" . }}-{{ include "openIM.fullname" . }}
+  labels:
+    {{- include "openIM.labels" . | nindent 4 }}
+    app: {{include "openIM.push" . }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: rpc
+      protocol: TCP
+      name: rpc
+    - port: {{ .Values.service.metrics }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+  selector:
+    {{- include "openIM.selectorLabels" . | nindent 4 }}
+    app: {{include "openIM.push" . }}
