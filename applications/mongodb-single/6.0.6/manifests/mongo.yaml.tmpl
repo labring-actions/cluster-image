@@ -1,0 +1,125 @@
+# Create the OpenEBS namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ default "mongodb" .NAMESPACE }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: {{ default "mongodb" .NAMESPACE }}
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-data
+      containers:
+        - name: mongodb
+          image: mongo:6.0.6
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+              name: mongodb
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongodb-data
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "{{ .MONGO_USER }}"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "{{ .MONGO_PASSWD }}"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: {{ default "mongodb" .NAMESPACE }}
+  labels:
+    app: mongodb
+spec:
+  ports:
+    - name: mongodb
+      port: 27017
+      targetPort: 27017
+  selector:
+    app: mongodb
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-express
+  namespace: {{ default "mongodb" .NAMESPACE }}
+  labels:
+    app: mongodb-express
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: mongodb-express
+  template:
+    metadata:
+      labels:
+        app: mongodb-express
+    spec:
+      containers:
+        - name: mongodb-express
+          image: mongo-express:1.0.0-alpha
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+              name: http
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              value: "{{ .MONGO_USER }}"
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              value: "{{ .MONGO_PASSWD }}"
+            - name: ME_CONFIG_MONGODB_URL
+              value: mongodb://{{ .MONGO_USER }}:{{ .MONGO_PASSWD }}@mongodb:27017/
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-express
+  namespace: {{ default "mongodb" .NAMESPACE }}
+  labels:
+    app: mongodb-express
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+  selector:
+    app: mongodb-express
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-data
+  namespace: {{ default "mongodb" .NAMESPACE }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
