@@ -73,8 +73,13 @@ community-operator-crds:
 createResource: false
 resource:
   name: mongodb-replica-set
+  namespace: mongodb
   version: 4.4.0
   members: 3
+  user:
+    name: user
+    password: password
+    database: default
   tls:
     enabled: false
 

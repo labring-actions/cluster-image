@@ -1,10 +1,15 @@
 {{- if and .Values.resource.tls.enabled .Values.resource.tls.useCertManager }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.resource.namespace }}
+---
 # cert-manager resources
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: tls-selfsigned-issuer
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.resource.namespace }}
 spec:
   selfSigned: {}
 ---
@@ -12,7 +17,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: tls-selfsigned-ca
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.resource.namespace }}
 spec:
   isCA: true
   commonName: "*.{{ .Values.resource.name }}-svc.{{ .Values.namespace }}.svc.cluster.local"
@@ -30,7 +35,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: tls-ca-issuer
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.resource.namespace }}
 spec:
   ca:
     secretName: {{ .Values.resource.tls.caCertificateSecretRef }}
@@ -39,7 +44,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: cert-manager-tls-certificate
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.resource.namespace }}
 spec:
   secretName: {{ .Values.resource.tls.certificateKeySecretRef }}
   issuerRef:
@@ -59,7 +64,7 @@ apiVersion: mongodbcommunity.mongodb.com/v1
 kind: MongoDBCommunity
 metadata:
   name: {{ .Values.resource.name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.resource.namespace }}
 spec:
   members: {{ .Values.resource.members }}
   type: ReplicaSet
@@ -74,6 +79,30 @@ spec:
         name: {{ .Values.resource.tls.caCertificateSecretRef }}
       {{- end }}
     authentication:
-      modes: ["SCRAM"]
-  users: []
+      modes: [ "SCRAM" ]
+  users:
+    - name: {{ .Values.resource.user.name }}
+      db: {{ .Values.resource.user.database }}
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: {{ .Values.resource.user.name }}-password
+      roles:
+        - name: clusterAdmin
+          db: {{ .Values.resource.user.database }}
+        - name: userAdminAnyDatabase
+          db: {{ .Values.resource.user.database }}
+      scramCredentialsSecretName: {{ .Values.resource.user.name }}-scram
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+
+# the user credentials will be generated from this secret
+# once the credentials are generated, this secret is no longer required
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.resource.user.name }}-password
+  namespace: {{ .Values.resource.namespace }}
+type: Opaque
+stringData:
+  password: {{ .Values.resource.user.password }}
 {{- end }}
