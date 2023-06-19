@@ -116,7 +116,12 @@
         mysql -h bitnami-mysql.mysql.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
   
   ```
+- bitnami-mongo/mongo-singele
 
+  sealos run labring/bitnami-mongodb-sharded:6.0.2
+  sealos run labring/bitnami-mongodb:6.0.2
+  sealos run labring/mongodb-community-operator:0.7.6
+  sealos run labring/mongodb-single:6.0.6 (support arm)
 
 - bitnami-zookeeper
 
