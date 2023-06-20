@@ -145,7 +145,24 @@
       zkCli.sh 127.0.0.1:2181
   
   ```
+- redis:v8.4.4
+  
+  sealos run labring/bitnami-redis-cluster:v8.4.4
+  ```shell
+  To get your password run:
+    export REDIS_PASSWORD=$(kubectl get secret --namespace "redis-cluster" redis-cluster -o jsonpath="{.data.redis-password}" | base64 -d)
 
+You have deployed a Redis&reg; Cluster accessible only from within you Kubernetes Cluster.INFO: The Job to create the cluster will be created.To connect to your Redis&reg; cluster:
+
+1. Run a Redis&reg; pod that you can use as a client:
+   kubectl run --namespace redis-cluster redis-cluster-client --rm --tty -i --restart='Never' \
+   --env REDIS_PASSWORD=$REDIS_PASSWORD \
+   --image docker.io/bitnami/redis-cluster:7.0.11-debian-11-r0 -- bash
+
+2. Connect using the Redis&reg; CLI:
+
+redis-cli -c -h redis-cluster -a $REDIS_PASSWORD
+  ```
 
 - nginx:v1.24.0
 
