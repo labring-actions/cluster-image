@@ -97,7 +97,7 @@ data:
 
     object:
       enable: minio
-      apiURL: http://127.0.0.1:10002/third/object
+      apiURL: http://{{include "openIM.api" . }}-{{ include "openIM.fullname" . }}.{{.Release.Namespace}}.svc.cluster.local:{{.Values.service.port}}/third/object
       minio: #MinIO 发送图片、视频、文件时需要，请自行申请后替换，必须修改。 客户端初始化InitSDK，中 object_storage参数为minio
         tempBucket: {{.Values.configmap.minio.tempBucket | default "openim"}}
         dataBucket: {{.Values.configmap.minio.dataBucket | default "openim"}}
