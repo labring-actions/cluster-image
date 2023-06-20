@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{include "openIM.push" . }}-{{ include "openIM.fullname" . }}
+  labels:
+    {{- include "openIM.labels" . | nindent 4 }}
+    app: {{include "openIM.push" . }}
+spec:
+  replicas: {{ .Values.push.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "openIM.selectorLabels" . | nindent 6 }}
+      app: {{include "openIM.push" . }}
+  template:
+    metadata:
+      {{- with .Values.push.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openIM.selectorLabels" . | nindent 8 }}
+        app: {{include "openIM.push" . }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "openIM.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.push.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.push.securityContext | nindent 12 }}
+          image: "{{ .Values.push.repository }}:{{ .Values.push.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.push.pullPolicy }}
+          command: [ "./open_im_push" ]
+          args: [ "--port", "10170", "--prometheus_port", "20170" ]
+          ports:
+            - name: rpc
+              containerPort: 10170
+              protocol: TCP
+            - name: metrics
+              containerPort: 20170
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: rpc
+          readinessProbe:
+            tcpSocket:
+              port: rpc
+          volumeMounts:
+            - name: config
+              mountPath: /Open-IM-Server/config/config.yaml
+              subPath: config.yaml
+              readOnly: true
+            - name: notification
+              mountPath: /Open-IM-Server/config/notification.yaml
+              subPath: notification.yaml
+              readOnly: true
+          env:
+            - name: CONFIG_NAME
+              value: "/Open-IM-Server"
+            - name: USUAL_CONFIG_NAME
+              value: "/Open-IM-Server"
+          resources:
+            {{- toYaml .Values.push.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "openIM.fullname" . }}
+            items:
+              - key: config.yaml
+                path: config.yaml
+        - name: notification
+          configMap:
+            name: {{ include "openIM.fullname" . }}
+            items:
+              - key: notification.yaml
+                path: notification.yaml
+      {{- with .Values.push.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.push.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.push.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

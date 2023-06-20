@@ -1,0 +1,514 @@
+# Default values for openIM.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+api:
+  repository: openim/api
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "1024Mi"
+      cpu: 600m
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+  nodeSelector: {}
+  tolerations: []
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - api
+            topologyKey: kubernetes.io/hostname
+
+auth:
+  repository: openim/auth
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "512Mi"
+      cpu: 300m
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - auth
+            topologyKey: kubernetes.io/hostname
+
+
+conversation:
+  repository: openim/conversation
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "512Mi"
+      cpu: 300m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - conversation
+            topologyKey: kubernetes.io/hostname
+
+cron_task:
+  repository: openim/cron_task
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "512Mi"
+      cpu: 300m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - cron_task
+            topologyKey: kubernetes.io/hostname
+
+friend:
+  repository: openim/friend
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "512Mi"
+      cpu: 300m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - friend
+            topologyKey: kubernetes.io/hostname
+
+group:
+  repository: openim/group
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "512Mi"
+      cpu: 300m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - group
+            topologyKey: kubernetes.io/hostname
+
+msg:
+  repository: openim/msg
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "1024Mi"
+      cpu: 600m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - msg
+            topologyKey: kubernetes.io/hostname
+
+msg_gateway:
+  repository: openim/msg_gateway
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "1024Mi"
+      cpu: 600m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - msg-gateway
+            topologyKey: kubernetes.io/hostname
+
+msg_transfer:
+  repository: openim/msg_transfer
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "1024Mi"
+      cpu: 600m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - msg-transfer
+            topologyKey: kubernetes.io/hostname
+
+push:
+  repository: openim/push
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "1024Mi"
+      cpu: 600m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity: { }
+
+third:
+  repository: openim/third
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "1024Mi"
+      cpu: 600m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - third
+            topologyKey: kubernetes.io/hostname
+
+user:
+  repository: openim/user
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  replicaCount: 1
+  podAnnotations: { }
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: 10m
+    limits:
+      memory: "1024Mi"
+      cpu: 600m
+
+  podSecurityContext: { }
+  # fsGroup: 2000
+
+  securityContext: { }
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - user
+            topologyKey: kubernetes.io/hostname
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+
+service:
+  type: ClusterIP
+  port: 8080
+  metrics: 9090
+  wsPort: 8081
+

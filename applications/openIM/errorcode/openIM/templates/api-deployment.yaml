@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{include "openIM.api" . }}-{{ include "openIM.fullname" . }}
+  labels:
+    {{- include "openIM.labels" . | nindent 4 }}
+    app: {{include "openIM.api" . }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "openIM.selectorLabels" . | nindent 6 }}
+      app: {{include "openIM.api" . }}
+  template:
+    metadata:
+      {{- with .Values.api.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openIM.selectorLabels" . | nindent 8 }}
+        app: {{include "openIM.api" . }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "openIM.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.api.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.api.securityContext | nindent 12 }}
+          image: "{{ .Values.api.repository }}:{{ .Values.api.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.api.pullPolicy }}
+          command: [ "./open_im_api" ]
+          args: [ "--port", "10002" ]
+          ports:
+            - name: http
+              containerPort: 10002
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          volumeMounts:
+            - name: config
+              mountPath: /Open-IM-Server/config/config.yaml
+              subPath: config.yaml
+              readOnly: true
+            - name: notification
+              mountPath: /Open-IM-Server/config/notification.yaml
+              subPath: notification.yaml
+              readOnly: true
+          env:
+            - name: CONFIG_NAME
+              value: "/Open-IM-Server"
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "openIM.fullname" . }}
+            items:
+              - key: config.yaml
+                path: config.yaml
+        - name: notification
+          configMap:
+            name: {{ include "openIM.fullname" . }}
+            items:
+              - key: notification.yaml
+                path: notification.yaml
+      {{- with .Values.api.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

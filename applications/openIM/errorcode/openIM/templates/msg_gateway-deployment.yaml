@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{include "openIM.msg_gateway" . }}-{{ include "openIM.fullname" . }}
+  labels:
+    {{- include "openIM.labels" . | nindent 4 }}
+    app: {{include "openIM.msg_gateway" . }}
+spec:
+  replicas: {{ .Values.msg_gateway.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "openIM.selectorLabels" . | nindent 6 }}
+      app: {{include "openIM.msg_gateway" . }}
+  template:
+    metadata:
+      {{- with .Values.msg_gateway.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openIM.selectorLabels" . | nindent 8 }}
+        app: {{include "openIM.msg_gateway" . }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "openIM.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.msg_gateway.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.msg_gateway.securityContext | nindent 12 }}
+          image: "{{ .Values.msg_gateway.repository }}:{{ .Values.msg_gateway.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.msg_gateway.pullPolicy }}
+          command: [ "./open_im_msg_gateway" ]
+          args: ["--port", "10140", "--ws_port", "10001", "--prometheus_port", "20240"]
+          ports:
+            - name: rpc
+              containerPort: 10140
+              protocol: TCP
+            - name: ws
+              containerPort: 10001
+              protocol: TCP
+            - name: metrics
+              containerPort: 20240
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: rpc
+          readinessProbe:
+            tcpSocket:
+              port: rpc
+          volumeMounts:
+            - name: config
+              mountPath: /Open-IM-Server/config/config.yaml
+              subPath: config.yaml
+              readOnly: true
+            - name: notification
+              mountPath: /Open-IM-Server/config/notification.yaml
+              subPath: notification.yaml
+              readOnly: true
+          env:
+            - name: CONFIG_NAME
+              value: "/Open-IM-Server"
+            - name: USUAL_CONFIG_NAME
+              value: "/Open-IM-Server"
+          resources:
+            {{- toYaml .Values.msg_gateway.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "openIM.fullname" . }}
+            items:
+              - key: config.yaml
+                path: config.yaml
+        - name: notification
+          configMap:
+            name: {{ include "openIM.fullname" . }}
+            items:
+              - key: notification.yaml
+                path: notification.yaml
+      {{- with .Values.msg_gateway.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.msg_gateway.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.msg_gateway.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
