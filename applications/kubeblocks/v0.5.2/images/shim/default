@@ -5,7 +5,6 @@ registry.cn-hangzhou.aliyuncs.com/apecloud/percona-xtrabackup
 registry.cn-hangzhou.aliyuncs.com/apecloud/mysqld-exporter:0.14.1
 registry.cn-hangzhou.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.alpha9.20230606.gf80d546.9
 registry.cn-hangzhou.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.alpha9.20230606.gf80d546.9
-public.ecr.aws/eks/aws-load-balancer-controller:v2.4.7
 busybox
 registry.k8s.io/sig-storage/hostpathplugin:v1.9.0
 registry.cn-hangzhou.aliyuncs.com/google_containers/hostpathplugin:v1.11.0
