@@ -21,7 +21,9 @@
   ```shell
   sealos run labring/bitnami-minio:v12.6.4
   ```
-
+  echo "MinIO&reg; web URL: http://127.0.0.1:9001/minio"
+  kubectl port-forward --namespace minio svc/bitnami-minio 9001:9001
+  kubectl port-forward --namespace minio svc/bitnami-minio 9000:9000
 
 - bitnami-kafka
 
