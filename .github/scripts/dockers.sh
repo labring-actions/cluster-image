@@ -25,11 +25,11 @@ fi
 cp -rf "dockerimages/$APP_NAME/$APP_VERSION"/* $buildDir
 
 cd $buildDir && {
-  if  [ -f Dockerfile ]; then
-    filename=Dockerfile
-  fi
   if [[ -s init.sh ]]; then
     bash init.sh "$APP_ARCH" "$APP_NAME" "$APP_VERSION"
+  fi
+  if  [ -f Dockerfile ]; then
+    filename=Dockerfile
   fi
 
   IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/docker-$APP_NAME:$APP_VERSION-$APP_ARCH"
