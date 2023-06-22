@@ -12,6 +12,9 @@ image:
 EOF
 
 mkdir -p "charts"
+mkdir -p "manifests"
+helm template zot zot  --values zot/values.yaml --values  zot/values-version.yaml  --debug > manifests/zot.yaml
+
 cp -rf zot charts/
 cat <<EOF >"Kubefile"
 FROM scratch
