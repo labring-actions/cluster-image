@@ -41,10 +41,10 @@ spec:
             - name: http
               containerPort: 10002
               protocol: TCP
-          livenessProbe:
+          livenessProbe: #TODO 这里需要调整
             tcpSocket:
               port: http
-          readinessProbe:
+          readinessProbe: #TODO 这里需要调整
             tcpSocket:
               port: http
           volumeMounts:
