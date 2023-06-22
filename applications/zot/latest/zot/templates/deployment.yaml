@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "zot.fullname" . }}
+  labels:
+    {{- include "zot.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "zot.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "zot.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "zot.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: zot
+              containerPort: 5000
+              protocol: TCP
+          {{- if or .Values.mountConfig .Values.mountSecret .Values.persistence }}
+          volumeMounts:
+          {{- if .Values.mountConfig }}
+            - mountPath: '/etc/zot'
+              name: {{ .Release.Name }}-config
+          {{- end }}
+          {{- if .Values.mountSecret }}
+            - mountPath: '/secret'
+              name: {{ .Release.Name }}-secret
+          {{- end }}
+          {{- if .Values.persistence }}
+            - mountPath: '/var/lib/registry'
+              name: {{ .Release.Name }}-volume
+          {{- end }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /v2/
+              port: 5000
+              {{- if .Values.authHeader }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ .Values.authHeader }}
+              {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /v2/
+              port: 5000
+              {{- if .Values.authHeader }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ .Values.authHeader }}
+              {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- if or .Values.mountConfig .Values.persistence }}
+      volumes:
+      {{- if .Values.mountConfig }}
+        - name: {{ .Release.Name }}-config
+          configMap:
+            name: {{ .Release.Name }}-config
+      {{- end }}
+      {{- if .Values.mountSecret }}
+        - name: {{ .Release.Name }}-secret
+          secret:
+            secretName: {{ .Release.Name }}-secret
+      {{- end }}
+      {{- if .Values.persistence }}
+        - name: {{ .Release.Name }}-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name | default (printf "%s-pvc" .Release.Name) }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

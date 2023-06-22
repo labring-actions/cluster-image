@@ -1,0 +1,159 @@
+# Default values for zot.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+image:
+  repository: ghcr.io/project-zot/zot-linux-amd64
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v2.0.0-rc4"
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+service:
+  type: NodePort
+  port: 8443
+
+# If mountConfig is true the configMap named $CHART_RELEASE-config is mounted
+# on the pod's '/etc/zot' directory
+mountConfig: true
+# If mountConfig is true the chart creates the '$CHART_RELEASE-config', if it
+# does not exist the user is in charge of managing it (as this file includes a
+# sample file you have to add it empty to handle it externally) ... note that
+# the service does not reload the configFiles once mounted, so you need to
+# delete the pods to create new ones to use the new values.
+configFiles:
+  config.json: |-
+    {
+      "storage": { "rootDirectory": "/var/lib/registry","gc": true,"gcDelay": "1h","gcInterval": "24h" },
+      "http": { 
+          "address": "0.0.0.0", 
+          "port": "5000",
+          "tls": {
+            "cert":"/certs/tls.crt",
+            "key":"/certs/tls.key"
+          }
+      },
+      "log": { "level": "debug" },
+      "auth": { "htpasswd": { "path": "/secret/htpasswd" } },
+      "extensions": {
+        "metrics": {
+        "enable": true,
+            "prometheus": {
+                "path": "/metrics"
+            }
+        },
+        "search": {
+            "enable": true,
+            "cve": {
+                "updateInterval": "2h"
+            }
+        },
+        "scrub": {
+          "enable": true,
+          "interval": "24h"
+        },
+      },
+      "accessControl": {
+            "**": {
+              "policies": [{
+              "users": ["user"],
+                "actions": ["read"]
+              }],
+              "defaultPolicy": []
+            },
+            "adminPolicy": {
+              "users": ["admin"],
+              "actions": ["read", "create", "update", "delete"]
+            }
+      }
+    }
+# Alternatively, the configuration can include authentication and acessControl
+# data and we can use mountSecret option for the passwords.
+#
+#  config.json: |-
+#    {
+#      "storage": { "rootDirectory": "/var/lib/registry" },
+#      "http": { "address": "0.0.0.0", "port": "5000" },
+#      "auth": { "htpasswd": { "path": "/secret/htpasswd" } },
+#      "accessControl": {
+#        "**": {
+#          "policies": [{
+#          "users": ["user"],
+#            "actions": ["read"]
+#          }],
+#          "defaultPolicy": []
+#        },
+#        "adminPolicy": {
+#          "users": ["admin"],
+#          "actions": ["read", "create", "update", "delete"]
+#        }
+#      },
+#      "log": { "level": "debug" }
+#    }
+
+# If mountSecret is true, the Secret named $CHART_RELEASE-secret is mounted on
+# the pod's '/secret' directory (it is used to keep files with passwords, like
+# a `htpasswd` file)
+mountSecret: true
+# If secretFiles does not exist the user is in charge of managing it, again, if
+# you want to manage it the value has to be added empty to avoid using this one
+secretFiles:
+  # Example htpasswd with 'admin:admin' & 'user:user' user:pass pairs
+  # htpasswd -nbB -C 10 admin admin
+  htpasswd: |-
+    admin:$2y$05$vmiurPmJvHylk78HHFWuruFFVePlit9rZWGA/FbZfTEmNRneGJtha
+    user:$2y$05$L86zqQDfH5y445dcMlwu6uHv.oXFgT6AiJCwpv3ehr7idc0rI3S2G
+# Authentication string for tests, it contains a `user:password` string encoded
+# in base64. It is needed when `htpasswd` authentication is enabled and the
+# default access does not provide read permission
+# The example value is from running `echo -n "foo:var" | base64`
+authHeader: "dXNlcjp1c2Vy"
+
+# If persistence is 'true' the service uses a persistentVolumeClaim to mount a
+# volume for zot on '/var/lib/registry'; by default the pvc used is named
+# '$CHART_RELEASE-pvc', but the name can be changed below
+persistence: true
+# PVC data, only used if persistence is 'true'
+pvc:
+  # Make the chart create the PVC, this option is used with storageClasses that
+  # can create volumes dynamically, if that is not the case is better to do it
+  # manually and set create to false
+  create: true
+  # Name of the PVC to use or create if persistence is enabled, if not set the
+  # value '$CHART_RELEASE-pvc' is used
+  name: null
+  # Volume access mode, if using more than one replica we need
+  accessMode: "ReadWriteOnce"
+  # Size of the volume requested
+  storage: 10Gi
+  # Name of the storage class to use if it is different than the default one
+  storageClassName: null
+
+
+resources:
+  requests:
+    memory: "100Mi"
+    cpu: 10m
+  limits:
+    memory: "1024Mi"
+    cpu: 600m
+
+podSecurityContext: { }
+# fsGroup: 2000
+
+securityContext: { }
+  # capabilities:
+  #   drop:
+  #   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
+
+nodeSelector: {}
+tolerations: []

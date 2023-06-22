@@ -1,0 +1,10 @@
+{{- if and .Values.mountConfig .Values.configFiles }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+{{- range $key, $val := .Values.configFiles }}
+  {{ $key }}: {{ $val | quote }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,15 @@
+{{- if and .Values.persistence .Values.pvc .Values.pvc.create }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pvc.name | default (printf "%s-pvc" .Release.Name) }}
+spec:
+  accessModes:
+  - {{ .Values.pvc.accessMode | default "ReadWriteOnce" }}
+  resources:
+    requests:
+      storage: {{ .Values.pvc.storage | default "8Gi" }}
+  {{- if .Values.pvc.storageClassName }}
+  storageClassName: {{ .Values.pvc.storageClassName }}
+  {{- end }}
+{{- end }}

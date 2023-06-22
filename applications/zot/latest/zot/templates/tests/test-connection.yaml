@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "openIM.fullname" . }}-test-connection"
+  name: "{{ include "zot.fullname" . }}-test-connection"
   labels:
-    {{- include "openIM.labels" . | nindent 4 }}
+    {{- include "zot.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "openIM.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "zot.fullname" . }}:{{ .Values.service.port }}/v2/_catalog']
   restartPolicy: Never
