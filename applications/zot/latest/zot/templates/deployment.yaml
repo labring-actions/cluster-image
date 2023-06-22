@@ -39,11 +39,12 @@ spec:
             - mountPath: /tmp/serving-certs
               name: cert
               readOnly: true
-            - mountPath: '/etc/zot'
-              name: {{ .Release.Name }}-config
             - mountPath: '/etc/zot/htpasswd'
               name: {{ .Release.Name }}-secret
               subPath: htpasswd
+            - mountPath: '/etc/zot/config.json'
+              name: {{ .Release.Name }}-config
+              subPath: config.json
             - mountPath: '/var/lib/registry'
               name: {{ .Release.Name }}-volume
           livenessProbe:
