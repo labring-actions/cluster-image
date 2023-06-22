@@ -314,135 +314,315 @@ data:
       enable: true
 
   notification.yaml: |
-    {{- range $elem, $elemVal := index .Values "configmap" "notification.yaml" -}}
-    {{- if not (kindIs "map" $elemVal) -}}
-    {{- if kindIs "invalid" $elemVal -}}
-    {{- nindent 4 $elem -}}:
-    {{- else if kindIs "string" $elemVal -}}
-    {{- if (tpl $elemVal $ ) -}}
-    {{- nindent 4 $elem }}: {{ tpl $elemVal $ -}}
-    {{- else -}}
-    {{- nindent 4 $elem }}:
-    {{- end -}}
-    {{- else if kindIs "float64" $elemVal -}}
-    {{- nindent 4 $elem }}: {{ int $elemVal -}}
-    {{- else if kindIs "slice" $elemVal -}}
-    {{- nindent 4 $elem -}}:
-    {{- tpl (toYaml $elemVal ) $| nindent 4 -}}
-    {{- else -}}
-    {{- if $elemVal -}}
-    {{- nindent 4 $elem }}: {{ toYaml $elemVal -}}
-    {{- else -}}
-    {{- nindent 4 $elem }}:
-    {{- end -}}
-    {{- end -}}
-    {{- end -}}
-    {{- end -}}
-    {{- range $key, $value := index .Values "configmap" "app.yaml" -}}
-    {{- if kindIs "map" $value -}}
-    {{- nindent 4 $key -}}:
-      {{- range $elem, $elemVal := $value -}}
-      {{- if not (kindIs "map" $elemVal) -}}
-      {{- if kindIs "invalid" $elemVal -}}
-      {{- nindent 6 $elem -}}:
-      {{- else if kindIs "string" $elemVal -}}
-      {{- nindent 6 $elem }}: {{ tpl $elemVal $ -}}
-      {{- else if kindIs "float64" $elemVal -}}
-      {{- nindent 6 $elem }}: {{ int $elemVal -}}
-      {{- else if kindIs "slice" $elemVal -}}
-      {{- nindent 6 $elem -}}:
-      {{- tpl (toYaml $elemVal ) $| nindent 6 -}}
-      {{- else -}}
-      {{- nindent 6 $elem }}: {{  $elemVal -}}
-      {{- end -}}
-      {{- end -}}
-      {{- end -}}
-      {{- range $elem, $elemVal := $value -}}
-      {{- if kindIs "map" $elemVal -}}
-      {{- nindent 6 $elem -}}:
-        {{- range $therrKey, $therrVal := $elemVal -}}
-        {{- if not (kindIs "map" $therrVal) -}}
-        {{- if kindIs "invalid" $therrVal -}}
-        {{- nindent 8 $therrKey -}}:
-        {{- else if kindIs "string" $therrVal -}}
-        {{- if (tpl $therrVal $ ) -}}
-        {{- nindent 8 $therrKey }}: {{ tpl $therrVal $ -}}
-        {{- else -}}
-        {{- nindent 8 $therrKey }}:
-        {{- end -}}
-        {{- else if kindIs "float64" $therrVal -}}
-        {{- nindent 8 $therrKey }}: {{ int $therrVal -}}
-        {{- else if kindIs "slice" $therrVal -}}
-        {{- nindent 8 $therrKey -}}:
-        {{- tpl (toYaml $therrVal ) $| nindent 8 -}}
-        {{- else -}}
-        {{- if $therrVal -}}
-        {{- nindent 8 $therrKey }}: {{ toYaml $therrVal -}}
-        {{- else -}}
-        {{- nindent 8 $therrKey }}:
-        {{- end -}}
-        {{- end -}}
-        {{- end -}}
-        {{- end -}}
-        {{- range $therrKey, $therrVal := $elemVal -}}
-        {{- if kindIs "map" $therrVal -}}
-        {{- nindent 8 $therrKey -}}:
-          {{- range $fourKey, $fourVal := $therrVal -}}
-          {{- if not (kindIs "map" $fourVal) -}}
-          {{- if kindIs "invalid" $fourVal -}}
-          {{- nindent 10 $fourKey -}}:
-          {{- else if kindIs "string" $fourVal -}}
-          {{- if (tpl $fourVal $ ) -}}
-          {{- nindent 10 $fourKey }}: {{ tpl $fourVal $ -}}
-          {{- else -}}
-          {{- nindent 10 $fourKey }}:
-          {{- end -}}
-          {{- else if kindIs "float64" $fourVal -}}
-          {{- nindent 10 $fourKey }}: {{ int $fourVal -}}
-          {{- else if kindIs "slice" $fourVal -}}
-          {{- nindent 10 $fourKey -}}:
-          {{- tpl (toYaml $fourVal ) $| nindent 10 -}}
-          {{- else -}}
-          {{- if $fourVal -}}
-          {{- nindent 10 $fourKey }}: {{ toYaml $fourVal -}}
-          {{- else -}}
-          {{- nindent 10 $fourKey }}:
-          {{- end -}}
-          {{- end -}}
-          {{- end -}}
-          {{- end -}}
-          {{- range $fourKey, $fourVal := $therrVal -}}
-          {{- if kindIs "map" $fourVal -}}
-          {{- nindent 10 $fourKey -}}:
-            {{- range $fiveKey, $fiveVal := $fourVal -}}
-            {{- if not (kindIs "map" $fiveVal) -}}
-            {{- if kindIs "invalid" $fiveVal -}}
-            {{- nindent 12 $fiveKey -}}:
-            {{- else if kindIs "string" $fiveVal -}}
-            {{- if $fiveVal -}}
-            {{- nindent 12 $fiveKey }}: {{ tpl $fiveVal $ -}}
-            {{- else -}}
-            {{- nindent 12 $fiveKey }}:
-            {{- end -}}
-            {{- else if kindIs "float64" $fiveVal -}}
-            {{- nindent 12 $fiveKey }}: {{ int $fiveVal -}}
-            {{- else if kindIs "slice" $fiveVal -}}
-            {{- nindent 12 $fiveKey -}}:
-            {{- tpl (toYaml $fiveVal ) $| nindent 12 -}}
-            {{- else -}}
-            {{- if $fiveVal -}}
-            {{- nindent 12 $fiveKey }}: {{  $fiveVal -}}
-            {{- else -}}
-            {{- nindent 12 $fiveKey }}:
-            {{- end -}}
-            {{- end -}}
-            {{- end -}}
-            {{- end -}}
-          {{- end -}}
-          {{- end -}}
-        {{- end -}}
-        {{- end -}}
-      {{- end -}}
-      {{- end -}}
-    {{- end -}}
-    {{- end }}
+    groupCreated:
+      isSendMsg: true #是否发送消息，false不发消息为无声的触发同步。true发消息需要触发会话，rpc notification直接发两次，一次消息一次通知, options字段isNotification是否为通知
+      reliabilityLevel: 1 # 1为online才发送 2为必达
+      unreadCount: false # 只在isSendMsg为true的情况下有作用
+      offlinePush:
+        enable: false # 开启该开关
+        title: "create group title" # xx create the group
+        desc: "create group desc"
+        ext: "create group ext"
+
+    # 不加消息contentType，content统一json 结构体使用pb的
+
+
+    groupInfoSet:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupInfoSet title"
+        desc: "groupInfoSet desc"
+        ext: "groupInfoSet ext"
+
+
+    joinGroupApplication:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "joinGroupApplication title"
+        desc: "joinGroupApplication desc"
+        ext: "joinGroupApplication ext"
+
+    memberQuit:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "memberQuit title"
+        desc: "memberQuit desc"
+        ext: "memberQuit ext"
+
+    groupApplicationAccepted:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupApplicationAccepted title"
+        desc: "groupApplicationAccepted desc"
+        ext: "groupApplicationAccepted ext"
+
+    groupApplicationRejected:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: " title"
+        desc: " desc"
+        ext: " ext"
+
+
+    groupOwnerTransferred:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupOwnerTransferred title"
+        desc: "groupOwnerTransferred desc"
+        ext: "groupOwnerTransferred ext"
+
+    memberKicked:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "memberKicked title"
+        desc: "memberKicked desc"
+        ext: "memberKicked ext"
+
+    memberInvited:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "memberInvited title"
+        desc: "memberInvited desc"
+        ext: "memberInvited ext"
+
+    memberEnter:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "memberEnter title"
+        desc: "memberEnter desc"
+        ext: "memberEnter ext"
+
+    groupDismissed:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupDismissed title"
+        desc: "groupDismissed desc"
+        ext: "groupDismissed ext"
+
+    groupMuted:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupMuted title"
+        desc: "groupMuted desc"
+        ext: "groupMuted ext"
+
+    groupCancelMuted:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupCancelMuted title"
+        desc: "groupCancelMuted desc"
+        ext: "groupCancelMuted ext"
+      defaultTips:
+        tips: "group Cancel Muted"
+
+
+    groupMemberMuted:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupMemberMuted title"
+        desc: "groupMemberMuted desc"
+        ext: "groupMemberMuted ext"
+
+    groupMemberCancelMuted:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupMemberCancelMuted title"
+        desc: "groupMemberCancelMuted desc"
+        ext: "groupMemberCancelMuted ext"
+
+    groupMemberInfoSet:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupMemberInfoSet title"
+        desc: "groupMemberInfoSet desc"
+        ext: "groupMemberInfoSet ext"
+
+    groupInfoSetAnnouncement:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupInfoSetAnnouncement title"
+        desc: "groupInfoSetAnnouncement desc"
+        ext: "groupInfoSetAnnouncement ext"
+
+
+    groupInfoSetName:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "groupInfoSetName title"
+        desc: "groupInfoSetName desc"
+        ext: "groupInfoSetName ext"
+
+
+    #############################friend#################################
+    friendApplicationAdded:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: false
+        title: "Somebody applies to add you as a friend"
+        desc: "Somebody applies to add you as a friend"
+        ext: "Somebody applies to add you as a friend"
+
+    friendApplicationApproved:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "Someone applies to add your friend application"
+        desc: "Someone applies to add your friend application"
+        ext: "Someone applies to add your friend application"
+
+    friendApplicationRejected:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "Someone rejected your friend application"
+        desc: "Someone rejected your friend application"
+        ext: "Someone rejected your friend application"
+
+    friendAdded:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "We have become friends"
+        desc: "We have become friends"
+        ext: "We have become friends"
+
+    friendDeleted:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "deleted a friend"
+        desc: "deleted a friend"
+        ext: "deleted a friend"
+
+    friendRemarkSet:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "Your friend's profile has been changed"
+        desc: "Your friend's profile has been changed"
+        ext: "Your friend's profile has been changed"
+
+    blackAdded:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "blocked a user"
+        desc: "blocked a user"
+        ext: "blocked a user"
+
+    blackDeleted:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "Remove a blocked user"
+        desc: "Remove a blocked user"
+        ext: "Remove a blocked user"
+
+    friendInfoUpdated:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "friend info updated"
+        desc: "friend info updated"
+        ext: "friend info updated"
+
+    #####################user#########################
+    userInfoUpdated:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "Remove a blocked user"
+        desc: "Remove a blocked user"
+        ext: "Remove a blocked user"
+
+    #####################conversation#########################
+    conversationChanged:
+      isSendMsg: false
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "conversation changed"
+        desc: "conversation changed"
+        ext: "conversation changed"
+
+    conversationSetPrivate:
+      isSendMsg: true
+      reliabilityLevel: 1
+      unreadCount: false
+      offlinePush:
+        enable: true
+        title: "burn after reading"
+        desc: "burn after reading"
+        ext: "burn after reading"

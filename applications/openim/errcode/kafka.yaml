@@ -4,6 +4,7 @@ metadata:
   name: kafka-topic-creator
   namespace: kafka
 spec:
+  ttlSecondsAfterFinished: 30
   template:
     spec:
       containers:
