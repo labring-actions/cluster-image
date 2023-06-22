@@ -5,7 +5,7 @@ metadata:
 spec:
   dnsNames:
     - {{ include "zot.fullname" . }}.{{.Release.Namespace}}.svc
-    - {{ include "zot.fullname" . }}.{{.Release.Namespace}}.local
+    - {{ include "zot.fullname" . }}.{{.Release.Namespace}}.svc.cluster.local
     {{- range .Values.extraDNSNames }}
     - {{ . }}
     {{- end }}
