@@ -1,0 +1,26 @@
+{{if .Values.prometheusEnable }}
+# Prometheus Monitor Service (Metrics)
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "zot.fullname" . }}
+  labels:
+    {{- include "zot.labels" . | nindent 4 }}
+spec:
+  endpoints:
+    - path: /metrics
+      port: zot
+      scheme: https
+      basicAuth:
+        password:
+          name: {{ .Release.Name }}-secret-user
+          key: username
+        username:
+          name: {{ .Release.Name }}-secret-user
+          key: password
+      tlsConfig:
+        insecureSkipVerify: true
+  selector:
+    matchLabels:
+      {{- include "zot.labels" . | nindent 4 }}
+{{end}}

@@ -51,20 +51,18 @@ spec:
             httpGet:
               path: /v2/
               port: 5000
-              {{- if .Values.authHeader }}
+              scheme: HTTPS
               httpHeaders:
                 - name: Authorization
-                  value: Basic {{ .Values.authHeader }}
-              {{- end }}
+                  value: Basic {{ printf "%s:%s" .Values.authHeaderUser .Values.authHeaderPassword | b64enc }}
           readinessProbe:
             httpGet:
               path: /v2/
               port: 5000
-              {{- if .Values.authHeader }}
+              scheme: HTTPS
               httpHeaders:
                 - name: Authorization
-                  value: Basic {{ .Values.authHeader }}
-              {{- end }}
+                  value: Basic {{ printf "%s:%s" .Values.authHeaderUser .Values.authHeaderPassword | b64enc }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:

@@ -6,6 +6,9 @@ spec:
   dnsNames:
     - {{ include "zot.fullname" . }}.{{.Release.Namespace}}.svc
     - {{ include "zot.fullname" . }}.{{.Release.Namespace}}.local
+    {{- range .Values.extraDNSNames }}
+    - {{ . }}
+    {{- end }}
   issuerRef:
     kind: Issuer
     name: zot-selfsigned-issuer

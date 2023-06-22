@@ -11,7 +11,7 @@ serviceAccount:
   # Specifies whether a service account should be created
   create: true
   # Annotations to add to the service account
-  annotations: {}
+  annotations: { }
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
@@ -19,11 +19,36 @@ service:
   type: NodePort
   port: 8443
 
-podAnnotations: {}
+podAnnotations: { }
 
-imagePullSecrets: []
+imagePullSecrets: [ ]
+
+tlsEnable: true
 
 tlsSecretName: zot-cert
+
+extraDNSNames:
+  - sealos.hub
+  - apiserver.cluster.local
+
+prometheusEnable: true
+
+accessControl: {
+  "**": {
+    "policies": [ {
+      "users": [ "user" ],
+      "actions": [ "read" ]
+    } ],
+    "defaultPolicy": [ ]
+  },
+  "adminPolicy": {
+    "users": [ "admin" ],
+    "actions": [ "read", "create", "update", "delete" ]
+  }
+}
+
+s3: { }
+
 # If mountConfig is true the chart creates the '$CHART_RELEASE-config', if it
 # does not exist the user is in charge of managing it (as this file includes a
 # sample file you have to add it empty to handle it externally) ... note that
@@ -43,7 +68,8 @@ configFiles:
           "port": "5000",
           "tls": {
             "cert":"/tmp/serving-certs/tls.crt",
-            "key":"/tmp/serving-certs/tls.key"
+            "key":"/tmp/serving-certs/tls.key",
+            "caCert":"/tmp/serving-certs/ca.crt"
           },
           "realm":"zot",
           "auth":{
@@ -86,29 +112,6 @@ configFiles:
         }
       }
     }
-# Alternatively, the configuration can include authentication and acessControl
-# data and we can use mountSecret option for the passwords.
-#
-#  config.json: |-
-#    {
-#      "storage": { "rootDirectory": "/var/lib/registry" },
-#      "http": { "address": "0.0.0.0", "port": "5000" },
-#      "auth": { "htpasswd": { "path": "/secret/htpasswd" } },
-#      "accessControl": {
-#        "**": {
-#          "policies": [{
-#          "users": ["user"],
-#            "actions": ["read"]
-#          }],
-#          "defaultPolicy": []
-#        },
-#        "adminPolicy": {
-#          "users": ["admin"],
-#          "actions": ["read", "create", "update", "delete"]
-#        }
-#      },
-#      "log": { "level": "debug" }
-#    }
 
 secretFiles:
   # Example htpasswd with 'admin:admin' & 'user:user' user:pass pairs
@@ -120,8 +123,8 @@ secretFiles:
 # in base64. It is needed when `htpasswd` authentication is enabled and the
 # default access does not provide read permission
 # The example value is from running `echo -n "foo:var" | base64`
-authHeader: "dXNlcjp1c2Vy"
-
+authHeaderUser: "user"
+authHeaderPassword: "user"
 # PVC data, only used if persistence is 'true'
 pvc:
   # Make the chart create the PVC, this option is used with storageClasses that
@@ -153,12 +156,12 @@ podSecurityContext: { }
 securityContext: { }
   # capabilities:
   #   drop:
-  #   - ALL
+#   - ALL
 # readOnlyRootFilesystem: true
 # runAsNonRoot: true
 # runAsUser: 1000
 
-nodeSelector: {}
-tolerations: []
+nodeSelector: { }
+tolerations: [ ]
 
-affinity: {}
+affinity: { }
