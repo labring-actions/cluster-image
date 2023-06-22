@@ -8,12 +8,12 @@
    docker.io/labring/zot:v1.4.3
 
 ### How to using
-export PORT=$(kubectl get --namespace zot -o jsonpath="{.spec.ports[0].port}" services zot)
-export CLUSTER_IP=$(kubectl get --namespace zot -o jsonpath="{.spec.clusterIP}" services zot)
-echo "https://$CLUSTER_IP:$PORT"
+export ZOT_PORT=$(kubectl get --namespace zot -o jsonpath="{.spec.ports[0].port}" services zot)
+export ZOT_IP=$(kubectl get --namespace zot -o jsonpath="{.spec.clusterIP}" services zot)
+echo "https://$ZOT_IP:$ZOT_PORT"
 
-helm registry  login  $CLUSTER_IP:$PORT --insecure  (admin:admin / user:user)
-helm  push  zot-0.1.22.tgz  oci://$CLUSTER_IP:$PORT --insecure-skip-tls-verify
-helm  pull  oci://$CLUSTER_IP:$PORT/zot --version 0.1.22 --insecure-skip-tls-verify=true
+helm registry  login  $ZOT_IP:$ZOT_PORT --insecure  (admin:admin / user:user)
+helm  push  zot-0.1.22.tgz  oci://$ZOT_IP:$ZOT_PORT --insecure-skip-tls-verify
+helm  pull  oci://$ZOT_IP:$ZOT_PORT/zot --version 0.1.22 --insecure-skip-tls-verify=true
 
 svc addr: zot.zot.svc.cluster.local:8443
