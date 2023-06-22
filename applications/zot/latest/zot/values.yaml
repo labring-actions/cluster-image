@@ -22,6 +22,8 @@ service:
 podAnnotations: {}
 
 imagePullSecrets: []
+
+tlsSecretName: zot-cert
 # If mountConfig is true the chart creates the '$CHART_RELEASE-config', if it
 # does not exist the user is in charge of managing it (as this file includes a
 # sample file you have to add it empty to handle it externally) ... note that

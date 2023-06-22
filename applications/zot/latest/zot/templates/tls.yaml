@@ -9,7 +9,7 @@ spec:
   issuerRef:
     kind: Issuer
     name: zot-selfsigned-issuer
-  secretName: zot-cert
+  secretName: {{.Values.tlsSecretName}}
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer

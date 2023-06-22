@@ -41,8 +41,9 @@ spec:
               readOnly: true
             - mountPath: '/etc/zot'
               name: {{ .Release.Name }}-config
-            - mountPath: '/etc/zot'
+            - mountPath: '/etc/zot/htpasswd'
               name: {{ .Release.Name }}-secret
+              subPath: htpasswd
             - mountPath: '/var/lib/registry'
               name: {{ .Release.Name }}-volume
           livenessProbe:
@@ -69,7 +70,7 @@ spec:
         - name: cert
           secret:
             defaultMode: 420
-            secretName: zot-cert
+            secretName: {{.Values.tlsSecretName}}
         - name: {{ .Release.Name }}-config
           configMap:
             name: {{ .Release.Name }}-config
