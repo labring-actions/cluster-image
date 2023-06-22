@@ -15,3 +15,5 @@ echo "https://$NODE_IP:$NODE_PORT"
 helm registry  login  $NODE_IP:$NODE_PORT --insecure  (admin:admin / user:user)
 helm  push  zot-0.1.22.tgz  oci://$NODE_IP:$NODE_PORT --insecure-skip-tls-verify
 helm  pull  oci://$NODE_IP:$NODE_PORT/zot --version 0.1.22 --insecure-skip-tls-verify=true
+
+svc addr: zot.zot.svc.cluster.local:8443
