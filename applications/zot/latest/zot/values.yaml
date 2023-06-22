@@ -81,7 +81,7 @@ configFiles:
         "scrub": {
           "enable": true,
           "interval": "24h"
-        },
+        }
       }
     }
 # Alternatively, the configuration can include authentication and acessControl
