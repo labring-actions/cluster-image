@@ -19,7 +19,7 @@ service:
   type: NodePort
   port: 8443
 
-podAnnotations: { }
+podAnnotations: {}
 
 imagePullSecrets: [ ]
 
