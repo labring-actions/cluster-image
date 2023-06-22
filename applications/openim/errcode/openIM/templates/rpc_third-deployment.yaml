@@ -13,14 +13,14 @@ spec:
       app: {{include "openIM.rpc_third" . }}
   template:
     metadata:
-      {{- with .Values.third.podAnnotations }}
       annotations:
+        {{- with .Values.third.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
         {{- include "openIM.selectorLabels" . | nindent 8 }}
         app: {{include "openIM.rpc_third" . }}
-        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

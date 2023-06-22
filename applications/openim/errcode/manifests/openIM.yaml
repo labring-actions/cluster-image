@@ -31,11 +31,15 @@ data:
     #---------------Infrastructure configuration---------------------#
     zookeeper:
       schema: openim
-      zkAddr: [bitnami-zookeeper.zookeeper.svc.cluster.local:2181] #单机部署时，默认即可
+      #单机部署时，默认即可
+      zkAddr:
+      - bitnami-zookeeper.zookeeper.svc.cluster.local:2181
       userName: 
       password: 
     mysql:
-      dbMysqlAddress: [bitnami-mysql.mysql.svc.cluster.local:3306] #mysql地址 目前仅支持单机，默认即可
+      #mysql地址 目前仅支持单机，默认即可
+      dbMysqlAddress:
+      - bitnami-mysql.mysql.svc.cluster.local:3306
       dbMysqlUserName: root #mysql用户名，建议修改
       dbMysqlPassword: mysql123 # mysql密码，建议修改
       dbMysqlDatabaseName: openIM_v2 #默认即可
@@ -49,7 +53,9 @@ data:
 
     mongo:
       dbUri: ""#当dbUri值不为空则直接使用该值
-      dbAddress: [mongodb-sharded.mongodb-sharded.svc.cluster.local:27017]  #单机时为mongo地址，使用分片集群时，为mongos地址 默认即可
+      #单机时为mongo地址，使用分片集群时，为mongos地址 默认即可
+      dbAddress:
+      - mongodb-sharded.mongodb-sharded.svc.cluster.local:27017
       dbDirect: false
       dbTimeout: 60
       dbDatabase: openIM  #mongo db 默认即可
@@ -61,7 +67,13 @@ data:
       chatRecordsClearTime: "0 2 * * 3" # 每周三凌晨2点清除消息，该配置和linux定时任务一样， 清理操作建议设置在用户活跃少的时候 # 0 3 * * *
 
     redis:
-      dbAddress: [redis-cluster-0.redis-cluster-headless.redis-cluster.svc.cluster.local:16379 redis-cluster-1.redis-cluster-headless.redis-cluster.svc.cluster.local:16379 redis-cluster-2.redis-cluster-headless.redis-cluster.svc.cluster.local:16379 redis-cluster-3.redis-cluster-headless.redis-cluster.svc.cluster.local:16379 redis-cluster-4.redis-cluster-headless.redis-cluster.svc.cluster.local:16379 redis-cluster-5.redis-cluster-headless.redis-cluster.svc.cluster.local:16379]
+      dbAddress:
+      - redis-cluster-0.redis-cluster-headless.redis-cluster.svc.cluster.local:16379
+      - redis-cluster-1.redis-cluster-headless.redis-cluster.svc.cluster.local:16379
+      - redis-cluster-2.redis-cluster-headless.redis-cluster.svc.cluster.local:16379
+      - redis-cluster-3.redis-cluster-headless.redis-cluster.svc.cluster.local:16379
+      - redis-cluster-4.redis-cluster-headless.redis-cluster.svc.cluster.local:16379
+      - redis-cluster-5.redis-cluster-headless.redis-cluster.svc.cluster.local:16379
       dbMaxIdle: 128
       dbMaxActive: 0
       dbIdleTimeout: 120
@@ -115,7 +127,7 @@ data:
 
     object:
       enable: minio
-      apiURL: http://api-openim.schedule002-system.svc.cluster.local:8080/third/object
+      apiURL: http://api-openim.schedule-system.svc.cluster.local:8080/third/object
       minio: #MinIO 发送图片、视频、文件时需要，请自行申请后替换，必须修改。 客户端初始化InitSDK，中 object_storage参数为minio
         tempBucket: openim
         dataBucket: openim
@@ -635,6 +647,8 @@ spec:
       app: api
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -729,6 +743,7 @@ spec:
       app: cron-task
   template:
     metadata:
+      annotations:
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -812,6 +827,8 @@ spec:
       app: msg-gateway
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -912,6 +929,8 @@ spec:
       app: msg-transfer
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1006,6 +1025,8 @@ spec:
       app: push
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1091,6 +1112,8 @@ spec:
       app: rpc-auth
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1185,6 +1208,8 @@ spec:
       app: rpc-conversation
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1282,6 +1307,8 @@ spec:
       app: rpc-friend
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1379,6 +1406,8 @@ spec:
       app: rpc-group
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1476,6 +1505,8 @@ spec:
       app: rpc-msg
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1573,6 +1604,8 @@ spec:
       app: rpc-third
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1670,6 +1703,8 @@ spec:
       app: rpc-user
   template:
     metadata:
+      annotations:
+        checksum/configmap: 7f7802ebbc185b913b4bd25bdac5551999490d99f8a69996b1d5cfecb3c0246d
       labels:
         app.kubernetes.io/name: openim
         app.kubernetes.io/instance: openim
@@ -1742,24 +1777,3 @@ spec:
                   - user
               topologyKey: kubernetes.io/hostname
             weight: 100
----
-# Source: openim/templates/tests/test-connection.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: "openim-test-connection"
-  labels:
-    helm.sh/chart: openim-3.0.0-alpha1
-    app.kubernetes.io/name: openim
-    app.kubernetes.io/instance: openim
-    app.kubernetes.io/version: "errcode"
-    app.kubernetes.io/managed-by: Helm
-  annotations:
-    "helm.sh/hook": test
-spec:
-  containers:
-    - name: wget
-      image: busybox
-      command: ['wget']
-      args: ['openim:8080']
-  restartPolicy: Never

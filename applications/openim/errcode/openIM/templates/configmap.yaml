@@ -13,11 +13,19 @@ data:
     #---------------Infrastructure configuration---------------------#
     zookeeper:
       schema: openim
-      zkAddr: {{.Values.configmap.zookeeper.zkAddr}} #单机部署时，默认即可
+      #单机部署时，默认即可
+      zkAddr:
+      {{- range .Values.configmap.zookeeper.zkAddr }}
+      - {{ . }}
+      {{- end }}
       userName: {{.Values.configmap.zookeeper.userName}}
       password: {{.Values.configmap.zookeeper.password}}
     mysql:
-      dbMysqlAddress: {{.Values.configmap.mysql.dbMysqlAddress}} #mysql地址 目前仅支持单机，默认即可
+      #mysql地址 目前仅支持单机，默认即可
+      dbMysqlAddress:
+      {{- range .Values.configmap.mysql.dbMysqlAddress }}
+      - {{ . }}
+      {{- end }}
       dbMysqlUserName: {{.Values.configmap.mysql.dbMysqlUserName}} #mysql用户名，建议修改
       dbMysqlPassword: {{.Values.configmap.mysql.dbMysqlPassword}} # mysql密码，建议修改
       dbMysqlDatabaseName: {{.Values.configmap.mysql.dbMysqlDatabaseName | default "openIM_v2" }} #默认即可
@@ -31,7 +39,11 @@ data:
 
     mongo:
       dbUri: ""#当dbUri值不为空则直接使用该值
-      dbAddress: {{.Values.configmap.mongo.dbAddress}}  #单机时为mongo地址，使用分片集群时，为mongos地址 默认即可
+      #单机时为mongo地址，使用分片集群时，为mongos地址 默认即可
+      dbAddress:
+      {{- range .Values.configmap.mongo.dbAddress }}
+      - {{ . }}
+      {{- end }}
       dbDirect: false
       dbTimeout: 60
       dbDatabase: {{.Values.configmap.mongo.dbDatabase | default "openIM" }}  #mongo db 默认即可
@@ -43,7 +55,10 @@ data:
       chatRecordsClearTime: "0 2 * * 3" # 每周三凌晨2点清除消息，该配置和linux定时任务一样， 清理操作建议设置在用户活跃少的时候 # 0 3 * * *
 
     redis:
-      dbAddress: {{.Values.configmap.redis.dbAddress}}
+      dbAddress:
+      {{- range .Values.configmap.redis.dbAddress }}
+      - {{ . }}
+      {{- end }}
       dbMaxIdle: 128
       dbMaxActive: 0
       dbIdleTimeout: 120
