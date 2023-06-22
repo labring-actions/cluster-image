@@ -35,21 +35,16 @@ spec:
             - name: zot
               containerPort: 5000
               protocol: TCP
-          {{- if or .Values.mountConfig .Values.mountSecret .Values.persistence }}
           volumeMounts:
-          {{- if .Values.mountConfig }}
+            - mountPath: /tmp/serving-certs
+              name: cert
+              readOnly: true
             - mountPath: '/etc/zot'
               name: {{ .Release.Name }}-config
-          {{- end }}
-          {{- if .Values.mountSecret }}
-            - mountPath: '/secret'
+            - mountPath: '/etc/zot'
               name: {{ .Release.Name }}-secret
-          {{- end }}
-          {{- if .Values.persistence }}
             - mountPath: '/var/lib/registry'
               name: {{ .Release.Name }}-volume
-          {{- end }}
-          {{- end }}
           livenessProbe:
             httpGet:
               path: /v2/
@@ -70,24 +65,20 @@ spec:
               {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      {{- if or .Values.mountConfig .Values.persistence }}
       volumes:
-      {{- if .Values.mountConfig }}
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: zot-cert
         - name: {{ .Release.Name }}-config
           configMap:
             name: {{ .Release.Name }}-config
-      {{- end }}
-      {{- if .Values.mountSecret }}
         - name: {{ .Release.Name }}-secret
           secret:
             secretName: {{ .Release.Name }}-secret
-      {{- end }}
-      {{- if .Values.persistence }}
         - name: {{ .Release.Name }}-volume
           persistentVolumeClaim:
             claimName: {{ .Values.pvc.name | default (printf "%s-pvc" .Release.Name) }}
-      {{- end }}
-      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

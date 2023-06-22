@@ -19,9 +19,9 @@ service:
   type: NodePort
   port: 8443
 
-# If mountConfig is true the configMap named $CHART_RELEASE-config is mounted
-# on the pod's '/etc/zot' directory
-mountConfig: true
+podAnnotations: {}
+
+imagePullSecrets: []
 # If mountConfig is true the chart creates the '$CHART_RELEASE-config', if it
 # does not exist the user is in charge of managing it (as this file includes a
 # sample file you have to add it empty to handle it externally) ... note that
@@ -30,17 +30,41 @@ mountConfig: true
 configFiles:
   config.json: |-
     {
-      "storage": { "rootDirectory": "/var/lib/registry","gc": true,"gcDelay": "1h","gcInterval": "24h" },
+      "storage": { 
+          "rootDirectory": "/var/lib/registry",
+          "gc": true,
+          "gcDelay": "1h",
+          "gcInterval": "24h" 
+      },
       "http": { 
           "address": "0.0.0.0", 
           "port": "5000",
           "tls": {
-            "cert":"/certs/tls.crt",
-            "key":"/certs/tls.key"
+            "cert":"/tmp/serving-certs/tls.crt",
+            "key":"/tmp/serving-certs/tls.key"
+          },
+          "realm":"zot",
+          "auth":{
+            "htpasswd":{
+               "path":"/etc/zot/htpasswd"
+            },
+            "failDelay":1
+          },
+          "accessControl": {
+             "**": {
+               "policies": [{
+                 "users": ["user"],
+                 "actions": ["read"]
+               }],
+               "defaultPolicy": []
+             },
+             "adminPolicy": {
+               "users": ["admin"],
+               "actions": ["read", "create", "update", "delete"]
+             }
           }
       },
       "log": { "level": "debug" },
-      "auth": { "htpasswd": { "path": "/secret/htpasswd" } },
       "extensions": {
         "metrics": {
         "enable": true,
@@ -58,19 +82,6 @@ configFiles:
           "enable": true,
           "interval": "24h"
         },
-      },
-      "accessControl": {
-            "**": {
-              "policies": [{
-              "users": ["user"],
-                "actions": ["read"]
-              }],
-              "defaultPolicy": []
-            },
-            "adminPolicy": {
-              "users": ["admin"],
-              "actions": ["read", "create", "update", "delete"]
-            }
       }
     }
 # Alternatively, the configuration can include authentication and acessControl
@@ -97,12 +108,6 @@ configFiles:
 #      "log": { "level": "debug" }
 #    }
 
-# If mountSecret is true, the Secret named $CHART_RELEASE-secret is mounted on
-# the pod's '/secret' directory (it is used to keep files with passwords, like
-# a `htpasswd` file)
-mountSecret: true
-# If secretFiles does not exist the user is in charge of managing it, again, if
-# you want to manage it the value has to be added empty to avoid using this one
 secretFiles:
   # Example htpasswd with 'admin:admin' & 'user:user' user:pass pairs
   # htpasswd -nbB -C 10 admin admin
@@ -115,10 +120,6 @@ secretFiles:
 # The example value is from running `echo -n "foo:var" | base64`
 authHeader: "dXNlcjp1c2Vy"
 
-# If persistence is 'true' the service uses a persistentVolumeClaim to mount a
-# volume for zot on '/var/lib/registry'; by default the pvc used is named
-# '$CHART_RELEASE-pvc', but the name can be changed below
-persistence: true
 # PVC data, only used if persistence is 'true'
 pvc:
   # Make the chart create the PVC, this option is used with storageClasses that
@@ -157,3 +158,5 @@ securityContext: { }
 
 nodeSelector: {}
 tolerations: []
+
+affinity: {}
