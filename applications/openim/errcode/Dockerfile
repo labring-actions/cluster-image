@@ -1,4 +1,3 @@
 FROM scratch
 COPY . .
-ENV password_valuespath="openIM/configmap-override.values.yaml"
-CMD ["helm upgrade -i openim openIM --namespace openim-system --create-namespace --values openIM/values.yaml   --values openIM/configmap-password.values.yaml --values $password_valuespath"]
+CMD ["helm upgrade -i openim openIM --namespace openim-system --create-namespace"]
