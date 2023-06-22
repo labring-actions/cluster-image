@@ -1,4 +1,3 @@
-{{- if and .Values.persistence .Values.pvc .Values.pvc.create }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12,4 +11,3 @@ spec:
   {{- if .Values.pvc.storageClassName }}
   storageClassName: {{ .Values.pvc.storageClassName }}
   {{- end }}
-{{- end }}
