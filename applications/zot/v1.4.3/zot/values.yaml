@@ -28,8 +28,7 @@ tlsEnable: true
 tlsSecretName: zot-cert
 
 extraDNSNames:
-  - sealos.hub
-  - apiserver.cluster.local
+  - zot.sealos.hub
 
 prometheusEnable: false
 
