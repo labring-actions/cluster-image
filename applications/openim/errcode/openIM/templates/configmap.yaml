@@ -70,16 +70,28 @@ data:
       SASLUserName: {{.Values.configmap.kafka.SASLUserName}}
       SASLPassword: {{.Values.configmap.kafka.SASLPassword}}
       ws2mschat:
-        addr: {{.Values.configmap.kafka.ws2mschat.addr}}
+        addr:
+        {{- range .Values.configmap.kafka.ws2mschat.addr }}
+        - {{ . }}
+        {{- end }}
         topic: {{.Values.configmap.kafka.ws2mschat.topic | default "ws2ms_chat"}} #用于mongo和mysql保存消息
       msgtomongo:
-        addr: {{.Values.configmap.kafka.msgtomongo.addr}}  #kafka配置，默认即可
+        addr:
+        {{- range .Values.configmap.kafka.msgtomongo.addr }}
+          - {{ . }}
+        {{- end }}
         topic: {{.Values.configmap.kafka.msgtomongo.topic | default "msg_to_mongo"}}
       ms2pschat:
-        addr: {{.Values.configmap.kafka.ms2pschat.addr}}  #kafka配置，默认即可
+        addr:
+        {{- range .Values.configmap.kafka.ms2pschat.addr }}
+          - {{ . }}
+        {{- end }}
         topic: {{.Values.configmap.kafka.ms2pschat.topic | default "ms2ps_chat"}}
       msgtomodify:
-        addr: {{.Values.configmap.kafka.msgtomodify.addr}}  #kafka配置，默认即可
+        addr:
+        {{- range .Values.configmap.kafka.msgtomodify.addr }}
+          - {{ . }}
+        {{- end }}
         topic: {{.Values.configmap.kafka.msgtomodify.topic | default "msg_to_modify"}}
       consumergroupid:
         msgToTransfer: mongo
