@@ -42,12 +42,10 @@ spec:
               containerPort: 10002
               protocol: TCP
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           readinessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           volumeMounts:
             - name: config

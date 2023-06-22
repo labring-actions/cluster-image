@@ -43,10 +43,10 @@ spec:
               protocol: TCP
           livenessProbe:
             tcpSocket:
-              port: rpc
+              port: metrics #TODO 这里需要调整
           readinessProbe:
             tcpSocket:
-              port: rpc
+              port: metrics #TODO 这里需要调整
           volumeMounts:
             - name: config
               mountPath: /Open-IM-Server/config/config.yaml

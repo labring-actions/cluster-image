@@ -17,6 +17,7 @@ spec:
         {{- with .Values.cron_task.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
         {{- include "openIM.selectorLabels" . | nindent 8 }}
         app: {{include "openIM.cron_task" . }}
