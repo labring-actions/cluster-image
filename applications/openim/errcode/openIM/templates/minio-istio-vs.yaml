@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: minio-{{ include "openIM.fullname" . }}
+  labels:
+    {{- include "openIM.labels" . | nindent 4 }}
+    app: minio
+spec:
+  hosts:
+    - {{ include "openIM.minioURL" . | trim }}
+  gateways:
+    - minio-{{ include "openIM.fullname" . }}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{.Values.istio.minio.service}}
+            port:
+              number: {{.Values.istio.minio.port}}

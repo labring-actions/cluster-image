@@ -129,7 +129,7 @@ data:
         tempBucket: {{.Values.configmap.minio.tempBucket | default "openim"}}
         dataBucket: {{.Values.configmap.minio.dataBucket | default "openim"}}
         location: {{.Values.configmap.minio.location }}
-        endpoint: {{.Values.configmap.minio.endpoint }}
+        endpoint: http://{{ include "openIM.minioAPIURL" . | trim }}:{{ required "istio public port is required" .Values.istio.publicPort }}
         accessKeyID: {{.Values.configmap.minio.accessKeyID }}
         secretAccessKey: {{.Values.configmap.minio.secretAccessKey }}
         isDistributedMod: false # 是否分布式多硬盘部署 默认docker-compose中为false，如果是多硬盘部署，需要修改为true

@@ -108,3 +108,30 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/* Generate minio url based on the value of .Values.istio.minio and .Values.istio.publicIP */}}
+{{- define "openIM.minioAPIURL" -}}
+{{- if .Values.istio.minioAPI.domain }}
+{{ .Values.istio.minioAPI.domain }}
+{{- else }}
+minio.api.{{ .Values.istio.publicIP }}.nip.io
+{{- end }}
+{{- end }}
+
+{{/* Generate minio url based on the value of .Values.istio.minio and .Values.istio.publicIP */}}
+{{- define "openIM.minioURL" -}}
+{{- if .Values.istio.minio.domain }}
+{{ .Values.istio.minio.domain }}
+{{- else }}
+minio.{{ .Values.istio.publicIP }}.nip.io
+{{- end }}
+{{- end }}
+
+{{/* Generate minio url based on the value of .Values.istio.minio and .Values.istio.publicIP */}}
+{{- define "openIM.apiURL" -}}
+{{- if .Values.istio.api.domain }}
+{{ .Values.istio.api.domain }}
+{{- else }}
+api.{{ .Values.istio.publicIP }}.nip.io
+{{- end }}
+{{- end }}

@@ -1,3 +1,4 @@
 FROM scratch
 COPY . .
-CMD ["helm upgrade -i openim openIM --namespace openim-system --create-namespace"]
+ENV publicIP="127.0.0.1"
+CMD ["bash helm.sh $publicIP"]

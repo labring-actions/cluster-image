@@ -557,7 +557,6 @@ configmap:
     tempBucket: "openim"
     dataBucket: "openim"
     location: "" #us-east-1
-    endpoint: http://127.0.0.1:9000 #minio外网ip 这个ip是给客户端访问的
     accessKeyID: admin
     secretAccessKey: minio123
     isDistributedMod: false # 是否分布式多硬盘部署 默认docker-compose中为false，如果是多硬盘部署，需要修改为true
@@ -584,3 +583,17 @@ configmap:
       msgToMySql: mysql
       msgToPush: push
       msgToModify: modify
+
+istio:
+  publicIP: ""
+  publicPort: ""
+  minio:
+    service: bitnami-minio.minio.svc.cluster.local
+    port: 9001
+    domain: ""
+  minioAPI:
+    service: bitnami-minio.minio.svc.cluster.local
+    port: 9000
+    domain: ""
+  api:
+    domain: ""

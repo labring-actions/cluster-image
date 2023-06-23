@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: minio-{{ include "openIM.fullname" . }}
+  labels:
+    {{- include "openIM.labels" . | nindent 4 }}
+    app: minio
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ include "openIM.minioURL" . | trim }}
