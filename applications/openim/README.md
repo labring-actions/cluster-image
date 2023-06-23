@@ -21,9 +21,6 @@ sealos run labring/bitnami-zookeeper:v11.4.2
 sealos run labring/bitnami-redis-cluster:v8.4.4
 sealos run labring/bitnami-minio:v12.6.4
 sealos run labring/istio:1.16.2-min
-#需要获取密码
-export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb-sharded mongodb-sharded -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
-export REDIS_PASSWORD=$(kubectl get secret --namespace "redis-cluster" redis-cluster -o jsonpath="{.data.redis-password}" | base64 -d)
-sealos run labring/openim:errcode
+sealos run --env publicIP=8.217.106.70 labring/openim:errcode
 ```
 
