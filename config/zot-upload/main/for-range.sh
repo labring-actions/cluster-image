@@ -27,4 +27,4 @@ for dir in $charts_dirs; do
     done
 done
 
-find . -name "*.tgz" -exec helm  push  {}  oci://"$ZOT_IP":"$ZOT_PORT" --insecure-skip-tls-verify \;
+find . -name "*.tgz" -exec helm  push  {}  oci://"$ZOT_IP":"$ZOT_PORT"/helm-charts --insecure-skip-tls-verify \;
