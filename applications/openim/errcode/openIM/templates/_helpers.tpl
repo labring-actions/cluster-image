@@ -127,11 +127,20 @@ minio.{{ .Values.istio.publicIP }}.nip.io
 {{- end }}
 {{- end }}
 
-{{/* Generate minio url based on the value of .Values.istio.minio and .Values.istio.publicIP */}}
+{{/* Generate api url based on the value of .Values.istio.minio and .Values.istio.publicIP */}}
 {{- define "openIM.apiURL" -}}
 {{- if .Values.istio.api.domain }}
 {{ .Values.istio.api.domain }}
 {{- else }}
 api.{{ .Values.istio.publicIP }}.nip.io
+{{- end }}
+{{- end }}
+
+{{/* Generate ws url based on the value of .Values.istio.minio and .Values.istio.publicIP */}}
+{{- define "openIM.gatewayDomain" -}}
+{{- if .Values.istio.gateway.domain }}
+{{ .Values.istio.api.domain }}
+{{- else }}
+gateway.{{ .Values.istio.publicIP }}.nip.io
 {{- end }}
 {{- end }}

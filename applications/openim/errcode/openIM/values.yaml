@@ -597,3 +597,5 @@ istio:
     domain: ""
   api:
     domain: ""
+  gateway:
+    domain: ""

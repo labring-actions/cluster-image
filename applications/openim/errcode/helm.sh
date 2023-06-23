@@ -1,5 +1,5 @@
 #!/bin/bash
-export PUBLIC_IP:="${1:-"127.0.0.1"}"
+export readonly PUBLIC_IP="${1:-"127.0.0.1"}"
 # shellcheck disable=SC2155
 export readonly MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb-sharded mongodb-sharded -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
 export readonly REDIS_PASSWORD=$(kubectl get secret --namespace "redis-cluster" redis-cluster -o jsonpath="{.data.redis-password}" | base64 -d)

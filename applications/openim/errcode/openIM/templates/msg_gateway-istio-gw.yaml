@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{include "openIM.msg_gateway" . }}-{{ include "openIM.fullname" . }}
+  labels:
+    {{- include "openIM.labels" . | nindent 4 }}
+    app: {{include "openIM.msg_gateway" . }}
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ include "openIM.gatewayDomain" . | trim }}
