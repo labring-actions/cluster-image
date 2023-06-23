@@ -15,3 +15,4 @@
     minio: http://{{ include "openIM.minioURL" . | trim}}:{{.Values.istio.publicPort}}
     minio api: http://{{ include "openIM.minioAPIURL" . | trim}}:{{.Values.istio.publicPort}}
     openim api: http://{{ include "openIM.apiURL" . | trim}}:{{.Values.istio.publicPort}}
+    gateway: ws://{{ include "openIM.gatewayDomain" . | trim}}:{{.Values.istio.publicPort}}
