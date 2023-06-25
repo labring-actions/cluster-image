@@ -11,3 +11,7 @@ helm  push  zot-0.1.22.tgz  oci://$ZOT_IP:$ZOT_PORT --insecure-skip-tls-verify
 helm  pull  oci://$ZOT_IP:$ZOT_PORT/zot --version 0.1.22 --insecure-skip-tls-verify=true
 
 Using svc address: helm registry login {{ include "zot.fullname" . }}.{{.Release.Namespace}}.svc.cluster.local:{{.Values.service.port}} --insecure -u user -p user
+
+You can push your all helm chart for your zot registry.
+
+sealos run labring/zot-upload:main -f
