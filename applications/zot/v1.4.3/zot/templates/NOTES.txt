@@ -1,9 +1,7 @@
 Get the application URL by running these commands:
-{{- if contains "NodePort" .Values.service.type }}
-  export ZOT_PORT=$(kubectl get --namespace zot -o jsonpath="{.spec.ports[0].port}" services zot)
-  export ZOT_IP=$(kubectl get --namespace zot -o jsonpath="{.spec.clusterIP}" services zot)
-  echo "https://$ZOT_IP:$ZOT_PORT"
-{{- end }}
+export ZOT_PORT=$(kubectl get --namespace zot -o jsonpath="{.spec.ports[0].port}" services zot)
+export ZOT_IP=$(kubectl get --namespace zot -o jsonpath="{.spec.clusterIP}" services zot)
+echo "https://$ZOT_IP:$ZOT_PORT"
 You can now access your application using helm.
 
 helm registry login $ZOT_IP:$ZOT_PORT --insecure -u user -p user
