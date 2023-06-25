@@ -15,9 +15,21 @@ if [ "${BIN_DOWNLOAD}" == "true" ]; then
   rm -rf linux-"${ARCH}" kbcli.tar.gz
   echo "download kbcli success"
 fi
-helm repo add kubeblocks https://apecloud.github.io/helm-charts
+#helm repo add kubeblocks https://apecloud.github.io/helm-charts
 mkdir -p charts
 #chart_version=`helm search repo --versions --regexp '\vkubeblocks/kubeblocks\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 #helm pull kubeblocks/kubeblocks --version=${chart_version} -d charts/
-helm search repo kubeblocks | awk 'NR>1{print $1}'|xargs -I {} helm fetch {} -d charts/ || true
-rm -rf charts/aws-load-balancer*
+#helm search repo kubeblocks | awk 'NR>1{print $1}'|xargs -I {} helm fetch {} -d charts/ || true
+#rm -rf charts/aws-load-balancer*
+
+# 需要下载到的目标目录
+target_dir="charts"
+# 文件名，这里以 `urls.txt` 为例
+file="chartlist"
+# 使用 `while` 循环和 `read` 命令来读取文件中的每一行
+while IFS= read -r line
+do
+    # 使用 `wget` 或 `curl` 命令来下载文件
+    # 这里以 `wget` 为例
+    wget -P $target_dir "$line"
+done < "$file"
