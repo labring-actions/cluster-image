@@ -38,7 +38,8 @@ accessControl: {
       "users": [ "user" ],
       "actions": [ "read" ]
     } ],
-    "defaultPolicy": [ ]
+    "defaultPolicy": [ ],
+    "anonymousPolicy":["read"]
   },
   "adminPolicy": {
     "users": [ "admin" ],

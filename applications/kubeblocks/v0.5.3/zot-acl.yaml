@@ -1,0 +1,14 @@
+accessControl: {
+  "**": {
+    "policies": [ {
+      "users": [ "user" ],
+      "actions": [ "read" ]
+    } ],
+    "defaultPolicy": [ ],
+    "anonymousPolicy":["read"]
+  },
+  "adminPolicy": {
+    "users": [ "admin" ],
+    "actions": [ "read", "create", "update", "delete" ]
+  }
+}
