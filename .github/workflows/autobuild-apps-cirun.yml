@@ -6,7 +6,7 @@ on:
 jobs:
   resolve-issue-var:
     if: startswith(github.event.comment.body, '/imagebuild_cirun_apps') &&  github.event.sender.login=='cuisongliu'
-    runs-on: cirun-gcp-amd64--${{ github.run_id }}
+    runs-on: ubuntu-latest
     outputs:
       app: ${{ steps.set-appversion.outputs.app }}
       version: ${{ steps.set-appversion.outputs.version }}
@@ -23,7 +23,7 @@ jobs:
     name: Auto build app image
     needs:
       - resolve-issue-var
-    runs-on: ubuntu-latest
+    runs-on: cirun-gcp-amd64--${{ github.run_id }}
     strategy:
       matrix:
         arch: [ amd64,arm64 ]
