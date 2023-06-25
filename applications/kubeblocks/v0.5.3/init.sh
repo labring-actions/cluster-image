@@ -20,7 +20,6 @@ mkdir -p charts
 #chart_version=`helm search repo --versions --regexp '\vkubeblocks/kubeblocks\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 #helm pull kubeblocks/kubeblocks --version=${chart_version} -d charts/
 #helm search repo kubeblocks | awk 'NR>1{print $1}'|xargs -I {} helm fetch {} -d charts/ || true
-#rm -rf charts/aws-load-balancer*
 
 # 需要下载到的目标目录
 target_dir="charts"
@@ -33,3 +32,5 @@ do
     # 这里以 `wget` 为例
     wget -P $target_dir "$line"
 done < "$file"
+
+rm -rf charts/aws-load-balancer*
