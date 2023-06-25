@@ -25,6 +25,7 @@ cd "$ROOT" && {
 }
 
 echo "$0"
+sudo apt-get install -y tree
 tree "$ROOT"
 
 {
