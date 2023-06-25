@@ -5,7 +5,7 @@ on:
       - created
 jobs:
   resolve-issue-var:
-    if: startswith(github.event.comment.body, '/imagebuild_apps') &&  github.event.sender.login=='cuisongliu'
+    if: startswith(github.event.comment.body, '/imagebuild_apps_cirun') &&  github.event.sender.login=='cuisongliu'
     runs-on: cirun-gcp-amd64--${{ github.run_id }}
     outputs:
       app: ${{ steps.set-appversion.outputs.app }}
