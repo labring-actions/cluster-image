@@ -11,7 +11,7 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 mkdir -p images/shim
 echo "ghcr.io/labring/lvscare:$VERSION" > images/shim/lvscare
 
-wget https://github.com/labring/sealos/releases/download/"$VERSION"/sealos_"${VERSION#v}"_linux_amd64.tar.gz
+wget https://github.com/labring/sealos/releases/download/"$VERSION"/sealos_"${VERSION#v}"_linux_"${ARCH}".tar.gz
 tar -zxvf sealos_"${VERSION#v}"_linux_"${ARCH}".tar.gz sealos sealctl image-cri-shim
 
 cat <<EOF >>"Kubefile"
