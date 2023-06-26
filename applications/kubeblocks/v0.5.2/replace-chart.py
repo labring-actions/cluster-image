@@ -4,7 +4,7 @@
 import re
 import sys
 
-oci_registry = "oci://10.128.0.9:30968"
+oci_registry = "oci://zot.zot.svc.cluster.local:8443"
 
 # Read all lines from the file
 # with open('all.yaml') as f:
