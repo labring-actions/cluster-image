@@ -4,7 +4,7 @@
 import re
 import sys
 
-oci_registry = "oci://zot.zot.svc.cluster.local:8443"
+oci_registry = "oci://zot.zot.svc.cluster.local:8443/helm-charts"
 
 # Read all lines from the file
 # with open('all.yaml') as f:
