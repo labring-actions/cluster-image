@@ -1,0 +1,17 @@
+accessControl: {
+  "**": {
+    "policies": [ {
+      "users": [ "user" ],
+      "actions": [ "read" ]
+    }],
+    "defaultPolicy": [ "read"]
+  },
+  "helm-charts/**": {
+    "anonymousPolicy": [ "read", "create", "update","delete" ],
+    "defaultPolicy": [ "read", "create", "update","delete" ]
+  },
+  "adminPolicy": {
+    "users": [ "admin" ],
+    "actions": [ "read", "create", "update", "delete" ]
+  }
+}
