@@ -7,3 +7,10 @@ https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/pgcluster-
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/postgresql-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/redis-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/redis-cluster-0.5.2.tgz
+https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/milvus-0.5.2.tgz
+https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/milvus-cluster-0.5.2.tgz
+https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/qdrant-0.5.2.tgz
+https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/qdrant-cluster-0.5.2.tgz
+https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/weaviate-0.5.2.tgz
+https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/weaviate-cluster-0.5.2.tgz
+https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/snapshot-controller-1.7.2.tgz
