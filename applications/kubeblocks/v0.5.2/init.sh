@@ -5,7 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
-export readonly BIN_DOWNLOAD=${4:-true }
+export readonly BIN_DOWNLOAD=${4:-"true" }
 if [ "${BIN_DOWNLOAD}" == "true" ]; then
   mkdir -p opt
   wget https://github.com/apecloud/kubeblocks/releases/download/v0.5.2/kbcli-linux-"${ARCH}"-v0.5.2.tar.gz -O kbcli.tar.gz
