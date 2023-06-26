@@ -1,12 +1,6 @@
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/alertmanager-webhook-adaptor-0.1.4.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/apecloud-mysql-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/apecloud-mysql-cluster-0.5.2.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/aws-load-balancer-controller-1.4.8.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/clickhouse-cluster-0.5.2.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/csi-hostpath-driver-0.5.2.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/csi-s3-0.5.2.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/dt-platform-0.1.0.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/grafana-6.43.5.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/kafka-cluster-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/kubeblocks-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/kubeblocks-csi-driver-0.1.0.tgz
@@ -17,12 +11,9 @@ https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/mongodb-cl
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/nyancat-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/pgcluster-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/postgresql-0.5.2.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/prometheus-15.16.1.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/prometheus-cluster-0.6.0-alpha.20.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/qdrant-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/qdrant-cluster-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/redis-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/redis-cluster-0.5.2.tgz
-https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/snapshot-controller-1.7.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/weaviate-0.5.2.tgz
 https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/weaviate-cluster-0.5.2.tgz
