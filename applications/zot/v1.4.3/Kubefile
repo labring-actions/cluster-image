@@ -4,4 +4,4 @@ COPY registry registry
 ENV policy=default
 COPY default.yaml default.yaml
 COPY anonymousPolicy.yaml anonymousPolicy.yaml
-CMD ["helm upgrade --install zot charts/zot --namespace zot --create-namespace --values charts/zot/values.yaml --values ${policy}.yaml "]
+CMD ["helm upgrade --install zot charts/zot --namespace zot --create-namespace --values charts/zot/values.yaml --values $(policy).yaml "]
