@@ -8,12 +8,5 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 
 mkdir -p "charts"
 mkdir -p "manifests"
-helm template zot zot  --values zot/values.yaml  --set image.tag=${VERSION}  --debug > manifests/zot.yaml
-
+helm template zot zot  --values zot/values.yaml   --debug > manifests/zot.yaml
 cp -rf zot charts/
-cat <<EOF >"Kubefile"
-FROM scratch
-COPY charts charts
-COPY registry registry
-CMD ["helm upgrade --install zot charts/zot --namespace zot --create-namespace --values charts/zot/values.yaml --set image.tag=${VERSION}"]
-EOF

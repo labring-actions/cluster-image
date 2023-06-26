@@ -17,3 +17,7 @@ helm  push  zot-0.1.22.tgz  oci://$ZOT_IP:$ZOT_PORT --insecure-skip-tls-verify
 helm  pull  oci://$ZOT_IP:$ZOT_PORT/zot --version 0.1.22 --insecure-skip-tls-verify=true
 
 svc addr: zot.zot.svc.cluster.local:8443
+
+### Using anonymousPolicy.yaml
+
+sealos run --env policy=anonymousPolicy docker.io/labring/zot:v1.4.3
