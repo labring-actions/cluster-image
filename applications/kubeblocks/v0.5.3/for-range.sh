@@ -4,11 +4,9 @@ ZOT_PORT=$(kubectl get --namespace zot -o jsonpath="{.spec.ports[0].port}" servi
 ZOT_IP=$(kubectl get --namespace zot -o jsonpath="{.spec.clusterIP}" services zot)
 echo "https://$ZOT_IP:$ZOT_PORT"
 
-# 设置你的目标目录为上级目录
-target_dir="../../"
 
 # 使用 `find` 来找到所有在 `workdir/charts` 目录下的 `.tgz` 文件
-tgz_files=$(find $target_dir -type f -name "*.tgz")
+tgz_files=$(find charts -type f -name "*.tgz")
 
 # 使用 `for` 循环遍历所有找到的 `.tgz` 文件
 for file in $tgz_files; do
