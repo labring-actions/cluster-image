@@ -1,4 +1,5 @@
 #!/bin/bash
+helm upgrade -i kubeblocks-checks charts/kubeblocks-checks -n kb-system --create-namespace
 bash for-range.sh
 export ZOT_PORT=$(kubectl get --namespace zot -o jsonpath="{.spec.ports[0].port}" services zot)
 export ZOT_IP=$(kubectl get --namespace zot -o jsonpath="{.spec.clusterIP}" services zot)

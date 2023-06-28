@@ -20,4 +20,5 @@ do
     wget -P $target_dir "$line"
 done < "$file"
 
+cp -rf kubeblocks-checks charts/
 rm -rf charts/aws-load-balancer*
