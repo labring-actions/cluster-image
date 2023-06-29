@@ -1,4 +1,8 @@
 
+zot:
+  host: zot.zot.svc.cluster.local
+  port: 8443
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
