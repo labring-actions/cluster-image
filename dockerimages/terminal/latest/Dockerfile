@@ -27,10 +27,15 @@ COPY scripts/ttyd-kubectl.sh /usr/bin/
 RUN arch                                                                         && \
     wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - && \
     echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list && \
+    wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
+    sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list' &&\
+    curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb bullseye main" | tee /etc/apt/sources.list.d/redis.list && \
     apt-get update                                                               && \
     apt-get install -y mongodb-mongosh                                           && \
     apt-get install -y default-mysql-client                                      && \
-    apt-get install -y postgresql-client                                         && \ 
+    apt-get install -y postgresql-client-14                                      && \ 
+    apt-get install -y redis-tools                                               && \
     apt-get install -y ncurses-dev libtolua-dev exuberant-ctags gdb              && \
     apt-get install -y ca-certificates curl wget bind9-utils                     && \
     apt-get install -y git g++ gcc libc6-dev make pkg-config vim                 && \
