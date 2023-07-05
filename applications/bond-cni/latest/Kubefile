@@ -1,0 +1,4 @@
+FROM scratch
+COPY bond-cni.sh bond-cni.sh
+COPY opt opt
+CMD ["bash bond-cni.sh"]
