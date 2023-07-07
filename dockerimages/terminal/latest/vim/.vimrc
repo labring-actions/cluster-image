@@ -3,7 +3,6 @@ set nocompatible              " be iMproved
 call plug#begin()
 
 " custom plugins
-Plug 'fatih/vim-go'
 Plug 'majutsushi/tagbar'
 Plug 'shougo/neocomplete.vim'
 Plug 'scrooloose/nerdtree'
@@ -85,24 +84,3 @@ nmap <F7> :NERDTreeTabsToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 nmap <C-Left> :tabprevious<CR>
 nmap <C-Right> :tabnext<CR>
-
-" show a list of interfaces which is implemented by the type under your cursor
-au FileType go nmap <Leader>s <Plug>(go-implements)
-" show type info for the word under your cursor
-au FileType go nmap <Leader>gi <Plug>(go-info)
-" open the relevant Godoc for the word under the cursor
-au FileType go nmap <Leader>gd <Plug>(go-doc)
-au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-" run Go commands
-au FileType go nmap <leader>r <Plug>(go-run)
-au FileType go nmap <leader>b <Plug>(go-build)
-au FileType go nmap <leader>t <Plug>(go-test)
-au FileType go nmap <leader>c <Plug>(go-coverage)
-au FileType go nmap <leader>i <Plug>(go-install)
-" open the definition/declaration in a new vertical, horizontal or tab for the
-" word under your cursor
-au FileType go nmap <Leader>ds <Plug>(go-def-split)
-au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
-au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-" rename the identifier under the cursor to a new name
-au FileType go nmap <Leader>e <Plug>(go-rename)
