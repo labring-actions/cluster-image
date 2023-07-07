@@ -14,12 +14,3 @@ mkdir -p charts/
 VERSION=`echo ${VERSION} | sed 's/.//'`
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm pull nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --version=${VERSION} -d charts/ --untar
-
-cat <<'EOF' >"Kubefile"
-FROM scratch
-ENV NFS_SERVER "127.0.0.1"
-ENV NFS_PATH "/nfs-share"
-COPY charts charts
-COPY registry registry
-CMD ["helm upgrade -i nfs-subdir-external-provisioner charts/nfs-subdir-external-provisioner -n nfs-provisioner --create-namespace --set storageClass.defaultClass=true,nfs.server=$(NFS_SERVER),nfs.path=$(NFS_PATH)"]
-EOF
