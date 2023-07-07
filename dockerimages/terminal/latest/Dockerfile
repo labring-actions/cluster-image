@@ -11,7 +11,7 @@ ENV HOME /root
 ARG kubeVersion=1.25.6
 ARG ttydVersion=1.7.3
 ARG helmVersion=3.12.0
-ARG ARCH=amd64
+ARG ARCH
 ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /root
