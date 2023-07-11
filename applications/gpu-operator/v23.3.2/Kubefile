@@ -1,0 +1,4 @@
+FROM scratch
+COPY registry registry
+COPY images images
+CMD ["helm upgrade -i gpu-operator -n gpu-operator --create-namespace gpu-operator-v23.3.2.tgz"]

@@ -1,0 +1,396 @@
+apiVersion: nvidia.com/v1
+kind: ClusterPolicy
+metadata:
+  name: cluster-policy
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: "gpu-operator"
+    {{ .Release.labels }}
+spec:
+  operator:
+    {{- if .Values.operator.defaultRuntime }}
+    defaultRuntime: {{ .Values.operator.defaultRuntime }}
+    {{- end }}
+    {{- if .Values.operator.runtimeClass }}
+    runtimeClass: {{ .Values.operator.runtimeClass }}
+    {{- end }}
+    {{- if .Values.operator.defaultGPUMode }}
+    defaultGPUMode: {{ .Values.operator.defaultGPUMode }}
+    {{- end }}
+    {{- if .Values.operator.migStrategy }}
+    migStrategy: {{ .Values.operator.migStrategy }}
+    {{- end }}
+    {{- if .Values.operator.initContainer }}
+    initContainer:
+      {{- if .Values.operator.initContainer.repository }}
+      repository: {{ .Values.operator.initContainer.repository }}
+      {{- end }}
+      {{- if .Values.operator.initContainer.image }}
+      image: {{ .Values.operator.initContainer.image }}
+      {{- end }}
+      {{- if .Values.operator.initContainer.version }}
+      version: {{ .Values.operator.initContainer.version | quote }}
+      {{- end }}
+      {{- if .Values.operator.initContainer.imagePullPolicy }}
+      imagePullPolicy: {{ .Values.operator.initContainer.imagePullPolicy }}
+      {{- end }}
+      {{- if .Values.operator.initContainer.imagePullSecrets }}
+      imagePullSecrets: {{ toYaml .Values.operator.initContainer.imagePullSecrets | nindent 8 }}
+      {{- end }}
+    {{- end }}
+  daemonsets:
+    {{- if .Values.daemonsets.tolerations }}
+    tolerations: {{ toYaml .Values.daemonsets.tolerations | nindent 6 }}
+    {{- end }}
+    {{- if .Values.daemonsets.priorityClassName }}
+    priorityClassName: {{ .Values.daemonsets.priorityClassName }}
+    {{- end }}
+  validator:
+    {{- if .Values.validator.repository }}
+    repository: {{ .Values.validator.repository }}
+    {{- end }}
+    {{- if .Values.validator.image }}
+    image: {{ .Values.validator.image }}
+    {{- end }}
+    version: {{ .Values.validator.version | default .Chart.AppVersion | quote }}
+    {{- if .Values.validator.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.validator.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.validator.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.validator.imagePullSecrets | nindent 8 }}
+    {{- end }}
+    {{- if .Values.validator.securityContext }}
+    securityContext: {{ toYaml .Values.validator.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.validator.resources }}
+    resources: {{ toYaml .Values.validator.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.validator.env }}
+    env: {{ toYaml .Values.validator.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.validator.args }}
+    args: {{ toYaml .Values.validator.args | nindent 6 }}
+    {{- end }}
+    {{- if .Values.validator.plugin }}
+    plugin:
+      {{- if .Values.validator.plugin.env }}
+      env: {{ toYaml .Values.validator.plugin.env | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.validator.driver }}
+    driver:
+      {{- if .Values.validator.driver.env }}
+      env: {{ toYaml .Values.validator.driver.env | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.validator.toolkit }}
+    toolkit:
+      {{- if .Values.validator.toolkit.env }}
+      env: {{ toYaml .Values.validator.toolkit.env | nindent 8 }}
+      {{- end }}
+    {{- end }}
+  mig:
+    {{- if .Values.mig.strategy }}
+    strategy: {{ .Values.mig.strategy }}
+    {{- end }}
+  psp:
+    enabled: {{ .Values.psp.enabled }}
+  driver:
+    enabled: {{ .Values.driver.enabled }}
+    {{- if .Values.driver.use_ocp_driver_toolkit }}
+    use_ocp_driver_toolkit: {{ .Values.driver.use_ocp_driver_toolkit }}
+    {{- end }}
+    {{- if .Values.driver.repository }}
+    repository: {{ .Values.driver.repository }}
+    {{- end }}
+    {{- if .Values.driver.image }}
+    image: {{ .Values.driver.image }}
+    {{- end }}
+    {{- if .Values.driver.version }}
+    version: {{ .Values.driver.version | quote }}
+    {{- end }}
+    {{- if .Values.driver.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.driver.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.driver.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.driver.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    rdma:
+      enabled: {{ .Values.driver.rdma.enabled }}
+      useHostMofed: {{ .Values.driver.rdma.useHostMofed }}
+    manager:
+      {{- if .Values.driver.manager.repository }}
+      repository: {{ .Values.driver.manager.repository }}
+      {{- end }}
+      {{- if .Values.driver.manager.image }}
+      image: {{ .Values.driver.manager.image }}
+      {{- end }}
+      {{- if .Values.driver.manager.version }}
+      version: {{ .Values.driver.manager.version | quote }}
+      {{- end }}
+      {{- if .Values.driver.manager.imagePullPolicy }}
+      imagePullPolicy: {{ .Values.driver.manager.imagePullPolicy }}
+      {{- end }}
+      {{- if .Values.driver.manager.env }}
+      env: {{ toYaml .Values.driver.manager.env | nindent 8 }}
+      {{- end }}
+    {{- if .Values.driver.repoConfig }}
+    repoConfig: {{ toYaml .Values.driver.repoConfig | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.certConfig }}
+    certConfig: {{ toYaml .Values.driver.certConfig | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.licensingConfig }}
+    licensingConfig: {{ toYaml .Values.driver.licensingConfig | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.virtualTopology }}
+    virtualTopology: {{ toYaml .Values.driver.virtualTopology | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.kernelModuleConfig }}
+    kernelModuleConfig: {{ toYaml .Values.driver.kernelModuleConfig | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.securityContext }}
+    securityContext: {{ toYaml .Values.driver.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.resources }}
+    resources: {{ toYaml .Values.driver.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.env }}
+    env: {{ toYaml .Values.driver.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.driver.args }}
+    args: {{ toYaml .Values.driver.args | nindent 6 }}
+    {{- end }}
+  toolkit:
+    enabled: {{ .Values.toolkit.enabled }}
+    {{- if .Values.toolkit.repository }}
+    repository: {{ .Values.toolkit.repository }}
+    {{- end }}
+    {{- if .Values.toolkit.image }}
+    image: {{ .Values.toolkit.image }}
+    {{- end }}
+    {{- if .Values.toolkit.version }}
+    version: {{ .Values.toolkit.version | quote }}
+    {{- end }}
+    {{- if .Values.toolkit.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.toolkit.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.toolkit.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.toolkit.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    {{- if .Values.toolkit.securityContext }}
+    securityContext: {{ toYaml .Values.toolkit.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.toolkit.resources }}
+    resources: {{ toYaml .Values.toolkit.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.toolkit.env }}
+    env: {{ toYaml .Values.toolkit.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.toolkit.args }}
+    args: {{ toYaml .Values.toolkit.args | nindent 6 }}
+    {{- end }}
+  devicePlugin:
+    {{- if .Values.devicePlugin.repository }}
+    repository: {{ .Values.devicePlugin.repository }}
+    {{- end }}
+    {{- if .Values.devicePlugin.image }}
+    image: {{ .Values.devicePlugin.image }}
+    {{- end }}
+    {{- if .Values.devicePlugin.version }}
+    version: {{ .Values.devicePlugin.version | quote }}
+    {{- end }}
+    {{- if .Values.devicePlugin.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.devicePlugin.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.devicePlugin.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.devicePlugin.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    {{- if .Values.devicePlugin.securityContext }}
+    securityContext: {{ toYaml .Values.devicePlugin.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.devicePlugin.resources }}
+    resources: {{ toYaml .Values.devicePlugin.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.devicePlugin.env }}
+    env: {{ toYaml .Values.devicePlugin.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.devicePlugin.args }}
+    args: {{ toYaml .Values.devicePlugin.args | nindent 6 }}
+    {{- end }}
+  dcgm:
+    enabled: {{ .Values.dcgm.enabled }}
+    {{- if .Values.dcgm.repository }}
+    repository: {{ .Values.dcgm.repository }}
+    {{- end }}
+    {{- if .Values.dcgm.image }}
+    image: {{ .Values.dcgm.image }}
+    {{- end }}
+    {{- if .Values.dcgm.version }}
+    version: {{ .Values.dcgm.version | quote }}
+    {{- end }}
+    {{- if .Values.dcgm.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.dcgm.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.dcgm.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.dcgm.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgm.securityContext }}
+    securityContext: {{ toYaml .Values.dcgm.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgm.resources }}
+    resources: {{ toYaml .Values.dcgm.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgm.env }}
+    env: {{ toYaml .Values.dcgm.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgm.args }}
+    args: {{ toYaml .Values.dcgm.args | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgm.hostPort }}
+    hostPort: {{ .Values.dcgm.hostPort }}
+    {{- end }}
+  dcgmExporter:
+    {{- if .Values.dcgmExporter.repository }}
+    repository: {{ .Values.dcgmExporter.repository }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.image }}
+    image: {{ .Values.dcgmExporter.image }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.version }}
+    version: {{ .Values.dcgmExporter.version | quote }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.dcgmExporter.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.dcgmExporter.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.securityContext }}
+    securityContext: {{ toYaml .Values.dcgmExporter.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.resources }}
+    resources: {{ toYaml .Values.dcgmExporter.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.env }}
+    env: {{ toYaml .Values.dcgmExporter.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.args }}
+    args: {{ toYaml .Values.dcgmExporter.args | nindent 6 }}
+    {{- end }}
+    {{- if .Values.dcgmExporter.config }}
+    config: {{ toYaml .Values.dcgmExporter.config | nindent 6 }}
+    {{- end }}
+  gfd:
+    {{- if .Values.gfd.repository }}
+    repository: {{ .Values.gfd.repository }}
+    {{- end }}
+    {{- if .Values.gfd.image }}
+    image: {{ .Values.gfd.image }}
+    {{- end }}
+    {{- if .Values.gfd.version }}
+    version: {{ .Values.gfd.version | quote }}
+    {{- end }}
+    {{- if .Values.gfd.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.gfd.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.gfd.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.gfd.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    {{- if .Values.gfd.securityContext }}
+    securityContext: {{ toYaml .Values.gfd.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.gfd.resources }}
+    resources: {{ toYaml .Values.gfd.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.gfd.env }}
+    env: {{ toYaml .Values.gfd.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.gfd.args }}
+    args: {{ toYaml .Values.gfd.args | nindent 6 }}
+    {{- end }}
+  migManager:
+    enabled: {{ .Values.migManager.enabled }}
+    {{- if .Values.migManager.repository }}
+    repository: {{ .Values.migManager.repository }}
+    {{- end }}
+    {{- if .Values.migManager.image }}
+    image: {{ .Values.migManager.image }}
+    {{- end }}
+    {{- if .Values.migManager.version }}
+    version: {{ .Values.migManager.version | quote }}
+    {{- end }}
+    {{- if .Values.migManager.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.migManager.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.migManager.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.migManager.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    {{- if .Values.migManager.securityContext }}
+    securityContext: {{ toYaml .Values.migManager.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.migManager.resources }}
+    resources: {{ toYaml .Values.migManager.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.migManager.env }}
+    env: {{ toYaml .Values.migManager.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.migManager.args }}
+    args: {{ toYaml .Values.migManager.args | nindent 6 }}
+    {{- end }}
+    {{- if .Values.migManager.config }}
+    config: {{ toYaml .Values.migManager.config | nindent 6 }}
+    {{- end }}
+    {{- if .Values.migManager.gpuClientsConfig }}
+    gpuClientsConfig: {{ toYaml .Values.migManager.gpuClientsConfig | nindent 6 }}
+    {{- end }}
+  nodeStatusExporter:
+    enabled: {{ .Values.nodeStatusExporter.enabled }}
+    {{- if .Values.nodeStatusExporter.repository }}
+    repository: {{ .Values.nodeStatusExporter.repository }}
+    {{- end }}
+    {{- if .Values.nodeStatusExporter.image }}
+    image: {{ .Values.nodeStatusExporter.image }}
+    {{- end }}
+    version: {{ .Values.nodeStatusExporter.version | default .Chart.AppVersion | quote }}
+    {{- if .Values.nodeStatusExporter.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.nodeStatusExporter.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.nodeStatusExporter.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.nodeStatusExporter.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    {{- if .Values.nodeStatusExporter.securityContext }}
+    securityContext: {{ toYaml .Values.nodeStatusExporter.securityContext | nindent 6 }}
+    {{- end }}
+    {{- if .Values.nodeStatusExporter.resources }}
+    resources: {{ toYaml .Values.nodeStatusExporter.resources | nindent 6 }}
+    {{- end }}
+    {{- if .Values.nodeStatusExporter.env }}
+    env: {{ toYaml .Values.nodeStatusExporter.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.nodeStatusExporter.args }}
+    args: {{ toYaml .Values.nodeStatusExporter.args | nindent 6 }}
+    {{- end }}
+  {{- if .Values.gds.enabled }}
+  gds:
+    enabled: {{ .Values.gds.enabled }}
+    {{- if .Values.gds.repository }}
+    repository: {{ .Values.gds.repository }}
+    {{- end }}
+    {{- if .Values.gds.image }}
+    image: {{ .Values.gds.image }}
+    {{- end }}
+    version: {{ .Values.gds.version | quote }}
+    {{- if .Values.gds.imagePullPolicy }}
+    imagePullPolicy: {{ .Values.gds.imagePullPolicy }}
+    {{- end }}
+    {{- if .Values.gds.imagePullSecrets }}
+    imagePullSecrets: {{ toYaml .Values.gds.imagePullSecrets | nindent 8 }}
+    {{- end }}
+    {{- if .Values.gds.env }}
+    env: {{ toYaml .Values.gds.env | nindent 6 }}
+    {{- end }}
+    {{- if .Values.gds.args }}
+    args: {{ toYaml .Values.gds.args | nindent 6 }}
+    {{- end }}
+  {{- end }}
