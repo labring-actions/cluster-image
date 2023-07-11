@@ -14,7 +14,7 @@ else
 fi
 
 cd bond-cni
-make build-bin
+GOARCH=${ARCH} make build-bin
 cd -
 mkdir opt
 cp -f bond-cni/bin/bond opt/
