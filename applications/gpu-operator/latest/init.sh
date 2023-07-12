@@ -36,8 +36,8 @@ sed -i 's/"//g' images_list.txt
 cat images_list.txt
 
 mkdir -p "images/shim"
-mv images_list.txt images/shim/gpuImageList
-
+cat images_list.txt | grep -v vgpu > images/shim/gpuImageList
+rm -rf mv images_list.txt
 cat <<EOF >"Kubefile"
 FROM scratch
 ENV TOOLKIT_VERSION=false
