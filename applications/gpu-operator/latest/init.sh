@@ -25,9 +25,15 @@ rm temp.txt
 
 cat manifests/gpu-operator.yaml | grep 'image:'  | awk '{print $2}'| grep  ":" >> images_list.txt
 
+# 获取 Ubuntu 版本号
+ubuntu_version=$(cat images_list.txt | grep -o 'ubuntu[0-9.]*' | head -1)
+sed -i "/nvidia\/driver/ s/$/-${ubuntu_version}/" images_list.txt
+
 rm -rf repositories.txt images.txt versions.txt
 rm -rf manifests
 sed -i 's/"//g' images_list.txt
+
+cat images_list.txt
 
 mkdir -p "images/shim"
 mv images_list.txt images/shim/gpuImageList
