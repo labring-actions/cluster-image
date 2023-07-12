@@ -17,7 +17,7 @@ mkdir -p "manifests"
 helm template gpu-operator gpu-operator  --values gpu-operator/values.yaml  --set driver.enabled=false  --debug > manifests/gpu-operator.yaml
 
 cat manifests/gpu-operator.yaml | grep 'repository:' | awk '{print $2}' > repositories.txt
-cat manifests/gpu-operator.yaml | grep 'image:'  | awk '{print $2}'| grep -v ":" > images.txt
+cat manifests/gpu-operator.yaml | grep 'image:'  | awk '{print $2}'| grep -v ":" | grep -v vgpu-manager > images.txt
 cat manifests/gpu-operator.yaml | grep 'version:' | grep -v "/" | awk '{print $2}' > versions.txt
 paste -d/ repositories.txt images.txt > temp.txt
 paste -d: temp.txt versions.txt > images_list.txt
