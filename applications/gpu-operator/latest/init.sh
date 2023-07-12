@@ -19,12 +19,16 @@ helm template gpu-operator gpu-operator  --values gpu-operator/values.yaml   --d
 cat manifests/gpu-operator.yaml | grep 'repository:' | awk '{print $2}' > repositories.txt
 cat manifests/gpu-operator.yaml | grep 'image:'  | awk '{print $2}'| grep -v ":" > images.txt
 cat manifests/gpu-operator.yaml | grep 'version:' | grep -v "/" | awk '{print $2}' > versions.txt
-paste -d: repositories.txt images.txt versions.txt > images_list.txt
+paste -d/ repositories.txt images.txt > temp.txt
+paste -d: temp.txt versions.txt > images_list.txt
+rm temp.txt
 
 cat manifests/gpu-operator.yaml | grep 'image:'  | awk '{print $2}'| grep  ":" >> images_list.txt
 
 rm -rf repositories.txt images.txt versions.txt
 rm -rf manifests
+sed -i 's/"//g' images_list.txt
+
 mkdir -p "images/shim"
 mv images_list.txt images/shim/gpuImageList
 
