@@ -12,19 +12,19 @@ To avoid upgrades for each iteration of `helm`, the `helmfile` executable delega
 
 - Kubernetes(depends on the app requirements)
 - sealos 4.x.x
+- helm
 
 ## Installing the app
 
 To install the app with sealos run  command:
 
 ```bash
-sealos run docker.io/labring/helmfile:v0.151.0
+sealos run docker.io/labring/helmfile:v0.155.0
 ```
 
-These commands deploy helm、helmfile and helmdiff plugin binary on the Kubernetes cluster in the `/usr/bin` directory，list app using
+These commands deploy helmfile and helmdiff plugin binary on the Kubernetes cluster in the `/usr/bin` directory，list app using
 
 ```bash
-$ which helm
 $ which helmfile
 ```
 

@@ -1,5 +1,4 @@
 FROM scratch
-COPY entrypoint.sh entrypoint.sh
+COPY helmfile.sh helmfile.sh
 COPY opt opt
-COPY scripts scripts
-CMD ["bash entrypoint.sh"]
+CMD ["bash helmfile.sh"]
