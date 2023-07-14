@@ -1,0 +1,66 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kube-cni
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cni-plugin-ds
+  namespace: kube-cni
+  labels:
+    app: cni-plugin
+spec:
+  selector:
+    matchLabels:
+      app: cni-plugin
+  template:
+    metadata:
+      labels:
+        app: cni-plugin
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+      hostNetwork: true
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+      initContainers:
+        - name: install-cni-plugin-sealos
+          image: docker.io/labring/docker-cni-plugins:v1.2.0
+          command: ["/bin/sh"]
+          args: ["-c", "cp -f /cni-plugins/* /opt/cni/bin/"]
+          volumeMounts:
+            - name: cni-plugin-sealos
+              mountPath: /opt/cni/bin
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "15Mi"
+      containers:
+        - name: sleep
+          image: busybox:1.35.0
+          command: [ "/bin/sh" ]
+          args: [ "-c", "sleep 3600 && ls -l /opt/cni/bin" ]
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "15Mi"
+          volumeMounts:
+            - name: cni-plugin-sealos
+              mountPath: /opt/cni/bin
+      volumes:
+        - name: cni-plugin-sealos
+          hostPath:
+            path: /opt/cni/bin
