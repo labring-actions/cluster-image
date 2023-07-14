@@ -1,34 +1,36 @@
-## Usage
+## nfs-subdir-external-provisioner
 
-Run sample nfs server out of kubernetes cluster
+Dynamic sub-dir volume provisioner on a remote NFS server.
 
-```shell
-docker run -d --name nfs-server \
-    --privileged \
-    --restart always \
-    -p 2049:2049 \
-    -v /nfs-share:/nfs-share \
-    -e SHARED_DIRECTORY=/nfs-share \
-    itsthenetwork/nfs-server-alpine:latest
-```
-
-Install nfs-client in all kubernetes cluster nodes.
+## Install
 
 ```shell
-apt install -y nfs-common
+sealos run docker.io/labring/nfs-subdir-external-provisioner:v4.0.18
 ```
 
-Intall nfs-subdir-external-provisioner, if use docker install nfs server ,just keep NFS_PATH as `/`.
+custome values
+```shell
+sealos run docker.io/labring/nfs-subdir-external-provisioner:v4.0.18 -e HELM_OPTS="--set nfs.server=10.0.0.5 --set nfs.path=/nfs-storage"
+```
+
+Get pods status
 
 ```shell
-sealos run labring/nfs-subdir-external-provisioner:v4.0.17 --env NFS_SERVER=192.168.72.15 --env NFS_PATH=/
+$ kubectl -n nfs-provisioner get pods 
+NAME                                               READY   STATUS    RESTARTS   AGE
+nfs-subdir-external-provisioner-6545794f8f-v4j69   1/1     Running   0          11m
 ```
 
-Notes: only support `NFS_SERVER`and `NFS_PATH` env.
-
-Get storageclass
+Get storageclass status
 
 ```shell
-kubectl get sc
+$ kubectl get sc
+NAME                         PROVISIONER                                     RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+nfs-client                   cluster.local/nfs-subdir-external-provisioner   Delete          Immediate              true                   11m
 ```
 
+## Uinstall
+
+```shell
+sealos run docker.io/labring/nfs-subdir-external-provisioner:v4.0.18 -e uninstall=true
+```

@@ -1,0 +1,4 @@
+FROM scratch
+COPY podman.sh podman.sh
+COPY opt opt
+CMD ["bash podman.sh"]

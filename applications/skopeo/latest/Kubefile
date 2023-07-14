@@ -1,0 +1,4 @@
+FROM scratch
+COPY skopeo.sh skopeo.sh
+COPY opt opt
+CMD ["bash skopeo.sh"]
