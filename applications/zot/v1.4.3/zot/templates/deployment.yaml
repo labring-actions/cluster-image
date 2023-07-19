@@ -46,8 +46,10 @@ spec:
             - mountPath: '/etc/zot/config.json'
               name: {{ .Release.Name }}-config
               subPath: config.json
+            {{- if .Values.pvc.create }}
             - mountPath: '/var/lib/registry'
               name: {{ .Release.Name }}-volume
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /v2/
@@ -77,9 +79,11 @@ spec:
         - name: {{ .Release.Name }}-secret
           secret:
             secretName: {{ .Release.Name }}-secret
+        {{- if .Values.pvc.create }}
         - name: {{ .Release.Name }}-volume
           persistentVolumeClaim:
             claimName: {{ .Values.pvc.name | default (printf "%s-pvc" .Release.Name) }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
