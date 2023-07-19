@@ -54,21 +54,11 @@ spec:
               name: {{ .Release.Name }}-volume
             {{- end }}
           livenessProbe:
-            httpGet:
-              path: /v2/
+            tcpSocket:
               port: 5000
-              scheme: HTTPS
-              httpHeaders:
-                - name: Authorization
-                  value: Basic {{ printf "%s:%s" .Values.authHeaderUser .Values.authHeaderPassword | b64enc }}
           readinessProbe:
-            httpGet:
-              path: /v2/
+            tcpSocket:
               port: 5000
-              scheme: HTTPS
-              httpHeaders:
-                - name: Authorization
-                  value: Basic {{ printf "%s:%s" .Values.authHeaderUser .Values.authHeaderPassword | b64enc }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
