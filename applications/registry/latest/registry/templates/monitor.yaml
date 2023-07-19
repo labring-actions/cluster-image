@@ -1,0 +1,42 @@
+{{if .Values.prometheusEnable }}
+# Prometheus Monitor Service (Metrics)
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "registry.fullname" . }}
+  labels:
+    {{- include "registry.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 9090
+      targetPort: debug
+      protocol: TCP
+      name: debug
+  selector:
+    {{- include "registry.selectorLabels" . | nindent 4 }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "registry.fullname" . }}
+  labels:
+    {{- include "registry.labels" . | nindent 4 }}
+spec:
+  endpoints:
+    - path: /metrics
+      port: debug
+      scheme: https
+      basicAuth:
+        password:
+          name: {{ .Release.Name }}-secret-user
+          key: username
+        username:
+          name: {{ .Release.Name }}-secret-user
+          key: password
+      tlsConfig:
+        insecureSkipVerify: true
+  selector:
+    matchLabels:
+      {{- include "registry.labels" . | nindent 4 }}
+{{end}}

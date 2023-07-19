@@ -1,0 +1,8 @@
+Get the application URL by running these commands:
+
+export REGISTRY_PORT=$(kubectl get --namespace {{.Release.Namespace}} -o jsonpath="{.spec.ports[0].port}" services {{.Release.Name}})
+export REGISTRY_IP=$(kubectl get --namespace {{.Release.Namespace}} -o jsonpath="{.spec.clusterIP}" services {{.Release.Name}})
+echo "https://$REGISTRY_IP:$REGISTRY_PORT"
+You can now access your application using helm.
+
+helm registry login $REGISTRY_IP:$REGISTRY_PORT" --insecure -u user -p user
