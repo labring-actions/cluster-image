@@ -14,7 +14,9 @@ data:
       filesystem:
         rootdirectory: /var/lib/registry
         maxthreads: 100
-      s3: {{ toJson .Values.s3  }}
+      {{- if .Values.s3.enable }}
+      s3: {{ toJson .Values.s3.data  }}
+      {{- end }}
       delete:
         enabled: {{ .Values.deleteEnable }}
     http:

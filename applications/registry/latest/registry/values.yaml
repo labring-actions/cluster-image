@@ -22,7 +22,7 @@ service:
 fullnameOverride: ""
 nameOverride: ""
 
-podAnnotations: {}
+podAnnotations: { }
 
 imagePullSecrets: [ ]
 
@@ -42,7 +42,7 @@ accessControl: {
       "actions": [ "read" ]
     } ],
     "defaultPolicy": [ ],
-    "anonymousPolicy":["read"]
+    "anonymousPolicy": [ "read" ]
   },
   "adminPolicy": {
     "users": [ "admin" ],
@@ -50,7 +50,10 @@ accessControl: {
   }
 }
 
-s3: { }
+s3:
+  enable: false
+  data: {}
+
 deleteEnable: false
 # If mountConfig is true the chart creates the '$CHART_RELEASE-config', if it
 # does not exist the user is in charge of managing it (as this file includes a
@@ -158,7 +161,7 @@ podSecurityContext: { }
 
 securityContext: { }
   # capabilities:
-  #   drop:
+#   drop:
 #   - ALL
 # readOnlyRootFilesystem: true
 # runAsNonRoot: true
