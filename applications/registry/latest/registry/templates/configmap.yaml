@@ -32,8 +32,6 @@ data:
       tls:
         certificate: /tmp/serving-certs/tls.crt
         key: /tmp/serving-certs/tls.key
-        clientcas:
-        - /tmp/serving-certs/ca.crt
       {{- end }}
     proxy:
       on: true
