@@ -54,8 +54,6 @@ spec:
               name: {{ .Release.Name }}-volume
             {{- end }}
           livenessProbe:
-            tcpSocket:
-              port: 5000
             httpGet:
               path: /v2/
               port: 5000
