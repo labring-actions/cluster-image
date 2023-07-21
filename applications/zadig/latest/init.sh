@@ -12,6 +12,8 @@ helm pull koderover-chart/zadig --version=${chart_version} -d charts/ --untar
 
 cat <<'EOF' >"install.sh"
 #!/bin/bash
+IP=${1:-}
+PORT=${1:-}
 helm upgrade --install zadig koderover-chart/zadig --namespace zadig-system --create-namespace  --set endpoint.type=IP \
     --set endpoint.IP=${IP} \
     --set gloo.gatewayProxies.gatewayProxy.service.httpNodePort=${PORT} \
@@ -27,5 +29,5 @@ ENV PORT=30080
 COPY charts charts
 COPY registry registry
 COPY install.sh install.sh
-CMD ["bash install.sh"]
+CMD ["bash install.sh $(IP) $(PORT)"]
 EOF
