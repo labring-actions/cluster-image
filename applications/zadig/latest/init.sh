@@ -20,7 +20,7 @@ cat <<'EOF' >"install.sh"
 #!/bin/bash
 IP=${1:-}
 PORT=${2:-}
-helm upgrade --install zadig koderover-chart/zadig --namespace zadig-system --create-namespace  --set endpoint.type=IP \
+helm upgrade --install zadig charts/zadig --namespace zadig-system --create-namespace  --set endpoint.type=IP \
     --set endpoint.IP=${IP} \
     --set tags.minio=false \
     --set gloo.gatewayProxies.gatewayProxy.service.httpNodePort=${PORT} \
