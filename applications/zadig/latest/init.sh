@@ -13,7 +13,8 @@ mkdir -p images/shim/
 
 helm template xx charts/zadig | grep image: | awk '{print $2}' | grep -v image: |  tr -d '"' | grep -v "^$"  > images/shim/images1
 helm template xx charts/zadig | grep image: | awk '{print $3}' | grep -v image: |  tr -d '"' | grep -v "^$" > images/shim/images2
-helm template xx charts/zadig | grep IMAGE | awk '{print $2}' | grep -v IMAGE |  tr -d '"' | grep -v "^$" > images/shim/images3
+helm template xx charts/zadig | grep IMAGE | awk '{print $2}' | grep -v BuildOS | grep -v IMAGE |  tr -d '"' | grep -v "^$" > images/shim/images3
+echo "koderover.tencentcloudcr.com/koderover-public/build-base:focal" >  images/shim/images4
 
 cat <<'EOF' >"install.sh"
 #!/bin/bash
