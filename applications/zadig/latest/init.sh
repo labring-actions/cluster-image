@@ -16,25 +16,10 @@ helm template xx charts/zadig | grep image: | awk '{print $3}' | grep -v image: 
 helm template xx charts/zadig | grep IMAGE | awk '{print $2}' | grep -v BuildOS | grep -v IMAGE |  tr -d '"' | grep -v "^$" > images/shim/images3
 echo "koderover.tencentcloudcr.com/koderover-public/build-base:focal" >  images/shim/images4
 
-cat <<'EOF' >"install.sh"
-#!/bin/bash
-IP=${1:-}
-PORT=${2:-}
-helm upgrade --install zadig charts/zadig --namespace zadig-system --create-namespace  --set endpoint.type=IP \
-    --set endpoint.IP=${IP} \
-    --set tags.minio=true \
-    --set gloo.gatewayProxies.gatewayProxy.service.httpNodePort=${PORT} \
-    --set global.extensions.extAuth.extauthzServerRef.namespace=zadig-system \
-    --set gloo.gatewayProxies.gatewayProxy.service.type=NodePort \
-    --set "dex.config.staticClients[0].redirectURIs[0]=http://${IP}:${PORT}/api/v1/callback,dex.config.staticClients[0].id=zadig,dex.config.staticClients[0].name=zadig,dex.config.staticClients[0].secret=ZXhhbXBsZS1hcHAtc2VjcmV0"
-EOF
-
 cat <<'EOF' >"Kubefile"
 FROM scratch
-ENV IP=127.0.0.1
-ENV PORT=30080
 COPY charts charts
 COPY registry registry
 COPY install.sh install.sh
-CMD ["bash install.sh $(IP) $(PORT)"]
+CMD ["bash install.sh"]
 EOF
