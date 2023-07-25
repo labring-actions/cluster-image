@@ -83,7 +83,7 @@ Get `root` user password
 kubectl -n gitlab-system get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 -d; echo
 ```
 
-Browser access to website
+Browser access to website, Add DNS resolution to external ip: gitlab.example.com --> 192.168.72.200
 
 ```shell
 https://gitlab.example.com
@@ -91,7 +91,7 @@ https://gitlab.example.com
 
 ## Git clone
 
-**Use HTTPS **
+**Use HTTPS**
 
 ```shell
 kubectl -n gitlab-system get secrets gitlab-gitlab-tls -o jsonpath="{.data.tls\.crt}" | base64 -d >gitlab.example.com.crt
