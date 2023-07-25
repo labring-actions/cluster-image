@@ -1,0 +1,6 @@
+FROM scratch
+COPY gitlab-operator.sh gitlab-operator.sh
+COPY charts charts
+COPY manifests manifests
+COPY registry registry
+CMD ["bash gitlab-operator.sh"]
