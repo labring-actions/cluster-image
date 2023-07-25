@@ -27,6 +27,11 @@ Run gitlab operator
 sealos run docker.io/labring/gitlab-operator:v0.21.2 
 ```
 
+Default domain is `example.com`, you can custome domain with
+```
+sealos run docker.io/labring/gitlab-operator:v0.21.2 -e DOMAIN=sealos.com
+```
+
 Get pods status
 
 ```shell
