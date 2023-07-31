@@ -19,10 +19,7 @@ rm -rf charts && mkdir -p charts
 wget -qO- https://github.com/flannel-io/flannel/releases/download/${VERSION}/flannel.tgz | tar -xz -C charts
 
 # delete "---" for merge support
-mv charts/flannel/values.yaml{,.bak}
-yq -N charts/flannel/values.yaml.bak > charts/flannel/values.yaml
-rm -rf charts/flannel/values.yaml.bak
-yq e -i '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
+yq e -iN '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
 
 # insert cni-plugin init-container config to helm chart
 readonly cni_latest_version=v${cnilatest:-$(
@@ -31,9 +28,9 @@ readonly cni_latest_version=v${cnilatest:-$(
 cni_plugin_image="docker.io/labring/docker-cni-plugins:${cni_latest_version}"
 if [[ "$XY_LATEST" == true ]]; then
   yq e -i '.podCidr="172.31.0.0/17"' charts/flannel/values.yaml
-    cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
+  cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
       - name: install-cni-plugins
-        image: "${cni_plugin_image}"
+        image: ${cni_plugin_image}
         command: ["/bin/sh"]
         args: ["-c", "cp -au /cni-plugins/* /cni-plugin/"]
         volumeMounts:
@@ -48,7 +45,7 @@ CMD ["helm upgrade -i flannel charts/flannel -n kube-system"]
 EOF
   exit
 fi
-cat << EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
+cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
       - name: install-cni-plugin-sealos
         image: "${cni_plugin_image}"
         command: ["/bin/sh"]
@@ -57,7 +54,7 @@ cat << EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates
         - name: cni-plugin-sealos
           mountPath: /opt/cni/bin
 EOF
-cat << EOF | sed -i '/^\s*volumes/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
+cat <<EOF | sed -i '/^\s*volumes/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
       - name: cni-plugin-sealos
         hostPath:
           path: /opt/cni/bin
