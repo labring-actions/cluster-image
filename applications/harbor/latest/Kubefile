@@ -1,5 +1,5 @@
 FROM scratch
-ENV NAMESPACE "harbor"
+COPY entrypoint.sh entrypoint.sh
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i harbor charts/harbor -n $(NAMESPACE) --create-namespace"]
+CMD ["bash entrypoint.sh"]
