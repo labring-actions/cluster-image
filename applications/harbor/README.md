@@ -12,7 +12,12 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 2. Install harbor
 
 ```shell
-$ sealos run labring/harbor:v2.7.0
+$ sealos run docker.io/labring/harbor:v2.8.3
+```
+
+Custome config
+```
+$ sealos run docker.io/labring/harbor:v2.8.3 -e HELM_OPTS="--set harborAdminPassword=Harbor12345"
 ```
 
 Get pods status
@@ -42,19 +47,24 @@ https://core.harbor.domain
 Get ca.crt and copy it to your docker client nodes.
 
 ```shell
-kubectl -n harbor get secrets harbor-nginx -o jsonpath="{.data.ca\.crt}" | base64 -d >ca.crt
+kubectl -n harbor get secrets harbor-ingress -o jsonpath="{.data.ca\.crt}" | base64 -d >ca.crt
 ```
 
-Create certs directory in docker client node
+Create certs directory in containerd client node
 
 ```shell
+mkdir -p /etc/containerd/certs.d/core.harbor.domain/
+```
+
+or docker
+```
 mkdir -p /etc/docker/certs.d/core.harbor.domain/
 ```
 
 Copy ca.crt to the directory
 
 ```shell
-scp ca.crt /etc/docker/certs.d/core.harbor.domain/
+scp ca.crt /etc/containerd/certs.d/core.harbor.domain/
 ```
 
 Login harbor
@@ -75,4 +85,3 @@ docker push core.harbor.domain/library/coredns:1.9.1
 ```shell
 helm -n harbor uninstall harbor
 ```
-

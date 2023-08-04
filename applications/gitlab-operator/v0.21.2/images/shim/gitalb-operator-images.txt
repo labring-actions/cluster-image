@@ -12,10 +12,10 @@ registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.76.0-gitla
 registry.gitlab.com/gitlab-org/build/cng/gitlab-exporter:13.0.3
 registry.gitlab.com/gitlab-org/build/cng/gitlab-kas:v16.1.3
 registry.gitlab.com/gitlab-org/build/cng/gitlab-shell:v14.23.0
-registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee:v16.1.2
-registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee:v16.1.2
-registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee:v16.1.2
-registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee:v16.1.2
+registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce:v16.1.2
+registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ce:v16.1.2
+registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ce:v16.1.2
+registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce:v16.1.2
 registry.gitlab.com/gitlab-org/build/cng/kubectl:v16.1.2
 registry.gitlab.com/gitlab-org/cloud-native/gitlab-operator:0.21.2
 registry.gitlab.com/gitlab-org/cloud-native/mirror/images/ingress-nginx/controller:v1.2.1

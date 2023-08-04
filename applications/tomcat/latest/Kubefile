@@ -1,4 +1,5 @@
 FROM scratch
+COPY tomcat.sh tomcat.sh
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i tomcat charts/tomcat -n tomcat --create-namespace"]
+CMD ["bash tomcat.sh"]
