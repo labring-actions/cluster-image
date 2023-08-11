@@ -65,7 +65,7 @@ To install the app with sealos run  command:
 sealos run docker.io/labring/ceph-csi-rbd:v3.8.0 --config-file ceph-csi-rbd-config.yaml
 ```
 
-These commands deploy kube-ovn with install.sh to the Kubernetes cluster，list app using:
+These commands deploy ceph-csi-rbd to the Kubernetes cluster，list app using:
 
 ```bash
 kubectl -n ceph-csi-rbd get pods

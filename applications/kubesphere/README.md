@@ -6,10 +6,10 @@ KubeSphere is a distributed operating system for cloud-native application manage
 
 ```
 sealos run \
-  hub.sealos.cn/labring/kubernetes:v1.24.10 \
-  hub.sealos.cn/labring/helm:v3.11.0 \
-  hub.sealos.cn/labring/calico:v3.24.5 \
-  hub.sealos.cn/labring/openebs:v3.4.0 \
+  docker.io/labring/kubernetes:v1.24.10 \
+  docker.io/labring/helm:v3.11.0 \
+  docker.io/labring/calico:v3.24.5 \
+  docker.io/labring/openebs:v3.4.0 \
   --masters 192.168.0.22 \
   --nodes 192.168.0.23,192.168.0.24,192.168.0.30 \
   -p 123456
@@ -20,7 +20,11 @@ sealos run \
 Prerequisites: You should check the official document of kubesphere to confirm which versions of kubernetes are compatible with kubesphere.
 
 ```shell
-sealos run hub.sealos.cn/labring/kubesphere:v3.3.2
+sealos run docker.io/labring/kubesphere:v3.3.2
+```
+or
+```
+sealos run registry.cn-hongkong.aliyuncs.com/labring/kubesphere:v3.3.2 
 ```
 
 Check pods status

@@ -1,0 +1,9 @@
+apiVersion: piraeus.io/v1
+kind: LinstorSatelliteConfiguration
+metadata:
+  name: storage-pool
+spec:
+  storagePools:
+    - name: pool1
+      fileThinPool:
+        directory: {{ default "/var/lib/piraeus-datastore/pool1" .directory | quote }}
