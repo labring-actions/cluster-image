@@ -12,12 +12,12 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 2. Install harbor
 
 ```shell
-$ sealos run docker.io/labring/harbor:v2.8.3
+$ sealos run docker.io/labring/harbor:v2.8.2
 ```
 
 Custome config
 ```
-$ sealos run docker.io/labring/harbor:v2.8.3 -e HELM_OPTS="--set harborAdminPassword=Harbor12345"
+$ sealos run docker.io/labring/harbor:v2.8.2 -e HELM_OPTS="--set harborAdminPassword=Harbor12345"
 ```
 
 Get pods status

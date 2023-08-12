@@ -64,7 +64,7 @@ To install the app with sealos run  command:
 sealos run docker.io/labring/ceph-csi-cephfs:v3.8.0 --config-file ceph-csi-cephfs-config.yaml
 ```
 
-These commands deploy kube-ovn with install.sh to the Kubernetes cluster，list app using:
+These commands deploy ceph-csi-cephfs to the Kubernetes cluster，list app using:
 
 ```bash
 kubectl -n ceph-csi-cephfs get pods
