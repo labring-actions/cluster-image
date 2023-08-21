@@ -4,7 +4,7 @@ IP="${IP:-127.0.0.1}"
 PORT="${PORT:-30080}"
 HELM_OPTS="${HELM_OPTS:-}"
 
-helm upgrade --install zadig charts/zadig --namespace zadig-system --create-namespace  --set endpoint.type=IP \
+helm upgrade --install zadig charts/zadig --namespace zadig --create-namespace  --set endpoint.type=IP \
     --set endpoint.IP=${IP} \
     --set tags.minio=true \
     --set gloo.gatewayProxies.gatewayProxy.service.httpNodePort=${PORT} \
