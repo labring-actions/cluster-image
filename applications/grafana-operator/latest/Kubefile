@@ -1,5 +1,6 @@
 FROM scratch
 COPY entrypoint.sh entrypoint.sh
+COPY manifests manifests
 COPY charts charts
 COPY registry registry
 CMD ["bash entrypoint.sh"]

@@ -1,5 +1,5 @@
 FROM scratch
-COPY tomcat.sh tomcat.sh
+COPY entrypoint.sh entrypoint.sh
 COPY charts charts
 COPY registry registry
-CMD ["bash tomcat.sh"]
+CMD ["bash entrypoint.sh"]
