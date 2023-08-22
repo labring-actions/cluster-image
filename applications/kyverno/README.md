@@ -9,8 +9,6 @@ Kyverno is a policy engine designed for Kubernetes. It can validate, mutate, and
 
 ## Install
 
-Prerequisites example
-
 ```shell
 sealos run docker.io/labring/kyverno:v1.10.3
 ```

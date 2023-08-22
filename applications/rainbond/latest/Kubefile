@@ -1,5 +1,5 @@
 FROM scratch
 COPY entrypoint.sh entrypoint.sh
-COPY charts charts
+COPY chart chart
 COPY registry registry
 CMD ["bash entrypoint.sh"]

@@ -3,22 +3,19 @@
 set -e
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 
-NAME=${NAME:-"loki"}
-NAMESPACE=${NAMESPACE:-"loki"}
+NAME=${NAME:-"jenkins-operator"}
+NAMESPACE=${NAMESPACE:-"jenkins-operator"}
 HELM_OPTS=${HELM_OPTS:-" \
---set loki.auth_enabled=false \
---set minio.enabled=true \
---set write.replicas=1 \
---set read.replicas=1 \
---set backend.replicas=1 \
---set loki.commonConfig.replication_factor=1"}
+--set jenkins.namespace=jenkins-operator \
+--set jenkins.service.type=NodePort \
+--set jenkins.service.port=8080"}
 
 function log::info() {
   printf "%s \033[32minfo \033[0m%s\n" "$(date +'%Y-%m-%dT%H:%M:%S')" "$*"
 }
 
 function install(){
-  helm upgrade -i ${NAME} ./charts/loki -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
+  helm upgrade -i ${NAME} ./charts/${NAME} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
 }
 
 function uninstall(){
