@@ -17,13 +17,5 @@ if [ "${BIN_DOWNLOAD}" == "true" ]; then
   echo "download kbcli success"
 fi
 
-mkdir -p charts
-helm fetch -d charts https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/kubeblocks-${VERSION#v}.tgz
-
-cat > kb.sh <<EOF
-#!/bin/bash
-cp -rf opt/kbcli /usr/local/bin/
-helm upgrade -i kubeblocks charts/kubeblocks-${VERSION#v}.tgz --set snapshot-controller.enabled=false --insecure-skip-tls-verify -n kb-system --create-namespace
-EOF
-
-chmod a+x kb.sh
+mkdir charts
+helm fetch -d charts --untar https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/kubeblocks-${VERSION#v}.tgz
