@@ -19,3 +19,4 @@ fi
 
 mkdir charts
 helm fetch -d charts --untar https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts/kubeblocks-${VERSION#v}.tgz
+rm -rf charts/kubeblocks-${VERSION#v}.tgz
