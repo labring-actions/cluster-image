@@ -41,10 +41,10 @@ service:
   port: 80
 
 resources:
-   limits:
+   requests:
      cpu: 100m
      memory: 128Mi
-   requests:
+   limits:
      cpu: 1
      memory: 1Gi
 
