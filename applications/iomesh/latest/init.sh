@@ -8,7 +8,8 @@ rm -rf charts && mkdir -p charts
 helm repo add iomesh http://iomesh.com/charts
 chart_version=`helm search repo --versions --regexp '\viomesh/iomesh\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 helm pull iomesh/iomesh --version=${chart_version} -d charts/ --untar
-
+mkdir -p images/shim/
+helm template xx charts/iomesh | grep image: | awk '{print $2}' | grep -v image: |  tr -d '"' | grep -v "^$"  > images/shim/images1
 cat <<'EOF' >"Kubefile"
 FROM scratch
 COPY charts charts
