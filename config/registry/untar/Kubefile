@@ -1,3 +1,0 @@
-FROM scratch
-LABEL sealos.io.type="patch"
-COPY scripts scripts

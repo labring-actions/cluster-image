@@ -1,4 +1,0 @@
-FROM scratch
-LABEL sealos.io.type="addons"
-COPY . .
-
