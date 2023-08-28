@@ -1,18 +1,27 @@
-## Overview
+# Gitea
 
 Gitea provides a Helm Chart to allow for installation on kubernetes.
 
+## Prerequisites
 
+- Kubernetes(depends on the app requirements)
+- sealos 4.x.x
+- Helm 3.x.x
+- PV provisioner support in the underlying infrastructure
 
-## Install
-
-Prerequirements:
-
-- ingress-nginx installed to your cluster and expose with loadbalancer or hostnetwork.
+## Installing the app
 
 ```shell
-sealos run labring/gitea:v1.18.1
+$ sealos run labring/gitea:v1.20.3
 ```
+
+## Uninstalling the app
+
+```shell
+$ helm -n gitea uninstall gitea
+```
+
+## Access the app
 
 makeysure ingress loadbalancer ip have dns relosve
 
@@ -24,6 +33,17 @@ Access gitea，the default username/password is `gitea_admin/gitea_admin`
 
 ```shell
 http://git.example.com/
+```
+
+## Configuration
+
+Refer to gitea `values.yaml` for the full run-down on defaults.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
+
+```shell
+$ sealos run docker.io/labring/gitea:v1.20.3 \
+-e NAME=mygitea -e NAMESPACE=mygitea -e HELM_OPTS="--set gitea.admin.password=gitea_admin --set ingress.enabled=true"
 ```
 
 ## ssh clone support
@@ -95,4 +115,3 @@ remote: Compressing objects: 100% (3/3), done.
 remote: Total 6 (delta 0), reused 0 (delta 0), pack-reused 0
 Receiving objects: 100% (6/6), done.
 ```
-

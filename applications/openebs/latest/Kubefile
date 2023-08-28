@@ -1,4 +1,5 @@
 FROM scratch
+COPY entrypoint.sh entrypoint.sh
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i openebs charts/openebs -n openebs --create-namespace --set ndm.enabled=false,ndmOperator.enabled=false,localprovisioner.deviceClass.enabled=false,localprovisioner.hostpathClass.isDefaultClass=true"]
+CMD ["bash entrypoint.sh"]

@@ -1,36 +1,43 @@
-## Overview
+# Openebs      
 
 This openebs application only enabled [localpv-hostpath](https://openebs.io/docs/user-guides/localpv-hostpath).
 
-## Install
+## Prerequisites
 
-Install with sealos run
+- Kubernetes(depends on the app requirements)
+- sealos 4.x.x
+- Helm 3.x.x
+
+## Installing the app
 
 ```shell
-sealos run labring/openebs:v3.3.0
+$ sealos run docker.io/labring/openebs:v3.8.0
 ```
 
-Get pods status
+Get storageclass
 
-```shell
-$ kubectl -n openebs get pods 
-NAME                                          READY   STATUS    RESTARTS   AGE
-openebs-localpv-provisioner-7b4db8497-68xpr   1/1     Running   0          9m18s
 ```
-
-Get StorageClass status
-
-```shell
 $ kubectl get sc
-NAME                         PROVISIONER        RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-openebs-hostpath (default)   openebs.io/local   Delete          WaitForFirstConsumer   false                  9m22s
 ```
-Now it is ready to provide dynamic PV.
 
-## Uninstall
-
-Uninstall with helm command.
+## Uninstalling the app
 
 ```shell
-helm -n openebs uninstall openebs
+$ helm -n openebs uninstall openebs
+```
+
+## Configuration
+
+Refer to openebs`values.yaml` for the full run-down on defaults.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
+
+```shell
+$ sealos run docker.io/labring/openebs:v3.8.0 \
+-e NAME=myopenebs -e NAMESPACE=myopenebs -e HELM_OPTS=" \
+--set ndm.enabled=false \
+--set ndmOperator.enabled=false \
+--set localprovisioner.deviceClass.enabled=false \
+--set localprovisioner.hostpathClass.isDefaultClass=true \
+"
 ```

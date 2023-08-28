@@ -1,0 +1,3 @@
+FROM scratch
+COPY opt opt
+CMD ["cp -f opt/helm /usr/bin/helm"]

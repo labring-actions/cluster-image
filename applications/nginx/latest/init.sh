@@ -9,26 +9,53 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 repo_url="https://charts.bitnami.com/bitnami"
 repo_name="bitnami/nginx"
 chart_name="bitnami"
+version_pattern="^v([0-9]+)\.([0-9]+)\.([0-9]+)$"
 
-helm repo add ${chart_name} ${repo_url} --force-update
+function check_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "$1 is required, exiting the script"
+    exit 1
+  fi
+}
 
-function version_check(){
+function check_version(){
+  rm -rf charts
+  helm repo add ${chart_name} ${repo_url} --force-update 1>/dev/null
+
+  # Check version pattern
+  if ! [[ $VERSION =~ $version_pattern ]]; then
+    echo "version pattern not match, example of version format should be vx.x.x, exit"
+    exit 1
+  fi
+
+  # Check version number exists
   all_versions=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | awk '{print $3}' | grep -v VERSION)
-
-  # Check if the provided version number exists in all versions
   if ! echo "$all_versions" | grep -qw "${VERSION#v}"; then
-    echo "Error: The provided version ${VERSION} does not exist in Helm Chart Repo $repo_name. Available versions are:"
-    echo "$all_versions"
+    echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo, get available version with: helm search repo ${repo_name} --versions"
     exit 1
   fi
 }
 
 function init(){
-  rm -rf charts && mkdir -p charts
+  # Find the chart version through the app version
   chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
+
+  # Pull helm charts to local
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
-  yq e -i '.service.type="NodePort"' charts/nginx/values.yaml
+  if [ $? -eq 0 ]; then
+    echo "init success, next run sealos build"
+  fi
 }
 
-version_check
-init
+function main() {
+  if [ $# -ne 3 ]; then
+    echo "Usage: ./$0 <ARCH> <NAME> <VERSION>"
+    exit 1
+  else
+    check_command helm
+    check_version
+    init
+  fi
+}
+
+main $@

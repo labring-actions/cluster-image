@@ -2,11 +2,12 @@
 set -e
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 
-NAME=${NAME:-"nginx"}
-NAMESPACE=${NAMESPACE:-"nginx"}
+NAME=${NAME:-"gitea"}
+NAMESPACE=${NAMESPACE:-"gitea"}
 UNINSTALL=${UNINSTALL:-"false"}
 HELM_OPTS=${HELM_OPTS:-" \
---set service.type=NodePort \
+--set gitea.admin.password=gitea_admin \
+--set ingress.enabled=true \
 "}
 
 function log_info() {
@@ -32,6 +33,7 @@ function uninstall(){
   if helm -n ${NAMESPACE} status ${NAME} > /dev/null 2>&1; then
     helm -n ${NAMESPACE} uninstall ${NAME} > /dev/null 2>&1
     log_info "${NAME} is uninstalled"
+    log_info "You should manually clean the pvc and pv"
   else
     log_info "${NAME} is not exits"
   fi
@@ -45,5 +47,3 @@ function main(){
     install
   fi
 }
-
-main $@
