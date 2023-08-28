@@ -1,4 +1,4 @@
-# Loki
+# Loki-stack
 
 Loki is a log aggregation system designed to store and query logs from all your applications and infrastructure.
 
@@ -14,10 +14,10 @@ Loki is a log aggregation system designed to store and query logs from all your 
 To install the app with sealos run  command:
 
 ```bash
-sealos run docker.io/labring/loki:v2.6.1
+sealos run docker.io/labring/loki-stack:v2.6.1
 ```
 
-These commands deploy loki with helm to the Kubernetes cluster，list app using:
+These commands deploy loki-stack with helm to the Kubernetes cluster，list app using:
 
 ```bash
 helm -n loki-stack ls
@@ -25,7 +25,7 @@ helm -n loki-stack ls
 
 ## Custome configuraton
 
-Custome  neuvector helm values with --set.
+Custome loki-stack helm values with --set.
 
 ```bash
 sealos run docker.io/labring/loki:v2.6.1 -e HELM_OPTS="--set loki.persistence.enabled=true"
@@ -36,7 +36,7 @@ sealos run docker.io/labring/loki:v2.6.1 -e HELM_OPTS="--set loki.persistence.en
 To uninstall/delete the `loki` app:
 
 ```bash
-sealos run docker.io/labring/loki:v2.6.1 -e uninstall=true
+sealos run docker.io/labring/loki-stack:v2.6.1 -e uninstall=true
 ```
 
 The command removes all the resource associated with the installtion.

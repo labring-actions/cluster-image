@@ -2,11 +2,14 @@
 set -e
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 
-NAME=${NAME:-"nginx"}
-NAMESPACE=${NAMESPACE:-"nginx"}
+NAME=${NAME:-"openebs"}
+NAMESPACE=${NAMESPACE:-"openebs"}
 UNINSTALL=${UNINSTALL:-"false"}
 HELM_OPTS=${HELM_OPTS:-" \
---set service.type=NodePort \
+--set ndm.enabled=false \
+--set ndmOperator.enabled=false \
+--set localprovisioner.deviceClass.enabled=false \
+--set localprovisioner.hostpathClass.isDefaultClass=true \
 "}
 
 function log_info() {

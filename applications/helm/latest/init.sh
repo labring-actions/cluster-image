@@ -9,13 +9,6 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 rm -rf opt
-wget -qO- "https://get.helm.sh/$NAME-$VERSION-linux-$ARCH.tar.gz" |
-  tar -zx "linux-$ARCH/helm"
+wget -qO- "https://get.helm.sh/$NAME-$VERSION-linux-$ARCH.tar.gz" | tar -zx "linux-$ARCH/helm"
 mv "linux-$ARCH" opt
 chmod a+x opt/helm
-
-cat <<EOF >>"Kubefile"
-FROM scratch
-COPY opt opt
-CMD ["sealos scp -r master opt/helm /usr/bin/helm"]
-EOF

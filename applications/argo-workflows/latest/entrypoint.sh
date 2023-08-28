@@ -8,6 +8,8 @@ NAMESPACE=${NAMESPACE:-"argo-workflows"}
 HELM_OPTS=${HELM_OPTS:-" \
 --set server.serviceType=NodePort \
 --set server.extraArgs[0]=--auth-mode=server \
+--set workflow.serviceAccount.create=true \
+--set controller.workflowDefaults.spec.serviceAccountName=argo-workflow \
 "}
 
 function log::info() {
@@ -16,7 +18,7 @@ function log::info() {
 
 function install(){
   helm upgrade -i ${NAME} ./charts/${NAME} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
-  sealos scp -r master opt/argo /usr/local/bin/argo
+  cp -f opt/argo /usr/local/bin/argo
 }
 
 install
