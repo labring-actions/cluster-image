@@ -16,7 +16,7 @@ else
 fi
 
 rm -rf charts && mkdir -p charts
-wget -qO- https://github.com/flannel-io/flannel/releases/download/${VERSION}/flannel.tgz | tar -xz -C charts
+wget -qO- https://github.com/flannel-io/flannel/archive/refs/tags/$VERSION.tar.gz | tar --strip-components=3 -C charts -xz flannel-\*/chart/kube-flannel
 
 # delete "---" for merge support
 yq e -iN '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
