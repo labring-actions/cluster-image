@@ -3,7 +3,6 @@
 ### 直接创建ISSUE 支持的镜像
 
 - [APP集群镜像](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-apps.md&title=【Auto-build】helm)
-- [配置集群镜像](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-configs.md&title=【Auto-build】coredns)
 - [Docker镜像](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-docker-apps.md&title=【Auto-build】cri) (暂不支持Run)
 - [大APP集群镜像](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-hosted.md&title=【Auto-build】athenaserving)
 
@@ -34,11 +33,6 @@
 ##### APP集群镜像
 
 主要是构建应用镜像，使用GitHub action,会同时出amd64和arm64架构
-
-
-##### 配置集群镜像
-
-主要是构建配置镜像，使用GitHub action，没有容器镜像不区分架构，一般是一些脚本相关的配置或者覆盖默认的配置镜像
 
 
 ##### Docker镜像
