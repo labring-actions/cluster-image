@@ -7,7 +7,9 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 rm -rf charts/ && mkdir charts
+rm -rf manifests && mkdir -p manifests
 helm pull oci://docker.io/envoyproxy/gateway-helm --version "${VERSION}" -d charts/ --untar
+cp -rf charts/gateway-helm/crds/* manifests/
 
 cat <<'EOF' >"Kubefile"
 FROM scratch
