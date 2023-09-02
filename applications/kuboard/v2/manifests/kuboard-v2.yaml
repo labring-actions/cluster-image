@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: kuboard
-        image: labring/docker-kuboard:v2
+        image: labring4docker/kuboard:v2
         imagePullPolicy: Always
       tolerations:
       - key: node-role.kubernetes.io/master
