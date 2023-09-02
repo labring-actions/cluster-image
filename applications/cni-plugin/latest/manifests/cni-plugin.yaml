@@ -38,7 +38,7 @@ spec:
           effect: NoSchedule
       initContainers:
         - name: install-cni-plugin-sealos
-          image: docker.io/labring/docker-cni-plugins:v1.2.0
+          image: docker.io/labring4docker/cni-plugins:v1.2.0
           command: ["/bin/sh"]
           args: ["-c", "cp -f /cni-plugins/* /opt/cni/bin/"]
           volumeMounts:

@@ -25,7 +25,7 @@ yq e -iN '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
 readonly cni_latest_version=v${cnilatest:-$(
   until curl -sL "https://api.github.com/repos/containernetworking/plugins/releases/latest"; do sleep 3; done | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
 )}
-cni_plugin_image="docker.io/labring/docker-cni-plugins:${cni_latest_version}"
+cni_plugin_image="docker.io/labring4docker/cni-plugins:${cni_latest_version}"
 if [[ "$XY_LATEST" == true ]]; then
   yq e -i '.podCidr="172.31.0.0/17"' charts/flannel/values.yaml
   cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml

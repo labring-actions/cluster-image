@@ -13,7 +13,7 @@ wget -q -N -P manifests/ https://raw.githubusercontent.com/k8snetworkplumbingwg/
 readonly cni_latest_version=v${cnilatest:-$(
   until curl -sL "https://api.github.com/repos/containernetworking/plugins/releases/latest"; do sleep 3; done | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
 )}
-cni_plugin_image="docker.io/labring/docker-cni-plugins:${cni_latest_version}"
+cni_plugin_image="docker.io/labring4docker/cni-plugins:${cni_latest_version}"
 cat << EOF | sed -i '/^\s*initContainers/ r /dev/stdin' manifests/multus-daemonset-thick.yml
         - name: install-cni-plugin-sealos
           image: "${cni_plugin_image}"
