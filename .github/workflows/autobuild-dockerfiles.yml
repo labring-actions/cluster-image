@@ -42,10 +42,10 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Build Image
         env:
-          registry: ${{ vars.D_REGISTRY_NAME }}
-          username: ${{ vars.D_REGISTRY_REPOSITORY }}
-          repo: ${{ vars.D_REGISTRY_REPOSITORY }}
-          password: ${{ secrets.D_REGISTRY_TOKEN }}
+          registry: ${{ vars.D_D_REGISTRY_NAME }}
+          username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          password: ${{ secrets.D_D_REGISTRY_TOKEN }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
