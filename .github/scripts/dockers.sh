@@ -32,7 +32,7 @@ cd $buildDir && {
     filename=Dockerfile
   fi
 
-  IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/docker-$APP_NAME:$APP_VERSION-$APP_ARCH"
+  IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$APP_NAME:$APP_VERSION-$APP_ARCH"
 
   IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
   build_args=$(echo "$BUILD_ARGS" | awk -F ',' '{ for(i=1; i<=NF; i++) { printf "--build-arg %s ", $i } }')
