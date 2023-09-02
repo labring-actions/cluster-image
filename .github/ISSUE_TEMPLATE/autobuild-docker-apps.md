@@ -1,6 +1,6 @@
 ---
 name: 构建Docker集群镜像
-about: 根据分支目录构建Docker镜像并推送到镜像仓库
+about: 根据分支目录构建Docker镜像并推送到镜像仓库labring4docker
 title: '【Auto-build】helm'
 assignees: ''
 
