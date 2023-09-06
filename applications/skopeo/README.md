@@ -15,7 +15,7 @@ To install the app with sealos run  command:
 sealos run docker.io/labring/skopeo:v1.13.0
 ```
 
-These commands deploy skopeo binary on the Kubernetes cluster in the `/usr/bin` directory，list app using
+These commands deploy skopeo binary on the Kubernetes cluster in the `/usr/local/bin` directory，list app using
 
 ```bash
 $ which skopeo
@@ -23,10 +23,8 @@ $ which skopeo
 
 ## Uninstalling the app
 
-To uninstall/delete the `podman` app:
+To uninstall/delete the `skopeo` app:
 
 ```bash
-sealos run docker.io/labring/skopeo:v1.13.0 -e uninstall=true
+rm -rf /usr/local/bin/skopeo
 ```
-
-The command removes all the binary files associated with the installtion.

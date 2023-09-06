@@ -7,40 +7,36 @@ This app is packaged by [Bitnami nginx helm charts](https://github.com/bitnami/c
 ## Prerequisites
 
 - Kubernetes(depends on the app requirements)
-- sealos 4.x.x
+- Sealos 4.x.x
 - Helm 3.x.x
 
 ## Installing the app
+
+Run app with sealos
 
 ```shell
 $ sealos run docker.io/labring/nginx:v1.23.4
 ```
 
-Get pods status
+Get app status
 
 ```shell
-$ kubectl -n nginx get pods 
+$ helm -n nginx ls
 NAME                     READY   STATUS    RESTARTS   AGE
 nginx-5469965c89-mhncn   1/1     Running   0          21s
 ```
 
-Get service status
-
-```shell
-$ kubectl -n nginx get svc
-NAME    TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-nginx   NodePort   10.96.2.184   <none>        80:30208/TCP   23s
-```
-
 ## Uninstalling the app
 
+Uninstall with helm command
+
 ```shell
-sealos run docker.io/labring/nginx:v1.23.4 -e uninstall=true
+helm -n nginx uninstall nginx
 ```
 
 ## Configuration
 
-Refer to bitnami nginx `values.yaml` for the full run-down on defaults.
+Refer to bitnami nginx [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/nginx/values.yaml) for the full run-down on defaults.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
 
@@ -60,17 +56,18 @@ kind: Config
 metadata:
   name: nginx-config
 spec:
-  path: charts/nginx.values.yaml
+  path: charts/nginx/values.yaml
   match: docker.io/labring/nginx:v1.23.4
-  strategy: override
+  strategy: merge
   data: |
     service:
       type: LoadBalancer
 ```
 
+
+
 Run with the yaml config file
 
 ```shell
-$ sealos run docker.io/labring/nginx:v1.23.4 \
---config=nginx-config.yaml -e HELM_OPTS="-f charts/nginx.values.yaml"
+$ sealos run docker.io/labring/nginx:v1.23.4 --config=nginx-config.yaml
 ```
