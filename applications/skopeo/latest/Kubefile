@@ -1,4 +1,4 @@
 FROM scratch
-COPY skopeo.sh skopeo.sh
+LABEL sealos.io.type="patch"
 COPY opt opt
-CMD ["bash skopeo.sh"]
+CMD ["cp -f ./opt/skopeo /usr/local/bin/skopeo && chmod +x /usr/bin/skopeo"]

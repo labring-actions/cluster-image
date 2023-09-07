@@ -12,7 +12,7 @@ Gitea provides a Helm Chart to allow for installation on kubernetes.
 ## Installing the app
 
 ```shell
-$ sealos run labring/gitea:v1.20.3
+$ sealos run docker.io/labring/gitea:v1.20.3
 ```
 
 ## Uninstalling the app
@@ -23,7 +23,7 @@ $ helm -n gitea uninstall gitea
 
 ## Access the app
 
-makeysure ingress loadbalancer ip have dns relosve
+Makeysure ingress loadbalancer ip have dns relosve
 
 ```shell
 ingress service with <loadbalancer ip> --> git.example.com

@@ -1,61 +1,55 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
+export readonly ARCH=${1:-amd64}
+export readonly NAME=${2:-$(basename "${PWD%/*}")}
+export readonly VERSION=${3:-$(basename "$PWD")}
 
-declare -r ARCH=${1:-amd64}
-declare -r NAME=${2:-$(basename "${PWD%/*}")}
+repo_url=" https://flannel-io.github.io/flannel/"
+repo_name="flannel/flannel"
+chart_name="flannel"
 
-inVERSION=${3:-$(basename "$PWD")}
+function check_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "$1 is required, exiting the script"
+    exit 1
+  fi
+}
 
-if [[ $inVERSION =~ ^v[.0-9]+$ ]]; then
-  declare -r VERSION=$inVERSION
-else
-  declare -r VERSION="v$inVERSION"
-  declare -r XY_LATEST=true
-fi
+function check_version(){
+  rm -rf charts
+  helm repo add ${chart_name} ${repo_url} --force-update 1>/dev/null
 
-rm -rf charts && mkdir -p charts
-wget -qO- https://github.com/flannel-io/flannel/archive/refs/tags/$VERSION.tar.gz | tar -xz && mv flannel-*/chart/kube-flannel charts/flannel
+  # Check version number exists
+  all_versions=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | awk '{print $3}' | grep -v VERSION)
+  if ! echo "$all_versions" | grep -qw "${VERSION}"; then
+    echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo, get available version with: helm search repo ${repo_name} --versions"
+    exit 1
+  fi
+}
 
-# delete "---" for merge support
-yq e -iN '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
+function init(){
+  # Find the chart version through the app version
+  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
 
-# insert cni-plugin init-container config to helm chart
-readonly cni_latest_version=v${cnilatest:-$(
-  until curl -sL "https://api.github.com/repos/containernetworking/plugins/releases/latest"; do sleep 3; done | grep tarball_url | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2
-)}
-cni_plugin_image="docker.io/labring4docker/cni-plugins:${cni_latest_version}"
-if [[ "$XY_LATEST" == true ]]; then
-  yq e -i '.podCidr="172.31.0.0/17"' charts/flannel/values.yaml
-  cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
-      - name: install-cni-plugins
-        image: ${cni_plugin_image}
-        command: ["/bin/sh"]
-        args: ["-c", "cp -au /cni-plugins/* /cni-plugin/"]
-        volumeMounts:
-        - name: cni-plugin
-          mountPath: /cni-plugin
-EOF
-  cat <<EOF >Kubefile
-FROM scratch
-COPY charts charts
-COPY registry registry
-CMD ["helm upgrade -i flannel charts/flannel -n kube-system"]
-EOF
-  exit
-fi
-cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
-      - name: install-cni-plugin-sealos
-        image: "${cni_plugin_image}"
-        command: ["/bin/sh"]
-        args: ["-c", "cp -f /cni-plugins/* /opt/cni/bin/"]
-        volumeMounts:
-        - name: cni-plugin-sealos
-          mountPath: /opt/cni/bin
-EOF
-cat <<EOF | sed -i '/^\s*volumes/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
-      - name: cni-plugin-sealos
-        hostPath:
-          path: /opt/cni/bin
-EOF
+  # Pull helm charts to local
+  helm pull ${repo_name} --version=${chart_version} -d charts --untar
+  if [ $? -eq 0 ]; then
+    echo "init success, next run sealos build"
+  fi
+  yq e -iN '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
+}
+
+function main() {
+  if [ $# -ne 3 ]; then
+    echo "Usage: ./$0 <ARCH> <NAME> <VERSION>"
+    exit 1
+  else
+    check_command helm
+    check_version
+    init
+  fi
+}
+
+main $@

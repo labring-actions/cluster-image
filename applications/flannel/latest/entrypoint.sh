@@ -3,8 +3,10 @@
 set -e
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 
-if [ -z ${uninstall} ]; then
-  bash scripts/enable.sh
-elif [ -n ${uninstall} ]; then
-  bash scripts/disable.sh
-fi
+NAME=${NAME:-"flannel"}
+NAMESPACE=${NAMESPACE:-"kube-flannel"}
+HELM_OPTS=${HELM_OPTS:-""}
+
+kubectl create ns ${NAMESAPCE} > /dev/null 2>&1 || true
+kubectl label --overwrite ns ${NAMESAPCE} pod-security.kubernetes.io/enforce=privileged
+helm upgrade -i ${NAME} ./charts/flannel -n ${NAMESAPCE} --create-namespace ${HELM_OPTS}

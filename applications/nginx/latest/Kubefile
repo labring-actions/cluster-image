@@ -1,5 +1,11 @@
 FROM scratch
-COPY entrypoint.sh entrypoint.sh
+
+ENV NAME=${NAME:-"nginx"}
+ENV NAMESPACE=${NAMESPACE:-"nginx"}
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set service.type=NodePort \
+"}
+
 COPY charts charts
 COPY registry registry
-CMD ["bash entrypoint.sh"]
+CMD ["helm upgrade -i $(NAME) ./charts/nginx -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

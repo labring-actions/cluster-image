@@ -1,4 +1,4 @@
 FROM scratch
-COPY bond-cni.sh bond-cni.sh
+LABEL sealos.io.type="patch"
 COPY opt opt
-CMD ["bash bond-cni.sh"]
+CMD ["mkdir -p /opt/cni/bin && cp -f opt/bond /opt/cni/bin/bond && chmod +x /opt/cni/bin/bond"]

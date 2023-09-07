@@ -6,7 +6,6 @@ kubectl plugin - giving admins df (disk free) like utility for persistent volume
 
 - Kubernetes(depends on the app requirements)
 - sealos 4.x.x
-- kubectl
 
 ## Installing the app
 
@@ -58,5 +57,5 @@ $ kubectl dfpv -n minio
 ## Uninstalling the app
 
 ```shell
-$ sealos run docker.io/labring/kubectl-df-pv:v0.3.0 -e uninstall=true
+$ rm -rf /usr/local/bin/kubectl-dfpv
 ```

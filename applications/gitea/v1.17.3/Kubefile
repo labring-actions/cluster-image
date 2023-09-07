@@ -1,7 +1,0 @@
-FROM scratch
-ENV NODE_IP "git.example.com"
-ENV HTTP_NODE_PORT 30033
-ENV SSH_NODE_PORT 30022
-COPY charts charts
-COPY registry registry
-CMD ["helm upgrade -i gitea charts/gitea -n gitea --create-namespace --set gitea.admin.password=gitea_admin,service.http.type=NodePort,service.ssh.type=NodePort,service.http.nodePort=$(HTTP_NODE_PORT),service.ssh.nodePort=$(SSH_NODE_PORT),gitea.config.server.ROOT_URL=http://$(NODE_IP):$(HTTP_NODE_PORT),gitea.config.server.SSH_DOMAIN=${NODE_IP}:${SSH_NODE_PORT}"]

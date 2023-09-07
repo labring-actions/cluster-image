@@ -6,9 +6,10 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://charts.bitnami.com/bitnami"
-repo_name="bitnami/nginx"
-chart_name="bitnami"
+repo_url="https://helm-charts.komodor.io"
+repo_name="komodorio/helm-dashboard"
+chart_name="komodorio"
+version_pattern="^v([0-9]+)\.([0-9]+)\.([0-9]+)$"
 
 function check_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -20,7 +21,6 @@ function check_command() {
 function check_version(){
   rm -rf charts
   helm repo add ${chart_name} ${repo_url} --force-update 1>/dev/null
-
   # Check version number exists
   all_versions=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | awk '{print $3}' | grep -v VERSION)
   if ! echo "$all_versions" | grep -qw "${VERSION#v}"; then

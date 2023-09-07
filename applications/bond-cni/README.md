@@ -28,7 +28,5 @@ bond
 To uninstall/delete the app:
 
 ```bash
-sealos run docker.io/labring/bond-cni:latest -e uninstall=true
+rm -rf /opt/cni/bin/bond
 ```
-
-The command removes all the resource associated with the installtion.

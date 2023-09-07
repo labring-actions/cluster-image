@@ -20,13 +20,3 @@ These commands deploy podman binary on the Kubernetes cluster in the `/usr/local
 ```bash
 $ which podman
 ```
-
-## Uninstalling the app
-
-To uninstall/delete the `podman` app:
-
-```bash
-sealos run docker.io/labring/podman:v4.5.1 -e uninstall=true
-```
-
-The command removes all the binary files associated with the installtion.

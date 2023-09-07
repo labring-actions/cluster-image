@@ -1,4 +1,4 @@
 FROM scratch
-COPY podman.sh podman.sh
+LABEL sealos.io.type="patch"
 COPY opt opt
-CMD ["bash podman.sh"]
+CMD ["cp -rn podman-linux-amd64/usr podman-linux-amd64/etc /"]

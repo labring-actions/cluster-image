@@ -1,4 +1,3 @@
 FROM scratch
-COPY entrypoint.sh entrypoint.sh
 COPY opt opt
-CMD ["bash entrypoint.sh"]
+CMD ["cp -f opt/kubectl-dfpv /usr/local/bin/kubectl-dfpv"]

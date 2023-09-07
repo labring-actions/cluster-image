@@ -7,20 +7,25 @@ Flannel is a simple and easy way to configure a layer 3 network fabric designed 
 - Kubernetes (depends on the app requirements)
 - sealos v4.x
 - helm v3.x
-- latest cni-plugin image prebuild
- 
+- cni-plugins
+
 ## Installing the app
 
-To install the app with sealos run  command:
+Flannel uses portmap as CNI network plugin by default; when deploying Flannel ensure that the CNI Network plugins are installed in /opt/cni/bin, the latest binaries can be installed with the following commands:
+```
+$ sealos run docker.io/labring/cni-plugins:v1.3.0
+```
+
+To install the flannel app with sealos run  command:
 
 ```bash
-sealos run docker.io/labring/flannel:v0.21.4
+$ sealos run docker.io/labring/flannel:v0.22.1
 ```
 
 These commands deploy flannel with helm to the Kubernetes cluster，list app using:
 
 ```bash
-helm -n kube-flannel ls
+$ helm -n kube-flannel ls
 ```
 
 ## Uninstalling the app
@@ -28,7 +33,7 @@ helm -n kube-flannel ls
 To uninstall/delete the `flannel` app:
 
 ```bash
-sealos run docker.io/labring/flannel:v0.21.4 -e uninstall=true
+helm -n kube-flannel uninstall flannel
 ```
 
 The command removes all the resource associated with the installtion.
@@ -38,20 +43,18 @@ The command removes all the resource associated with the installtion.
 Custome  flannel podCidr or backend.
 
 ```bash
-sealos run docker.io/labring/flannel:v0.21.4 \
-  -e POD_CIDR="100.64.0.0/10" \
-  -e BACKEND="vxlan"
+$ sealos run docker.io/labring/flannel:v0.22.1 -e HELM_OPTS="--set podCidr=10.244.0.0/16"
 ```
 
-Warn: The flannel `POD_CIDR` must same with ClusterConfiguration, the default podSubnet of sealos is `100.64.0.0/10`, so do not change `POD_CIDR` if you are not custome `networking.podSubnet`  of ClusterConfiguration.
+Warn: The flannel `podCidr` must same with ClusterConfiguration, the default podSubnet of sealos is `100.64.0.0/10`, so do not change `POD_CIDR` if you are not custome `networking.podSubnet`  of ClusterConfiguration.
 
-Here is a sample Clusterfile to [custome podSubnet and serviceSubnet](https://www.sealyun.com/docs/getting-started/customize-cluster):
+Here is a sample Clusterfile:
 
 ```bash
 sealos gen \
   hub.sealos.cn/labring/kubernetes:v1.25.6 \
   hub.sealos.cn/labring/helm:v3.11.0 \
-  hub.sealos.cn/labring/flannel:v0.21.4 \
+  hub.sealos.cn/labring/flannel:v0.22.1 \
   --masters 192.168.10.10 -p 123456 > Clusterfile
 ```
 
@@ -66,7 +69,7 @@ metadata:
 spec:
   hosts:
   - ips:
-    - 192.168.72.35:22
+    - 192.168.10.10:22
     roles:
     - master
     - amd64
@@ -128,4 +131,3 @@ kube-system    kube-controller-manager-ubuntu   1/1     Running   2          61s
 kube-system    kube-proxy-7jvgg                 1/1     Running   0          46s   192.168.72.35   ubuntu   <none>           <none>
 kube-system    kube-scheduler-ubuntu            1/1     Running   6          63s   192.168.72.35   ubuntu   <none>           <none>
 ```
-
