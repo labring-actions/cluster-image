@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["cd ./autoscaler/vertical-pod-autoscaler && ./hack/vpa-up.sh"]

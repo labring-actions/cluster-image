@@ -1,0 +1,10 @@
+FROM scratch
+
+ENV NAME=${NAME:-"cowboysysop-vertical-pod-autoscaler"}
+ENV NAMESPACE=${NAMESPACE:-"cowboysysop-vertical-pod-autoscaler"}
+ENV CHARTS="./charts/vertical-pod-autoscaler"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]
