@@ -5,7 +5,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 
 NAME=${NAME:-"longhorn"}
 NAMESPACE=${NAMESPACE:-"longhorn-system"}
-HELM_OPTS="${HELM_OPTS:-}"
+CHARTS="./charts/longhorn"
+HELM_OPTS=${HELM_OPTS:-" \
+--set service.ui.type=NodePort \
+"}
 
 function install(){
   cp opt/jq /usr/local/bin/
@@ -19,7 +22,7 @@ function install(){
 
   bash scripts/environment_check.sh
 
-  helm upgrade -i ${NAME} ./charts/longhorn -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
+  helm upgrade -i ${NAME} ${CHARTS} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
 }
 
 install

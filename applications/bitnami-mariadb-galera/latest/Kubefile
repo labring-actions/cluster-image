@@ -1,0 +1,12 @@
+FROM scratch
+
+ENV NAME=${NAME:-"bitnami-mariadb-galera"}
+ENV NAMESPACE=${NAMESPACE:-"bitnami-mariadb-galera"}
+ENV CHARTS="./charts/mariadb-galera"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set service.type=NodePort \
+"}
+
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

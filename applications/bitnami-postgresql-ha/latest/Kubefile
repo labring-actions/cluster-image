@@ -1,0 +1,12 @@
+FROM scratch
+
+ENV NAME=${NAME:-"bitnami-postgresql-ha"}
+ENV NAMESPACE=${NAMESPACE:-"bitnami-postgresql-ha"}
+ENV CHARTS="./charts/postgresql-ha"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set service.type=NodePort \
+"}
+
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]
