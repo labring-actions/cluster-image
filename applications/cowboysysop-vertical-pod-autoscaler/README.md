@@ -27,8 +27,6 @@ $ kubectl -n cowboysysop-vertical-pod-autoscaler get pods
 
 ## Uninstalling the app
 
-Get mount path which is `default-xxxxxx`.
-
 ```shell
 $ helm -n cowboysysop-vertical-pod-autoscaler uninstall cowboysysop-vertical-pod-autoscaler
 ```
