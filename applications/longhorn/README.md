@@ -6,6 +6,8 @@ Longhorn is a lightweight, reliable and easy-to-use distributed block storage sy
 
 - Kubernetes(depends on the app requirements)
 - sealos 4.x.x
+- Helm 3.x.x
+- PV provisioner support in the underlying infrastructure
 
 ## Install
 
@@ -16,7 +18,7 @@ sealos run docker.io/labring/longhorn:v1.5.1
 Custome config
 
 ```shell
-sealos run docker.io/labring/longhorn:v1.5.1 -e HELM_OPTS="--set service.ui.type=NodePort
+sealos run docker.io/labring/longhorn:v1.5.1 -e HELM_OPTS="--set service.ui.type=NodePort"
 ```
 
 Get pods status

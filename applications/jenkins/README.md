@@ -6,6 +6,7 @@ In a nutshell, Jenkins is the leading open-source automation server. Built with 
 
 - Kubernetes(depends on the app requirements)
 - sealos 4.x.x
+- helm v3.x.x
 - default storageclass
 
 ## Install
