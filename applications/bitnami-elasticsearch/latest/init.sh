@@ -10,6 +10,12 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 # Get the chart version from the app version
 chart_version=`helm search repo --versions --regexp '\vbitnami/elasticsearch\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
 helm pull bitnami/elasticsearch --version=${chart_version} -d charts/ --untar
+cat >charts/elasticsearch/elasticsearch.values.yaml<<EOF
+metrics
+  enabled: true
+global
+  kibanaEnabled: true
+EOF
 
 cat <<EOF >"Kubefile"
 FROM scratch
