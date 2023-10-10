@@ -2,9 +2,16 @@
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
-export readonly ARCH=${1:-amd64}
-export readonly NAME=${2:-$(basename "${PWD%/*}")}
-export readonly VERSION=${3:-$(basename "$PWD")}
+readonly ARCH=${1:-amd64}
+readonly NAME=${2:-$(basename "${PWD%/*}")}
+inVERSION=${3:-$(basename "$PWD")}
+
+if [[ $inVERSION =~ ^v[.0-9]+$ ]]; then
+  readonly VERSION=$inVERSION
+else
+  readonly VERSION="v$inVERSION"
+  readonly XY_LATEST=true
+fi
 
 repo_url=" https://flannel-io.github.io/flannel/"
 repo_name="flannel/flannel"
@@ -39,6 +46,25 @@ function init(){
     echo "init success, next run sealos build"
   fi
   yq e -iN '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
+  if [[ "$XY_LATEST" == true ]]; then
+  yq e -i '.podCidr="172.31.0.0/17"' charts/flannel/values.yaml
+    cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
+      - name: install-cni-plugins
+        image: docker.io/labring4docker/cni-plugins:v1.3.0
+        command: ["/bin/sh"]
+        args: ["-c", "cp -au /cni-plugins/* /cni-plugin/"]
+        volumeMounts:
+        - name: cni-plugin
+          mountPath: /cni-plugin
+EOF
+  cat <<EOF >Kubefile
+FROM scratch
+COPY charts charts
+COPY registry registry
+CMD ["helm upgrade -i flannel charts/flannel -n kube-system"]
+EOF
+  exit
+fi
 }
 
 function main() {
@@ -52,4 +78,4 @@ function main() {
   fi
 }
 
-main $@
+main "$@"
