@@ -17,5 +17,6 @@ cat <<EOF >"Kubefile"
 FROM scratch
 COPY charts charts
 COPY registry registry
-CMD ["helm upgrade -i bitnami-zookeeper charts/zookeeper -n zookeeper --create-namespace"]
+COPY install.sh install.sh
+CMD ["bash install.sh"]
 EOF
