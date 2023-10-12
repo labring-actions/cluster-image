@@ -1,0 +1,11 @@
+FROM scratch
+
+ENV NAME=${NAME:-"vector"}
+ENV NAMESPACE=${NAMESPACE:-"vector"}
+ENV CHARTS="./charts/vector"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set role=Agent \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

@@ -1,0 +1,11 @@
+FROM scratch
+
+ENV NAME=${NAME:-"vector-operator"}
+ENV NAMESPACE=${NAMESPACE:-"vector-operator"}
+ENV CHARTS="./charts/vector-operator"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set vector.enable=true \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

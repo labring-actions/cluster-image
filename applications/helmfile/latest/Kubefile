@@ -1,4 +1,6 @@
 FROM scratch
-COPY helmfile.sh helmfile.sh
-COPY opt opt
-CMD ["bash helmfile.sh"]
+LABEL sealos.io.type="patch"
+COPY . .
+CMD cp -f ./opt/helmfile /usr/bin/helmfile \
+    && mkdir -p /root/.local/share/helm/plugins/helm-diff \
+    && cp -r -f ./opt/diff /root/.local/share/helm/plugins/helm-diff

@@ -1,0 +1,12 @@
+FROM scratch
+
+ENV NAME=${NAME:-"openobserve"}
+ENV NAMESPACE=${NAMESPACE:-"openobserve"}
+ENV CHARTS="./charts/openobserve"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set service.type=NodePort \
+--set minio.enabled=true \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

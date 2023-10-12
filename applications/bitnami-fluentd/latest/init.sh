@@ -7,7 +7,7 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 repo_url="https://charts.bitnami.com/bitnami"
-repo_name="bitnami/elasticsearch"
+repo_name="bitnami/fluentd"
 chart_name="bitnami"
 
 function check_command() {
@@ -38,13 +38,6 @@ function init(){
   if [ $? -eq 0 ]; then
     echo "init success, next run sealos build"
   fi
-
-  cat >charts/elasticsearch.values.yaml<<EOF
-metrics:
-  enabled: true
-global:
-  kibanaEnabled: true
-EOF
 }
 
 function main() {

@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["helm upgrade -i fluent-bit charts/fluent-bit -n elastic --create-namespace"]
