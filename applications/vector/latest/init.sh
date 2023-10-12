@@ -6,9 +6,10 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://charts.bitnami.com/bitnami"
-repo_name="bitnami/elasticsearch"
-chart_name="bitnami"
+repo_url="https://helm.vector.dev"
+repo_name="vector/vector"
+chart_name="vector"
+VERSION=${VERSION#v}
 
 function check_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -23,7 +24,7 @@ function check_version(){
 
   # Check version number exists
   all_versions=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | awk '{print $3}' | grep -v VERSION)
-  if ! echo "$all_versions" | grep -qw "${VERSION#v}"; then
+  if ! echo "$all_versions" | grep -qw "${VERSION}"; then
     echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo, get available version with: helm search repo ${repo_name} --versions"
     exit 1
   fi
@@ -31,20 +32,13 @@ function check_version(){
 
 function init(){
   # Find the chart version through the app version
-  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
+  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1)
 
   # Pull helm charts to local
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
   if [ $? -eq 0 ]; then
     echo "init success, next run sealos build"
   fi
-
-  cat >charts/elasticsearch.values.yaml<<EOF
-metrics:
-  enabled: true
-global:
-  kibanaEnabled: true
-EOF
 }
 
 function main() {

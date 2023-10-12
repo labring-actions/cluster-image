@@ -1,0 +1,10 @@
+FROM scratch
+
+ENV NAME=${NAME:-"fluent-bit"}
+ENV NAMESPACE=${NAMESPACE:-"fluent-bit"}
+ENV CHARTS="./charts/fluent-bit"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

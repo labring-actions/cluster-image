@@ -1,0 +1,10 @@
+FROM scratch
+
+ENV NAME=${NAME:-"fluentd"}
+ENV NAMESPACE=${NAMESPACE:-"fluentd"}
+ENV CHARTS="./charts/fluentd"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

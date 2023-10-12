@@ -33,7 +33,8 @@ $ which helmfile
 To uninstall/delete the `helmfile` app:
 
 ```bash
-sealos run docker.io/labring/helmfile:v0.151.0 -e uninstall=true
+rm -f /usr/bin/helmfile
+rm -rf /root/.local/share/helm/plugins/helm-diff
 ```
 
 The command removes all the binary files associated with the installtion.

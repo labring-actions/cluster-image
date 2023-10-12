@@ -1,0 +1,11 @@
+FROM scratch
+
+ENV NAME=${NAME:-"elasticsearch"}
+ENV NAMESPACE=${NAMESPACE:-"elasticsearch"}
+ENV CHARTS="./charts/elasticsearch"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set service.type=NodePort \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

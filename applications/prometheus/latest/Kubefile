@@ -1,0 +1,11 @@
+FROM scratch
+
+ENV NAME=${NAME:-"prometheus"}
+ENV NAMESPACE=${NAMESPACE:-"prometheus"}
+ENV CHARTS="./charts/prometheus"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set server.service.type=NodePort \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]
