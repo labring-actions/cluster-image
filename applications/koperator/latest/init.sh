@@ -23,7 +23,7 @@ function check_version(){
 
   # Check version number exists
   all_versions=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | awk '{print $3}' | grep -v VERSION)
-  if ! echo "$all_versions" | grep -qw "${VERSION#v}"; then
+  if ! echo "$all_versions" | grep -qw "${VERSION}"; then
     echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo, get available version with: helm search repo ${repo_name} --versions"
     exit 1
   fi
@@ -31,7 +31,7 @@ function check_version(){
 
 function init(){
   # Find the chart version through the app version
-  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
+  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1)
 
   # Pull helm charts to local
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
