@@ -11,6 +11,7 @@ spec:
   headlessServiceEnabled: true
   zkAddresses:
     - {{ default "zook-zookeeper-client.zook-system:2181" .ZOOKEEPER_CLIENT_SERVICE_ADDR }}
+  zkPath: "/kafka"
   propagateLabels: false
   oneBrokerPerNode: false
   clusterImage: "ghcr.io/banzaicloud/kafka:2.13-3.4.1"
@@ -82,7 +83,7 @@ spec:
     #      limits:
     #        cpu: 500m
     #        memory: 1Gi
-       image: "ghcr.io/banzaicloud/cruise-control:2.5.123"
+    image: "ghcr.io/banzaicloud/cruise-control:2.5.123"
     config: |
       # Copyright 2017 LinkedIn Corp. Licensed under the BSD 2-Clause License (the "License"). See License in the project root for license information.
       #
