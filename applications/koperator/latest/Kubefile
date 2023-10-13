@@ -1,9 +1,4 @@
 FROM scratch
 
-ENV NAME=${NAME:-"koperator"}
-ENV NAMESPACE=${NAMESPACE:-"koperator-system"}
-ENV CHARTS="./charts/kafka-operator"
-ENV HELM_OPTS=${HELM_OPTS:-""}
-
 COPY . .
-CMD ["kubectl apply -f crds/kafka-operator.crds.yaml","helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace --set certManager.namespace=cert-manager --set prometheusMetrics.enabled=true $(HELM_OPTS)","kubectl apply -f manifests/simplekafkacluster.yaml"]
+CMD ["bash install.sh"]
