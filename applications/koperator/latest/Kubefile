@@ -1,0 +1,9 @@
+FROM scratch
+
+ENV NAME=${NAME:-"koperator"}
+ENV NAMESPACE=${NAMESPACE:-"koperator-system"}
+ENV CHARTS="./charts/koperator"
+ENV HELM_OPTS=${HELM_OPTS:-""}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace --set certManager.namespace=cert-manager --set prometheusMetrics.enabled=true $(HELM_OPTS)"]
