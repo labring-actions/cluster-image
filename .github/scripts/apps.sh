@@ -25,6 +25,14 @@ cp -rf "applications/$APP_NAME/$APP_VERSION"/* $buildDir
 
 cd $buildDir && {
   [[ -s Dockerfile ]] && Kubefile="Dockerfile" || Kubefile="Kubefile"
+
+  if [[ -s "build_arch" ]]; then
+    FILE_CONTENT=$(cat "build_arch"| tr -d '[:space:]'| tr -d '\n'| tr -d '\t')
+    if [[ "$FILE_CONTENT" != "$ARCH" ]]; then
+        echo "The content of build_arch does not match the ARCH variable. Exiting."
+        exit 0
+    fi
+  fi
   if [[ -s init.sh ]]; then
     bash init.sh "$APP_ARCH" "$APP_NAME" "$APP_VERSION"
   fi

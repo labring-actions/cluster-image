@@ -2,7 +2,7 @@
 
 set -eu
 
-readonly ARCH=${arch:-}
+ARCH=${arch:-}
 readonly IMAGE_NAME=${app?}
 readonly IMAGE_TAG=${version?}
 readonly IMAGE_HUB_REGISTRY=${registry?}
@@ -10,6 +10,22 @@ readonly IMAGE_HUB_REPO=${repo?}
 readonly IMAGE_HUB_USERNAME=${username?}
 readonly IMAGE_HUB_PASSWORD=${password?}
 readonly IMAGE_NAME_FULL=${IMAGE_HUB_REGISTRY}/${IMAGE_HUB_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
+
+readonly buildDir=.build-image
+
+rm -rf $buildDir
+mkdir -p $buildDir
+
+if [[ -d "applications/$IMAGE_NAME/latest" ]] && ! [[ -d "applications/$IMAGE_NAME/$IMAGE_TAG" ]]; then
+  cp -af .github/scripts/apps/ /tmp/scripts_apps
+  cp -af "applications/$IMAGE_NAME/latest" "applications/$IMAGE_NAME/$IMAGE_TAG"
+fi
+
+cp -rf "applications/$IMAGE_NAME/$IMAGE_TAG"/* $buildDir
+
+if [[ -s "$buildDir/build_arch" ]]; then
+  ARCH=$(cat "$buildDir/build_arch")
+fi
 
 # for host action ,Don't delete this code
 sudo sealos rmi "$IMAGE_NAME_FULL" || true
