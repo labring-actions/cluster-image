@@ -28,7 +28,7 @@ cd $buildDir && {
 
   if [[ -s "build_arch" ]]; then
     FILE_CONTENT=$(cat "build_arch"| tr -d '[:space:]'| tr -d '\n'| tr -d '\t')
-    if [[ "$FILE_CONTENT" != "$ARCH" ]]; then
+    if [[ "$FILE_CONTENT" != "$APP_ARCH" ]]; then
         echo "The content of build_arch does not match the ARCH variable. Exiting."
         exit 0
     fi
