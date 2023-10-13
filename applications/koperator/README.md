@@ -1,6 +1,6 @@
 # koperator
 
-Your window into the koperator https://github.com/banzaicloud/koperator#koperator
+Your window into the koperator https://banzaicloud.com/docs/supertubes/kafka-operator/
 
 ## Prerequisites
 
@@ -95,7 +95,10 @@ $ helm -n koperator-system ls
 Uninstall with helm command
 
 ```shell
+kubectl delete kafkaclusters -n koperator-system kafka
 helm -n koperator-system uninstall koperator
+VERSION=v0.25.1
+kubectl delete -f https://github.com/banzaicloud/koperator/releases/download/${VERSION}/kafka-operator.crds.yaml
 ```
 
 ## Configuration
@@ -106,5 +109,5 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `seao
 
 ```shell
 $ sealos run docker.io/labring/koperator:0.25.1 \
--e NAME=koperator -e NAMESPACE=koperator-system -e HELM_OPTS="--set prometheusMetrics.enabled=true"
+-e NAME=koperator -e NAMESPACE=koperator-system -e HELM_OPTS="--set prometheusMetrics.enabled=true" -e ZOOKEEPER_CLIENT_SERVICE_ADDR=zook-zookeeper-client.zook-system:2181
 ```
