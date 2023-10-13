@@ -43,6 +43,8 @@ function init(){
 prometheusMetrics:
   enabled: true
 EOF
+  mkdir crds
+  wget -q -O crds/kafka-operator.crds.yaml https://github.com/banzaicloud/koperator/releases/download/${VERSION}/kafka-operator.crds.yaml
 }
 
 function main() {
