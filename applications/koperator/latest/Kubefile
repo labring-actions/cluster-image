@@ -1,4 +1,6 @@
 FROM scratch
 
+ENV NAMESPACE=${NAMESPACE:-"koperator-system"}
+
 COPY . .
 CMD ["bash install.sh"]
