@@ -34,7 +34,7 @@ helm -n helm-dashboard uninstall helm-dashboard
 
 Refer to helm-dashboard [values.yaml](https://github.com/komodorio/helm-dashboard/tree/main/charts/helm-dashboard) for the full run-down on defaults.
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
+Specify each parameter using the `--set key=value[,key=value]` argument to `sealos run -e HELM_OPTS=`. For example,
 
 ```shell
 $ sealos run docker.io/labring/helm-dashboard:v1.3.3 \

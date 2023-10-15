@@ -33,7 +33,7 @@ $ helm -n cowboysysop-vertical-pod-autoscaler uninstall cowboysysop-vertical-pod
 
 ## Configuration
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. 
+Specify each parameter using the `--set key=value[,key=value]` argument to `sealos run -e HELM_OPTS=`. 
 
 For example:
 

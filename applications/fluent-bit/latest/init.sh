@@ -7,7 +7,7 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 repo_url="https://fluent.github.io/helm-charts"
-repo_name="fluent/fluent-bit"
+repo_name="fluent"
 chart_name="fluent-bit"
 
 function check_command() {
@@ -22,7 +22,7 @@ function check_version(){
   helm repo add ${chart_name} ${repo_url} --force-update 1>/dev/null
 
   # Check version number exists
-  all_versions=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | awk '{print $3}' | grep -v VERSION)
+  all_versions=$(helm search repo --versions --regexp "\v"${repo_name}/${chart_name}"\v" | awk '{print $3}' | grep -v VERSION)
   if ! echo "$all_versions" | grep -qw "${VERSION#v}"; then
     echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo, get available version with: helm search repo ${repo_name} --versions"
     exit 1
@@ -31,10 +31,10 @@ function check_version(){
 
 function init(){
   # Find the chart version through the app version
-  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
+  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}/${chart_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
 
   # Pull helm charts to local
-  helm pull ${repo_name} --version=${chart_version} -d charts --untar
+  helm pull "${repo_name}/${chart_name}" --version=${chart_version} -d charts --untar
   if [ $? -eq 0 ]; then
     echo "init success, next run sealos build"
   fi

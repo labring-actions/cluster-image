@@ -1,7 +1,7 @@
 FROM scratch
 
 ENV NAME=${NAME:-"fluent-bit"}
-ENV NAMESPACE=${NAMESPACE:-"fluent-bit"}
+ENV NAMESPACE=${NAMESPACE:-"fluent"}
 ENV CHARTS="./charts/fluent-bit"
 ENV HELM_OPTS=${HELM_OPTS:-" \
 "}

@@ -35,7 +35,7 @@ helm -n bitnami-postgresql-ha uninstall bitnami-postgresql-ha
 
 Refer to bitnami postgresql-ha [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/postgresql-ha/values.yaml) for the full run-down on defaults.
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
+Specify each parameter using the `--set key=value[,key=value]` argument to `sealos run -e HELM_OPTS=`. For example,
 
 ```shell
 $ sealos run docker.io/labring/bitnami-postgresql-ha:v15.4.0 \

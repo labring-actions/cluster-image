@@ -1,6 +1,6 @@
 # Vector-operator
 
-Kubernetes Operator for deploy and configure Vector.
+[Vector-operator](https://github.com/kaasops/vector-operator)Kubernetes Operator for deploy and configure Vector.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ $ sealos run docker.io/labring/vector-operator:v0.0.30
 Get app status
 
 ```shell
-$ helm -n Vector-operator ls
+$ helm -n vector-operator ls
 ```
 
 ## Uninstalling the app
@@ -34,7 +34,7 @@ helm -n vector-operator uninstall vector-operator
 
 Refer to Vector-operator values.yaml for the full run-down on defaults.
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
+Specify each parameter using the `--set key=value[,key=value]` argument to `sealos run -e HELM_OPTS=`. For example,
 
 ```shell
 $ sealos run docker.io/labring/vector-operator:v0.0.30 \
@@ -74,7 +74,7 @@ spec:
       inputs:
         - "kubernetes_logs"
       endpoints:
-        - "http://elasticsearch.elastic-system:9200"
+        - "http://elasticsearch.elasticsearch:9200"
       bulk:
         index: "vector-%Y-%m-%d"
 EOF

@@ -1,10 +1,10 @@
 FROM scratch
 
-ENV NAME=${NAME:-"fluent-bit"}
-ENV NAMESPACE=${NAMESPACE:-"fluent-bit"}
-ENV CHARTS="./charts/fluent-bit"
+ENV NAME=${NAME:-"logging-operator"}
+ENV NAMESPACE=${NAMESPACE:-"logging"}
+ENV CHARTS="./charts/logging-operator"
 ENV HELM_OPTS=${HELM_OPTS:-" \
---set daemonset.enabled=true \
+--set logging.enabled=true \
 "}
 
 COPY . .
