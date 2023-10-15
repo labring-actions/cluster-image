@@ -35,7 +35,7 @@ helm -n elastic-system uninstall elasticsearch
 
 Refer to elasticsearch values.yaml for the full run-down on defaults.
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
+Specify each parameter using the `--set key=value[,key=value]` argument to `sealos run -e HELM_OPTS=`. For example,
 
 ```shell
 $ sealos run docker.io/labring/elasticsearch:v8.5.1 \

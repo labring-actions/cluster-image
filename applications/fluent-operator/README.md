@@ -1,6 +1,8 @@
 # Fluent-operator
 
-Operate Fluent Bit and Fluentd in the Kubernetes way - Previously known as FluentBit Operator.
+[Operate Fluent Bit and Fluentd](https://github.com/fluent/fluent-operator) in the Kubernetes way - Previously known as FluentBit Operator.
+
+This cluster image bootstraps a fluent-bit application using the [fluent-bit Helm chart](https://github.com/fluent/helm-charts).
 
 ## Prerequisites
 
@@ -34,7 +36,7 @@ helm -n fluent uninstall fluent-operator
 
 Refer to fluent-operator values.yaml for the full run-down on defaults.
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. For example,
+Specify each parameter using the `--set key=value[,key=value]` argument to `sealos run -e HELM_OPTS=`. For example,
 
 ```shell
 $ sealos run docker.io/labring/bitnami-fluent-bit：v2.1.10 \
