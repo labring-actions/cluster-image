@@ -1,6 +1,0 @@
-FROM scratch
-COPY opt opt
-COPY charts charts
-COPY manifests manifests
-COPY registry registry
-CMD ["cp opt/vela /usr/bin/vela","helm upgrade -i kubevela charts/vela-core -n vela-system --create-namespace --wait","vela addon enable manifests/velaux serviceType=NodePort"]

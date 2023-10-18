@@ -19,7 +19,7 @@ function check_command() {
 
 function check_version(){
   rm -rf charts
-  helm repo add ${chart_name} ${repo_url} --force-update 1>/dev/null
+  helm repo add ${repo_name} ${repo_url} --force-update 1>/dev/null
 
   # Check version number exists
   all_versions=$(helm search repo --versions --regexp "\v"${repo_name}/${chart_name}"\v" | awk '{print $3}' | grep -v VERSION)

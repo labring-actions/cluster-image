@@ -6,9 +6,10 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://charts.bitnami.com/bitnami"
-repo_name="bitnami/kafka"
-chart_name="bitnami"
+repo_url="https://open-policy-agent.github.io/gatekeeper/charts"
+repo_name="gatekeeper"
+chart_name="gatekeeper"
+APP_VERSION=${VERSION}
 
 function check_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -19,11 +20,11 @@ function check_command() {
 
 function check_version(){
   rm -rf charts
-  helm repo add ${chart_name} ${repo_url} --force-update 1>/dev/null
+  helm repo add ${repo_name} ${repo_url} --force-update 1>/dev/null
 
   # Check version number exists
-  all_versions=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | awk '{print $3}' | grep -v VERSION)
-  if ! echo "$all_versions" | grep -qw "${VERSION#v}"; then
+  all_versions=$(helm search repo --versions --regexp "\v"${repo_name}/${chart_name}"\v" | awk '{print $3}' | grep -v VERSION)
+  if ! echo "$all_versions" | grep -qw "${APP_VERSION}"; then
     echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo, get available version with: helm search repo ${repo_name} --versions"
     exit 1
   fi
@@ -31,34 +32,13 @@ function check_version(){
 
 function init(){
   # Find the chart version through the app version
-  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
+  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}/${chart_name}"\v" |grep ${APP_VERSION} | awk '{print $2}' | sort -rn | head -n1)
 
   # Pull helm charts to local
-  helm pull ${repo_name} --version=${chart_version} -d charts --untar
+  helm pull ${repo_name}/${chart_name} --version=${chart_version} -d charts --untar
   if [ $? -eq 0 ]; then
     echo "init success, next run sealos build"
   fi
-
-#  cat >charts/kafka.values.yaml <<EOF
-#externalAccess:
-#  autoDiscovery:
-#    enabled: true
-#volumePermissions:
-#  enabled: true
-#metrics:
-#  kafka:
-#    enabled: true
-#  jmx:
-#    enabled: true
-#kraft:
-#  enabled: false
-#zookeeper:
-#  enabled: true
-#controller:
-#  replicaCount: 0
-#broker:
-#  replicaCount: 1
-#EOF
 }
 
 function main() {
