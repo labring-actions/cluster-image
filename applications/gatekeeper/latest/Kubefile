@@ -1,8 +1,8 @@
 FROM scratch
 
-ENV NAME=${NAME:-"kyverno"}
-ENV NAMESPACE=${NAMESPACE:-"kyverno"}
-ENV CHARTS="./charts/kyverno"
+ENV NAME=${NAME:-"gatekeeper"}
+ENV NAMESPACE=${NAMESPACE:-"gatekeeper-system"}
+ENV CHARTS="./charts/gatekeeper"
 ENV HELM_OPTS=${HELM_OPTS:-" \
 "}
 

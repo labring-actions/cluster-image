@@ -1,11 +1,12 @@
 # kyverno
 
-Kyverno is a policy engine designed for Kubernetes. It can validate, mutate, and generate configurations using admission controls and background scans. Kyverno policies are Kubernetes resources and do not require learning a new language. Kyverno is designed to work nicely with tools you already use like kubectl, kustomize, and Git.
+[Kyverno][https://github.com/kyverno/kyverno] is a Kubernetes Native Policy Management.
 
 ## Prerequisites
 
 - Kubernetes(depends on the app requirements)
-- sealos 4.x.x
+- Sealos v4.x.x
+- Helm v3.x.x
 
 ## Install
 

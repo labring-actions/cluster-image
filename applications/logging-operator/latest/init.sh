@@ -8,7 +8,7 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 
 rm -rf charts
 wget -qO- https://github.com/kube-logging/logging-operator/archive/refs/tags/${VERSION#v}.tar.gz | tar -zx
-mv logging-operator-4.4.0/charts .
+mv logging-operator-${VERSION#v}/charts .
 rm -rf charts/logging-demo
 
 export FluentdImage_file="logging-operator-${VERSION#v}/pkg/sdk/logging/api/v1beta1/logging_types.go"
@@ -19,7 +19,7 @@ export DefaultFluentdConfigReloaderImageTag=$(cat $FluentdImage_file | grep -E "
 export syslogngImage_file="logging-operator-${VERSION#v}/pkg/resources/syslogng/syslogng.go"
 export syslogngImageTag=$(cat $syslogngImage_file | grep -E "^\s+(syslogngImageTag.*)" | cut -d '"' -f2)
 
-rm -rf logging-operator-4.4.0
+rm -rf logging-operator-${VERSION#v}
 rm -rf ${VERSION#v}.tar.gz
 
 mkdir -p images/shim/
