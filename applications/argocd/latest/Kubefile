@@ -1,0 +1,12 @@
+FROM scratch
+
+ENV NAME=${NAME:-"argocd"}
+ENV NAMESPACE=${NAMESPACE:-"argocd"}
+ENV CHARTS="./charts/argo-cd"
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set server.service.type=NodePort \
+-f charts/argo-cd.values.yaml \
+"}
+
+COPY . .
+CMD ["cp -f opt/argocd /usr/local/bin","helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

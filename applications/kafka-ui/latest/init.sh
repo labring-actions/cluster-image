@@ -39,13 +39,6 @@ function init(){
     echo "init success, next run sealos build"
   fi
 
-  cat >charts/kafka-ui.values.yaml<<EOF
-env:
-- name: DYNAMIC_CONFIG_ENABLED
-  value: "true"
-EOF
-}
-
 function main() {
   if [ $# -ne 3 ]; then
     echo "Usage: ./$0 <ARCH> <NAME> <VERSION>"

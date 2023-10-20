@@ -32,6 +32,7 @@ function check_version(){
 
 function init(){
   # Find the chart version through the app version
+  rm -rf opt manifests images/shim/ && mkdir -p opt manifests images/shim/
   chart_version=$(helm search repo --versions --regexp "\v"${repo_name}/${chart_name}"\v" |grep ${APP_VERSION} | awk '{print $2}' | sort -rn | head -n1)
 
   # Pull helm charts to local
