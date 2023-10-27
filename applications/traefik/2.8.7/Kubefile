@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["helm upgrade -i traefik charts/traefik -n traefik --create-namespace --set service.type=NodePort"]

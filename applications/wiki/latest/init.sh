@@ -24,25 +24,15 @@ check_command() {
 }
 
 download_chart() {
-    local HELM_REPO_URL="https://kubernetes.github.io/ingress-nginx"
-    local HELM_REPO_NAME="ingress-nginx"
-    local HELM_CHART_NAME="ingress-nginx"
-    local APP_VERSION=${VERSION#v}
+    local HELM_REPO_URL="https://charts.js.wiki"
+    local HELM_REPO_NAME="requarks"
+    local HELM_CHART_NAME="wiki"
+    local APP_VERSION=${VERSION}
 
     helm repo add "${HELM_REPO_NAME}" "${HELM_REPO_URL}" --force-update 1>/dev/null
-
-    ALL_VERSIONS=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | awk '{print $3}' | grep -v VERSION)
-    if ! echo "${ALL_VERSIONS}" | grep -qw "${APP_VERSION}"; then
-        echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo"
-        exit 1
-    fi
-
     # Find CHART VERSION through APP VERSION
-    HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
+    HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rV | head -n1)
     helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
-
-    yq e -i '.controller.image.digest=null' charts/ingress-nginx/values.yaml
-    yq e -i '.controller.admissionWebhooks.patch.image.digest=null' charts/ingress-nginx/values.yaml
 }
 
 main() {

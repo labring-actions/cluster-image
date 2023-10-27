@@ -19,6 +19,7 @@ function check_command() {
 
 function init(){
   rm -rf charts
+  helm repo add ${repo_name} ${repo_url} --force-update 1>/dev/null
   # Find the chart version through the app version
   chart_version=$(helm search repo --versions --regexp "\v"${repo_name}/${chart_name}"\v" |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1)
 

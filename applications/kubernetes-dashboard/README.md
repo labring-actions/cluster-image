@@ -9,6 +9,7 @@ This cloud image build with [kubernetes-dashboard helm charts](https://artifacth
 - Kubernetes(depends on the app requirements)
 - sealos 4.x.x
 - Helm 3.x.x
+- metrics-server
 
 ## Installing the app
 
@@ -55,7 +56,7 @@ https://<node-ip>:<node-port>
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-sealos run docker.io/labring/kubernetes-dashboard:v2.7.0 -e uninstall=true
+helm -n kubernetes-dashboard uninstall kubernetes-dashboard
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.

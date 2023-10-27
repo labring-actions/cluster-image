@@ -6,13 +6,37 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://kyverno.github.io/kyverno/"
-repo_name="kyverno/kyverno"
-chart_name="kyverno"
+init_dir() {
+    local OPT_DIR="./opt"
+    local IMAGES_DIR="./images"
+    local CHARTS_DIR="./charts"
+    local MANIFESTS_DIR="./manifests"
 
-app_version=${VERSION}
+    rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}" "${MANIFESTS_DIR}"
+    mkdir -p "${CHARTS_DIR}" "${OPT_DIR}"
+}
 
-rm -rf charts && mkdir -p charts
-helm repo add ${chart_name} ${repo_url}
-chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | grep ${app_version} | awk '{print $2}' | sort -rn | head -n1)
-helm pull ${repo_name} --version=${chart_version} -d charts --untar
+download_chart() {
+    local HELM_REPO_URL="https://kyverno.github.io/kyverno/"
+    local HELM_REPO_NAME="kyverno"
+    local HELM_CHART_NAME="kyverno"
+
+    helm repo add "${HELM_REPO_NAME}" "${HELM_REPO_URL}"
+    # Find CHART VERSION through APP VERSION
+    HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${VERSION}" | awk '{print $2}' | sort -rn | head -n1)
+    helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
+}
+
+download_file() {
+    local GITHUB_USER="kyverno"
+    local GITHUB_REPO="kyverno"
+    local GITHUB_FILE="kyverno-cli_${VERSION}_linux_${ARCH}.tar.gz"
+    local DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/download/${VERSION}/${GITHUB_FILE}"
+
+    wget -qO- "${DOWNLOAD_URL}" | tar -zx -C ./opt kyverno
+    chmod +x opt/kyverno
+}
+
+init_dir
+download_chart
+download_file

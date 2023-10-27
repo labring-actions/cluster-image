@@ -38,6 +38,7 @@ function init(){
   if [ $? -eq 0 ]; then
     echo "init success, next run sealos build"
   fi
+}
 
 function main() {
   if [ $# -ne 3 ]; then

@@ -40,13 +40,6 @@ function init(){
     echo "init success, next run sealos build"
   fi
 
-  cat >charts/argo-cd.values.yaml<<'EOF'
-configs:
-  secret:
-    # ARGO_ADMIN_PASSWORD=$(htpasswd -nbBC 10 "" admin1234 | tr -d ':\n' | sed 's/$2y/$2a/')
-    argocdServerAdminPassword: "$2a$10$Lvnendj5L6t9HAWEMp3Cc.rBGZ0xwv5AmKoVv2IWq2aEavim/gg5u"
-EOF
-
   rm -rf opt/ && mkdir -p opt/
   wget -q https://github.com/argoproj/argo-cd/releases/download/${APP_VERSION}/argocd-linux-${ARCH}
   mv argocd-linux-${ARCH} opt/argocd

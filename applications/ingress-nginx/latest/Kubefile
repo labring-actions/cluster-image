@@ -1,5 +1,11 @@
 FROM scratch
-COPY entrypoint.sh entrypoint.sh
-COPY charts charts
-COPY registry registry
-CMD ["bash entrypoint.sh"]
+
+ENV NAME=${NAME:-"ingress-nginx"}
+ENV NAMESPACE=${NAMESPACE:-"ingress-nginx"}
+ENV CHARTS=${CHARTS:-"./charts/ingress-nginx"}
+ENV HELM_OPTS=${HELM_OPTS:-" \
+--set controller.ingressClassResource.default=true \
+"}
+
+COPY . .
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]
