@@ -2,9 +2,9 @@ FROM scratch
 
 ENV NAME=${NAME:-"kyverno"}
 ENV NAMESPACE=${NAMESPACE:-"kyverno"}
-ENV CHARTS="./charts/kyverno"
-ENV HELM_OPTS=${HELM_OPTS:-" \
-"}
+ENV CHARTS=${CHARTS:-"./charts/kyverno"}
+ENV HELM_OPTS=${HELM_OPTS:-""}
 
 COPY . .
-CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]
+
+CMD ["cp -f opt/kyverno /usr/local/bin/","helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

@@ -1,0 +1,10 @@
+FROM scratch
+
+ENV NAME=${NAME:-"traefik"}
+ENV NAMESPACE=${NAMESPACE:-"traefik"}
+ENV CHARTS=${CHARTS:-"./charts/traefik"}
+ENV HELM_OPTS=${HELM_OPTS:-""}
+
+COPY . .
+
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

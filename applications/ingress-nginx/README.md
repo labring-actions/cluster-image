@@ -1,18 +1,12 @@
-## Overview
+## Ingress-nginx
 
-ingress-nginx is an Ingress controller for Kubernetes using [NGINX](https://www.nginx.org/) as a reverse proxy and load balancer.
-
-The main expose type for ingress-nginx service:
-
-- loadbalancer(default)
-- nodeport
-- hostnetwork
+[Ingress-nginx](https://github.com/kubernetes/ingress-nginx) is an Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
 
 ## Prerequisites
 
 - Kubernetes(depends on the app requirements)
-- sealos v4.x
-- helm v3.x
+- sealos v4.x.x
+- helm v3.x.x
 
 ## Get started
 
@@ -22,7 +16,11 @@ Install with sealos run
 sealos run docker.io/labring/ingress-nginx:v1.8.1
 ```
 
-Bare-metal considerations:  [metallb](https://metallb.universe.tf/) or other load-balancer implementation need installed to your bare metal Kubernetes clusters for LoadBalancer service type of ingress-nginx.
+## Uninstall
+
+```shell
+helm -n ingress-nginx uninstall ingress-nginx
+```
 
 ## Custome configuraton
 
@@ -112,9 +110,4 @@ Notes: The value of the `path` field is bound to the installation command and is
 
 ```shell
 sealos run labring/ingress-nginx:v1.8.1 --config-file ingress-nginx-config.yaml
-```
-## Uninstall
-
-```shell
-sealos run docker.io/labring/ingress-nginx:v1.8.1 -e uninstall=true
 ```

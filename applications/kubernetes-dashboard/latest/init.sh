@@ -1,13 +1,61 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
-export readonly NAME=${1:-$(basename "${PWD%/*}")}
-export readonly VERSION=${2:-$(basename "$PWD")}
+export readonly ARCH=${1:-amd64}
+export readonly NAME=${2:-$(basename "${PWD%/*}")}
+export readonly VERSION=${3:-$(basename "$PWD")}
 
-helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
-chart_version=`helm search repo --versions --regexp '\vkubernetes-dashboard/kubernetes-dashboard\v' |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1`
+init_dir() {
+    local OPT_DIR="./opt"
+    local IMAGES_DIR="./images"
+    local CHARTS_DIR="./charts"
+    local MANIFESTS_DIR="./manifests"
 
-rm -rf charts && mkdir -p charts
-helm pull kubernetes-dashboard/kubernetes-dashboard --version=${chart_version} -d charts/ --untar
-yq e -i '.service.type="NodePort"' charts/kubernetes-dashboard/values.yaml
+    rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}"
+    mkdir -p "${CHARTS_DIR}"
+}
+
+check_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "$1 is required, exiting the script"
+    exit 1
+  fi
+}
+
+download_chart() {
+    local HELM_REPO_URL="https://kubernetes.github.io/dashboard/"
+    local HELM_REPO_NAME="kubernetes-dashboard"
+    local HELM_CHART_NAME="kubernetes-dashboard"
+    local APP_VERSION=${VERSION}
+
+    helm repo add "${HELM_REPO_NAME}" "${HELM_REPO_URL}" --force-update 1>/dev/null
+
+    ALL_VERSIONS=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | awk '{print $3}' | grep -v VERSION)
+    if ! echo "${ALL_VERSIONS}" | grep -qw "${APP_VERSION}"; then
+        echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo"
+        exit 1
+    fi
+
+    # Find CHART VERSION through APP VERSION
+    HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
+    helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
+
+    cat >charts/kubernetes-dashboard.values.yaml<<EOF
+metricsScraper:
+  enabled: true
+EOF
+}
+
+main() {
+    if [ $# -ne 3 ]; then
+        echo "Usage: ./$0 <ARCH> <NAME> <VERSION>"
+        exit 1
+    else
+        init_dir
+        check_command helm
+        download_chart
+    fi
+}
+
+main $@
