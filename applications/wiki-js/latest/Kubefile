@@ -1,7 +1,7 @@
 FROM scratch
 
-ENV NAME=${NAME:-"wiki"}
-ENV NAMESPACE=${NAMESPACE:-"wiki"}
+ENV NAME=${NAME:-"wiki-js"}
+ENV NAMESPACE=${NAMESPACE:-"wiki-js"}
 ENV CHARTS=${CHARTS:-"./charts/wiki"}
 ENV HELM_OPTS=${HELM_OPTS:-" \
 --set service.type=NodePort \

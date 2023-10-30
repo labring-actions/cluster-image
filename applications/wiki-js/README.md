@@ -12,13 +12,13 @@
 ## Install
 
 ```shell
-sealos run docker.io/labring/wiki:v2.5.300 
+sealos run docker.io/labring/wiki-js:v2.5.300 
 ```
 
 ## Uninstall
 
 ```shell
-helm -n wiki uninstall wiki
+helm -n wiki-js uninstall wiki-js
 ```
 
 ## Configuration
@@ -30,6 +30,6 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `seao
 For example:
 
 ```shell
-$ sealos run docker.io/labring/wiki:v2.5.300 \
+$ sealos run docker.io/labring/wiki-js:v2.5.300 \
 -e NAME=my-wiki-e NAMESPACE=my-wiki -e HELM_OPTS="--set service.type=NodePort"
 ```

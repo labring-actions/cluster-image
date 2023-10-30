@@ -30,7 +30,7 @@ download_chart() {
 download_file() {
     local GITHUB_USER="kyverno"
     local GITHUB_REPO="kyverno"
-    local GITHUB_FILE="kyverno-cli_${VERSION}_linux_${ARCH}.tar.gz"
+    local GITHUB_FILE="kyverno-cli_${VERSION}_linux_x86_64.tar.gz"
     local DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/download/${VERSION}/${GITHUB_FILE}"
 
     wget -qO- "${DOWNLOAD_URL}" | tar -zx -C ./opt kyverno
