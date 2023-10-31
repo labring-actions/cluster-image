@@ -1,0 +1,10 @@
+FROM scratch
+
+ENV NAME=${NAME:-"opentelemetry-collector"}
+ENV NAMESPACE=${NAMESPACE:-"opentelemetry-collector"}
+ENV CHARTS=${CHARTS:-"./charts/opentelemetry-collector"}
+ENV HELM_OPTS=${HELM_OPTS:-"--set mode=daemonset"}
+
+COPY . .
+
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]
