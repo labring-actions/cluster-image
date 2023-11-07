@@ -28,7 +28,15 @@ env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
 jobs:
+  enable-self-runner:
+    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
+    with:
+      GITHUB_REPO: "apecloud/kubeblocks-airgap"
+      RUNNER_LABEL: "kubeblocks-airgap-runner"
+    secrets: inherit
+
   build-apps-amd64:
+    needs: [ enable-self-runner ]
     name: build app amd64 image
     runs-on: [ self-hosted, amd-runner ]
     steps:
@@ -45,6 +53,7 @@ jobs:
         run: .github/scripts/apps.sh
 
   build-apps-arm64:
+    needs: [ enable-self-runner ]
     name: build app arm64 image
     runs-on: [ self-hosted, arm-runner ]
     steps:
@@ -59,6 +68,16 @@ jobs:
           version: ${{ inputs.IMAGE_VERSION }}
           arch: arm64
         run: .github/scripts/apps.sh
+
+  disable-self-runner:
+    if: ${{ always() }}
+    needs: [ build-apps-amd64, build-apps-arm64 ]
+    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
+    with:
+      GITHUB_REPO: "apecloud/kubeblocks-airgap"
+      RUNNER_LABEL: "kubeblocks-airgap-runner"
+      ENABLE: "disable"
+    secrets: inherit
 
   build-manifest:
     name: build manifest app image
@@ -89,7 +108,7 @@ jobs:
           repository: apecloud/apecloud-cd
           path: apecloud-cd
           token: ${{ env.GITHUB_TOKEN }}
-          ref: v0.1.37
+          ref: v0.1.38
 
       - name: generate image yaml
         run: |
@@ -133,9 +152,9 @@ jobs:
   send-message:
     needs: [ build-result ]
     if: ${{ always() }}
-    uses: apecloud/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.37
+    uses: apecloud/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.38
     with:
       TYPE: "2"
       CONTENT: "build airgap image ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }} ${{ needs.build-result.outputs.build_result }}"
-      APECD_REF: "v0.1.37"
+      APECD_REF: "v0.1.38"
     secrets: inherit
