@@ -1,3 +1,0 @@
-FROM scratch
-COPY manifests ./manifests
-CMD ["chmod a+x manifests/coredns.sh","sh manifests/coredns.sh"]

@@ -1,4 +1,0 @@
-FROM scratch
-COPY manifests manifests
-COPY registry registry
-CMD ["KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f manifests/kubeadm-kuberouter-all-features.yaml"]

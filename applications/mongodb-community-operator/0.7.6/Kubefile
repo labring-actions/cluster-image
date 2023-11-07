@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["helm upgrade -i mongodb-community-operator charts/community-operator -n mongodb-community-operator --create-namespace --set createResource=true"]

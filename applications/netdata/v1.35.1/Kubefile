@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["helm upgrade --install netdata charts/netdata --namespace netdata --create-namespace --set service.type=NodePort"]

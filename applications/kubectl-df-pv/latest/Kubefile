@@ -1,3 +1,0 @@
-FROM scratch
-COPY opt opt
-CMD ["cp -f opt/kubectl-dfpv /usr/local/bin/kubectl-dfpv"]

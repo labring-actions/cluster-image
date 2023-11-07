@@ -1,2 +1,0 @@
-nvcr.io/nvidia/tritonserver:21.08-py3
-docker.io/kubegems/mlserver:1.0.0-openmmlab

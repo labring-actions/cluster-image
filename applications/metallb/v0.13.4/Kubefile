@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["kubectl get configmap kube-proxy -n kube-system -o yaml | sed -e 's/strictARP: false/strictARP: true/' | kubectl apply -f - -n kube-system","helm install metallb charts/metallb --namespace=metallb --create-namespace"]

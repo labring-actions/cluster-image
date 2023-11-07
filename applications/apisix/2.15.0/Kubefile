@@ -1,6 +1,0 @@
-FROM scratch
-ENV SERVICE_TYPE "NodePort"
-ENV GATEWAY_TLS "false"
-COPY charts charts
-COPY registry registry
-CMD ["helm upgrade -i apisix charts/apisix -n apisix --create-namespace --set ingress-controller.enabled=true,dashboard.enabled=true,ingress-controller.config.apisix.serviceNamespace=apisix,gateway.type=$(SERVICE_TYPE),dashboard.service.type=$(SERVICE_TYPE),gateway.tls.enabled=$(GATEWAY_TLS)"]

@@ -1,4 +1,0 @@
-FROM scratch
-LABEL sealos.io.type="patch"
-COPY opt opt
-CMD ["mkdir -p /opt/cni/bin && cp -f opt/bond /opt/cni/bin/bond && chmod +x /opt/cni/bin/bond"]

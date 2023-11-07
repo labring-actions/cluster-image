@@ -1,5 +1,0 @@
-FROM scratch
-COPY for-range.sh for-range.sh
-ENV USERNAME="admin"
-ENV PASSWORD="admin"
-CMD ["chmod a+x for-range.sh","bash for-range.sh $USERNAME $PASSWORD"]

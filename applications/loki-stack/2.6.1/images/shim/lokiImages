@@ -1,6 +1,0 @@
-docker.io/bats/bats:v1.1.0
-docker.io/grafana/fluent-bit-plugin-loki:2.1.0-amd64
-docker.io/grafana/grafana:8.3.5
-docker.io/grafana/loki:2.6.1
-docker.io/grafana/promtail:2.6.1
-quay.io/kiwigrid/k8s-sidecar:1.15.6

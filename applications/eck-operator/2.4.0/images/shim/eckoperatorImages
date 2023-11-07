@@ -1,4 +1,0 @@
-docker.elastic.co/eck/eck-operator:2.4.0
-docker.elastic.co/elasticsearch/elasticsearch:8.3.1
-docker.elastic.co/beats/filebeat:8.3.1
-docker.elastic.co/kibana/kibana:8.3.1

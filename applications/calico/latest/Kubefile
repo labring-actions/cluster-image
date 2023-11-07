@@ -1,7 +1,0 @@
-FROM scratch
-ENV NAME=${NAME:-"calico"}
-ENV NAMESPACE=${NAMESPACE:-"tigera-operator"}
-ENV HELM_OPTS=${HELM_OPTS:-""}
-
-COPY . .
-CMD ["helm upgrade -i $(NAME) charts/calico -f charts/calico.values.yaml -n $(NAMESPACE) --create-namespace $(HELM_OPTS)"]

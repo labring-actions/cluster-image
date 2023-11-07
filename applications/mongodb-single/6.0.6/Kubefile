@@ -1,6 +1,0 @@
-FROM scratch
-COPY . .
-ENV MONGO_USER="root"
-ENV MONGO_PASSWD="mongo123"
-ENV NAMESPACE="mongodb-single"
-CMD ["kubectl apply -f manifests"]

@@ -1,4 +1,0 @@
-FROM scratch
-LABEL sealos.io.type="patch"
-COPY opt opt
-CMD ["tar -zxf opt/cni-plugins.tar.gz --one-top-level=/opt/cni/bin/"]

@@ -1,7 +1,0 @@
-FROM scratch
-COPY piraeus-operator.sh piraeus-operator.sh
-COPY chart chart
-COPY opt opt
-COPY manifests manifests
-COPY registry registry
-CMD ["bash piraeus-operator.sh"]

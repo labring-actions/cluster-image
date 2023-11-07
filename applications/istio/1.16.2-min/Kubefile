@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["cp opt/istioctl /usr/bin/","istioctl install"]
