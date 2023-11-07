@@ -30,7 +30,7 @@ env:
 jobs:
   build-apps:
     name: build app image
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, gke-runner ]
     strategy:
       matrix:
         arch: [ amd64, arm64 ]
