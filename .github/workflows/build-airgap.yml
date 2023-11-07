@@ -34,13 +34,8 @@ jobs:
     strategy:
       matrix:
         arch: [ amd64, arm64 ]
-    permissions:
-      issues: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Download buildah and sealos
-        run: .github/scripts/download.sh
-
+      - uses: actions/checkout@v4
       - name: Build Image
         env:
           registry: ${{ env.DOCKER_REGISTRY_URL }}
@@ -56,13 +51,11 @@ jobs:
     name: build manifest app image
     needs: [ build-apps ]
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download buildah and sealos
         run: .github/scripts/download.sh
+
       - name: Manifest Image
         env:
           registry: ${{ env.DOCKER_REGISTRY_URL }}
