@@ -1,5 +1,0 @@
-FROM scratch
-COPY nfs-subdir-external-provisioner.sh nfs-subdir-external-provisioner.sh
-COPY charts charts
-COPY registry registry
-CMD ["bash nfs-subdir-external-provisioner.sh"]

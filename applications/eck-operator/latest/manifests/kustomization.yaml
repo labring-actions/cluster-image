@@ -1,7 +1,0 @@
-resources:
-- filebeat_no_autodiscover_tmp.yaml
-
-patches:
-- path: patch.yaml
-  target:
-    kind: Kibana

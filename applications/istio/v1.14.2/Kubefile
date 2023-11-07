@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["cp opt/istioctl /usr/bin/","helm upgrade --install istio-base charts-istio/base -n istio-system --create-namespace","helm upgrade --install istiod charts-istio/istiod -n istio-system --create-namespace"]

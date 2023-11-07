@@ -1,6 +1,0 @@
-FROM scratch
-LABEL sealos.io.type="patch"
-COPY entrypoint.sh entrypoint.sh
-COPY opt opt
-COPY etc etc
-CMD ["bash entrypoint.sh"]

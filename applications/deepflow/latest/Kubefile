@@ -1,5 +1,0 @@
-FROM scratch
-COPY charts charts
-COPY registry registry
-COPY opt opt
-CMD ["mv opt/deepflow-ctl /usr/bin/","helm upgrade -i deepflow charts/deepflow -n deepflow --create-namespace"]

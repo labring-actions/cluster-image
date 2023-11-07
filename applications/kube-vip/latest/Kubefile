@@ -1,9 +1,0 @@
-FROM scratch
-
-ENV kube_vip_address apiserver.cluster.local
-
-COPY entrypoint.sh entrypoint.sh
-COPY scripts scripts
-COPY manifests manifests
-COPY registry registry
-CMD ["bash entrypoint.sh"]

@@ -1,8 +1,0 @@
-kind: Kibana
-metadata:
-  name: kibana
-spec:
-  http:
-    service:
-      spec:
-        type: NodePort

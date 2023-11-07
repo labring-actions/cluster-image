@@ -1,5 +1,0 @@
-FROM scratch
-COPY registry ./registry
-COPY charts ./charts
-COPY values ./values
-CMD ["helm upgrade --install mysql-operator  charts/mysql-operator --namespace=mysql-operator --create-namespace","helm upgrade -f values/oracle-mysql-cluster-values.yaml --install mysql-mycluster  charts/mysql-innodbcluster --namespace=mysql-operator --create-namespace "]

@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["helm upgrade -i mongodb-sharded charts/mongodb-sharded -n mongodb-sharded --create-namespace"]

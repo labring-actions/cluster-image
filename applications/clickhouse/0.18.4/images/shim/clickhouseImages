@@ -1,3 +1,0 @@
-docker.io/altinity/clickhouse-operator:0.18.4
-docker.io/altinity/metrics-exporter:0.18.4
-docker.io/fanux/clickhouse-server:22.3

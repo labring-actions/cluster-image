@@ -1,3 +1,0 @@
-FROM scratch
-COPY registry ./registry
-# docker.io/kubegems/mlserver:1.0.0-openmmlab

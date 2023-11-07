@@ -1,4 +1,0 @@
-FROM scratch
-LABEL sealos.io.type="patch"
-COPY opt opt
-CMD ["cp -rn podman-linux-amd64/usr podman-linux-amd64/etc /"]

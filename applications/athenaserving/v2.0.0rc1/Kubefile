@@ -1,5 +1,0 @@
-FROM scratch
-COPY . athenaserving
-COPY registry ./registry
-CMD ["rm -rf athenaserving/registry && helm install athena athenaserving --set global.storageClass=local-hostpath"]
-

@@ -1,5 +1,0 @@
-FROM scratch
-COPY charts charts
-COPY registry registry
-COPY manifests manifests
-CMD ["helm upgrade -i redis-operator charts/redis-operator -n redis-operator --create-namespace","kubectl apply -f manifests/basic.yaml"]

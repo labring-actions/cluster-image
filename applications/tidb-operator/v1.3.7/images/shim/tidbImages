@@ -1,3 +1,0 @@
-docker.io/pingcap/pd:latest
-docker.io/pingcap/tidb:latest
-docker.io/pingcap/tikv:latest

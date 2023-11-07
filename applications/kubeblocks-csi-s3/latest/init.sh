@@ -9,9 +9,9 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 rm -rf charts
 mkdir charts
 
-repo_url="https://jihulab.com/api/v4/projects/85949/packages/helm/stable/charts"
+repo_url="https://github.com/apecloud/helm-charts/releases/download"
 charts=( "csi-s3")
 for chart in "${charts[@]}"; do
-  helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION#v}".tgz
-  rm -rf charts/"${chart}"-"${VERSION#v}".tgz
+    helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION#v}"/"${chart}"-"${VERSION#v}".tgz
+    rm -rf charts/"${chart}"-"${VERSION#v}".tgz
 done

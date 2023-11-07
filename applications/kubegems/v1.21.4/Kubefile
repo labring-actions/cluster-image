@@ -1,5 +1,0 @@
-FROM scratch
-COPY registry ./registry
-COPY kubegems ./kubegems
-COPY kubegems.sh kubegems.sh
-CMD ["bash kubegems.sh"]

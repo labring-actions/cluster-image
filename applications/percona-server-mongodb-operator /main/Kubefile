@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["kubectl apply --server-side -f operator.yaml","kubectl apply -f minimal-cluster.yaml"]

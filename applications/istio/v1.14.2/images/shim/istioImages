@@ -1,3 +1,0 @@
-docker.io/istio/install-cni:1.14.2
-docker.io/istio/proxyv2:1.14.2
-docker.io/istio/pilot:1.14.2

@@ -1,7 +1,0 @@
-FROM scratch
-COPY entrypoint.sh entrypoint.sh
-COPY scripts scripts
-COPY charts charts
-COPY manifests manifests
-COPY registry registry
-CMD ["bash entrypoint.sh"]

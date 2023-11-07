@@ -1,4 +1,0 @@
-busybox:1.30
-docker.elastic.co/elasticsearch/elasticsearch:6.8.6
-skywalking.docker.scarf.sh/apache/skywalking-oap-server:8.8.1
-skywalking.docker.scarf.sh/apache/skywalking-ui:8.8.1

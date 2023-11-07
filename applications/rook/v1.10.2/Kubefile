@@ -1,3 +1,0 @@
-FROM scratch
-COPY . .
-CMD ["helm upgrade -i rook-ceph charts/rook-ceph -n rook-ceph --create-namespace","helm upgrade -i rook-ceph-cluster charts/rook-ceph-cluster -n rook-ceph --create-namespace --set operatorNamespace=rook-ceph"]
