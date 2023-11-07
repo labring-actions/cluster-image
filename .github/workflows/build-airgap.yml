@@ -28,12 +28,9 @@ env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
 jobs:
-  build-apps:
-    name: build app image
-    runs-on: [ self-hosted, gke-runner ]
-    strategy:
-      matrix:
-        arch: [ amd64, arm64 ]
+  build-apps-amd64:
+    name: build app amd64 image
+    runs-on: [ self-hosted, amd-runner ]
     steps:
       - uses: actions/checkout@v4
       - name: Build Image
@@ -44,12 +41,28 @@ jobs:
           password: ${{ env.DOCKER_PASSWORD }}
           app: ${{ inputs.APP_NAME }}
           version: ${{ inputs.IMAGE_VERSION }}
-          arch: ${{ matrix.arch }}
+          arch: amd64
+        run: .github/scripts/apps.sh
+
+  build-apps-arm64:
+    name: build app arm64 image
+    runs-on: [ self-hosted, arm-runner ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Image
+        env:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_USER }}
+          repo: ${{ env.DOCKER_REPO }}
+          password: ${{ env.DOCKER_PASSWORD }}
+          app: ${{ inputs.APP_NAME }}
+          version: ${{ inputs.IMAGE_VERSION }}
+          arch: arm64
         run: .github/scripts/apps.sh
 
   build-manifest:
     name: build manifest app image
-    needs: [ build-apps ]
+    needs: [ build-apps-amd64, build-apps-arm64 ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
