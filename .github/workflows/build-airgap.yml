@@ -12,7 +12,7 @@ on:
         required: true
         default: 'kubeblocks'
 
-run-name: Build:${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
+run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 
 env:
   DOCKER_REGISTRY_URL: docker.io
@@ -130,6 +130,6 @@ jobs:
     uses: apecloud/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.37
     with:
       TYPE: "2"
-      CONTENT: "Build image ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }} ${{ needs.build-result.outputs.build_result }}"
+      CONTENT: "build airgap image ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }} ${{ needs.build-result.outputs.build_result }}"
       APECD_REF: "v0.1.37"
     secrets: inherit
