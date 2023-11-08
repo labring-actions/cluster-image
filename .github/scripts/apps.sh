@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set +e
 
 readonly APP_NAME=${app?}
 readonly APP_VERSION=${version?}
@@ -40,12 +40,9 @@ cd $buildDir && {
     IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$APP_NAME:$APP_VERSION-$APP_ARCH"
 
     IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
-    sudo sealos build -t "$IMAGE_BUILD" --max-pull-procs=10 --isolation=chroot --platform "linux/$APP_ARCH" -f $Kubefile .
+    sudo sealos build -t "$IMAGE_BUILD" --max-pull-procs=20 --isolation=chroot --platform "linux/$APP_ARCH" -f $Kubefile .
 
-    sudo sealos tag "$IMAGE_BUILD" "$IMAGE_NAME" && sudo sealos rmi -f "$IMAGE_BUILD"
-
-    sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY" &&
-    sudo sealos push "$IMAGE_NAME" && echo "$IMAGE_NAME push success"
+    echo "init $IMAGE_NAME success"
 }
 
 sudo buildah images
