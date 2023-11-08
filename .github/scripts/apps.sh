@@ -6,10 +6,10 @@ readonly APP_NAME=${app?}
 readonly APP_VERSION=${version?}
 readonly APP_ARCH=${arch?}
 
-readonly IMAGE_HUB_REGISTRY=${DOCKER_REGISTRY_URL?}
-readonly IMAGE_HUB_REPO=${DOCKER_REPO?}
-readonly IMAGE_HUB_USERNAME=${DOCKER_USER?}
-readonly IMAGE_HUB_PASSWORD=${DOCKER_PASSWORD?}
+readonly IMAGE_HUB_REGISTRY=${registry?}
+readonly IMAGE_HUB_REPO=${repo?}
+readonly IMAGE_HUB_USERNAME=${username?}
+readonly IMAGE_HUB_PASSWORD=${password?}
 
 readonly buildDir=.build-image
 
