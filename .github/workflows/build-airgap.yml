@@ -16,8 +16,6 @@ run-name: build ${{ inputs.IAMGE_NAME }}:${{ inputs.IMAGE_VERSION }}
 
 env:
   DOCKER_REGISTRY_URL: docker.io
-  ALIYUN_REGISTRY_URL: registry.cn-hangzhou.aliyuncs.com
-  ALIYUN_REGISTRY_URL_NEW: infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com
   DOCKER_REPO: "apecloud"
   DOCKER_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
@@ -40,6 +38,7 @@ jobs:
     name: build app amd64 image
     runs-on: [ self-hosted, amd-runner ]
     strategy:
+      fail-fast: false
       matrix:
         arch: [ amd64, arm64 ]
     steps:
@@ -50,6 +49,7 @@ jobs:
           driver-opts: image=moby/buildkit:master
 
       - name: Init Image
+        continue-on-error: true
         env:
           registry: ${{ env.DOCKER_REGISTRY_URL }}
           username: ${{ env.DOCKER_USER }}
@@ -100,7 +100,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download buildah and sealos
-        run: .github/scripts/download.sh
+        run: |
+          bash .github/scripts/download.sh
 
       - name: Manifest Image
         env:
@@ -110,7 +111,8 @@ jobs:
           password: ${{ env.DOCKER_PASSWORD }}
           app: ${{ inputs.IAMGE_NAME }}
           version: ${{ inputs.IMAGE_VERSION }}
-        run: .github/scripts/manifest-other.sh
+        run: |
+          bash .github/scripts/manifest-other.sh
 
   sync-to-aliyun:
     runs-on: ubuntu-latest

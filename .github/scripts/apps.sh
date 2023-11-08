@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set +e
+set -eu
 
 readonly APP_NAME=${app?}
 readonly APP_VERSION=${version?}
