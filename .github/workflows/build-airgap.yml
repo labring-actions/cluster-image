@@ -26,16 +26,17 @@ env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
 jobs:
-#  enable-self-runner:
-#    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
-#    with:
-#      GITHUB_REPO: "apecloud/kubeblocks-airgap"
-#      RUNNER_LABEL: "kubeblocks-airgap-runner"
-#    secrets: inherit
+  enable-self-runner:
+    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
+    with:
+      GITHUB_REPO: "apecloud/kubeblocks-airgap"
+      RUNNER_LABEL: "kubeblocks-airgap-runner"
+      RUNNER_REPLICAS: 2
+    secrets: inherit
 
   build-apps:
-#    needs: [ enable-self-runner ]
-    name: build app amd64 image
+    needs: [ enable-self-runner ]
+    name: build app ${{ matrix.arch }} image
     runs-on: [ self-hosted, amd-runner ]
     strategy:
       fail-fast: false
@@ -83,15 +84,15 @@ jobs:
           provenance: false
           sbom: false
 
-#  disable-self-runner:
-#    if: ${{ always() }}
-#    needs: [ build-apps ]
-#    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
-#    with:
-#      GITHUB_REPO: "apecloud/kubeblocks-airgap"
-#      RUNNER_LABEL: "kubeblocks-airgap-runner"
-#      ENABLE: "disable"
-#    secrets: inherit
+  disable-self-runner:
+    if: ${{ always() }}
+    needs: [ build-apps ]
+    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
+    with:
+      GITHUB_REPO: "apecloud/kubeblocks-airgap"
+      RUNNER_LABEL: "kubeblocks-airgap-runner"
+      ENABLE: "disable"
+    secrets: inherit
 
   build-manifest:
     name: build manifest app image
