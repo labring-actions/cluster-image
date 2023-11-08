@@ -16,6 +16,14 @@ on:
           - kubeblocks
           - llm
           - csi-s3
+      GHA_CACHE:
+        description: 'gha cache'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - true
+          - false
 
 run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 
@@ -75,7 +83,7 @@ jobs:
           username: ${{ env.DOCKER_USER }}
           password: ${{ env.DOCKER_PASSWORD }}
 
-      - if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' }}
+      - if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && inputs.GHA_CACHE == 'true' }}
         name: Build and Push to Docker Hub
         uses: docker/build-push-action@v5
         with:
@@ -86,6 +94,18 @@ jobs:
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
+          sbom: false
+
+      - if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && inputs.GHA_CACHE == 'false' }}
+        name: Build and Push to Docker Hub without cache
+        uses: docker/build-push-action@v5
+        with:
+          context: ./.build-image
+          file: ./.build-image/Dockerfile
+          tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-${{ matrix.arch }}
+          platforms: linux/${{ matrix.arch }}
+          push: true
           provenance: false
           sbom: false
 
