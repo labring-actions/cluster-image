@@ -35,43 +35,45 @@ jobs:
       RUNNER_LABEL: "kubeblocks-airgap-runner"
     secrets: inherit
 
-  build-apps-amd64:
+  release-apps-amd64:
     needs: [ enable-self-runner ]
-    name: build app amd64 image
-    runs-on: [ self-hosted, amd-runner ]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build Image
-        env:
-          registry: ${{ env.DOCKER_REGISTRY_URL }}
-          username: ${{ env.DOCKER_USER }}
-          repo: ${{ env.DOCKER_REPO }}
-          password: ${{ env.DOCKER_PASSWORD }}
-          app: ${{ inputs.APP_NAME }}
-          version: ${{ inputs.IMAGE_VERSION }}
-          arch: amd64
-        run: .github/scripts/apps.sh
+    uses: apecloud/apecloud-cd/.github/workflows/release-image-cache-amd-sync.yml@v0.1.38
+    with:
+      MAKE_OPS_PRE: "apps"
+      IMG: "apecloud/${{ inputs.APP_NAME }}"
+      VERSION: "${{ inputs.IMAGE_VERSION }}"
+      CONTEXT: "./.build-image"
+      DOCKERFILE_PATH: "./.build-image/Dockerfile"
+      BUILDX_PLATFORMS: "linux/amd64"
+      REMOVE_PREFIX: false
+      APECD_REF: "v0.1.38"
+    env:
+      app: ${{ inputs.APP_NAME }}
+      version: ${{ inputs.IMAGE_VERSION }}
+      arch: amd64
+    secrets: inherit
 
-  build-apps-arm64:
+  release-apps-arm64:
     needs: [ enable-self-runner ]
-    name: build app arm64 image
-    runs-on: [ self-hosted, arm-runner ]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build Image
-        env:
-          registry: ${{ env.DOCKER_REGISTRY_URL }}
-          username: ${{ env.DOCKER_USER }}
-          repo: ${{ env.DOCKER_REPO }}
-          password: ${{ env.DOCKER_PASSWORD }}
-          app: ${{ inputs.APP_NAME }}
-          version: ${{ inputs.IMAGE_VERSION }}
-          arch: arm64
-        run: .github/scripts/apps.sh
+    uses: apecloud/apecloud-cd/.github/workflows/release-image-cache-amd-sync.yml@v0.1.38
+    with:
+      MAKE_OPS_PRE: "apps"
+      IMG: "apecloud/${{ inputs.APP_NAME }}"
+      VERSION: "${{ inputs.IMAGE_VERSION }}"
+      CONTEXT: "./.build-image"
+      DOCKERFILE_PATH: "./.build-image/Dockerfile"
+      BUILDX_PLATFORMS: "linux/arm64"
+      REMOVE_PREFIX: false
+      APECD_REF: "v0.1.38"
+    env:
+      app: ${{ inputs.APP_NAME }}
+      version: ${{ inputs.IMAGE_VERSION }}
+      arch: arm64
+    secrets: inherit
 
   disable-self-runner:
     if: ${{ always() }}
-    needs: [ build-apps-amd64, build-apps-arm64 ]
+    needs: [ release-apps-amd64, release-apps-arm64 ]
     uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
     with:
       GITHUB_REPO: "apecloud/kubeblocks-airgap"
