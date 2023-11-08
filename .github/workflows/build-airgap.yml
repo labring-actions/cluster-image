@@ -130,7 +130,7 @@ jobs:
         run: |
           bash ${{ github.workspace }}/apecloud-cd/.github/utils/utils.sh \
             --type 27 \
-            --images "${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}" \
+            --images "${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-amd64|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-arm64" \
             --registry "${{ env.DOCKER_REGISTRY_URL }}"
 
       - uses: hhyasdf/image-sync-action@v1.1
@@ -171,6 +171,6 @@ jobs:
     uses: apecloud/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.38
     with:
       TYPE: "2"
-      CONTENT: "build airgap image ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }} ${{ needs.build-result.outputs.build_result }}"
+      CONTENT: "build image ${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }} ${{ needs.build-result.outputs.build-result }}"
       APECD_REF: "v0.1.38"
     secrets: inherit
