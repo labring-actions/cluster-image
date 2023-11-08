@@ -21,6 +21,9 @@ mkdir charts
 
 repo_url="https://github.com/apecloud/helm-charts/releases/download"
 charts=("kubeblocks" "apecloud-mysql" "mongodb" "postgresql" "redis" "kafka" "qdrant" "llm")
+if [[ "${VERSION}" == "v0.6."* ]]; then
+    charts=("kubeblocks" "apecloud-mysql" "mongodb" "postgresql" "redis" "kafka")
+fi
 for chart in "${charts[@]}"; do
     helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION#v}"/"${chart}"-"${VERSION#v}".tgz
     rm -rf charts/"${chart}"-"${VERSION#v}".tgz
