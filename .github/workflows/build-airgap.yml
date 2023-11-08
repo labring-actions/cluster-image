@@ -11,6 +11,11 @@ on:
         description: 'app name'
         required: true
         default: 'kubeblocks'
+        type: choice
+        options:
+          - kubeblocks
+          - llm
+          - csi-s3
 
 run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 
