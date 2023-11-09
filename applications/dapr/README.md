@@ -30,7 +30,7 @@ helm -n dapr-system uninstall dapr
 
 ## Configuration
 
-Refer to dapr`values.yaml` for the full run-down on defaults.
+Refer to dapr `values.yaml` for the full run-down on defaults.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `seaos run -e HELM_OPTS=`. 
 
