@@ -51,7 +51,7 @@ kind: Config
 metadata:
   name: calico
 spec:
-  path: charts/calico/values.yaml
+  path: charts/calico.values.yaml
   match: docker.io/labring/calico:3.26.1
   strategy: merge
   data: |

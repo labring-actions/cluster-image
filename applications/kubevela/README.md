@@ -26,7 +26,7 @@ $ helm -n vela-system ls
 
 ```
 kubectl -n vela-system get svc
-``
+```
 
 Default username and password: `admin/VelaUX12345`
 
