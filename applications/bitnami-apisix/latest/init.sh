@@ -26,8 +26,8 @@ ensure_helm() {
 }
 
 download_chart() {
-    local HELM_REPO_URL="https://charts.apiseven.com"
-    local HELM_REPO_NAME="apisix"
+    local HELM_REPO_URL="https://charts.bitnami.com/bitnami"
+    local HELM_REPO_NAME="bitnami"
     local HELM_CHART_NAME="apisix"
     local APP_VERSION=${VERSION#v}
 
@@ -42,12 +42,6 @@ download_chart() {
     # Find CHART VERSION through APP VERSION
     HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
     helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
-    cat >charts/apisix.values.yaml<<EOF
-ingress-controller:
-  enabled: true
-dashboard:
-  enabled: true
-EOF
 }
 
 main() {

@@ -1,6 +1,6 @@
 # kyverno
 
-[Kyverno][https://github.com/kyverno/kyverno] is a Kubernetes Native Policy Management.
+[Kyverno](https://github.com/kyverno/kyverno) is a Kubernetes Native Policy Management.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 ## Wiki.js
 
-(Wiki.js)[https://github.com/requarks/wiki] is a modern and powerful wiki app built on Node.js.
+[Wiki.js](https://github.com/requarks/wiki) is a modern and powerful wiki app built on Node.js.
 
 ## Prerequisites
 
