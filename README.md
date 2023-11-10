@@ -110,4 +110,4 @@ Github ISSUE支持的命令清单如下：
 1. 参考 `application` 路径下其他应用的实现逻辑，编写自己应用的 `init.sh` 脚本、`Kubefile`以及`entrypoint.sh`。
 2. 提出PR，合并代码到github cluster-image仓库。
 3. 创建ISSUE，并执行构建，构建成功后镜像将自动推送到官方 dockerhub 仓库。
-4. 拉取镜像到本地，使用 selaos run 命令安装运行应用。
+4. 拉取镜像到本地，使用 sealos run 命令安装运行应用。
