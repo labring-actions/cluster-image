@@ -2,6 +2,8 @@
 
 Sealos cluster image，也称为集群镜像，是 Sealos 工具的一个创新功能。该特性允许用户将 Kubernetes 云原生应用和插件打包成一个统一的 Docker 镜像，从而简化和标准化云原生生态下各种应用及插件的部署和管理。
 
+Rootfs 相关的集群镜像请参考 [runtime项目](https://github.com/labring-actions/runtime)。
+
 ## 功能特性
 
 1. :package: 统一封装: 集成 Kubernetes 应用和插件依赖的所需的所有资源，包括 YAML 文件、Helm charts、Docker 镜像和二进制文件。
