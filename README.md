@@ -20,7 +20,7 @@ Sealos 在 dockerhub 中的镜像使用 `github action` 自动构建，每个人
 由于社区已在`application`目录贡献了nginx构建脚本的实现，只需在ISSUE里搜索标题`【Auto-build】nginx`，在评论框输入以下指令，结合镜像名称（固定）和镜像版本（与官方一致），即可构建出新版本的nginx集群镜像，构建完成后会自动上传至DockerHub。
 
 ```bash
-/imagebuild_apps nginx 1.23.1
+/imagebuild_apps nginx v1.23.1
 ```
 
 ## 镜像文件目录结构
