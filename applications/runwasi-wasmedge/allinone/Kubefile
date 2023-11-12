@@ -1,4 +1,0 @@
-FROM scratch
-COPY registry registry
-ENV wasmedge_plugin=wasi_nn-ggml
-CMD ["crictl pull ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.$(wasmedge_plugin)"]
