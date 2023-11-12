@@ -12,5 +12,7 @@ cat <<EOF >>"Kubefile"
 FROM ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.${VERSION}
 LABEL sealos.io.type="patch"
 COPY install.sh install.sh
+COPY containerd.sh containerd.sh
+COPY runtime.yaml runtime.yaml
 CMD ["bash install.sh"]
 EOF
