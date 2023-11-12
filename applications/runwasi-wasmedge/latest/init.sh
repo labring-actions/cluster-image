@@ -13,6 +13,5 @@ FROM scratch
 COPY --from=ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.${VERSION} . ${NAME}
 LABEL sealos.io.type="patch"
 COPY install.sh ${NAME}/install.sh
-COPY runtime.yaml ${NAME}/runtime.yaml
 CMD ["bash ${NAME}/install.sh ${NAME}"]
 EOF
