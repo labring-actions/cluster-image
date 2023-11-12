@@ -10,5 +10,6 @@ export readonly VERSION=${3:-latest}
 
 cat <<EOF >>"Kubefile"
 FROM ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.${VERSION}
-CMD ["cp -rf * /opt/containerd/"]
+COPY install.sh install.sh
+CMD ["bash install.sh"]
 EOF
