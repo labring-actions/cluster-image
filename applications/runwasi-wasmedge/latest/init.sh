@@ -12,8 +12,7 @@ cat <<EOF >>"Kubefile"
 FROM scratch
 COPY --from=ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.${VERSION} . ${NAME}
 LABEL sealos.io.type="patch"
-COPY install.sh install.sh
-COPY containerd.sh containerd.sh
-COPY runtime.yaml runtime.yaml
-CMD ["bash install.sh"]
+COPY install.sh ${NAME}/install.sh
+COPY runtime.yaml ${NAME}/runtime.yaml
+CMD ["bash ${NAME}/install.sh","kubectl apply -f ${NAME}/runtime.yaml"]
 EOF
