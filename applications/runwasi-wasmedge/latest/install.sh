@@ -1,6 +1,5 @@
 #!/bin/bash
-cp -rvf bin/ /opt/containerd/bin/
-cp -rvf lib/ /opt/containerd/lib/
+cp -rvf runwasi-wasmedge/* /opt/containerd/
 
 CONFIG_FILE="/etc/containerd/config.toml"
 BACKUP_FILE="/etc/containerd/config.toml.bak"
