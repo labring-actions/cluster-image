@@ -1,0 +1,5 @@
+quay.io/strimzi/kafka:0.37.0-kafka-3.5.1
+quay.io/strimzi/operator:0.37.0
+quay.io/strimzi/kafka-bridge:0.26.1
+quay.io/strimzi/kaniko-executor:0.37.0
+quay.io/strimzi/maven-builder:0.37.0

@@ -1,0 +1,11 @@
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasi_nn-ggml-cuda
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasmedge_tensorflow
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasm_bpf
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasi_crypto
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasmedge_image
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasi_nn-ggml
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasi_nn-openvino
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasi_nn-pytorch
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasi_nn-tensorflowlite
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasmedge_tensorflowlite
+ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.wasi_nn-ggml-preview
