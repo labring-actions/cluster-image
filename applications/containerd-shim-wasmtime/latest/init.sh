@@ -10,7 +10,6 @@ export readonly VERSION=${3:-latest}
 
 cat <<EOF >>"Kubefile"
 FROM scratch
-COPY --from=ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.${VERSION} . ${NAME}
 LABEL sealos.io.type="patch"
 COPY install.sh install.sh
 COPY containerd.sh containerd.sh
