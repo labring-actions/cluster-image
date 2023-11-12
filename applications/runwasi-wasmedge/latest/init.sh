@@ -10,6 +10,7 @@ export readonly VERSION=${3:-latest}
 
 cat <<EOF >>"Kubefile"
 FROM ghcr.io/second-state/runwasi-wasmedge-plugin:allinone.${VERSION}
+LABEL sealos.io.type="patch"
 COPY install.sh install.sh
 CMD ["bash install.sh"]
 EOF
