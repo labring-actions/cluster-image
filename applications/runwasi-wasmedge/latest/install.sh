@@ -1,5 +1,6 @@
 #!/bin/bash
-cp -rvf "${1}"/* /opt/containerd/
+cp -rvf "${1}"/bin/* /opt/containerd/bin/
+cp -rvf "${1}"/lib/* /opt/containerd/lib/
 
 CONFIG_FILE="/etc/containerd/config.toml"
 BACKUP_FILE="/etc/containerd/config.toml.bak"
@@ -17,3 +18,10 @@ else
     echo "WasmEdge runtime configuration already exists."
 fi
 
+kubectl apply -f - <<EOF
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: wasmedge
+handler: wasmedge
+EOF
