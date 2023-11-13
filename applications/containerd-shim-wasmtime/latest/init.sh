@@ -21,8 +21,8 @@ tar -zxvf runwasi.tar.gz -C ${NAME}/bin
 
 cat <<EOF >>"Kubefile"
 FROM scratch
-COPY ${NAME} ${NAME}
+COPY ${NAME} ${NAME}/${VERSION}
 LABEL sealos.io.type="patch"
-COPY install.sh ${NAME}/install.sh
-CMD ["bash ${NAME}/install.sh ${NAME}"]
+COPY install.sh ${NAME}/${VERSION}/install.sh
+CMD ["bash ${NAME}/install.sh ${NAME}/${VERSION}"]
 EOF
