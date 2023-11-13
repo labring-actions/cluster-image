@@ -13,8 +13,8 @@ if [[ -s lib ]]; then
 fi
 
 # 添加 WasmRuntime 运行时配置
-if ! grep -q io.containerd.wasmtime.v1 "$CONFIG_FILE"; then
-  sudo sed -i.bak '/.containerd.runtimes]$/a\        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runwasi-wasmtime]\n          runtime_type = "io.containerd.wasmtime.v1"' "$CONFIG_FILE"
+if ! grep -q io.containerd.wasmer.v1 "$CONFIG_FILE"; then
+  sudo sed -i.bak '/.containerd.runtimes]$/a\        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runwasi-wasmer]\n          runtime_type = "io.containerd.wasmer.v1"' "$CONFIG_FILE"
   echo "WasmRuntime runtime configuration added."
   sudo systemctl restart containerd
   echo "Containerd restarted."
@@ -26,6 +26,6 @@ kubectl apply -f - <<EOF
 apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
-  name: runwasi-wasmtime
-handler: runwasi-wasmtime
+  name: runwasi-wasmer
+handler: runwasi-wasmer
 EOF
