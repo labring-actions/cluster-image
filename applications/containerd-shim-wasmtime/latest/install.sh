@@ -1,10 +1,6 @@
 #!/bin/bash
 cp -rvf "${1}"/bin/* /opt/containerd/bin/
-
-# shellcheck disable=SC1035
-if [[-s "${1}"/lib ]]; then
-    cp -rvf "${1}"/lib/* /opt/containerd/lib/
-fi
+if [[ -s "${1}"/lib ]]; then cp -rvf "${1}"/lib/* /opt/containerd/lib/ ; fi
 
 CONFIG_FILE="/etc/containerd/config.toml"
 BACKUP_FILE="/etc/containerd/config.toml.bak"
