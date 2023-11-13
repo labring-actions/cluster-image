@@ -24,5 +24,5 @@ FROM scratch
 COPY ${NAME} ${NAME}/${VERSION}
 LABEL sealos.io.type="patch"
 COPY install.sh ${NAME}/${VERSION}/install.sh
-CMD ["bash ${NAME}/install.sh ${NAME}/${VERSION}"]
+CMD ["bash ${NAME}/${VERSION}/install.sh ${NAME}/${VERSION}"]
 EOF
