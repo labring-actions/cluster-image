@@ -11,6 +11,9 @@ export readonly VERSION=${3:-latest}
 if [ "$ARCH" == "arm64" ]; then
     ARCH="aarch64"
 fi
+if [ "$ARCH" == "amd64" ]; then
+    ARCH="x86_64"
+fi
 mkdir -p ${NAME}/bin
 wget -O runwasi.tar.gz https://github.com/containerd/runwasi/releases/download/${NAME}/${VERSION}/${NAME}-${ARCH}.tar.gz
 tar -zxvf runwasi.tar.gz -C ${NAME}/bin
