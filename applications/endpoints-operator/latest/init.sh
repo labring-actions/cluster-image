@@ -12,21 +12,14 @@ rm -rf charts/
 mkdir -p charts/
 mkdir -p images/shim
 
-helm repo add endpoints-operator --force-update https://labring.github.io/endpoints-operator/
-if [ $VERSION = "latest" ]
-then
-  helm pull endpoints-operator/endpoints-operator --untar -d charts/
-  echo "ghcr.io/labring/cepctl:latest" > images/shim/cepctl
-else
-  helm pull endpoints-operator/endpoints-operator --version=$VERSION --untar -d charts/
-  echo "ghcr.io/labring/cepctl:$VERSION" > images/shim/cepctl
-fi
+echo "ghcr.io/labring/cepctl:$VERSION" > images/shim/cepctl
+wget -qO charts/endpoints-operator.tgz https://github.com/labring/endpoints-operator/releases/download/v${VERSION#v}/endpoints-operator-${VERSION#v}.tgz
 
 cat <<'EOF' >"Kubefile"
 FROM scratch
 COPY charts ./charts
 COPY images ./images
 COPY registry ./registry
-CMD ["helm upgrade -n kube-system  endpoints-operator charts/endpoints-operator --install"]
+CMD ["helm upgrade -n kube-system  endpoints-operator charts/endpoints-operator.tgz --install"]
 EOF
 
