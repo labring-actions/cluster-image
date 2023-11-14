@@ -17,9 +17,10 @@ wget -qO charts/endpoints-operator.tgz https://github.com/labring/endpoints-oper
 
 cat <<'EOF' >"Kubefile"
 FROM scratch
+ENV HELM_OPTS
 COPY charts ./charts
 COPY images ./images
 COPY registry ./registry
-CMD ["helm upgrade -n kube-system  endpoints-operator charts/endpoints-operator.tgz --install"]
+CMD ["helm upgrade -n kube-system  endpoints-operator charts/endpoints-operator.tgz --install \$(HELM_OPTS)"]
 EOF
 
