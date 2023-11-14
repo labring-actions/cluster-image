@@ -21,6 +21,6 @@ ENV HELM_OPTS=""
 COPY charts ./charts
 COPY images ./images
 COPY registry ./registry
-CMD ["helm upgrade -n kube-system  endpoints-operator charts/endpoints-operator.tgz --install \$(HELM_OPTS)"]
+CMD ["helm upgrade -n kube-system  endpoints-operator charts/endpoints-operator.tgz --install $(HELM_OPTS)"]
 EOF
 
