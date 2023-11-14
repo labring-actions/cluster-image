@@ -17,7 +17,7 @@ wget -qO charts/endpoints-operator.tgz https://github.com/labring/endpoints-oper
 
 cat <<'EOF' >"Kubefile"
 FROM scratch
-ENV HELM_OPTS
+ENV HELM_OPTS=""
 COPY charts ./charts
 COPY images ./images
 COPY registry ./registry
