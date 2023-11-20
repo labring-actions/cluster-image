@@ -1,0 +1,24 @@
+apiVersion: spinnaker.io/v1alpha2
+kind: SpinnakerService
+metadata:
+  name: spinnaker
+  namespace: spinnaker
+spec:
+  spinnakerConfig:
+    config:
+      version: 1.32.2
+      timezone: Asia/Shanghai
+      persistentStorage:
+        persistentStoreType: s3
+        s3:
+          bucket: spinnaker
+          rootFolder: front50
+          region: us-west-2
+          endpoint: {{ default "http://minio.minio:9000" .s3_endpoint }}
+          accessKeyId: {{ default "admin" .s3_accessKeyId }}
+          secretAccessKey: {{ default "minio123" .s3_secretAccessKey }}
+          pathStyleAccess: true
+  expose:
+    type: ingress
+    service:
+      type: ClusterIP

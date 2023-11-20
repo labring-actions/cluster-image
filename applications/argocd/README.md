@@ -24,12 +24,13 @@ $ helm -n argocd ls
 
 ## Access argocd
 
-Get `admin` user password
-```
-kubectl -n argocd get secrets argocd-secret -o jsonpath="{.data.admin\.password}" | base64 -d
-```
-Access argocd UI
+Default username `admin` password
 
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+Access UI
 ```
 https://<node-ip>:<node-port>
 ```
@@ -51,3 +52,4 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `seao
 ```shell
 $ sealos run docker.io/labring/argocd:v2.8.4 \
 -e NAME=my-argocd -e NAMESPACE=my-argocd -e HELM_OPTS="--set server.service.type=NodePort"
+```
