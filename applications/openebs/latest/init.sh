@@ -45,6 +45,10 @@ function init(){
   if [ $? -eq 0 ]; then
     echo "init success, next run sealos build"
   fi
+
+  utils_tag=$(helm show values charts/openebs --jsonpath {.helper.imageTag})
+  mkdir -p images/shim
+  echo "docker.io/openebs/linux-utils:$utils_tag" >images/shim/openebsImages
 }
 
 function main() {

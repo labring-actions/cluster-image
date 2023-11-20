@@ -1,0 +1,4 @@
+FROM scratch
+ENV VERSION=v0.26.0
+COPY . .
+CMD ["bash install.sh $(VERSION)"]

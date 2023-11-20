@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["kubectl create -f manifests/cert-manager.yaml || true"]
