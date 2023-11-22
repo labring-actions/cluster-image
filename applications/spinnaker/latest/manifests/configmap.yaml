@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: halyard-config
+  namespace: default
+data:
+  halyard-local.yml: |
+    spinnaker:
+      config:
+        input:
+          gcs:
+            enabled: false

@@ -39,8 +39,8 @@ download_spinnaker_images() {
     export halyard_image="us-docker.pkg.dev/spinnaker-community/docker/halyard:stable"
     export spinnaker_dockerRegistry="us-docker.pkg.dev/spinnaker-community/docker/"
     export dockerhub_dockerRegistry="docker.io/library/"
-    local java_opts_proxy_env="-Dhttp.proxyHost=192.168.10.1 -Dhttp.proxyPort=7890 -Dhttps.proxyHost=192.168.10.1 -Dhttps.proxyPort=7890"
-    local proxy_enabled="false"
+    local java_opts_proxy_env="-Dhttp.proxyHost=192.168.72.1 -Dhttp.proxyPort=7890 -Dhttps.proxyHost=192.168.72.1 -Dhttps.proxyPort=7890"
+    local proxy_enabled="true"
 
     if [[ "${proxy_enabled}" == "false" ]]; then
         java_opts_proxy_env=""
@@ -49,7 +49,7 @@ download_spinnaker_images() {
     docker rm -f halyard &>/dev/null || true
     docker run -d -e JAVA_OPTS="${java_opts_proxy_env}" --name halyard ${halyard_image}
 
-    for i in {1..3}; do
+    for i in {1..10}; do
         status=$(docker exec -it halyard hal --ready &> /dev/null)
         if [ $? -eq 0 ]; then
             echo "halyard ready"
@@ -76,7 +76,7 @@ download_spinnaker_images() {
     echo "us-docker.pkg.dev/spinnaker-community/redis/redis-cluster:v2" >> ${IMAGES_DIR}/spinnaker_images.txt
     cat ${minio_deployment} |grep image: | awk -F"image: " '{print "docker.io/"$2}' >> ${IMAGES_DIR}/spinnaker_images.txt
     sed -i '/monitoring-third-party/d' ${IMAGES_DIR}/spinnaker_images.txt
-    sed -i "s|version:.*|version: ${latestSpinnaker}|g" manifests/spinnakerservice.yml.tmpl
+    sed -i "s|version:.*|version: ${latestSpinnaker}|g" manifests/spinnakerService.yaml.tmpl
 }
 
 main() {

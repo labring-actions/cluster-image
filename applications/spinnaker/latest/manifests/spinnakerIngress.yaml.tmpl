@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spin-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: {{ default "spinnaker.example.com" .domain }} 
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: spin-deck
+            port:
+              number: 9000
+  - host: {{ default "spinnaker.example.com" .domain }}
+    http:
+      paths:
+      - path: /api/v1
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: spin-gate
+            port:
+              number: 8084
