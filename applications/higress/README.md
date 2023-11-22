@@ -7,9 +7,16 @@ chmod a+x sealos
 mv sealos /usr/bin/
 ```
 
+Under one sealos cluster, run the following command to deploy higress.
+@Note: you must remove any other ingress controllers before you deploy higress.
+ 
 ```shell
-sealos run --masters 172.31.64.100 --nodes 172.31.64.101,172.31.64.102,172.31.64.103 labring/kubernetes:v1.23.0 labring/helm:v3.12.0 labring/calico:v3.24.1 labring/coredns:v0.0.1 --passwd 'Fanux#123'
-sealos run labring/openebs:v3.4.0
-sealos run --env HELM_OPTS="--set higress-console.domain=console.8.218.172.255.nip.io" labring/higress:v1.1.0 
+sealos run --env HELM_OPTS="--set higress-core.gateway.replicas=3 --set higress-core.controller.replicas=3 \
+  --set higress-console.replicaCount=0 --set higress-console.domain=higress-console.svc.cluster.local \
+  --set higress-core.gateway.resources.requests.cpu=256m --set higress-core.gateway.resources.requests.memory=256Mi \
+  --set higress-console.resources.requests.cpu=256m --set higress-console.resources.requests.memory=256Mi \
+  --set higress-core.controller.resources.requests.cpu=256m --set higress-core.controller.resources.requests.memory=256Mi" \
+  --env ENABLE_GATEWAY=true --env ENABLE_ISTIO=true --env APPLY_DEFAULT_CR=true \
+  labring/higress:v1.3.1 
 ```
 
