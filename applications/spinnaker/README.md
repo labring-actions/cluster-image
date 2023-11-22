@@ -16,9 +16,10 @@
 Prerequisites example
 
 ```bash
+registry.cn-shanghai.aliyuncs.com/labring/openebs:v3.9.0
+sealos run docker.io/labring/minio:RELEASE.2023-10-07T15-07-38Z
 sealos run docker.io/labring/metallb:v0.13.10 -e addresses="192.168.10.100-192.168.10.110"
 sealos run docker.io/labring/ingress-nginx:v1.8.1
-sealos run docker.io/labring/minio:RELEASE.2023-10-07T15-07-38Z
 ```
 
 Install spinnaker
