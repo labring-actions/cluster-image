@@ -39,9 +39,9 @@ download_spinnaker_images() {
     export halyard_image="us-docker.pkg.dev/spinnaker-community/docker/halyard:stable"
     export spinnaker_dockerRegistry="us-docker.pkg.dev/spinnaker-community/docker/"
     export dockerhub_dockerRegistry="docker.io/library/"
-    local java_opts_proxy_env="-Dhttp.proxyHost=192.168.72.1 -Dhttp.proxyPort=7890 -Dhttps.proxyHost=192.168.72.1 -Dhttps.proxyPort=7890"
-    local proxy_enabled="true"
+    local java_opts_proxy_env="-Dhttp.proxyHost=192.168.10.1 -Dhttp.proxyPort=7890 -Dhttps.proxyHost=192.168.10.1 -Dhttps.proxyPort=7890"
 
+    local proxy_enabled="false"
     if [[ "${proxy_enabled}" == "false" ]]; then
         java_opts_proxy_env=""
     fi
