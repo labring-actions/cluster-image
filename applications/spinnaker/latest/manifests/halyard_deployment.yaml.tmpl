@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: halyard
+  name: halyard
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: halyard
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: halyard
+    spec:
+      serviceAccountName: spinnaker-service-account
+      hostNetwork: true  # for access apiserver.cluster.local
+      dnsPolicy: ClusterFirstWithHostNet
+      initContainers: # install yq to halyard pod
+        - name: yq
+          image: docker.io/mikefarah/yq:4.40.2
+          command: ["/bin/sh"]
+          args: ["-c", "cp -a -f /usr/bin/yq /yq-volume/yq"]
+          volumeMounts:
+            - name: yq-volume
+              mountPath: /yq-volume
+      containers:
+        - name: halyard
+          image: us-docker.pkg.dev/spinnaker-community/docker/halyard:stable
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: spinnaker_version
+              value: "1.32.2"
+            - name: KUBERNETES_SERVICE_HOST
+              value: {{ default "apiserver.cluster.local:6443" .kubernetes_service_host }}
+            - name: DOMAIN
+              value: {{ default "spinnaker.example.com" .domain }}
+            - name: ENDPOINT
+              value: {{ default "http://minio.minio:9000" .s3_endpoint }}
+            - name: MINIO_ACCESS_KEY
+              value: {{ default "admin" .s3_accessKeyId }}
+            - name: MINIO_SECRET_KEY
+              value: {{ default "minio123" .s3_secretAccessKey }}
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - curl -f http://127.0.0.1:8064/health || exit 1
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          volumeMounts:
+            - name: yq-volume
+              mountPath: /usr/bin/yq
+              subPath: yq
+            - name: halyard-volume
+              mountPath: /opt/halyard/config/halyard-local.yml
+              subPath: halyard-local.yml
+            - name: spinnaker-home
+              mountPath: /home/spinnaker
+      volumes:
+        - name: yq-volume
+          emptyDir: {}
+        - name: halyard-volume
+          configMap:
+            name: halyard-config
+        - name: spinnaker-home
+          persistentVolumeClaim:
+            claimName: spinnaker-home-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: spinnaker-home-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

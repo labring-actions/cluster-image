@@ -22,7 +22,7 @@ download_file() {
     local GITHUB_FILE="kustomize_${VERSION}_linux_${ARCH}.tar.gz"
     local DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/download/kustomize%2F${VERSION}/${GITHUB_FILE}"
 
-    wget -qO- "${DOWNLOAD_URL}" | tar -zx -C ./opt --strip=1
+    wget -qO- "${DOWNLOAD_URL}" | tar -zx -C ./opt
     chmod +x opt/kustomize
 }
 
