@@ -10,7 +10,7 @@ RUN docker-php-ext-install fileinfo opcache
 # ADD https://ghproxy.com/https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions redis mongodb pcntl pdo_mysql zip
+    install-php-extensions redis mongodb pcntl pdo_mysql zip gd
 
 # imagick
 RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && \
