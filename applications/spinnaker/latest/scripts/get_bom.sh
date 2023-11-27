@@ -1,6 +1,10 @@
 #!/bin/bash
 
 cd /workspace
+
+curl -sL -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.40.2/yq_linux_amd64
+chmod a+x /usr/local/bin/yq
+
 halconfig_path=./halconfig
 spinnaker_bom_path=${halconfig_path}/bom
 spinnaker_bom_file=${spinnaker_version}.yml
