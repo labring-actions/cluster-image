@@ -26,15 +26,12 @@ command_exists() {
 }
 
 download_spinnaker_boms(){
-    docker rm -f yq &>/dev/null || true
-    docker create --name yq -v yq:/usr/bin/yq docker.io/mikefarah/yq:4.40.2
-
     local proxy_enabled=false
     if [[ "${proxy_enabled}" == "true" ]]; then
-        docker_opts="--env HTTP_PROXY='http://192.168.10.1:7890' --env HTTP_PROXY='http://192.168.10.1:7890'"
+        docker_opts="--env http_proxy=http://192.168.72.1:7890 --env https_proxy=http://192.168.72.1:7890"
     fi
     docker rm -f gloud-cli &>/dev/null || true
-    docker run -d --name gloud-cli -v ./etc:/workspace -w /workspace -v yq:/usr/local/bin -e spinnaker_version=${VERSION} \
+    docker run -d --name gloud-cli -v ./etc:/workspace -w /workspace -e spinnaker_version=${VERSION} \
       ${docker_opts} \
       docker.io/google/cloud-sdk:alpine sleep infinity
 

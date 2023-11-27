@@ -18,8 +18,10 @@ kubectl -n spinnaker-operator apply -f ${MANIFESTS_DIR}/deploy/operator/cluster
 kubectl rollout status -w deployment.apps/spinnaker-operator --namespace="spinnaker-operator"
 
 # install spinnaker basic
+sleep 10s
 kubectl create ns spinnaker &>/dev/null || true
-kubectl apply -f manifests/
+kubectl apply -f manifests/spinnakerService.yaml
+kubectl apply -f manifests/spinnakerIngress.yaml
 
 # install spinnaker kustomize
 # pushd ${MANIFESTS_DIR}/spinnaker-kustomize-patches-master
