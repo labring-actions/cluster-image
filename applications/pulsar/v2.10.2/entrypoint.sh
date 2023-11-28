@@ -3,7 +3,7 @@ set -e
 
 NAME=${NAME:-"pulsar"}
 NAMESPACE=${NAMESPACE:-"pulsar"}
-CHART=${CHARTS:-"./charts/pulsar"}
+CHARTS=${CHARTS:-"./charts/pulsar"}
 VALUES_FILE=${VALUES_FILE:-"./manifest/examples/values-one-node.yaml"}
 HELM_OPTS=${HELM_OPTS:-" \
 -f $VALUES_FILE \
@@ -16,4 +16,4 @@ HELM_OPTS=${HELM_OPTS:-" \
 
 # --set proxy.ports.http=8080 to fix: https://github.com/apache/pulsar-helm-chart/pull/356
 
-helm upgrade -i ${NAME} ${CHART} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
+helm upgrade -i ${NAME} ${CHARTS} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}

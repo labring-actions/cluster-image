@@ -13,9 +13,9 @@ install_spinnaker(){
     pod_name=$(kubectl get pods -l app=halyard -o jsonpath='{.items[*].metadata.name}')
     kubectl cp scripts/deploy.sh ${pod_name}:/home/spinnaker/ -c halyard
     kubectl cp etc/halconfig.tar.gz ${pod_name}:/home/spinnaker/ -c halyard
-    kubectl exec -it ${pod_name} -c halyard -- mkdir -p /home/spinnaker/.hal/.boms
-    kubectl exec -it ${pod_name} -c halyard -- tar -zxf /home/spinnaker/halconfig.tar.gz -C /home/spinnaker/.hal/.boms --strip=2
-    kubectl exec -it ${pod_name} -c halyard -- bash /home/spinnaker/deploy.sh
+    kubectl exec ${pod_name} -c halyard -- mkdir -p /home/spinnaker/.hal/.boms
+    kubectl exec ${pod_name} -c halyard -- tar -zxf /home/spinnaker/halconfig.tar.gz -C /home/spinnaker/.hal/.boms --strip=1
+    kubectl exec ${pod_name} -c halyard -- bash /home/spinnaker/deploy.sh
 }
 
 apply_ingress() {

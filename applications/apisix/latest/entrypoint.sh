@@ -3,7 +3,7 @@ set -e
 
 NAME=${NAME:-"apisix"}
 NAMESPACE=${NAMESPACE:-"ingress-apisix"}
-CHART=${CHARTS:-"./charts/apisix"}
+CHARTS=${CHARTS:-"./charts/apisix"}
 HELM_OPTS=${HELM_OPTS:-" \
 --set gateway.type=NodePort \
 --set ingress-controller.enabled=true \
@@ -13,4 +13,4 @@ HELM_OPTS=${HELM_OPTS:-" \
 --set dashboard.service.type=NodePort \
 "}
 
-helm upgrade -i ${NAME} ${CHART} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
+helm upgrade -i ${NAME} ${CHARTS} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}

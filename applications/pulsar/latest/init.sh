@@ -7,13 +7,13 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 init_dir() {
-    local OPT_DIR="./opt"
-    local IMAGES_DIR="./images"
-    local CHARTS_DIR="./charts"
-    local MANIFESTS_DIR="./manifests"
+    OPT_DIR="./opt"
+    IMAGES_DIR="./images/shim"
+    CHARTS_DIR="./charts"
+    MANIFESTS_DIR="./manifest"
 
     rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}" "${MANIFESTS_DIR}"
-    mkdir -p "${CHARTS_DIR}" "${MANIFESTS_DIR}"
+    mkdir -p "${CHARTS_DIR}" "${MANIFESTS_DIR}" "${IMAGES_DIR}"
 }
 
 ensure_helm() {
@@ -42,7 +42,15 @@ download_chart() {
     HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
     helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
 
-    helm template charts/pulsar/ --set components.pulsar_manager=true > manifests/pulsar.yaml
+
+    # Generate image list
+    helm template charts/pulsar/ --set components.pulsar_manager=true | grep image: | awk '{print $2}' | cut -d '"' -f2 | sort -u > ${IMAGES_DIR}/images.txt
+
+    kube_prometheus_stack_values_file="charts/pulsar/charts/kube-prometheus-stack/values.yaml"
+    prometheusConfigReloader_image_repository=$(yq .prometheusOperator.prometheusConfigReloader.image.repository ${kube_prometheus_stack_values_file})
+    prometheusConfigReloader_image_tag=$(yq .prometheusOperator.prometheusConfigReloader.image.tag ${kube_prometheus_stack_values_file})
+    prometheusConfigReloader_image="${prometheusConfigReloader_image_repository}:${prometheusConfigReloader_image_tag}"
+    echo "${prometheusConfigReloader_image}" >> ${IMAGES_DIR}/images.txt
 }
 
 download_manifests (){

@@ -7,12 +7,13 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 init_dir() {
+    ETC_DIR="./etc"
     OPT_DIR="./opt"
     IMAGES_DIR="./images/shim"
     CHARTS_DIR="./charts"
     MANIFESTS_DIR="./manifests"
 
-    rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}" "${MANIFESTS_DIR}"
+    rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}" "${MANIFESTS_DIR}" "${ETC_DIR}"
     mkdir -p "${CHARTS_DIR}"
 }
 
