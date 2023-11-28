@@ -30,6 +30,7 @@ spec:
       containers:
         - name: halyard
           image: us-docker.pkg.dev/spinnaker-community/docker/halyard:stable
+          workingDir: /home/spinnaker
           imagePullPolicy: IfNotPresent
           env:
             - name: spinnaker_version

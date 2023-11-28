@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-MANIFESTS_DIR="./manifest"
+ETC_DIR="./etc"
+MANIFESTS_DIR="./manifests"
 
 # if ! command -v kustomize >/dev/null 2>&1; then
 #     echo "kustomize is not installed, exit"
@@ -9,19 +10,19 @@ MANIFESTS_DIR="./manifest"
 # fi
 
 # install spinnaker operator crds
-kubectl apply -f ${MANIFESTS_DIR}/deploy/crds/
-kubectl wait --for=condition=Established -f ${MANIFESTS_DIR}/deploy/crds/
+kubectl apply -f ${ETC_DIR}/deploy/crds/
+kubectl wait --for=condition=Established -f ${ETC_DIR}/deploy/crds/
 
 # install spinnaker operator
 kubectl create ns spinnaker-operator &>/dev/null || true
-kubectl -n spinnaker-operator apply -f ${MANIFESTS_DIR}/deploy/operator/cluster
+kubectl -n spinnaker-operator apply -f ${ETC_DIR}/deploy/operator/cluster
 kubectl rollout status -w deployment.apps/spinnaker-operator --namespace="spinnaker-operator"
 
 # install spinnaker basic
 sleep 10s
 kubectl create ns spinnaker &>/dev/null || true
-kubectl apply -f manifests/spinnakerService.yaml
-kubectl apply -f manifests/spinnakerIngress.yaml
+kubectl apply -f ${MANIFESTS_DIR}/spinnakerService.yaml
+kubectl apply -f ${MANIFESTS_DIR}/spinnakerIngress.yaml
 
 # install spinnaker kustomize
 # pushd ${MANIFESTS_DIR}/spinnaker-kustomize-patches-master
