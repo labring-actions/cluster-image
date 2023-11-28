@@ -7,6 +7,7 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 init_dir() {
+    ETC_DIR="./etc"
     OPT_DIR="./opt"
     IMAGES_DIR="./images/shim"
     CHARTS_DIR="./charts"
