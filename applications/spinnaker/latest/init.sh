@@ -28,7 +28,7 @@ command_exists() {
 }
 
 download_spinnaker_files(){
-    local proxy_enabled=true
+    local proxy_enabled=false
     if [[ "${proxy_enabled}" == "true" ]]; then
         docker_opts="--env http_proxy=http://192.168.72.1:7890 --env https_proxy=http://192.168.72.1:7890"
     fi
