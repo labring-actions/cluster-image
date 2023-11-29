@@ -52,7 +52,6 @@ download_file() {
     local GITHUB_REPO="kargo"
     local GITHUB_FILE="kargo-linux-${ARCH}"
     local DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/download/${VERSION}/${GITHUB_FILE}"
-    echo "${DOWNLOAD_URL}"
     wget -qO opt/kargo "${DOWNLOAD_URL}" && chmod +x opt/kargo
 }
 
