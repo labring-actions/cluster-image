@@ -31,7 +31,7 @@ download_chart() {
     local HELM_REPO_URL="ghcr.io/akuity/kargo-charts/kargo"
     local APP_VERSION=${VERSION#v}
 
-    ALL_VERSIONS=$(docker run -it --rm quay.io/skopeo/stable:latest list-tags docker://${HELM_REPO_URL} | yq .Tags[])
+    ALL_VERSIONS=$(docker run --rm quay.io/skopeo/stable:latest list-tags docker://${HELM_REPO_URL} | yq .Tags[])
     if ! echo "${ALL_VERSIONS}" | grep -qw "${APP_VERSION}"; then
         echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo"
         exit 1
