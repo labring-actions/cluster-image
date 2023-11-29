@@ -7,7 +7,6 @@
 - Kubernetes(depends on the app requirements)
 - Sealos v4.x.x
 - Helm v3.x.x
-
 - PV provisioner support in the underlying infrastructure
 
 ## Install the app
