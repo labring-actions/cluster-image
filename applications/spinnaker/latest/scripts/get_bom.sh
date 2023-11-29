@@ -36,9 +36,9 @@ generate_spinnaker_images() {
 
     mkdir -p ${images_dir}
     yq -r '.services | to_entries | .[] | env(spinnaker_dockerRegistry) + .key + ":" + .value.version' ${spinnaker_bom_file} > ${images_list}
-    yq -r '.dependencies | to_entries | .[] | env(dockerhub_dockerRegistry) + .key + ":" + .value.version' ${spinnaker_bom_file} >> ${images_list}
+    #yq -r '.dependencies | to_entries | .[] | env(dockerhub_dockerRegistry) + .key + ":" + .value.version' ${spinnaker_bom_file} >> ${images_list}
 
-    sed -i "s#docker.io/library/redis:.*#docker.io/library/redis:6.2#g" ${images_list}
+    echo docker.io/library/redis:6.2 >> ${images_list}
     sed -i '/monitoring-third-party/d' ${images_list}
     echo "${halyard_image}" >> ${images_list}
     echo "docker.io/mikefarah/yq:4.40.2" >> ${images_list}
