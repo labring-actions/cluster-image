@@ -24,6 +24,10 @@ on:
         options:
           - true
           - false
+      KUBEBLOCKS_VERSION:
+        description: 'kubeblocks version for gemini build'
+        required: false
+        default: ''
 
 run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 
@@ -91,6 +95,7 @@ jobs:
           file: ./.build-image/Dockerfile
           tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-${{ matrix.arch }}
           platforms: linux/${{ matrix.arch }}
+          build-args: "KUBEBLOCKS_VERSION=${{ inputs.KUBEBLOCKS_VERSION }}"
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -105,6 +110,7 @@ jobs:
           file: ./.build-image/Dockerfile
           tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-${{ matrix.arch }}
           platforms: linux/${{ matrix.arch }}
+          build-args: "KUBEBLOCKS_VERSION=${{ inputs.KUBEBLOCKS_VERSION }}"
           push: true
           provenance: false
           sbom: false
