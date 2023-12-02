@@ -18,18 +18,18 @@ $ sealos run docker.io/labring/argo-events:v1.8.1
 Get pods status
 
 ```shell
-$ kubectl -n argo-workflows get pods
-NAME                                                  READY   STATUS    RESTARTS   AGE
-argo-workflows-server-66948875c-7hlmb                 1/1     Running   0          18s
-argo-workflows-workflow-controller-6f8bc6d85d-j8b89   1/1     Running   0          18s
+$ kubectl get pods -n argo-events
+NAME                                              READY   STATUS    RESTARTS   AGE
+argo-events-controller-manager-6f8fcdc964-vnwzb   1/1     Running   0          8m46s
+events-webhook-54fc554c76-4nl7m                   1/1     Running   0          8m46s
 ```
 
 Get service status
 
 ```shell
-$ kubectl -n argo-workflows get svc
-NAME                    TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
-argo-workflows-server   NodePort   10.96.0.99   <none>        2746:32241/TCP   44m
+$ kubectl -n argo-events get svc
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+events-webhook   ClusterIP   10.96.194.202   <none>        443/TCP   9m3s
 ```
 
 ## Uninstalling the app
