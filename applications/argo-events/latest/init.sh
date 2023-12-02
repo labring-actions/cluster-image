@@ -29,6 +29,8 @@ function init(){
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
   wget -qO- https://github.com/argoproj/argo-events/releases/download/${VERSION}/argo-events-linux-${ARCH}.gz | gunzip -c > opt/argo-events
   chmod +x opt/argo-events
+  mkdir -p images/shim/
+  cat charts/argo-events/values.yaml | grep Image | grep -v '#' | awk '{ print $2 }' > images/shim/eventImage
 }
 
 version_check
