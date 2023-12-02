@@ -27,7 +27,7 @@ function init(){
   rm -rf charts opt && mkdir -p charts opt
   chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1)
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
-  wget -qO- https://github.com/argoproj/argo-events/releases/download/${VERSION}/argo-linux-${ARCH}.gz | gunzip -c > opt/argo-events
+  wget -qO- https://github.com/argoproj/argo-events/releases/download/${VERSION}/argo-events-linux-${ARCH}.gz | gunzip -c > opt/argo-events
   chmod +x opt/argo-events
 }
 
