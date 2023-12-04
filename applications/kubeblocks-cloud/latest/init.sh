@@ -8,17 +8,11 @@ export readonly VERSION=${3:-$(basename "$PWD")}
 
 rm -rf charts
 mkdir charts
-
 repo_url="https://github.com/apecloud/helm-charts/releases/download"
 charts=("kubeblocks-cloud")
 for chart in "${charts[@]}"; do
     helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION}"/"${chart}"-"${VERSION}".tgz
-    if [[ "$charts" == "kubeblocks-cloud" ]]; then
-        cloud_values_file="charts/${charts}/kubeblocks-cloud-values.yaml"
-        touch $cloud_values_file
-        tee -a $cloud_values_file > /dev/null << EOF
-${CLOUD_VALUES}
-EOF
-    fi
+    values_file="charts/${charts}/values.yaml"
+    echo "${CLOUD_VALUES}" > $values_file
     rm -rf charts/"${chart}"-"${VERSION}".tgz
 done
