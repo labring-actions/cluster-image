@@ -149,7 +149,6 @@ jobs:
           password: ${{ env.DOCKER_PASSWORD }}
           app: ${{ inputs.APP_NAME }}
           version: ${{ inputs.IMAGE_VERSION }}
-          email: ${{ inputs.IMAGE_VERSION }}
         run: |
           bash .github/scripts/manifest-other.sh
 
