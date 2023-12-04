@@ -1,4 +1,4 @@
-name: Build Airgap Large Image
+name: Build Airgap Small Image
 
 on:
   workflow_dispatch:
@@ -45,18 +45,9 @@ env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
 jobs:
-  enable-self-runner:
-    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
-    with:
-      GITHUB_REPO: "apecloud/kubeblocks-airgap"
-      RUNNER_LABEL: "kubeblocks-airgap-runner"
-      RUNNER_REPLICAS: 2
-    secrets: inherit
-
   build-apps:
-    needs: [ enable-self-runner ]
     name: build app ${{ matrix.arch }} image
-    runs-on: [ self-hosted, amd-runner ]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -116,16 +107,6 @@ jobs:
           push: true
           provenance: false
           sbom: false
-
-  disable-self-runner:
-    if: ${{ always() }}
-    needs: [ build-apps ]
-    uses: apecloud/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.38
-    with:
-      GITHUB_REPO: "apecloud/kubeblocks-airgap"
-      RUNNER_LABEL: "kubeblocks-airgap-runner"
-      ENABLE: "disable"
-    secrets: inherit
 
   build-manifest:
     name: build manifest app image
