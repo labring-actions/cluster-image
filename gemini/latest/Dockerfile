@@ -1,5 +1,5 @@
 FROM scratch
 COPY charts charts
 COPY registry registry
-ARG KUBEBLOCKS_VERSION="latest"
-CMD ["helm upgrade -i gemini charts/gemini --insecure-skip-tls-verify -n kb-system --create-namespace --set kubeblocks.version=${KUBEBLOCKS_VERSION},kubeblocks.namespace=kb-system,kubeblocks.serviceAccountName=kubeblocks"]
+ARG TOOLS_VERSION="0.2.2-beta.5"
+CMD ["helm upgrade --install kb-gemini charts/gemini --set image.oteld.tag=${TOOLS_VERSION} --insecure-skip-tls-verify -n kb-system --create-namespace"]
