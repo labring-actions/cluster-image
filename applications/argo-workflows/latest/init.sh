@@ -27,7 +27,7 @@ function init(){
   rm -rf images/shim && mkdir -p images/shim
   echo "quay.io/argoproj/argoexec:${VERSION}" > images/shim/argoImage
   echo "argoproj/argosay:v2" >> images/shim/argoImage
-  echo "docker/whalesay:latest" >> images/shim/argoImage
+  echo "docker/whalesay" >> images/shim/argoImage
   rm -rf charts opt && mkdir -p charts opt
   chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1)
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
