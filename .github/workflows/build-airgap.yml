@@ -43,6 +43,9 @@ env:
   ALIYUN_USER_NEW: ${{ secrets.ALIYUN_USER_NEW }}
   ALIYUN_PASSWORD_NEW: ${{ secrets.ALIYUN_PASSWORD_NEW }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  DOCKER_READONLY_USER: ${{ secrets.DOCKER_READONLY_USER }}
+  DOCKER_READONLY_PASSWORD: ${{ secrets.DOCKER_READONLY_PASSWORD }}
+  DOCKER_READONLY_EMAIL: ${{ secrets.DOCKER_READONLY_EMAIL }}
 
 jobs:
   enable-self-runner:
@@ -72,12 +75,13 @@ jobs:
         continue-on-error: true
         env:
           registry: ${{ env.DOCKER_REGISTRY_URL }}
-          username: ${{ env.DOCKER_USER }}
+          username: ${{ env.DOCKER_READONLY_USER }}
           repo: ${{ env.DOCKER_REPO }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          password: ${{ env.DOCKER_READONLY_PASSWORD }}
           app: ${{ inputs.APP_NAME }}
           version: ${{ inputs.IMAGE_VERSION }}
           arch: ${{ matrix.arch }}
+          email: ${{ env.DOCKER_READONLY_EMAIL }}
         run: |
           bash .github/scripts/apps.sh
 
