@@ -14,7 +14,7 @@ init_dir() {
     MANIFESTS_DIR="./manifests"
 
     rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}" "${MANIFESTS_DIR}" "${ETC_DIR}"
-    mkdir -p "${CHARTS_DIR}"
+    mkdir -p "${CHARTS_DIR}" "${OPT_DIR}"
 }
 
 
@@ -45,6 +45,16 @@ download_chart() {
     helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
 }
 
+download_zli_file() {
+    local GITHUB_USER="project-zot"
+    local GITHUB_REPO="zot"
+    local GITHUB_FILE="zli-linux-${ARCH}"
+    local DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/download/${VERSION}/${GITHUB_FILE}"
+
+    wget -qO opt/zli "${DOWNLOAD_URL}"
+    chmod +x opt/zli
+}
+
 main() {
     if [ $# -ne 3 ]; then
         echo "Usage: ./$0 <ARCH> <NAME> <VERSION>"
@@ -56,6 +66,7 @@ main() {
           exit 1
         }
         download_chart
+        download_zli_file
     fi
 }
 
