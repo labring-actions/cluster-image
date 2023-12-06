@@ -18,6 +18,7 @@ on:
           - gemini
           - kubeblocks
           - kubeblocks-cloud
+          - loki
           - metallb
           - minio
           - victoria-metrics-cluster
