@@ -16,12 +16,14 @@ on:
           - csi-s3
           - cubetran
           - gemini
+          - grafana
           - kubeblocks
           - kubeblocks-cloud
           - loki
           - metallb
           - minio
           - snapshot-controller
+          - prometheus
           - victoria-metrics-cluster
       TOOLS_VERSION:
         description: 'tools version'
