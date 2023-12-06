@@ -21,6 +21,7 @@ on:
           - loki
           - metallb
           - minio
+          - snapshot-controller
           - victoria-metrics-cluster
       TOOLS_VERSION:
         description: 'tools version'
