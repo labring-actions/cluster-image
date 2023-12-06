@@ -10,3 +10,4 @@ HELM_OPTS=${HELM_OPTS:-" \
 "}
 
 helm upgrade -i ${NAME} ${CHARTS} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
+cp -f opt/zli /usr/local/bin/
