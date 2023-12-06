@@ -19,6 +19,8 @@ on:
           - kubeblocks
           - kubeblocks-cloud
           - llm
+          - metallb
+          - minio
       TOOLS_VERSION:
         description: 'tools version'
         required: false
