@@ -13,14 +13,7 @@ on:
         default: 'kubeblocks'
         type: choice
         options:
-          - cubetran
-          - csi-s3
-          - gemini
-          - kubeblocks
-          - kubeblocks-cloud
           - llm
-          - metallb
-          - minio
       TOOLS_VERSION:
         description: 'tools version'
         required: false
