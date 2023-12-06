@@ -13,7 +13,14 @@ on:
         default: 'kubeblocks'
         type: choice
         options:
-          - llm
+          - csi-s3
+          - cubetran
+          - gemini
+          - kubeblocks
+          - kubeblocks-cloud
+          - metallb
+          - minio
+          - victoria-metrics-cluster
       TOOLS_VERSION:
         description: 'tools version'
         required: false
