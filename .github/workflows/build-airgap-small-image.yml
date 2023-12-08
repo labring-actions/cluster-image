@@ -19,6 +19,7 @@ on:
           - grafana
           - kubeblocks
           - kubeblocks-cloud
+          - logto
           - loki
           - metallb
           - minio
