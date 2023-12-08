@@ -75,6 +75,7 @@ jobs:
           app: ${{ inputs.APP_NAME }}
           version: ${{ inputs.IMAGE_VERSION }}
           arch: ${{ matrix.arch }}
+          tools_version: ${{ inputs.TOOLS_VERSION }}
         run: |
           bash .github/scripts/apps.sh
 
@@ -94,7 +95,6 @@ jobs:
           file: ./.build-image/Dockerfile
           tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-${{ matrix.arch }}
           platforms: linux/${{ matrix.arch }}
-          build-args: "TOOLS_VERSION=${{ inputs.TOOLS_VERSION }}"
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -109,7 +109,6 @@ jobs:
           file: ./.build-image/Dockerfile
           tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-${{ matrix.arch }}
           platforms: linux/${{ matrix.arch }}
-          build-args: "TOOLS_VERSION=${{ inputs.TOOLS_VERSION }}"
           push: true
           provenance: false
           sbom: false
