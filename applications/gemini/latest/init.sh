@@ -14,6 +14,6 @@ repo_url="https://github.com/apecloud/helm-charts/releases/download"
 charts=("gemini")
 for chart in "${charts[@]}"; do
     helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION#v}"/"${chart}"-"${VERSION#v}".tgz
-    yq e -i '.image.oteld.tag='${TOOLS_VERSION} charts/${chart}/values.yaml
+    yq e -i '.image.oteld.tag="'${TOOLS_VERSION}'"' charts/${chart}/values.yaml
     rm -rf charts/"${chart}"-"${VERSION#v}".tgz
 done
