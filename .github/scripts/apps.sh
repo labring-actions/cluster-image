@@ -10,6 +10,7 @@ readonly IMAGE_HUB_REGISTRY=${registry?}
 readonly IMAGE_HUB_REPO=${repo?}
 readonly IMAGE_HUB_USERNAME=${username?}
 readonly IMAGE_HUB_PASSWORD=${password?}
+readonly APP_TOOLS_VERSION=${tools_version?}
 
 readonly buildDir=.build-image
 
@@ -34,7 +35,7 @@ cd $buildDir && {
         fi
     fi
     if [[ -s init.sh ]]; then
-        bash init.sh "$APP_ARCH" "$APP_NAME" "$APP_VERSION"
+        bash init.sh "$APP_ARCH" "$APP_NAME" "$APP_VERSION" "$APP_TOOLS_VERSION"
     fi
 
     IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$APP_NAME-airgap:$APP_VERSION-$APP_ARCH"
