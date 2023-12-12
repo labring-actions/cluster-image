@@ -30,10 +30,10 @@ for chart in "${charts[@]}"; do
     if [[ "$REDUCE_VERSION" == "true" ]]; then
         case $chart in
             mongodb)
-                yq e -i '.enabledClusterVersions=[mongodb-5.0,mongodb-6.0]' charts/${chart}/values.yaml
+                yq e -i '.enabledClusterVersions=[ "mongodb-5.0", "mongodb-6.0" ]' charts/${chart}/values.yaml
             ;;
             postgresql)
-                yq e -i '.enabledClusterVersions=[postgresql-14.8.0,postgresql-12.15.0]' charts/${chart}/values.yaml
+                yq e -i '.enabledClusterVersions=[ "postgresql-14.8.0", "postgresql-12.15.0" ]' charts/${chart}/values.yaml
             ;;
         esac
 
