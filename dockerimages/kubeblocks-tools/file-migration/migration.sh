@@ -1,6 +1,6 @@
 chmod +x /root/minio-binaries/mc
 export PATH=$PATH:/root/minio-binaries/
-mc config host add migrationTask $MINIO_URL migration sealos.12345 --api s3v4
+mc config host add migrationTask $MINIO_URL $MINIO_ACCESS_KEY $MINIO_SECRET_KEY --api s3v4
 mc cp migrationTask/file-migration/$FILE_NAME ./
 if [ "$DATABASE_TYPE" = "apecloud-mysql" ]; then
     mysql -u $DATABASE_USER -h $DATABASE_HOST -p$DATABASE_PASSWORD $DATABASE_NAME < $FILE_NAME
