@@ -1,0 +1,8 @@
+FROM scratch
+
+ENV NAME=${NAME:-"minio-operator"}
+ENV NAMESPACE=${NAMESPACE:-"minio-system"}
+
+COPY . .
+
+CMD ["helm install $(NAME) operator-5.0.6.tgz --namespace $(NAMESPACE) --create-namespace", "kubectl wait --for=condition=Available deployment/$(NAME) -n $(NAMESPACE)"]
