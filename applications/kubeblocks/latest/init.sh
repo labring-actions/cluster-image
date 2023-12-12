@@ -6,8 +6,9 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 export readonly BIN_DOWNLOAD=${4:-"true"}
+export readonly REDUCE_VERSION=${5:-"false"}
 
-if [ "${BIN_DOWNLOAD}" == "true" ]; then
+if [[ -z "${BIN_DOWNLOAD}" || "${BIN_DOWNLOAD}" == "true" ]]; then
     mkdir -p opt
     wget https://github.com/apecloud/kubeblocks/releases/download/"${VERSION}"/kbcli-linux-"${ARCH}"-"${VERSION}".tar.gz -O kbcli.tar.gz
     tar -zxvf kbcli.tar.gz linux-"${ARCH}"/kbcli
@@ -26,6 +27,17 @@ if [[ "${VERSION}" == "v0.6."* ]]; then
 fi
 for chart in "${charts[@]}"; do
     helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION#v}"/"${chart}"-"${VERSION#v}".tgz
+    if [[ "$REDUCE_VERSION" == "true" ]]; then
+        case $chart in
+            mongodb)
+                yq e -i '.enabledClusterVersions=[mongodb-5.0,mongodb-6.0]' charts/${chart}/values.yaml
+            ;;
+            postgresql)
+                yq e -i '.enabledClusterVersions=[postgresql-14.8.0,postgresql-12.15.0]' charts/${chart}/values.yaml
+            ;;
+        esac
+
+    fi
     rm -rf charts/"${chart}"-"${VERSION#v}".tgz
 done
 
