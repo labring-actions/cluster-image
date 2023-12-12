@@ -2,4 +2,5 @@ FROM scratch
 
 COPY . .
 
-CMD ["kubectl apply -f manifests/minio.yaml"]
+CMD ["bash entrypoint.sh"]
+

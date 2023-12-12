@@ -2,4 +2,4 @@ FROM scratch
 
 COPY . .
 
-CMD ["kubectl apply -f manifests/monitor.yaml"]
+CMD ["bash entrypoint.sh"]
