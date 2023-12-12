@@ -14,6 +14,14 @@ on:
         type: choice
         options:
           - llm
+      REDUCE_VERSION:
+        description: 'reduce multi cluster version for KubeBlocks'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - true
+          - false
       TOOLS_VERSION:
         description: 'tools version'
         required: false
@@ -76,6 +84,7 @@ jobs:
           version: ${{ inputs.IMAGE_VERSION }}
           arch: ${{ matrix.arch }}
           tools_version: ${{ inputs.TOOLS_VERSION }}
+          reduce_version: ${{ inputs.REDUCE_VERSION }}
         run: |
           bash .github/scripts/apps.sh
 
