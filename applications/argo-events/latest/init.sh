@@ -7,7 +7,7 @@ export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
 repo_url="https://argoproj.github.io/argo-helm"
-repo_name="argo/argo-workflows"
+repo_name="argo/argo-events"
 chart_name="argo"
 
 helm repo add ${chart_name} ${repo_url} --force-update
@@ -24,14 +24,13 @@ function version_check(){
 }
 
 function init(){
-  rm -rf images/shim && mkdir -p images/shim
-  echo "quay.io/argoproj/argoexec:${VERSION}" > images/shim/argoImage
-  echo "argoproj/argosay:v2" >> images/shim/argoImage
   rm -rf charts opt && mkdir -p charts opt
   chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1)
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
-  wget -qO- https://github.com/argoproj/argo-workflows/releases/download/${VERSION}/argo-linux-${ARCH}.gz | gunzip -c > opt/argo
-  chmod +x opt/argo
+  wget -qO- https://github.com/argoproj/argo-events/releases/download/${VERSION}/argo-events-linux-${ARCH}.gz | gunzip -c > opt/argo-events
+  chmod +x opt/argo-events
+  mkdir -p images/shim/
+  cat charts/argo-events/values.yaml | grep Image | grep -v '#' | awk '{ print $2 }' > images/shim/eventImage
 }
 
 version_check

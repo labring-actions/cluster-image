@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
@@ -25,45 +27,24 @@ command_exists() {
     fi
 }
 
-download_spinnaker_boms(){
-    docker rm -f yq &>/dev/null || true
-    docker create --name yq -v yq:/usr/bin/yq docker.io/mikefarah/yq:4.40.2
-
+download_spinnaker_files(){
     local proxy_enabled=false
     if [[ "${proxy_enabled}" == "true" ]]; then
-        docker_opts="--env HTTP_PROXY='http://192.168.10.1:7890' --env HTTP_PROXY='http://192.168.10.1:7890'"
+        docker_opts="--env http_proxy=http://192.168.72.1:7890 --env https_proxy=http://192.168.72.1:7890"
     fi
     docker rm -f gloud-cli &>/dev/null || true
-    docker run -d --name gloud-cli -v ./etc:/workspace -w /workspace -v yq:/usr/local/bin -e spinnaker_version=${VERSION} \
-      ${docker_opts} \
-      docker.io/google/cloud-sdk:alpine sleep infinity
+    docker run -d --name gloud-cli -w /workspace -e spinnaker_version=${VERSION} ${docker_opts} \
+        docker.io/google/cloud-sdk:alpine sleep infinity
 
     docker cp scripts/get_bom.sh gloud-cli:/workspace
-    docker exec -it gloud-cli bash get_bom.sh
-    docker exec -it gloud-cli rm -f get_bom.sh
+    docker exec gloud-cli bash get_bom.sh
+    docker cp gloud-cli:/workspace/etc .
+    docker cp gloud-cli:/workspace/images .
 }
 
-generate_spinnaker_images() {
-    export spinnaker_version=${VERSION}
-    export halyard_image="us-docker.pkg.dev/spinnaker-community/docker/halyard:stable"
-    export spinnaker_dockerRegistry="us-docker.pkg.dev/spinnaker-community/docker/"
-    export dockerhub_dockerRegistry="docker.io/library/"
-    export spinnaker_bom="etc/halconfig/bom/${spinnaker_version}.yml"
-
-    yq -r '.services | to_entries | .[] | env(spinnaker_dockerRegistry) + .key + ":" + .value.version' ${spinnaker_bom} > ${IMAGES_DIR}/spinnaker_images.txt
-    yq -r '.dependencies | to_entries | .[] | env(dockerhub_dockerRegistry) + .key + ":" + .value.version' ${spinnaker_bom} >> ${IMAGES_DIR}/spinnaker_images.txt
-
-    sed -i "s#docker.io/library/redis:.*#docker.io/library/redis:6.2#g" ${IMAGES_DIR}/spinnaker_images.txt
-    sed -i '/monitoring-third-party/d' ${IMAGES_DIR}/spinnaker_images.txt
-    echo "${halyard_image}" >> ${IMAGES_DIR}/spinnaker_images.txt
-    echo "docker.io/mikefarah/yq:4.40.2" >> ${IMAGES_DIR}/spinnaker_images.txt
-
-    yq e -i '.services.*.version |= "local:" + .' ${spinnaker_bom}
-    tar -zcvf etc/halconfig.tar.gz -C etc/ .
-    rm -rf etc/halconfig
-
+generate_version() {
     DEPLOYMENT_FILE="manifests/halyard_deployment.yaml.tmpl"
-    sed -i "/name: spinnaker_version/{n;s/value:.*/value: \"$spinnaker_version\"/}" $DEPLOYMENT_FILE
+    sed -i "/name: spinnaker_version/{n;s/value:.*/value: \"$VERSION\"/}" $DEPLOYMENT_FILE
 }
 
 main() {
@@ -74,8 +55,8 @@ main() {
         init_dir
         command_exists docker
         command_exists yq
-        download_spinnaker_boms
-        generate_spinnaker_images
+        download_spinnaker_files
+        generate_version
     fi
 }
 

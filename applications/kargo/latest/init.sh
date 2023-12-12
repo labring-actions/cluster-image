@@ -14,7 +14,7 @@ init_dir() {
     MANIFESTS_DIR="./manifests"
 
     rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}" "${MANIFESTS_DIR}" "${ETC_DIR}"
-    mkdir -p "${CHARTS_DIR}"
+    mkdir -p "${CHARTS_DIR}" "${OPT_DIR}"
 }
 
 command_check() {
@@ -28,23 +28,33 @@ command_check() {
 }
 
 download_chart() {
-    local HELM_REPO_URL="https://dapr.github.io/helm-charts/"
-    local HELM_REPO_NAME="dapr"
-    local HELM_CHART_NAME="dapr"
+    local HELM_REPO_URL="ghcr.io/akuity/kargo-charts/kargo"
     local APP_VERSION=${VERSION#v}
 
-    helm repo add "${HELM_REPO_NAME}" "${HELM_REPO_URL}" --force-update 1>/dev/null
-
-    ALL_VERSIONS=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | awk '{print $3}' | grep -v VERSION)
+    ALL_VERSIONS=$(docker run --rm quay.io/skopeo/stable:latest list-tags docker://${HELM_REPO_URL} | yq .Tags[])
     if ! echo "${ALL_VERSIONS}" | grep -qw "${APP_VERSION}"; then
         echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo"
         exit 1
     fi
 
-    # Find CHART VERSION through APP VERSION
-    HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
-    helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
+    helm pull "oci://${HELM_REPO_URL}" --version="${APP_VERSION}" -d charts --untar
+
+    cat >charts/kargo.values.yaml<<EOF
+api:
+  adminAccount:
+    password: admin
+    tokenSigningKey: iwishtowashmyirishwristwatch
+EOF
 }
+
+download_file() {
+    local GITHUB_USER="akuity"
+    local GITHUB_REPO="kargo"
+    local GITHUB_FILE="kargo-linux-${ARCH}"
+    local DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/download/${VERSION}/${GITHUB_FILE}"
+    wget -qO opt/kargo "${DOWNLOAD_URL}" && chmod +x opt/kargo
+}
+
 
 main() {
     if [ $# -ne 3 ]; then
@@ -53,7 +63,10 @@ main() {
     else
         init_dir
         command_check "helm -h"
+        command_check "yq -h"
+        command_check "docker info"
         download_chart
+        download_file
     fi
 }
 
