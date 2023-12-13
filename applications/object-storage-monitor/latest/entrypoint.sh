@@ -6,7 +6,7 @@ if [[ -z "$DOMAIN" ]]; then
     exit 1
 fi
 
-MINIO_CONFIG_ENV=$(kubectl -n objectstorage-system get secret ${MINIO_NAME}-env-configuration -o jsonpath="{.data.config\.env}" | base64 --decode)
+MINIO_CONFIG_ENV=$(kubectl -n ${BACKEND_NAMESPACE} get secret ${MINIO_NAME}-env-configuration -o jsonpath="{.data.config\.env}" | base64 --decode)
 MINIO_ROOT_USER=$(echo "$MINIO_CONFIG_ENV" | tr ' ' '\n' | grep '^MINIO_ROOT_USER=' | cut -d '=' -f 2); MINIO_ROOT_USER=${MINIO_ROOT_USER//\"}
 MINIO_ROOT_PASSWORD=$(echo "$MINIO_CONFIG_ENV" | tr ' ' '\n' | grep '^MINIO_ROOT_PASSWORD=' | cut -d '=' -f 2); MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD//\"}
 
@@ -26,29 +26,29 @@ apiVersion: monitoring.coreos.com/v1
 kind: Probe
 metadata:
   labels:
-    namespace: objectstorage-system
+    namespace: ${BACKEND_NAMESPACE}
     release: prometheus
-  name: object-storage-sealos
-  namespace: objectstorage-system
+  name: ${MINIO_NAME}
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   jobName: object-storage-job
   bearerTokenSecret:
-    name: object-storage-sealos-probe
+    name: ${MINIO_NAME}-probe
     key: token
   prober:
     path: /minio/v2/metrics/bucket
     scheme: http
-    url: object-storage.objectstorage-system.svc.cluster.local:80
+    url: object-storage.${BACKEND_NAMESPACE}.svc.cluster.local:80
   targets:
     staticConfig:
       static:
-        - object-storage.objectstorage-system.svc.cluster.local:80
+        - object-storage.${BACKEND_NAMESPACE}.svc.cluster.local:80
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: object-storage-sealos-probe
-  namespace: objectstorage-system
+  name: ${MINIO_NAME}-probe
+  namespace: ${BACKEND_NAMESPACE}
 data:
   token: $BASE64_TOKEN
 type: Opaque
@@ -59,7 +59,7 @@ metadata:
   labels:
     app: object-storage-monitor
   name: object-storage-monitor-config
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 data:
   config.yml: |
     server:
@@ -71,7 +71,7 @@ metadata:
   labels:
     app: object-storage-monitor
   name: object-storage-monitor-deployment
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   replicas: 1
   selector:
@@ -91,9 +91,9 @@ spec:
         - /manager
         env:
         - name: OBJECT_STORAGE_INSTANCE
-          value: object-storage.objectstorage-system.svc.cluster.local:80
+          value: object-storage.${BACKEND_NAMESPACE}.svc.cluster.local:80
         - name: PROMETHEUS_SERVICE_HOST
-          value: http://prometheus-kube-prometheus-prometheus.objectstorage-system.svc.cluster.local:9090
+          value: http://prometheus-kube-prometheus-prometheus.${BACKEND_NAMESPACE}.svc.cluster.local:9090
         image: docker.io/nowinkey/sealos-database-service:v1.0.2
         imagePullPolicy: Always
         name: object-storage-monitor
@@ -129,7 +129,7 @@ metadata:
   labels:
     app: object-storage-monitor
   name: object-storage-monitor
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   ports:
     - name: http
@@ -143,7 +143,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: object-storage-monitor
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
   labels:
     cloud.sealos.io/app-deploy-manager-domain: object-storage-monitor
   annotations:

@@ -1,5 +1,7 @@
 FROM scratch
 
+ENV BACKEND_NAMESPACE=${BACKEND_NAMESPACE:-"objectstorage-system"}
+ENV FRONTEND_NAMESPACE=${FRONTEND_NAMESPACE:-"objectstorage-front"}
 ENV ADMIN_SECRET=${ADMIN_SECRET:-}
 ENV MINIO_NAME=${MINIO_NAME:-"object-storage"}
 

@@ -15,7 +15,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: objectstorage-system
+  name: ${BACKEND_NAMESPACE}
 EOF
 
 # create env-configuration secret
@@ -33,7 +33,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: ${MINIO_NAME}-env-configuration
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
   labels:
     v1.min.io/tenant: ${MINIO_NAME}
 data:
@@ -48,7 +48,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: ${MINIO_NAME}-secret
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
   labels:
     v1.min.io/tenant: ${MINIO_NAME}
 data:
@@ -63,7 +63,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: ${MINIO_NAME}-user-0
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
   labels:
     v1.min.io/tenant: ${MINIO_NAME}
 immutable: true
@@ -79,7 +79,7 @@ apiVersion: minio.min.io/v2
 kind: Tenant
 metadata:
   name: ${MINIO_NAME}
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   configuration:
     name: ${MINIO_NAME}-env-configuration
@@ -121,7 +121,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: object-storage
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   ports:
     - name: http-minio
@@ -146,7 +146,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ${MINIO_NAME}-api
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
   labels:
     cloud.sealos.io/app-deploy-manager-domain: objectstorageapi
   annotations:
@@ -189,7 +189,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ${MINIO_NAME}-console
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
   labels:
     cloud.sealos.io/app-deploy-manager-domain: osconsole
   annotations:

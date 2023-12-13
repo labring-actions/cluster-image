@@ -7,7 +7,7 @@ if [[ -z "$DOMAIN" ]]; then
 fi
 
 ADMIN_SECRET="${MINIO_NAME}-user-0"
-INTERNAL_ENDPOINT="object-storage.objectstorage-system.svc.cluster.local"
+INTERNAL_ENDPOINT="object-storage.${BACKEND_NAMESPACE}.svc.cluster.local"
 EXTERNAL_ENDPOINT="objectstorageapi.${DOMAIN}"
 
 
@@ -24,7 +24,7 @@ metadata:
     app.kubernetes.io/name: namespace
     app.kubernetes.io/part-of: objectstorage
     control-plane: controller-manager
-  name: objectstorage-system
+  name: ${BACKEND_NAMESPACE}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -173,7 +173,7 @@ metadata:
     app.kubernetes.io/name: serviceaccount
     app.kubernetes.io/part-of: objectstorage
   name: objectstorage-controller-manager
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -186,7 +186,7 @@ metadata:
     app.kubernetes.io/name: role
     app.kubernetes.io/part-of: objectstorage
   name: objectstorage-leader-election-role
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 rules:
   - apiGroups:
       - ""
@@ -407,7 +407,7 @@ metadata:
     app.kubernetes.io/part-of: objectstorage
     control-plane: controller-manager
   name: objectstorage-controller-manager-metrics-service
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   ports:
     - name: https
@@ -429,7 +429,7 @@ metadata:
     app.kubernetes.io/part-of: objectstorage
     control-plane: controller-manager
   name: objectstorage-controller-manager
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   replicas: 1
   selector:
@@ -490,7 +490,7 @@ spec:
             - /manager
           env:
             - name: OSNamespace
-              value: objectstorage-system
+              value: ${BACKEND_NAMESPACE}
             - name: OSAdminSecret
               value: ${ADMIN_SECRET}
             - name: OSInternalEndpoint
@@ -541,7 +541,7 @@ cat <<EOF | kubectl apply -f -
  kind: Deployment
  metadata:
    name: object-storage-frontend
-   namespace: objectstorage-frontend
+   namespace: ${FRONTEND_NAMESPACE}
    annotations:
      originImageName: nginx
      deploy.cloud.sealos.io/minReplicas: '1'
@@ -584,7 +584,7 @@ cat <<EOF | kubectl apply -f -
  kind: Service
  metadata:
    name: object-storage-frontend
-   namespace: objectstorage-frontend
+   namespace: ${FRONTEND_NAMESPACE}
    labels:
      cloud.sealos.io/app-deploy-manager: object-storage
  spec:
@@ -604,7 +604,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   name: object-storage-frontend
-  namespace: objectstorage-frontend
+  namespace: ${FRONTEND_NAMESPACE}
 spec:
   rules:
   - host: objectstorage.${DOMAIN}

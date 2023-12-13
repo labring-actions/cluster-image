@@ -3,6 +3,7 @@ set -e
 
 # check controller minio monitor prometheus
 
+
 # app cr
 cat <<EOF | kubectl apply -f -
 apiVersion: app.sealos.io/v1
