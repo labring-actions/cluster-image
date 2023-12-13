@@ -13,6 +13,17 @@ charts=("kubeblocks-cloud")
 for chart in "${charts[@]}"; do
     helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION}"/"${chart}"-"${VERSION}".tgz
     values_file="charts/${charts}/values.yaml"
-    echo "${CLOUD_VALUES}" > $values_file
+    new_values_file="charts/${charts}/new_values.yaml"
+    echo "${CLOUD_VALUES}" > $new_values_file
+    yq e $new_values_file $values_file
+
+    yq e -i '.images.apiserver.tag="'${VERSION}'"' $values_file
+    yq e -i '.images.sentry.tag="'${VERSION}'"' $values_file
+    yq e -i '.images.sentryInit.tag="'${VERSION}'"' $values_file
+    yq e -i '.images.prompt.tag="'${VERSION}'"' $values_file
+    yq e -i '.images.openconsole.managedTag="managed-'${VERSION}'"' $values_file
+    yq e -i '.images.openconsole.anywhereTag="anywhere-'${VERSION}'"' $values_file
+    yq e -i '.images.openconsole.defaultTag="default-'${VERSION}'"' $values_file
+
     rm -rf charts/"${chart}"-"${VERSION}".tgz
 done
