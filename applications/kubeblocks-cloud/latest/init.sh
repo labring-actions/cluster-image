@@ -12,10 +12,12 @@ repo_url="https://github.com/apecloud/helm-charts/releases/download"
 charts=("kubeblocks-cloud")
 for chart in "${charts[@]}"; do
     helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION}"/"${chart}"-"${VERSION}".tgz
-    values_file="charts/${charts}/values.yaml"
     new_values_file="charts/${charts}/new_values.yaml"
+    touch $new_values_file
     echo "${CLOUD_VALUES}" > $new_values_file
+    values_file="charts/${charts}/values.yaml"
     yq e $new_values_file $values_file
+    yq e -i '. *= load("'${new_values_file}'")' $values_file
 
     yq e -i '.images.apiserver.tag="'${VERSION}'"' $values_file
     yq e -i '.images.sentry.tag="'${VERSION}'"' $values_file
