@@ -1,4 +1,12 @@
-MINIO_CONFIG_ENV=$(kubectl -n objectstorage-system get secret object-storage-sealos-env-configuration -o jsonpath="{.data.config\.env}" | base64 --decode)
+#!/usr/bin/env bash
+set -e
+
+if [[ -z "$DOMAIN" ]]; then
+    echo "Error: DOMAIN is not set or is empty. Exiting script."
+    exit 1
+fi
+
+MINIO_CONFIG_ENV=$(kubectl -n objectstorage-system get secret ${MINIO_NAME}-env-configuration -o jsonpath="{.data.config\.env}" | base64 --decode)
 MINIO_ROOT_USER=$(echo "$MINIO_CONFIG_ENV" | tr ' ' '\n' | grep '^MINIO_ROOT_USER=' | cut -d '=' -f 2); MINIO_ROOT_USER=${MINIO_ROOT_USER//\"}
 MINIO_ROOT_PASSWORD=$(echo "$MINIO_CONFIG_ENV" | tr ' ' '\n' | grep '^MINIO_ROOT_PASSWORD=' | cut -d '=' -f 2); MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD//\"}
 
@@ -85,7 +93,7 @@ spec:
         - name: OBJECT_STORAGE_INSTANCE
           value: object-storage.objectstorage-system.svc.cluster.local:80
         - name: PROMETHEUS_SERVICE_HOST
-          value: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+          value: http://prometheus-kube-prometheus-prometheus.objectstorage-system.svc.cluster.local:9090
         image: docker.io/nowinkey/sealos-database-service:v1.0.2
         imagePullPolicy: Always
         name: object-storage-monitor
@@ -158,10 +166,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - object-storage-monitor.dev.sealos.top
+        - object-storage-monitor.${DOMAIN}
       secretName: wildcard-cert
   rules:
-    - host: object-storage-monitor.dev.sealos.top
+    - host: object-storage-monitor.${DOMAIN}
       http:
         paths:
           - path: /()(.*)

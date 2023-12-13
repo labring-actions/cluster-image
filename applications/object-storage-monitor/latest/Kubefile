@@ -1,5 +1,8 @@
 FROM scratch
 
+ENV DOMAIN=${DOMAIN:-}
+ENV MINIO_NAME=${MINIO_NAME:-"object-storage"}
+
 COPY . .
 
 CMD ["bash entrypoint.sh"]

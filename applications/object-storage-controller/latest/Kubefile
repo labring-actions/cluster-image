@@ -1,5 +1,9 @@
 FROM scratch
 
+ENV ADMIN_SECRET=${ADMIN_SECRET:-}
+ENV MINIO_NAME=${MINIO_NAME:-"object-storage"}
+
+OSExternalEndpoint
 COPY . .
 
-CMD ["kubectl apply -f manifests/controller.yaml"]
+CMD ["bash entrypoint.sh"]

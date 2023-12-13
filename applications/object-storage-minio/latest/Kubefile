@@ -1,5 +1,11 @@
 FROM scratch
 
+ENV DOMAIN=${DOMAIN:-}
+ENV STORAGE_SIZE=${STORAGE_SIZE:-1}
+ENV MINIO_NAME=${MINIO_NAME:-"object-storage"}
+ENV MINIO_ADMIN_USER=${MINIO_ADMIN_USER:-"username"}
+ENV MINIO_ADMIN_PASSWORD=${MINIO_ADMIN_PASSWORD:-"password"}
+
 COPY . .
 
 CMD ["bash entrypoint.sh"]

@@ -1,3 +1,18 @@
+#!/usr/bin/env bash
+set -e
+
+if [[ -z "$DOMAIN" ]]; then
+    echo "Error: DOMAIN is not set or is empty. Exiting script."
+    exit 1
+fi
+
+ADMIN_SECRET="${MINIO_NAME}-user-0"
+INTERNAL_ENDPOINT="object-storage.objectstorage-system.svc.cluster.local"
+EXTERNAL_ENDPOINT="objectstorageapi.${DOMAIN}"
+
+
+# backend controller
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -477,11 +492,11 @@ spec:
             - name: OSNamespace
               value: objectstorage-system
             - name: OSAdminSecret
-              value: '{{ .OSAdminSecret }}'
+              value: ${ADMIN_SECRET}
             - name: OSInternalEndpoint
-              value: '{{ .OSInternalEndpoint }}'
+              value: ${INTERNAL_ENDPOINT}
             - name: OSExternalEndpoint
-              value: '{{ .OSExternalEndpoint }}'
+              value: ${EXTERNAL_ENDPOINT}
             - name: OSUDetectionCycleSeconds
               value: "300"
             - name: MinioBucketDetectionCycleSeconds
@@ -506,8 +521,8 @@ spec:
               cpu: 500m
               memory: 512Mi
             requests:
-              cpu: 250m
-              memory: 256Mi
+              cpu: 5m
+              memory: 64Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -518,3 +533,77 @@ spec:
         runAsNonRoot: true
       serviceAccountName: objectstorage-controller-manager
       terminationGracePeriodSeconds: 10
+EOF
+
+# frontend controller
+cat <<EOF | kubectl apply -f -
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: object-storage-frontend
+   namespace: objectstorage-frontend
+   annotations:
+     originImageName: nginx
+     deploy.cloud.sealos.io/minReplicas: '1'
+     deploy.cloud.sealos.io/maxReplicas: '1'
+   labels:
+     cloud.sealos.io/app-deploy-manager: object-storage
+     app: object-storage
+ spec:
+   replicas: 1
+   revisionHistoryLimit: 1
+   selector:
+     matchLabels:
+       app: object-storage
+   strategy:
+     type: RollingUpdate
+     rollingUpdate:
+       maxUnavailable: 1
+       maxSurge: 0
+   template:
+     metadata:
+       labels:
+         app: object-storage
+     spec:
+       containers:
+         - name: object-storage
+           image: nginx
+           env: []
+           resources:
+             limits:
+               cpu: "1"
+               memory: 512Mi
+             requests:
+                cpu: 100m
+                memory: 128Mi
+           imagePullPolicy: Always
+           volumeMounts: []
+       volumes: []
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  name: object-storage-frontend
+  namespace: objectstorage-frontend
+spec:
+  rules:
+  - host: objectstorage.${DOMAIN}
+    http:
+      paths:
+      - backend:
+          service:
+            name: object-storage-frontend
+            port:
+              number: 3000
+        path: /()(.*)
+        pathType: Prefix
+  tls:
+  - hosts:
+    - objectstorage.${DOMAIN}
+    secretName: wildcard-cert
+EOF

@@ -1,3 +1,6 @@
 FROM scratch
+
+ENV DOMAIN=${DOMAIN:-""}
+
 COPY . .
 CMD ["bash entrypoint.sh"]
