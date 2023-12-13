@@ -44,7 +44,7 @@ cd $buildDir && {
     sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY"
 
     if [[ "$APP_NAME" == "gemini" ]]; then
-        sudo sealos pull docker.io/mysql:8.0
+        sudo sealos save -o registry/mysql docker.io/mysql:8.0
     fi
 
     IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
