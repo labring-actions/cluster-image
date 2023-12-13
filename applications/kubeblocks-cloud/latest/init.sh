@@ -16,9 +16,7 @@ for chart in "${charts[@]}"; do
     touch $new_values_file
     echo "${CLOUD_VALUES}" > $new_values_file
     values_file="charts/${charts}/values.yaml"
-    yq e $new_values_file $values_file
     yq e -i '. *= load("'${new_values_file}'")' $values_file
-
     yq e -i '.images.apiserver.tag="'${VERSION}'"' $values_file
     yq e -i '.images.sentry.tag="'${VERSION}'"' $values_file
     yq e -i '.images.sentryInit.tag="'${VERSION}'"' $values_file
