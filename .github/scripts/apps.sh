@@ -43,6 +43,10 @@ cd $buildDir && {
 
     sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY"
 
+    if [[ "$APP_NAME" == "gemini" ]]; then
+        sudo sealos pull docker.io/mysql:8.0
+    fi
+
     IMAGE_BUILD="${IMAGE_NAME%%:*}:build-$(date +%s)"
     sudo sealos build -t "$IMAGE_BUILD" --max-pull-procs=20 --isolation=chroot --platform "linux/$APP_ARCH" -f $Kubefile .
 
