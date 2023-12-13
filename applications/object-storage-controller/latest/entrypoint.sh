@@ -580,6 +580,21 @@ cat <<EOF | kubectl apply -f -
            volumeMounts: []
        volumes: []
 ---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: object-storage-frontend
+   namespace: objectstorage-frontend
+   labels:
+     cloud.sealos.io/app-deploy-manager: object-storage
+ spec:
+   ports:
+     - port: 3000
+       targetPort: 3000
+       protocol: TCP
+   selector:
+     app: object-storage
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
