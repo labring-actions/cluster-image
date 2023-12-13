@@ -17,3 +17,7 @@ for chart in "${charts[@]}"; do
     yq e -i '.image.oteld.tag="'${TOOLS_VERSION}'"' charts/${chart}/values.yaml
     rm -rf charts/"${chart}"-"${VERSION#v}".tgz
 done
+
+# add extra images
+mkdir -p images/shim
+echo "mysql:8.0" > images/shim/kubeblocksImages
