@@ -21,7 +21,7 @@ fi
 mkdir charts
 
 repo_url="https://github.com/apecloud/helm-charts/releases/download"
-charts=("kubeblocks" "apecloud-mysql" "mongodb" "postgresql" "redis" "kafka" "qdrant" "clickhouse")
+charts=("kubeblocks" "apecloud-mysql" "mongodb" "postgresql" "redis" "kafka" "qdrant" "clickhouse" "oceanbase")
 if [[ "${VERSION}" == "v0.6."* ]]; then
     charts=("kubeblocks" "apecloud-mysql" "mongodb" "postgresql" "redis" "kafka")
 fi
