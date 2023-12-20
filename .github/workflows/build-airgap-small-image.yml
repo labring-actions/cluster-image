@@ -24,6 +24,7 @@ on:
           - loki
           - metallb
           - minio
+          - nginx-ingress
           - snapshot-controller
           - prometheus
           - victoria-metrics-cluster
