@@ -6,29 +6,71 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://charts.gitlab.io/"
-repo_name="gitlab/gitlab"
-chart_name="gitlab"
+init_dir() {
+    ETC_DIR="./etc"
+    OPT_DIR="./opt"
+    IMAGES_DIR="./images/shim"
+    CHARTS_DIR="./charts"
+    MANIFESTS_DIR="./manifests"
 
-app_version=${VERSION}
+    rm -rf "${OPT_DIR}" "${IMAGES_DIR}" "${CHARTS_DIR}" "${MANIFESTS_DIR}" "${ETC_DIR}"
+    mkdir -p "${CHARTS_DIR}"
+}
 
-rm -rf charts && mkdir -p charts
-helm repo add ${chart_name} ${repo_url}
-chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" | grep ${app_version} | awk '{print $2}' | sort -rn | head -n1)
-helm pull ${repo_name} --version=${chart_version} -d charts --untar
+command_check() {
+    local command="$1"
+    {
+      $command >/dev/null 2>&1
+    } || {
+      echo "$1 is failed or does not exist, exiting the script"
+      exit 1
+    }
+}
 
-values_file_path="charts/gitlab/values.yaml"
-yq e -i '.global.edition="ce"' ${values_file_path}
-yq e -i '.gitlab-runner.install=false' ${values_file_path}
-yq eval '. += {"certmanager-issuer": {"email": "email@example.com"}}' -i ${values_file_path}
+download_chart() {
+    local HELM_REPO_URL="https://charts.gitlab.io/"
+    local HELM_REPO_NAME="gitlab"
+    local HELM_CHART_NAME="gitlab"
+    local APP_VERSION=${VERSION}
 
-match_line="\[runners.kubernetes\]"
-insert_line="helper_image = \"registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-latest\""
-sed -i "/$match_line/a \\
-        $insert_line" "${values_file_path}"
+    helm repo add "${HELM_REPO_NAME}" "${HELM_REPO_URL}" --force-update 1>/dev/null
 
-mkdir -p images/shim
-echo "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-latest" > images/shim/gitlab-images.txt
+    ALL_VERSIONS=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | awk '{print $3}' | grep -v VERSION)
+    if ! echo "${ALL_VERSIONS}" | grep -qw "${APP_VERSION}"; then
+        echo "Error: Exit, the provided version ${VERSION} does not exist in helm repo"
+        exit 1
+    fi
 
-ubuntu_image=$(cat ${values_file_path} | grep "image = .*ubuntu:" | cut -d'"' -f2)
-echo "docker.io/library/$ubuntu_image" >> images/shim/gitlab-images.txt
+    # Find CHART VERSION through APP VERSION
+    HELM_CHART_VERSION=$(helm search repo --versions --regexp "\v"${HELM_REPO_NAME}/${HELM_CHART_NAME}"\v" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
+    helm pull "${HELM_REPO_NAME}"/"${HELM_CHART_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
+
+    values_file_path="charts/gitlab/values.yaml"
+    yq e -i '.global.edition="ce"' ${values_file_path}
+    yq e -i '.gitlab-runner.install=false' ${values_file_path}
+    yq eval '. += {"certmanager-issuer": {"email": "email@example.com"}}' -i ${values_file_path}
+
+    match_line="\[runners.kubernetes\]"
+    insert_line="helper_image = \"registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-latest\""
+    sed -i "/$match_line/a \\
+            $insert_line" "${values_file_path}"
+
+    mkdir -p images/shim
+    echo "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-latest" > images/shim/gitlab-images.txt
+
+    ubuntu_image=$(cat ${values_file_path} | grep "image = .*ubuntu:" | cut -d'"' -f2)
+    echo "docker.io/library/$ubuntu_image" >> images/shim/gitlab-images.txt
+}
+
+main() {
+    if [ $# -ne 3 ]; then
+        echo "Usage: ./$0 <ARCH> <NAME> <VERSION>"
+        exit 1
+    else
+        init_dir
+        command_check "helm -h"
+        download_chart
+    fi
+}
+
+main $@

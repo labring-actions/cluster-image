@@ -2,7 +2,9 @@
 
 Sealos cluster image，也称为集群镜像，是 Sealos 工具的一个创新功能。该特性允许用户将 Kubernetes 云原生应用和插件打包成一个统一的 Docker 镜像，从而简化和标准化云原生生态下各种应用及插件的部署和管理。
 
-Rootfs 相关的集群镜像请参考 [runtime项目](https://github.com/labring-actions/runtime)。
+- Rootfs 集群镜像: [runtime项目](https://github.com/labring-actions/runtime)
+- Github 镜像清单：[cluster-image-docs](https://github.com/labring-actions/cluster-image-docs)
+- DockerHub 镜像：[dockerhub.io/labring](https://hub.docker.com/u/labring)
 
 ## 功能特性
 
@@ -32,16 +34,12 @@ Rootfs 相关的集群镜像请参考 [runtime项目](https://github.com/labring
 | `docker.io/labring/openebs:<tag>` | openebs  | openebs存储插件 |
 | ......                            |          | ......          |
 
-完整的镜像清单见以下链接：
-
-- 镜像清单列表汇总：[cluster-image-docs](https://github.com/labring-actions/cluster-image-docs)
-- DockerHub镜像仓库：[hub.dockerhub.com](https://hub.docker.com/u/labring)
 
 ## 构建方法
 
 Sealos 在 dockerhub 中的镜像使用 `github action` 自动构建，社区用户可以通过创建 github ISSUE 来触发构建任务，在ISSUE中通过支持的指令结合参数构建需要的镜像和版本，版本参数请参考应用官方网站、helm 仓库或 github release 页面。
 
-已贡献的镜像可直接点击跳转 Github ISSUE 进行新版本构建：:green_circle: [点击创建ISSUE](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-apps.md&title=【Auto-build】helm)。
+已贡献的镜像可直接点击跳转 Github ISSUE 进行新版本构建: [ :arrow_forward: ] [点击创建ISSUE](https://github.com/labring/cluster-image/issues/new?assignees=&labels=&template=autobuild-apps.md&title=【Auto-build】helm)。
 
 以构建新的nginx集群镜像为例，由于社区已在`application`目录贡献了 nginx 构建脚本的实现，只需在ISSUE里搜索标题`【Auto-build】nginx`，在评论框输入以下指令，结合镜像名称（固定）和镜像版本（与官方一致），即可构建出新版本的nginx集群镜像，构建完成后会自动上传至DockerHub。
 
@@ -98,6 +96,32 @@ Github ISSUE支持的命令清单如下：
 | `/imagebuild_apps`         | 构建集群应用镜像                       |
 | `/imagebuild_dockerimages` | 构建标准docker镜像                     |
 | `/imagesync`               | 同步镜像，有权限控制，只有机器人可操作 |
+
+### 本地构建示例
+
+拉取代码到本地
+
+```bash
+$ git clone https://github.com/labring-actions/cluster-image.git
+```
+切换到集群镜像初始化脚本所在目录
+```
+$ cd cluster-image/applications/nginx/latest
+```
+执行初始化脚本下载相关依赖
+```
+$ bash init.sh amd64 nginx v1.25.6
+```
+执行sealos命令进行构建
+```
+$ sealos build -t docker.io/labring/nginx:v1.25.6 .
+```
+查看构建的镜像
+```
+$ sealos images
+REPOSITORY                                                      TAG             IMAGE ID       CREATED        SIZE
+docker.io/labring/nginx                                         v1.25.2         41328582759a   3 months ago   37.4 MB
+```
 
 ## ROADMAP
 
