@@ -1,5 +1,3 @@
 FROM scratch
-COPY gitlab.sh gitlab.sh
-COPY charts charts
-COPY registry registry
-CMD ["bash gitlab.sh"]
+COPY . .
+CMD ["bash entrypoint.sh"]

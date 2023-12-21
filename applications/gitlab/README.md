@@ -101,8 +101,8 @@ kubectl -n gitlab get secrets gitlab-gitlab-tls -o jsonpath="{.data.tls\.crt}" |
 cp tls.crt to git client hosts
 
 ```shell
-mkdir ~/.ssl
 scp gitlab.example.com.crt ~/.ssl/gitlab.example.com.crt
+mkdir ~/.ssl
 git config --global http.sslCAInfo ~/.ssl/gitlab.example.com.crt
 ```
 
