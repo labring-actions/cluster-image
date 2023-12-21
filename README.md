@@ -102,23 +102,23 @@ Github ISSUE支持的命令清单如下：
 拉取代码到本地
 
 ```bash
-git clone https://github.com/labring-actions/cluster-image.git
+$ git clone https://github.com/labring-actions/cluster-image.git
 ```
 切换到集群镜像初始化脚本所在目录
 ```
-cd cluster-image/applications/nginx/latest
+$ cd cluster-image/applications/nginx/latest
 ```
 执行初始化脚本下载相关依赖
 ```
-bash init.sh amd64 nginx v1.25.6
+$ bash init.sh amd64 nginx v1.25.6
 ```
 执行sealos命令进行构建
 ```
-sealos build -t docker.io/labring/nginx:v1.25.6 .
+$ sealos build -t docker.io/labring/nginx:v1.25.6 .
 ```
 查看构建的镜像
 ```
-root@ubuntu:~# sealos images
+$ sealos images
 REPOSITORY                                                      TAG             IMAGE ID       CREATED        SIZE
 docker.io/labring/nginx                                         v1.25.2         41328582759a   3 months ago   37.4 MB
 ```
