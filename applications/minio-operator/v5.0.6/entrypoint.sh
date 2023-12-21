@@ -14,6 +14,6 @@ else
     echo "MinIO Operator is already installed. Skipping installation."
 fi
 
-kubectl wait --for=condition=Available deployment/$NAME -n $NAMESPACE
+kubectl wait --for=condition=Available deployment/minio-operator -n $NAMESPACE
 
 echo "MinIO Operator is installed and ready."
