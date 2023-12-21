@@ -2,7 +2,6 @@ FROM scratch
 
 ENV DOMAIN=${DOMAIN:-}
 ENV BACKEND_NAMESPACE=${BACKEND_NAMESPACE:-"objectstorage-system"}
-ENV MINIO_NAME=${MINIO_NAME:-"object-storage"}
 
 COPY . .
 

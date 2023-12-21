@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
+if [[ -z "$DOMAIN" ]]; then
+    echo "Error: DOMAIN is empty. Exiting script."
+    exit 1
+fi
+
 # check controller minio monitor prometheus
 
 
-# app cr
 cat <<EOF | kubectl apply -f -
 apiVersion: app.sealos.io/v1
 kind: App

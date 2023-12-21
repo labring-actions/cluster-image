@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ -z "$DOMAIN" ]]; then
+if [[ -z "${DOMAIN}" ]]; then
     echo "Error: DOMAIN is not set or is empty. Exiting script."
     exit 1
 fi
 
-ADMIN_SECRET="${MINIO_NAME}-user-0"
+ADMIN_SECRET="object-storage-user-0"
 INTERNAL_ENDPOINT="object-storage.${BACKEND_NAMESPACE}.svc.cluster.local"
 EXTERNAL_ENDPOINT="objectstorageapi.${DOMAIN}"
 
@@ -345,7 +345,7 @@ metadata:
     app.kubernetes.io/name: rolebinding
     app.kubernetes.io/part-of: objectstorage
   name: objectstorage-leader-election-rolebinding
-  namespace: objectstorage-system
+  namespace: ${BACKEND_NAMESPACE}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -353,7 +353,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: objectstorage-controller-manager
-    namespace: objectstorage-system
+    namespace: ${BACKEND_NAMESPACE}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -373,7 +373,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: objectstorage-controller-manager
-    namespace: objectstorage-system
+    namespace: ${BACKEND_NAMESPACE}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -393,7 +393,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: objectstorage-controller-manager
-    namespace: objectstorage-system
+    namespace: ${BACKEND_NAMESPACE}
 ---
 apiVersion: v1
 kind: Service
@@ -501,7 +501,7 @@ spec:
               value: "300"
             - name: MinioBucketDetectionCycleSeconds
               value: "300"
-          image: ghcr.io/labring/sealos-objectstorage-controller:latest
+          image: docker.io/nowinkey/objectstorage-controller:v1.0.1
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
@@ -537,72 +537,83 @@ EOF
 
 # frontend controller
 cat <<EOF | kubectl apply -f -
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: object-storage-frontend
-   namespace: ${FRONTEND_NAMESPACE}
-   annotations:
-     originImageName: nginx
-     deploy.cloud.sealos.io/minReplicas: '1'
-     deploy.cloud.sealos.io/maxReplicas: '1'
-   labels:
-     cloud.sealos.io/app-deploy-manager: object-storage
-     app: object-storage
- spec:
-   replicas: 1
-   revisionHistoryLimit: 1
-   selector:
-     matchLabels:
-       app: object-storage
-   strategy:
-     type: RollingUpdate
-     rollingUpdate:
-       maxUnavailable: 1
-       maxSurge: 0
-   template:
-     metadata:
-       labels:
-         app: object-storage
-     spec:
-       containers:
-         - name: object-storage
-           image: nginx
-           env: []
-           resources:
-             limits:
-               cpu: "1"
-               memory: 512Mi
-             requests:
-                cpu: 100m
-                memory: 128Mi
-           imagePullPolicy: Always
-           volumeMounts: []
-       volumes: []
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${FRONTEND_NAMESPACE}
 ---
- apiVersion: v1
- kind: Service
- metadata:
-   name: object-storage-frontend
-   namespace: ${FRONTEND_NAMESPACE}
-   labels:
-     cloud.sealos.io/app-deploy-manager: object-storage
- spec:
-   ports:
-     - port: 3000
-       targetPort: 3000
-       protocol: TCP
-   selector:
-     app: object-storage
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: object-storage-frontend
+ namespace: ${FRONTEND_NAMESPACE}
+ labels:
+   app: object-storage-frontend
+spec:
+ replicas: 1
+ revisionHistoryLimit: 1
+ selector:
+   matchLabels:
+     app: object-storage-frontend
+ strategy:
+   type: RollingUpdate
+   rollingUpdate:
+     maxUnavailable: 1
+     maxSurge: 0
+ template:
+   metadata:
+     labels:
+       app: object-storage-frontend
+   spec:
+     containers:
+       - name: object-storage-frontend
+         image: zzfc/sealos-objectstorage:v1.0.2
+         ports:
+           - containerPort: 3000
+             protocol: TCP
+         env:
+           - name: MONITOR_URL
+             value: https://object-storage-monitor.${DOMAIN}/q
+         resources:
+           limits:
+             cpu: 500m
+             memory: 512Mi
+           requests:
+              cpu: 5m
+              memory: 64Mi
+         imagePullPolicy: Always
+         volumeMounts: []
+     volumes: []
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: object-storage-frontend
+ namespace: ${FRONTEND_NAMESPACE}
+ labels:
+   app: object-storage-frontend
+spec:
+ ports:
+   - port: 3000
+     targetPort: 3000
+     protocol: TCP
+ selector:
+   app: object-storage-frontend
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/backend-protocol: HTTP
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if (\$request_uri ~* \.(js|css|gif|jpe?g|png)) {
+        expires 30d;
+        add_header Cache-Control "public";
+      }
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, DELETE, PATCH, OPTIONS
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/proxy-body-size: 3g
+    nginx.ingress.kubernetes.io/proxy-next-upstream-timeout: '180'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '180'
   name: object-storage-frontend
   namespace: ${FRONTEND_NAMESPACE}
 spec:

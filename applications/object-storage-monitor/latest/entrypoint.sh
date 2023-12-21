@@ -2,11 +2,11 @@
 set -e
 
 if [[ -z "$DOMAIN" ]]; then
-    echo "Error: DOMAIN is not set or is empty. Exiting script."
+    echo "Error: DOMAIN is empty. Exiting script."
     exit 1
 fi
 
-MINIO_CONFIG_ENV=$(kubectl -n ${BACKEND_NAMESPACE} get secret ${MINIO_NAME}-env-configuration -o jsonpath="{.data.config\.env}" | base64 --decode)
+MINIO_CONFIG_ENV=$(kubectl -n ${BACKEND_NAMESPACE} get secret object-storage-env-configuration -o jsonpath="{.data.config\.env}" | base64 --decode)
 MINIO_ROOT_USER=$(echo "$MINIO_CONFIG_ENV" | tr ' ' '\n' | grep '^MINIO_ROOT_USER=' | cut -d '=' -f 2); MINIO_ROOT_USER=${MINIO_ROOT_USER//\"}
 MINIO_ROOT_PASSWORD=$(echo "$MINIO_CONFIG_ENV" | tr ' ' '\n' | grep '^MINIO_ROOT_PASSWORD=' | cut -d '=' -f 2); MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD//\"}
 
@@ -19,7 +19,7 @@ BASE64_SIGNATURE=$(echo -n "$BASE64_HEADER.$BASE64_PAYLOAD" | openssl dgst -bina
 
 TOKEN="$BASE64_HEADER.$BASE64_PAYLOAD.$BASE64_SIGNATURE"
 
-BASE64_TOKEN=$(echo -n "$TOKEN" | base64 | tr -d '\n=' | tr '/+' '_-')
+BASE64_TOKEN=$(echo -n "$TOKEN" | base64 -w 0)
 
 cat <<EOF | kubectl apply -f -
 apiVersion: monitoring.coreos.com/v1
@@ -28,12 +28,12 @@ metadata:
   labels:
     namespace: ${BACKEND_NAMESPACE}
     release: prometheus
-  name: ${MINIO_NAME}
+  name: object-storage
   namespace: ${BACKEND_NAMESPACE}
 spec:
   jobName: object-storage-job
   bearerTokenSecret:
-    name: ${MINIO_NAME}-probe
+    name: object-storage-probe
     key: token
   prober:
     path: /minio/v2/metrics/bucket
@@ -47,10 +47,11 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ${MINIO_NAME}-probe
+  name: object-storage-probe
   namespace: ${BACKEND_NAMESPACE}
 data:
-  token: $BASE64_TOKEN
+  token: >-
+    ${BASE64_TOKEN}
 type: Opaque
 ---
 apiVersion: v1
@@ -93,8 +94,8 @@ spec:
         - name: OBJECT_STORAGE_INSTANCE
           value: object-storage.${BACKEND_NAMESPACE}.svc.cluster.local:80
         - name: PROMETHEUS_SERVICE_HOST
-          value: http://prometheus-kube-prometheus-prometheus.${BACKEND_NAMESPACE}.svc.cluster.local:9090
-        image: docker.io/nowinkey/sealos-database-service:v1.0.2
+          value: http://prometheus-object-storage.${BACKEND_NAMESPACE}.svc.cluster.local:9090
+        image: docker.io/nowinkey/sealos-database-service:v1.2.0
         imagePullPolicy: Always
         name: object-storage-monitor
         ports:
@@ -144,8 +145,6 @@ kind: Ingress
 metadata:
   name: object-storage-monitor
   namespace: ${BACKEND_NAMESPACE}
-  labels:
-    cloud.sealos.io/app-deploy-manager-domain: object-storage-monitor
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: HTTP

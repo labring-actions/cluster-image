@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ -z "$DOMAIN" ]]; then
-    echo "Error: DOMAIN is not set or is empty. Exiting script."
+if [[ -z "${DOMAIN}" ]]; then
+    echo "Error: DOMAIN is empty. Exiting script."
     exit 1
 fi
 
 MINIO_EXTERNAL_ENDPOINT="https://objectstorageapi.${DOMAIN}"
-CONSOLE_ACCESS_KEY=$(echo "$MINIO_ADMIN_USER" | base64)
-CONSOLE_SECRET_KEY=$(echo "$MINIO_ADMIN_PASSWORD" | base64)
+CONSOLE_ACCESS_KEY=$(echo -n "${MINIO_ADMIN_USER}" | base64 -w 0)
+CONSOLE_SECRET_KEY=$(echo -n "${MINIO_ADMIN_PASSWORD}" | base64 -w 0)
 
-# create namespace
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Namespace
@@ -18,54 +17,54 @@ metadata:
   name: ${BACKEND_NAMESPACE}
 EOF
 
-# create env-configuration secret
 MINIO_ROOT_USER=$(openssl rand -hex 12 | head -c 16)
 MINIO_ROOT_PASSWORD=$(openssl rand -hex 24 | head -c 32)
 
 CONFIG_ENV="export MINIO_STORAGE_CLASS_STANDARD=\"EC:2\"
 export MINIO_BROWSER=\"on\"
-export MINIO_ROOT_USER=\"$MINIO_ROOT_USER\"
-export MINIO_ROOT_PASSWORD=\"$MINIO_ROOT_PASSWORD\""
+export MINIO_ROOT_USER=\"${MINIO_ROOT_USER}\"
+export MINIO_ROOT_PASSWORD=\"${MINIO_ROOT_PASSWORD}\""
 
-ENCODED_CONFIG_ENV=$(echo "$CONFIG_ENV" | base64)
-cat <<EOF | kubectl apply -f -
+ENCODED_CONFIG_ENV=$(echo -n "$CONFIG_ENV" | base64 -w 0)
+
+if kubectl get secret object-storage-env-configuration -n ${BACKEND_NAMESPACE} 2>&1 | grep -q "not found"; then
+ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ${MINIO_NAME}-env-configuration
+  name: object-storage-env-configuration
   namespace: ${BACKEND_NAMESPACE}
   labels:
-    v1.min.io/tenant: ${MINIO_NAME}
+    v1.min.io/tenant: object-storage
 data:
   config.env: >-
-    $ENCODED_CONFIG_ENV
+    ${ENCODED_CONFIG_ENV}
 type: Opaque
 EOF
+fi
 
-# create ak/sk secret
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ${MINIO_NAME}-secret
+  name: object-storage-secret
   namespace: ${BACKEND_NAMESPACE}
   labels:
-    v1.min.io/tenant: ${MINIO_NAME}
+    v1.min.io/tenant: object-storage
 data:
   accesskey: ''
   secretkey: ''
 type: Opaque
 EOF
 
-# create user-0 secret
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ${MINIO_NAME}-user-0
+  name: object-storage-user-0
   namespace: ${BACKEND_NAMESPACE}
   labels:
-    v1.min.io/tenant: ${MINIO_NAME}
+    v1.min.io/tenant: object-storage
 immutable: true
 data:
   CONSOLE_ACCESS_KEY: ${CONSOLE_ACCESS_KEY}
@@ -73,18 +72,17 @@ data:
 type: Opaque
 EOF
 
-# create tenant cr
 cat <<EOF | kubectl apply -f -
 apiVersion: minio.min.io/v2
 kind: Tenant
 metadata:
-  name: ${MINIO_NAME}
+  name: object-storage
   namespace: ${BACKEND_NAMESPACE}
 spec:
   configuration:
-    name: ${MINIO_NAME}-env-configuration
+    name: object-storage-env-configuration
   credsSecret:
-    name: ${MINIO_NAME}-secret
+    name: object-storage-secret
   exposeServices:
     console: true
     minio: true
@@ -94,7 +92,13 @@ spec:
   mountPath: /export
   pools:
     - name: pool-0
-      resources: {}
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+        requests:
+          cpu: 100m
+          memory: 256Mi
       runtimeClassName: ''
       servers: 4
       volumeClaimTemplate:
@@ -105,17 +109,16 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: '$STORAGE_SIZE'
+              storage: ${STORAGE_SIZE}Gi
         status: {}
       volumesPerServer: 1
   requestAutoCert: false
   users:
-    - name: ${MINIO_NAME}-user-0
+    - name: object-storage-user-0
 scheduler:
   name: ''
 EOF
 
-# create service
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
@@ -129,7 +132,7 @@ spec:
       port: 80
       targetPort: 9000
   selector:
-    v1.min.io/tenant: ${MINIO_NAME}
+    v1.min.io/tenant: object-storage
   type: LoadBalancer
   sessionAffinity: None
   externalTrafficPolicy: Cluster
@@ -140,15 +143,12 @@ spec:
   internalTrafficPolicy: Cluster
 EOF
 
-# create api ingress
 cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${MINIO_NAME}-api
+  name: object-storage-api
   namespace: ${BACKEND_NAMESPACE}
-  labels:
-    cloud.sealos.io/app-deploy-manager-domain: objectstorageapi
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-body-size: 3g
@@ -188,10 +188,8 @@ cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${MINIO_NAME}-console
+  name: object-storage-console
   namespace: ${BACKEND_NAMESPACE}
-  labels:
-    cloud.sealos.io/app-deploy-manager-domain: osconsole
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-body-size: 3g
@@ -217,7 +215,7 @@ spec:
             path: /()(.*)
             backend:
               service:
-                name: ${MINIO_NAME}-console
+                name: object-storage-console
                 port:
                   number: 9090
   tls:
@@ -226,9 +224,21 @@ spec:
       secretName: wildcard-cert
 EOF
 
-curl https://dl.min.io/client/mc/release/linux-amd64/mc --create-dirs -o $HOME/minio-binaries/mc
+if [ ! -f "$HOME/minio-binaries/mc" ]; then
+  curl https://dl.min.io/client/mc/release/linux-amd64/mc --create-dirs -o $HOME/minio-binaries/mc
+fi
+
 chmod +x $HOME/minio-binaries/mc
 export PATH=$PATH:$HOME/minio-binaries/
+
+while kubectl wait -l statefulset.kubernetes.io/pod-name=object-storage-pool-0-0 --for=condition=ready pod -n ${BACKEND_NAMESPACE} --timeout=-1s 2>&1 | grep -q "error: no matching resources found"; do
+  sleep 1
+done
+
+kubectl wait -l statefulset.kubernetes.io/pod-name=object-storage-pool-0-0 --for=condition=ready pod -n ${BACKEND_NAMESPACE} --timeout=-1s
+kubectl wait -l statefulset.kubernetes.io/pod-name=object-storage-pool-0-1 --for=condition=ready pod -n ${BACKEND_NAMESPACE} --timeout=-1s
+kubectl wait -l statefulset.kubernetes.io/pod-name=object-storage-pool-0-2 --for=condition=ready pod -n ${BACKEND_NAMESPACE} --timeout=-1s
+kubectl wait -l statefulset.kubernetes.io/pod-name=object-storage-pool-0-3 --for=condition=ready pod -n ${BACKEND_NAMESPACE} --timeout=-1s
 
 mc alias set objectstorage ${MINIO_EXTERNAL_ENDPOINT} ${MINIO_ADMIN_USER} ${MINIO_ADMIN_PASSWORD}
 
@@ -237,8 +247,10 @@ mc admin policy create objectstorage userDenyWrite policy/user_deny_write.json
 mc admin policy create objectstorage migration policy/migration.json
 
 mc admin user add objectstorage migration sealos.12345
-mc admin group add objectstorage userNormal
-mc admin group add objectstorage userDenyWrite
+mc admin user add objectstorage testuser sealos2023
+mc admin group add objectstorage userNormal testuser
+mc admin group add objectstorage userDenyWrite testuser
+
 mc admin policy attach objectstorage migration --user migration
 mc admin policy attach objectstorage userNormal --group userNormal
 mc admin policy attach objectstorage userDenyWrite --group userDenyWrite
