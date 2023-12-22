@@ -242,9 +242,9 @@ kubectl wait -l statefulset.kubernetes.io/pod-name=object-storage-pool-0-3 --for
 
 mc alias set objectstorage ${MINIO_EXTERNAL_ENDPOINT} ${MINIO_ADMIN_USER} ${MINIO_ADMIN_PASSWORD}
 
-mc admin policy create objectstorage userNormal policy/user_deny_write.json
-mc admin policy create objectstorage userDenyWrite policy/user_deny_write.json
-mc admin policy create objectstorage migration policy/migration.json
+mc admin policy create objectstorage userNormal ./manifests/policy/user_deny_write.json
+mc admin policy create objectstorage userDenyWrite ./manifests/policy/user_deny_write.json
+mc admin policy create objectstorage migration ./manifests/policy/migration.json
 
 mc admin user add objectstorage migration sealos.12345
 mc admin user add objectstorage testuser sealos2023
