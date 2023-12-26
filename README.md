@@ -4,7 +4,7 @@ Sealos cluster image，也称为集群镜像，是 Sealos 工具的一个创新�
 
 - Rootfs 集群镜像: [runtime项目](https://github.com/labring-actions/runtime)
 - Github 镜像清单：[cluster-image-docs](https://github.com/labring-actions/cluster-image-docs)
-- DockerHub 镜像：[dockerhub.io/labring](https://hub.docker.com/u/labring)
+- DockerHub 镜像：[docker.io/labring](https://hub.docker.com/u/labring)
 
 ## 功能特性
 

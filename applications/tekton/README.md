@@ -44,6 +44,50 @@ Access with the following url
 http://<node-ip>:<node-port>
 ```
 
+## Example
+
+Notes: This cluster image already contains the docker images needed for the [git-clone task](https://hub.tekton.dev/tekton/task/git-clone) and the [kaniko task](https://hub.tekton.dev/tekton/task/kaniko).
+
+```bash
+gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:latest
+gcr.io/kaniko-project/executor:latest
+```
+
+Git clone example
+
+```yaml
+$ cat git-clone-taskrun.yaml
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: git-clone-taskrun-
+spec:
+  taskRef:
+    name: git-clone
+  podTemplate:
+    hostNetwork: true
+  workspaces:
+    - name: output
+      emptyDir: {}
+  params:
+  - name: url
+    value: https://github.com/tektoncd/pipeline.git
+  - name: revision
+    value: main
+  - name: subdirectory
+    value: pipeline
+  - name: deleteExisting
+    value: "true"
+  - name: gitInitImage
+    value: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:latest
+```
+
+Apply the yaml file
+
+```bash
+kubectl apply -f git-clone-taskrun.yaml
+```
+
 ## Uninstalling the app
 
 Uninstall tekton
