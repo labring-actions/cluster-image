@@ -28,7 +28,7 @@ download_file() {
 }
 
 generate_manifest() {
-    ./opt/istioctl manifest generate > manifests/generated-manifest.yaml
+    ./opt/istioctl manifest generate --set profile=demo > manifests/generated-manifest.yaml
 }
 
 main() {
