@@ -1,6 +1,6 @@
 # Istio-bookinfo
 
-This example deploys a sample application composed of four separate microservices used to demonstrate various Istio features.
+This [istio-bookinfo](https://github.com/istio/istio/tree/master/samples/bookinfo) example deploys a sample application composed of four separate microservices used to demonstrate various Istio features.
 
 ## Prerequisites
 
