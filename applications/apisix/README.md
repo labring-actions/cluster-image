@@ -46,12 +46,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `seao
 For example:
 
 ```shell
-$ sealos run docker.io/labring/apisix:v3.6.0  \
--e HELM_OPTS="--set gateway.type=NodePort  \
+$ sealos run docker.io/labring/apisix:v3.6.0 \
+-e HELM_OPTS="--set gateway.type=NodePort \
 --set ingress-controller.enabled=true \
 --set ingress-controller.config.apisix.serviceNamespace=ingress-apisix \
 --set ingress-controller.config.apisix.adminAPIVersion=v3 \
 --set dashboard.enabled=true \
---set dashboard.service.type=NodePort \
-"
+--set dashboard.service.type=NodePort"
 ```

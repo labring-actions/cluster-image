@@ -48,7 +48,7 @@ admin console
 https://192.168.1.10:31400/admin
 ```
 
-## Uinstall
+## Uninstall
 
 ```shell
 helm -n wordpress uninstall wordpress
