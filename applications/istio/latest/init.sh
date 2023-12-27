@@ -17,6 +17,16 @@ init_dir() {
     mkdir -p "${OPT_DIR}" "${MANIFESTS_DIR}"
 }
 
+command_check() {
+    local command="$1"
+    {
+      $command >/dev/null 2>&1
+    } || {
+      echo "$1 is failed or does not exist, exiting the script"
+      exit 1
+    }
+}
+
 download_file() {
     local GITHUB_USER="istio"
     local GITHUB_REPO="istio"
@@ -28,7 +38,7 @@ download_file() {
 }
 
 generate_manifest() {
-    ./opt/istioctl manifest generate --set profile=demo > manifests/generated-manifest.yaml
+    docker run docker.io/istio/istioctl:${APP_VERSION} manifest generate --set profile=demo > manifests/generated-manifest.yaml
 }
 
 main() {
@@ -36,6 +46,7 @@ main() {
         echo "Usage: ./$0 <ARCH> <NAME> <VERSION>"
         exit 1
     else
+        command_check "docker info"
         init_dir
         download_file
         generate_manifest
