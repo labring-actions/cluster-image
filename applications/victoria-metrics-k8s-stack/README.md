@@ -36,5 +36,5 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `seao
 For example:
 
 ```shell
-$ sealos run docker.io/labring/victoria-metrics-k8s-stack:v1.96.0 -e HELM_OPTS="--set grafana.service.type=NodePort "
+$ sealos run docker.io/labring/victoria-metrics-k8s-stack:v1.96.0 -e HELM_OPTS="--set grafana.service.type=NodePort"
 ```
