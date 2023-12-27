@@ -21,6 +21,20 @@ Get app status
 $ helm -n vm ls
 ```
 
+## Access grafana
+
+Get `admin` user password
+
+```
+kubectl -n vm get secrets victoria-metrics-k8s-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+Access grafana
+
+```
+http://<node-ip>:<node-port>
+```
+
 ## Uninstalling the app
 
 ```bash
