@@ -16,7 +16,7 @@
         "s3:DeleteObject"
       ],
       "Resource": [
-        "arn:aws:s3:::file_migration/*"
+        "arn:aws:s3:::file-migration/*"
       ]
     }
   ]
