@@ -6,11 +6,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: object-storage-sa
+  namespace: ${BACKEND_NAMESPACE}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: object-storage-role
+  namespace: ${BACKEND_NAMESPACE}
 rules:
   - verbs:
       - get
@@ -41,13 +43,16 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: object-storage-rolebind
+  namespace: ${BACKEND_NAMESPACE}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: object-storage-role
+  namespace: ${BACKEND_NAMESPACE}
 subjects:
   - kind: ServiceAccount
     name: object-storage-sa
+    namespace: ${BACKEND_NAMESPACE}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -55,6 +60,7 @@ metadata:
   labels:
     app: prometheus-object-storage
   name: object-storage
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   podMetadata:
     labels:
@@ -89,18 +95,19 @@ spec:
       metadata:
         annotations:
           path: /prometheus
-          value: 2Gi
+          value: ${STORAGE_SIZE}Gi
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 2Gi
+            storage: ${STORAGE_SIZE}Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: prometheus-object-storage
+  namespace: ${BACKEND_NAMESPACE}
 spec:
   ports:
     - port: 9090

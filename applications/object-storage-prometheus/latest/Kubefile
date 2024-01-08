@@ -1,5 +1,8 @@
 FROM scratch
 
+ENV BACKEND_NAMESPACE=${BACKEND_NAMESPACE:-"objectstorage-system"}
+ENV STORAGE_SIZE=${STORAGE_SIZE:-1}
+
 COPY . .
 
 CMD ["bash entrypoint.sh"]
