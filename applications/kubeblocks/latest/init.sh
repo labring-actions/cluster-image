@@ -27,7 +27,7 @@ if [[ "${VERSION}" == "v0.6."* ]]; then
 fi
 for chart in "${charts[@]}"; do
     chart_version=${VERSION#v}
-    if [[ "$chart" != "kubeblocks" ]]; then
+    if [[ "$chart" != "kubeblocks" && "$VERSION" != "v0.5."* && "$VERSION" != "v0.6."*  && "$VERSION" != "v0.7."*  ]]; then
         chart_version=$(cat charts/kubeblocks/templates/addons/$chart-addon.yaml | (grep "\"version\"" || true) | awk '{print $2}'| sed 's/"//g')
     fi
     helm fetch -d charts --untar "$repo_url"/"${chart}"-"${chart_version}"/"${chart}"-"${chart_version}".tgz
