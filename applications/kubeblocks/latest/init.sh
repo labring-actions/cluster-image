@@ -42,7 +42,7 @@ for chart in "${charts[@]}"; do
         esac
 
     fi
-    rm -rf charts/"${chart}"-"${VERSION#v}".tgz
+    rm -rf charts/"${chart}"-"${chart_version}".tgz
 done
 
 # add extra images
