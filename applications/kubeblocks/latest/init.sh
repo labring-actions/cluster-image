@@ -9,7 +9,7 @@ export readonly BIN_DOWNLOAD=${4:-"true"}
 
 if [ "${BIN_DOWNLOAD}" == "true" ]; then
   mkdir -p opt
-  wget https://github.com/apecloud/kubeblocks/releases/download/"${VERSION}"/kbcli-linux-"${ARCH}"-"${VERSION}".tar.gz -O kbcli.tar.gz
+  wget https://github.com/apecloud/kbcli/releases/download/"${VERSION}"/kbcli-linux-"${ARCH}"-"${VERSION}".tar.gz -O kbcli.tar.gz
   tar -zxvf kbcli.tar.gz linux-"${ARCH}"/kbcli
   mv linux-"${ARCH}"/kbcli opt/kbcli
   chmod a+x opt/kbcli
@@ -22,8 +22,12 @@ mkdir charts
 repo_url="https://github.com/apecloud/helm-charts/releases/download"
 charts=("kubeblocks" "apecloud-mysql" "mongodb" "postgresql" "redis" "kafka")
 for chart in "${charts[@]}"; do
-  helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION#v}"/"${chart}"-"${VERSION#v}".tgz
-  rm -rf charts/"${chart}"-"${VERSION#v}".tgz
+  chart_version=${VERSION#v}
+  if [[ "$chart" != "kubeblocks" ]]; then
+    chart_version=$(cat charts/kubeblocks/templates/addons/$chart-addon.yaml | (grep "\"version\"" || true) | awk '{print $2}'| sed 's/"//g')
+  fi
+  helm fetch -d charts --untar "$repo_url"/"${chart}"-"${chart_version}"/"${chart}"-"${chart_version}".tgz
+  rm -rf charts/"${chart}"-"${chart_version}".tgz
 done
 
 # add extra images
