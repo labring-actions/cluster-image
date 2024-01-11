@@ -10,7 +10,7 @@ export readonly REDUCE_VERSION=${5:-"false"}
 
 if [[ -z "${BIN_DOWNLOAD}" || "${BIN_DOWNLOAD}" == "true" ]]; then
     mkdir -p opt
-    wget https://github.com/apecloud/kubeblocks/releases/download/"${VERSION}"/kbcli-linux-"${ARCH}"-"${VERSION}".tar.gz -O kbcli.tar.gz
+    wget https://github.com/apecloud/kbcli/releases/download/"${VERSION}"/kbcli-linux-"${ARCH}"-"${VERSION}".tar.gz -O kbcli.tar.gz
     tar -zxvf kbcli.tar.gz linux-"${ARCH}"/kbcli
     mv linux-"${ARCH}"/kbcli opt/kbcli
     chmod a+x opt/kbcli
