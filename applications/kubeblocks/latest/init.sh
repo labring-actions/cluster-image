@@ -26,7 +26,11 @@ if [[ "${VERSION}" == "v0.6."* ]]; then
     charts=("kubeblocks" "apecloud-mysql" "mongodb" "postgresql" "redis" "kafka")
 fi
 for chart in "${charts[@]}"; do
-    helm fetch -d charts --untar "$repo_url"/"${chart}"-"${VERSION#v}"/"${chart}"-"${VERSION#v}".tgz
+    chart_version=${VERSION#v}
+    if [[ "$chart" != "kubeblocks" ]]; then
+        chart_version=$(cat charts/kubeblocks/templates/addons/$chart-addon.yaml | (grep "\"version\"" || true) | awk '{print $2}'| sed 's/"//g')
+    fi
+    helm fetch -d charts --untar "$repo_url"/"${chart}"-"${chart_version}"/"${chart}"-"${chart_version}".tgz
     if [[ "$REDUCE_VERSION" == "true" ]]; then
         case $chart in
             mongodb)
