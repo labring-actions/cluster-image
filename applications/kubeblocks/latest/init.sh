@@ -42,19 +42,19 @@ for chart in "${charts[@]}"; do
         esac
 
     fi
-    if [[ "$chart" == "kubeblocks" && "$VERSION" != "v0.5."* && "$VERSION" != "v0.6."*  && "$VERSION" != "v0.7."*  ]]; then
-        kubeblocks_ignore_file="charts/${chart}/.helmignore"
-        if [[ -f "${kubeblocks_ignore_file}" ]]; then
-            rm -rf ${kubeblocks_ignore_file}
-        fi
-        kubeblocks_crds_file="kubeblocks_crds.yaml"
-        wget https://github.com/apecloud/kubeblocks/releases/download/${VERSION}/${kubeblocks_crds_file} -O ${kubeblocks_crds_file}
-        kubeblocks_crds_dir="charts/${chart}/crds"
-        mkdir -p ${kubeblocks_crds_dir}
-        if [[ -f "${kubeblocks_crds_file}" ]]; then
-            mv ${kubeblocks_crds_file} ${kubeblocks_crds_dir}
-        fi
-    fi
+#    if [[ "$chart" == "kubeblocks" && "$VERSION" != "v0.5."* && "$VERSION" != "v0.6."*  && "$VERSION" != "v0.7."*  ]]; then
+#        kubeblocks_ignore_file="charts/${chart}/.helmignore"
+#        if [[ -f "${kubeblocks_ignore_file}" ]]; then
+#            rm -rf ${kubeblocks_ignore_file}
+#        fi
+#        kubeblocks_crds_file="kubeblocks_crds.yaml"
+#        wget https://github.com/apecloud/kubeblocks/releases/download/${VERSION}/${kubeblocks_crds_file} -O ${kubeblocks_crds_file}
+#        kubeblocks_crds_dir="charts/${chart}/crds"
+#        mkdir -p ${kubeblocks_crds_dir}
+#        if [[ -f "${kubeblocks_crds_file}" ]]; then
+#            mv ${kubeblocks_crds_file} ${kubeblocks_crds_dir}
+#        fi
+#    fi
     rm -rf charts/"${chart}"-"${chart_version}".tgz
 done
 
