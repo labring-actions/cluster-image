@@ -24,10 +24,30 @@ helm -n monitoring ls
 
 ## Uninstalling the app
 
-To uninstall/delete the `kube-prometheus-stack` app:
+Uninstall with helm command:
+
+```
+helm -n monitoring uninstall prometheus
+```
+
+Uninstall with sealos command:
 
 ```bash
 sealos run docker.io/labring/kube-prometheus-stack:v0.63.0 -e uninstall=true
 ```
 
 The command removes all the resource associated with the installtion.
+
+## Build cluster image
+
+Get prometheus-operator release tag：
+
+https://github.com/prometheus-operator/prometheus-operator/releases
+
+Create new github issues and comments, or create comments within [existing issues](https://github.com/labring-actions/cluster-image/issues/36).
+
+The sample comment content is as follows：
+
+```
+/imagebuild_apps kube-prometheus-stack v0.63.0
+```
