@@ -202,6 +202,9 @@ jobs:
           echo 'build_result='$BUILD_RESULT >> $GITHUB_OUTPUT
 
   send-message:
+    permissions:
+      id-token: write
+      contents: read
     needs: [ build-result ]
     if: ${{ always() }}
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
