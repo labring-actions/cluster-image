@@ -157,10 +157,10 @@ jobs:
       - name: Checkout apecloud-cd Code
         uses: actions/checkout@v4
         with:
-          repository: apecloud/apecloud-cd
+          repository: apecloud-inc/apecloud-cd
           path: apecloud-cd
           token: ${{ env.GITHUB_TOKEN }}
-          ref: v0.1.38
+          ref: v0.1.0
 
       - name: generate image yaml
         run: |
@@ -204,9 +204,9 @@ jobs:
   send-message:
     needs: [ build-result ]
     if: ${{ always() }}
-    uses: apecloud/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.38
+    uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
     with:
       TYPE: "2"
       CONTENT: "build image ${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }} ${{ needs.build-result.outputs.build-result }}"
-      APECD_REF: "v0.1.38"
+      APECD_REF: "v0.1.0"
     secrets: inherit
