@@ -34,8 +34,8 @@ $ kubectl -n milvus get pods
 Uninstall with helm command
 
 ```shell
-kubectl -n milvus delete milvus my-release
-helm -n milvus-operator uninstall milvus-operator
+$ kubectl -n milvus delete milvus my-release
+$ helm -n milvus-operator uninstall milvus-operator
 ```
 
 ## Configuration
@@ -43,12 +43,12 @@ helm -n milvus-operator uninstall milvus-operator
 Get mount path which is `default-xxxxxx`.
 
 ```bash
-container_name=$(sealos ps -f ancestor=istio-bookinfo --notruncate --format "{{.ContainerName}}")
+container_name=$(sealos ps -f ancestor=milvus-operator --notruncate --format "{{.ContainerName}}")
 cd /var/lib/sealos/data/default/applications/${container_name}/workdir
 ls manifest
 ```
 
-change to that path and apply sample yaml file
+change to that path and apply [sample yaml file](https://github.com/zilliztech/milvus-operator/tree/main/config/samples)
 
 ```bash
 kubectl apply -f manifest/xxx.yaml

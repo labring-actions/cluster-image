@@ -28,7 +28,7 @@ $ helm -n milvus ls
 Uninstall with helm command
 
 ```shell
-helm -n milvus uninstall milvus
+$ helm -n milvus uninstall milvus
 ```
 
 ## Configuration
@@ -40,7 +40,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `seao
 For example:
 
 ```shell
-$ sealos run docker.io/labring/milvus:v2.3.5 -e HELM_OPTS="
+$ sealos run docker.io/labring/milvus:v2.3.5 -e HELM_OPTS=" \
 --set cluster.enabled=false \
 --set etcd.replicaCount=1 \
 --set minio.mode=standalone \
