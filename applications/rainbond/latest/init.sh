@@ -14,6 +14,3 @@ rm -rf chart images/shim/ && mkdir -p chart images/shim/
 helm repo add ${chart_name} ${repo_url}
 chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
 helm pull ${repo_name} --version=${chart_version} -d chart --untar
-
-export VERSION=${VERSION}-release
-bash scripts/download_rbd_images.sh
