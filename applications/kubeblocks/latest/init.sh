@@ -61,3 +61,4 @@ done
 # add extra images
 mkdir -p images/shim
 echo "apecloud/kubeblocks-charts:${VERSION#v}" >images/shim/kubeblocksImages
+echo "apecloud/datasafed:0.1.0" >images/shim/kubeblocksImages
