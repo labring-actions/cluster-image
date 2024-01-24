@@ -199,7 +199,7 @@ jobs:
         id: get_build_result
         run: |
           BUILD_RESULT="error"
-          if [[ "${{ needs.build-manifest.result }}" == "success" && "${{ needs.sync-to-aliyun.result }}" == "success" ]]; then
+          if [[ "${{ needs.build-manifest.result }}" == "success" ]]; then
               BUILD_RESULT="success"
           fi
           echo 'build_result='$BUILD_RESULT >> $GITHUB_OUTPUT
