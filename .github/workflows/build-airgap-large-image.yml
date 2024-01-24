@@ -86,7 +86,7 @@ jobs:
           tools_version: ${{ inputs.TOOLS_VERSION }}
           reduce_version: ${{ inputs.REDUCE_VERSION }}
         run: |
-          bash .github/scripts/apps.sh
+          bash .github/scripts/large_apps.sh
 
       - if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' }}
         name: Login to Docker Hub
