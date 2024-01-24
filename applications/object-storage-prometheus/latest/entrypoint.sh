@@ -48,7 +48,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: object-storage-role
-  namespace: ${BACKEND_NAMESPACE}
 subjects:
   - kind: ServiceAccount
     name: object-storage-sa
