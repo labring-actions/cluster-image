@@ -190,7 +190,7 @@ jobs:
 
   build-result:
     runs-on: ubuntu-latest
-    needs: [ build-manifest, sync-to-aliyun ]
+    needs: [ build-manifest ]
     if: ${{ always() }}
     outputs:
       build-result: ${{ steps.get_build_result.outputs.build_result }}
