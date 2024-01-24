@@ -80,7 +80,7 @@ jobs:
         with:
           driver-opts: image=moby/buildkit:master
 
-      - name: Init Image
+      - name: Build And Push Image
         continue-on-error: true
         env:
           registry: ${{ env.DOCKER_REGISTRY_URL }}
