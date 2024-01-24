@@ -604,6 +604,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
+    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/configuration-snippet: |
       if (\$request_uri ~* \.(js|css|gif|jpe?g|png)) {
         expires 30d;
