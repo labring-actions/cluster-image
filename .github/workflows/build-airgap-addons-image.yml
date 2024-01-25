@@ -1,0 +1,152 @@
+name: Build Airgap Addons Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      ADDON_VERSION:
+        description: 'addons image version'
+        required: true
+        default: ''
+      ADDON_NAME:
+        description: 'addons name'
+        required: true
+        default: 'clickhouse'
+        type: choice
+        options:
+          - apecloud-mysql
+          - mongodb
+          - postgresql
+          - redis
+          - kafka
+          - qdrant
+          - clickhouse
+          - oceanbase"
+          - mysql
+
+
+run-name: build ${{ inputs.ADDON_NAME }}:${{ inputs.ADDON_VERSION }}
+
+env:
+  DOCKER_REGISTRY_URL: docker.io
+  DOCKER_REPO: "apecloud"
+  DOCKER_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+  ALIYUN_USER: ${{ secrets.ALIYUN_REGISTRY_USER }}
+  ALIYUN_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+  ALIYUN_USER_NEW: ${{ secrets.ALIYUN_USER_NEW }}
+  ALIYUN_PASSWORD_NEW: ${{ secrets.ALIYUN_PASSWORD_NEW }}
+  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+jobs:
+  build-apps:
+    name: build app ${{ matrix.arch }} image
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [ amd64, arm64 ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download buildah and sealos
+        run: .github/scripts/download.sh
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: image=moby/buildkit:master
+
+      - name: Build And Push Image
+        continue-on-error: true
+        env:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_USER }}
+          repo: ${{ env.DOCKER_REPO }}
+          password: ${{ env.DOCKER_PASSWORD }}
+          app: ${{ inputs.ADDON_NAME }}
+          version: ${{ inputs.ADDON_VERSION }}
+          arch: ${{ matrix.arch }}
+        run: |
+          bash .github/scripts/addons_apps.sh
+
+  build-manifest:
+    name: build manifest app image
+    needs: [ build-apps ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download buildah and sealos
+        run: |
+          bash .github/scripts/download.sh
+
+      - name: Manifest Image
+        env:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_USER }}
+          repo: ${{ env.DOCKER_REPO }}
+          password: ${{ env.DOCKER_PASSWORD }}
+          app: ${{ inputs.ADDON_NAME }}
+          version: ${{ inputs.ADDON_VERSION }}
+        run: |
+          bash .github/scripts/manifest-other.sh
+
+  sync-to-aliyun:
+    runs-on: ubuntu-latest
+    needs: [ build-manifest ]
+    steps:
+      - name: Checkout apecloud-cd Code
+        uses: actions/checkout@v4
+        with:
+          repository: apecloud-inc/apecloud-cd
+          path: apecloud-cd
+          token: ${{ env.GITHUB_TOKEN }}
+          ref: v0.1.0
+
+      - name: generate image yaml
+        run: |
+          bash ${{ github.workspace }}/apecloud-cd/.github/utils/utils.sh \
+            --type 27 \
+            --images "${{ env.DOCKER_REPO }}/${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }}|${{ env.DOCKER_REPO }}/${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }}-amd64|${{ env.DOCKER_REPO }}/${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }}-arm64" \
+            --registry "${{ env.DOCKER_REGISTRY_URL }}"
+
+      - uses: hhyasdf/image-sync-action@v1.1
+        if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && env.ALIYUN_USER != '' && env.ALIYUN_PASSWORD != '' && env.ALIYUN_USER_NEW != '' && env.ALIYUN_PASSWORD_NEW != '' }}
+        with:
+          auth_file: ${{ github.workspace }}/apecloud-cd/.github/actions/image-sync-auth.yml
+          images_file: ./image_sync_yaml.yml
+          proc: 6
+          retries: 5
+          version: v1.5.2
+        env:
+          DOCKER_USER: ${{ env.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ env.DOCKER_PASSWORD }}
+          ALIYUN_USER: ${{ env.ALIYUN_USER }}
+          ALIYUN_PASSWORD: ${{ env.ALIYUN_PASSWORD }}
+          ALIYUN_USER_NEW: ${{ env.ALIYUN_USER_NEW }}
+          ALIYUN_PASSWORD_NEW: ${{ env.ALIYUN_PASSWORD_NEW }}
+
+  build-result:
+    runs-on: ubuntu-latest
+    needs: [ build-manifest ]
+    if: ${{ always() }}
+    outputs:
+      build-result: ${{ steps.get_build_result.outputs.build_result }}
+    steps:
+      - name: get build result
+        id: get_build_result
+        run: |
+          BUILD_RESULT="error"
+          if [[ "${{ needs.build-manifest.result }}" == "success" ]]; then
+              BUILD_RESULT="success"
+          fi
+          echo 'build_result='$BUILD_RESULT >> $GITHUB_OUTPUT
+
+  send-message:
+    permissions:
+      id-token: write
+      contents: read
+    needs: [ build-result ]
+    if: ${{ always() }}
+    uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
+    with:
+      TYPE: "2"
+      CONTENT: "build image ${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }} ${{ needs.build-result.outputs.build-result }}"
+    secrets: inherit
