@@ -18,6 +18,7 @@ on:
           - cubetran
           - gemini
           - grafana
+          - kubebench
           - kubeblocks
           - kubeblocks-cloud
           - logto
