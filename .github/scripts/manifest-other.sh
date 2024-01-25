@@ -16,10 +16,10 @@ readonly buildDir=.build-image
 rm -rf $buildDir
 mkdir -p $buildDir
 
-if [[ ! -d "applications/$APP_NAME/latest" ]]; then
-    sed -i "s/^CMD.*/CMD [\"kbcli addon enable $APP_NAME\"]/" applications/addons/latest/Dockerfile
-    sed -i "s/^charts=.*/charts=(\"$APP_NAME\")/" applications/addons/latest/init.sh
-    cp -af applications/addons applications/$APP_NAME
+if [[ ! -d "applications/$IMAGE_NAME/latest" ]]; then
+    sed -i "s/^CMD.*/CMD [\"kbcli addon enable $IMAGE_NAME\"]/" applications/addons/latest/Dockerfile
+    sed -i "s/^charts=.*/charts=(\"$IMAGE_NAME\")/" applications/addons/latest/init.sh
+    cp -af applications/addons applications/$IMAGE_NAME
 fi
 
 if [[ -d "applications/$IMAGE_NAME/latest" ]] && ! [[ -d "applications/$IMAGE_NAME/$IMAGE_TAG" ]]; then
