@@ -1,16 +1,16 @@
-name: Build Airgap Addons Image
+name: Build Airgap Image
 
 on:
   workflow_dispatch:
     inputs:
-      ADDON_VERSION:
-        description: 'addons image version'
+      IMAGE_VERSION:
+        description: 'image version'
         required: true
         default: ''
-      ADDON_NAME:
-        description: 'addons name'
+      APP_NAME:
+        description: 'app name'
         required: true
-        default: 'clickhouse'
+        default: 'kubeblocks'
         type: choice
         options:
           - apecloud-mysql
@@ -20,11 +20,38 @@ on:
           - kafka
           - qdrant
           - clickhouse
-          - oceanbase"
+          - oceanbase
           - mysql
+          - kubeblocks
+          - kubeblocks-cloud
+          - gemini
+          - kubebench
+          - snapshot-controller
+          - csi-s3
+          - cubetran
+          - grafana
+          - logto
+          - loki
+          - metallb
+          - minio
+          - nginx-ingress
+          - prometheus
+          - victoria-metrics-cluster
+      REDUCE_VERSION:
+        description: 'only package KubeBlocks without addons'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - true
+          - false
+      TOOLS_VERSION:
+        description: 'tools version'
+        required: false
+        default: ''
 
 
-run-name: build ${{ inputs.ADDON_NAME }}:${{ inputs.ADDON_VERSION }}
+run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 
 env:
   DOCKER_REGISTRY_URL: docker.io
@@ -36,6 +63,7 @@ env:
   ALIYUN_USER_NEW: ${{ secrets.ALIYUN_USER_NEW }}
   ALIYUN_PASSWORD_NEW: ${{ secrets.ALIYUN_PASSWORD_NEW }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  CLOUD_VALUES: ${{ secrets.CLOUD_VALUES }}
 
 jobs:
   build-apps:
@@ -61,11 +89,13 @@ jobs:
           username: ${{ env.DOCKER_USER }}
           repo: ${{ env.DOCKER_REPO }}
           password: ${{ env.DOCKER_PASSWORD }}
-          app: ${{ inputs.ADDON_NAME }}
-          version: ${{ inputs.ADDON_VERSION }}
+          app: ${{ inputs.APP_NAME }}
+          version: ${{ inputs.IMAGE_VERSION }}
           arch: ${{ matrix.arch }}
+          tools_version: ${{ inputs.TOOLS_VERSION }}
+          reduce_version: ${{ inputs.REDUCE_VERSION }}
         run: |
-          bash .github/scripts/addons_apps.sh
+          bash .github/scripts/apps.sh
 
   build-manifest:
     name: build manifest app image
@@ -83,8 +113,8 @@ jobs:
           username: ${{ env.DOCKER_USER }}
           repo: ${{ env.DOCKER_REPO }}
           password: ${{ env.DOCKER_PASSWORD }}
-          app: ${{ inputs.ADDON_NAME }}
-          version: ${{ inputs.ADDON_VERSION }}
+          app: ${{ inputs.APP_NAME }}
+          version: ${{ inputs.IMAGE_VERSION }}
         run: |
           bash .github/scripts/manifest-other.sh
 
@@ -104,7 +134,7 @@ jobs:
         run: |
           bash ${{ github.workspace }}/apecloud-cd/.github/utils/utils.sh \
             --type 27 \
-            --images "${{ env.DOCKER_REPO }}/${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }}|${{ env.DOCKER_REPO }}/${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }}-amd64|${{ env.DOCKER_REPO }}/${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }}-arm64" \
+            --images "${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-amd64|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-arm64" \
             --registry "${{ env.DOCKER_REGISTRY_URL }}"
 
       - uses: hhyasdf/image-sync-action@v1.1
@@ -148,5 +178,5 @@ jobs:
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
     with:
       TYPE: "2"
-      CONTENT: "build image ${{ inputs.ADDON_NAME }}-airgap:${{ inputs.ADDON_VERSION }} ${{ needs.build-result.outputs.build-result }}"
+      CONTENT: "build image ${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }} ${{ needs.build-result.outputs.build-result }}"
     secrets: inherit
