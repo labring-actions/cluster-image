@@ -1,4 +1,4 @@
-name: Build Airgap Small Image
+name: Build Airgap Amd64 Image
 
 on:
   workflow_dispatch:
@@ -13,37 +13,10 @@ on:
         default: 'kubeblocks'
         type: choice
         options:
-          - clickhouse
-          - csi-s3
-          - cubetran
-          - gemini
-          - grafana
-          - kubeblocks
-          - kubeblocks-cloud
-          - logto
-          - loki
-          - metallb
-          - minio
           - mysql
-          - nginx-ingress
-          - snapshot-controller
-          - prometheus
-          - victoria-metrics-cluster
-      REDUCE_VERSION:
-        description: 'reduce multi cluster version for KubeBlocks'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - true
-          - false
-      TOOLS_VERSION:
-        description: 'tools version'
-        required: false
-        default: ''
 
 
-run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
+run-name: build amd64 ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 
 env:
   DOCKER_REGISTRY_URL: docker.io
@@ -55,16 +28,11 @@ env:
   ALIYUN_USER_NEW: ${{ secrets.ALIYUN_USER_NEW }}
   ALIYUN_PASSWORD_NEW: ${{ secrets.ALIYUN_PASSWORD_NEW }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-  CLOUD_VALUES: ${{ secrets.CLOUD_VALUES }}
 
 jobs:
-  build-apps:
-    name: build app ${{ matrix.arch }} image
+  build-amd64-apps:
+    name: build app amd64 image
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        arch: [ amd64, arm64 ]
     steps:
       - uses: actions/checkout@v4
       - name: Download buildah and sealos
@@ -83,36 +51,12 @@ jobs:
           password: ${{ env.DOCKER_PASSWORD }}
           app: ${{ inputs.APP_NAME }}
           version: ${{ inputs.IMAGE_VERSION }}
-          arch: ${{ matrix.arch }}
-          tools_version: ${{ inputs.TOOLS_VERSION }}
-          reduce_version: ${{ inputs.REDUCE_VERSION }}
         run: |
-          bash .github/scripts/apps.sh
-
-  build-manifest:
-    name: build manifest app image
-    needs: [ build-apps ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download buildah and sealos
-        run: |
-          bash .github/scripts/download.sh
-
-      - name: Manifest Image
-        env:
-          registry: ${{ env.DOCKER_REGISTRY_URL }}
-          username: ${{ env.DOCKER_USER }}
-          repo: ${{ env.DOCKER_REPO }}
-          password: ${{ env.DOCKER_PASSWORD }}
-          app: ${{ inputs.APP_NAME }}
-          version: ${{ inputs.IMAGE_VERSION }}
-        run: |
-          bash .github/scripts/manifest-other.sh
+          bash .github/scripts/amd64_apps.sh
 
   sync-to-aliyun:
     runs-on: ubuntu-latest
-    needs: [ build-manifest ]
+    needs: [ build-amd64-apps ]
     steps:
       - name: Checkout apecloud-cd Code
         uses: actions/checkout@v4
@@ -147,7 +91,7 @@ jobs:
 
   build-result:
     runs-on: ubuntu-latest
-    needs: [ build-manifest ]
+    needs: [ build-amd64-apps ]
     if: ${{ always() }}
     outputs:
       build-result: ${{ steps.get_build_result.outputs.build_result }}
@@ -156,7 +100,7 @@ jobs:
         id: get_build_result
         run: |
           BUILD_RESULT="error"
-          if [[ "${{ needs.build-manifest.result }}" == "success" ]]; then
+          if [[ "${{ needs.build-amd64-apps.result }}" == "success" ]]; then
               BUILD_RESULT="success"
           fi
           echo 'build_result='$BUILD_RESULT >> $GITHUB_OUTPUT
