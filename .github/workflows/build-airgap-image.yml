@@ -3,10 +3,6 @@ name: Build Airgap Image
 on:
   workflow_dispatch:
     inputs:
-      IMAGE_VERSION:
-        description: 'image version'
-        required: true
-        default: ''
       APP_NAME:
         description: 'app name'
         required: true
@@ -14,9 +10,9 @@ on:
         type: choice
         options:
           - apecloud-mysql
-          - mongodb
           - postgresql
           - redis
+          - mongodb
           - kafka
           - qdrant
           - clickhouse
@@ -37,6 +33,10 @@ on:
           - nginx-ingress
           - prometheus
           - victoria-metrics-cluster
+      IMAGE_VERSION:
+        description: 'image version'
+        required: true
+        default: ''
       REDUCE_VERSION:
         description: 'only package KubeBlocks without addons'
         required: false
