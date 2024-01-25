@@ -70,7 +70,7 @@ jobs:
         run: |
           bash ${{ github.workspace }}/apecloud-cd/.github/utils/utils.sh \
             --type 27 \
-            --images "${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-amd64|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-arm64" \
+            --images "${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}" \
             --registry "${{ env.DOCKER_REGISTRY_URL }}"
 
       - uses: hhyasdf/image-sync-action@v1.1
