@@ -24,6 +24,7 @@ on:
           - loki
           - metallb
           - minio
+          - mysql
           - nginx-ingress
           - snapshot-controller
           - prometheus
