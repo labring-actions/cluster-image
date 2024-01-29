@@ -17,6 +17,7 @@ on:
           - qdrant
           - clickhouse
           - oceanbase
+          - xinference
           - mysql
           - kubeblocks
           - kubeblocks-cloud
