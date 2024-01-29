@@ -15,18 +15,6 @@ on:
         options:
           - llm
           - xinference
-      REDUCE_VERSION:
-        description: 'reduce multi cluster version for KubeBlocks'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - true
-          - false
-      TOOLS_VERSION:
-        description: 'tools version'
-        required: false
-        default: ''
       GHA_CACHE:
         description: 'gha cache'
         required: false
@@ -84,8 +72,8 @@ jobs:
           app: ${{ inputs.APP_NAME }}
           version: ${{ inputs.IMAGE_VERSION }}
           arch: ${{ matrix.arch }}
-          tools_version: ${{ inputs.TOOLS_VERSION }}
-          reduce_version: ${{ inputs.REDUCE_VERSION }}
+          tools_version: ""
+          reduce_version: ""
         run: |
           bash .github/scripts/large_apps.sh
 
