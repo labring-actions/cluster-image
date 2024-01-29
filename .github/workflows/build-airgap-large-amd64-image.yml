@@ -83,8 +83,8 @@ jobs:
         with:
           context: ./.build-image
           file: ./.build-image/Dockerfile
-          tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-${{ matrix.arch }}
-          platforms: linux/${{ matrix.arch }}
+          tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}
+          platforms: linux/amd64
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -97,8 +97,8 @@ jobs:
         with:
           context: ./.build-image
           file: ./.build-image/Dockerfile
-          tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-${{ matrix.arch }}
-          platforms: linux/${{ matrix.arch }}
+          tags: ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}
+          platforms: linux/amd64
           push: true
           provenance: false
           sbom: false
