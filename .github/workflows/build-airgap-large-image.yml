@@ -54,7 +54,7 @@ jobs:
   enable-self-runner:
     uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
     with:
-      GITHUB_REPO: "apecloud/kubeblocks-airgap"
+      GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
       RUNNER_LABEL: "kubeblocks-airgap-runner"
       RUNNER_REPLICAS: 2
     secrets: inherit
@@ -128,7 +128,7 @@ jobs:
     needs: [ build-apps ]
     uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
     with:
-      GITHUB_REPO: "apecloud/kubeblocks-airgap"
+      GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
       RUNNER_LABEL: "kubeblocks-airgap-runner"
       ENABLE: "disable"
     secrets: inherit
