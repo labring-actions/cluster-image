@@ -43,7 +43,7 @@ jobs:
     with:
       GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
       RUNNER_LABEL: "kubeblocks-airgap-runner"
-      RUNNER_REPLICAS: 2
+      RUNNER_REPLICAS: 1
     secrets: inherit
 
   build-amd64-apps:
