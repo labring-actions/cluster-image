@@ -4,7 +4,7 @@ set -eu
 
 readonly APP_NAME=${app?}
 readonly APP_VERSION=${version?}
-readonly APP_ARCH=${arch?}
+readonly APP_ARCH=amd64
 
 readonly IMAGE_HUB_REGISTRY=${registry?}
 readonly IMAGE_HUB_REPO=${repo?}
@@ -37,7 +37,7 @@ cd $buildDir && {
         bash init.sh "$APP_ARCH" "$APP_NAME" "$APP_VERSION"
     fi
 
-    IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$APP_NAME-airgap:$APP_VERSION-$APP_ARCH"
+    IMAGE_NAME="$IMAGE_HUB_REGISTRY/$IMAGE_HUB_REPO/$APP_NAME-airgap:$APP_VERSION"
 
     sudo sealos login -u "$IMAGE_HUB_USERNAME" -p "$IMAGE_HUB_PASSWORD" "$IMAGE_HUB_REGISTRY"
 
