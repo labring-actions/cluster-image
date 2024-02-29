@@ -104,5 +104,5 @@ jobs:
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
     with:
       TYPE: "2"
-      CONTENT: "save images ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz ${{ needs.save-result.outputs.save-result }} ${{ needs.save-app-images.outputs.oss-url }}"
+      CONTENT: "save images ${{ needs.save-app-images.outputs.oss-url }} ${{ needs.save-result.outputs.save-result }} "
     secrets: inherit
