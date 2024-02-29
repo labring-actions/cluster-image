@@ -81,6 +81,12 @@ jobs:
         run: |
           IMAGE_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
           ossutil cp -rf ./${IMAGE_PKG_NAME} oss://${{ env.OSS_BUCKET }}/images/${IMAGE_PKG_NAME}
+          upload_ret=$?
+          if [[ $upload_ret -eq 0 ]]; then
+              echo "upload ${IMAGE_PKG_NAME} to oss successfully"
+          else
+              exit 1
+          fi
 
   save-result:
     runs-on: ubuntu-latest
