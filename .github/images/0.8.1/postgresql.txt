@@ -1,4 +1,0 @@
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/pgbouncer:1.19.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/spilo:12.15.0-pgvector-v0.5.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/spilo:14.7.2-pgvector-v0.5.0

@@ -18,12 +18,13 @@ add_images_list() {
     fi
 
     if [[ ! -f "$IMAGE_FILE_PATH" ]]; then
-        IMAGE_FILE_PATH_LATEST=${IMAGE_FILE_PATH/${APP_VERSION}/latest}
-        if [[ -f "$IMAGE_FILE_PATH_LATEST" ]]; then
-            cp -af $IMAGE_FILE_PATH_LATEST $IMAGE_FILE_PATH
-        else
-            touch "$IMAGE_FILE_PATH"
-        fi
+#        IMAGE_FILE_PATH_LATEST=${IMAGE_FILE_PATH/${APP_VERSION}/latest}
+#        if [[ -f "$IMAGE_FILE_PATH_LATEST" ]]; then
+#            cp -af $IMAGE_FILE_PATH_LATEST $IMAGE_FILE_PATH
+#        else
+#            touch "$IMAGE_FILE_PATH"
+#        fi
+        touch "$IMAGE_FILE_PATH"
     fi
 
     for image in $(echo "$ADD_IMAGES_LIST" | sed 's/|/ /g'); do

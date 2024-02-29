@@ -1,2 +1,0 @@
-docker.io/bitnami/clickhouse:22.9.4-debian-11-r1
-docker.io/bitnami/zookeeper:3.8.0-debian-11-r47
