@@ -38,7 +38,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
   OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
   OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
-  OSS_REGION: "cn-zhangjiakou"
+  OSS_REGION: "oss-cn-zhangjiakou"
   OSS_BUCKET: "kubeblocks-oss"
 
 jobs:
