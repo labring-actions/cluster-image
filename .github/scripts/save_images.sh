@@ -71,7 +71,7 @@ save_images_package() {
         save_cmd="docker save -o ${app_package_name} "
         while read -r image
         do
-            if [[ -z "$image" && "$image" == "#"* ]]; then
+            if [[ -z "$image" || "$image" == "#"* ]]; then
                 continue
             fi
             echo "pull image $image"
