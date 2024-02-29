@@ -39,7 +39,7 @@ env:
   OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
   OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
   OSS_ENDPOINT: "oss-cn-zhangjiakou.aliyuncs.com"
-  OSS_BUCKET: "kubeblocks-oss."
+  OSS_BUCKET: "kubeblocks-oss"
 
 jobs:
   save-app-images:
