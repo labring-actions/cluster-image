@@ -1,3 +1,4 @@
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/redis-stack-server:7.0.6-RC8
-docker.io/library/redis:7.0.5
+docker.io/malexer/twemproxy:0.5.0
+docker.io/library/busybox:1.36

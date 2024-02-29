@@ -1,6 +1,6 @@
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-scale:0.1.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.auditlogtest.20231121.g143b127.13
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.beta2.20230830.g4ca1eb8.13
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-scale:0.2.3
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-xtrabackup:8.0
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.beta3.20231215.ge77d836.13
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.beta3.auditlog.20231221.g6ba5e2e.13
+docker.io/library/busybox:1.35
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-latest
