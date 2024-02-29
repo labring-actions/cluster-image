@@ -38,15 +38,13 @@ env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
   OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
   OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
-  OSS_REGION: "oss-cn-zhangjiakou"
-  OSS_BUCKET: "kubeblocks-oss"
+  OSS_ENDPOINT: "oss-cn-zhangjiakou.aliyuncs.com"
+  OSS_BUCKET: "kubeblocks-oss."
 
 jobs:
   save-app-images:
     name: save app images
     runs-on: ubuntu-latest
-#    outputs:
-#      oss-url: ${{ steps.upload_to_oss.outputs.url }}
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -74,50 +72,44 @@ jobs:
 
       - uses: manyuanrong/setup-ossutil@v2.0
         with:
-          endpoint: "${{ env.OSS_REGION }}.aliyuncs.com"
           access-key-id: "${{ secrets.OSS_KEY_ID }}"
           access-key-secret: "${{ secrets.OSS_KEY_SECRET }}"
+          endpoint: "${{ env.OSS_ENDPOINT }}"
 
       - name: Upload images to oss
+        id: upload_to_oss
         run: |
-          ossutil cp -rf ./${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz oss://${{ env.OSS_BUCKET }}/images
-
-#      - name: Upload images to oss
-#        id: upload_to_oss
-#        uses: tvrcgo/oss-action@v1.0.0
-#        with:
-#          key-id: ${{ env.OSS_KEY_ID }}
-#          key-secret: ${{ env.OSS_KEY_SECRET }}
-#          region: ${{ env.OSS_REGION }}
-#          bucket: ${{ env.OSS_BUCKET }}
-#          assets: |
-#            ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz:/images/${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz
-
+          IMAGE_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
+          ossutil cp -rf ./${IMAGE_PKG_NAME} oss://${{ env.OSS_BUCKET }}/images/${IMAGE_PKG_NAME}
 
   save-result:
     runs-on: ubuntu-latest
     needs: [ save-app-images ]
     if: ${{ always() }}
     outputs:
+      image-pkg-name: ${{ steps.get_save_result.outputs.image_pkg_name }}
       save-result: ${{ steps.get_save_result.outputs.save_result }}
     steps:
       - name: get save result
         id: get_save_result
         run: |
           SAVE_RESULT="error"
+          IMAGE_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
           if [[ "${{ needs.save-app-images.result }}" == "success" ]]; then
               SAVE_RESULT="success"
+              IMAGE_PKG_NAME="http://kubeblocks-oss.${{ env.OSS_ENDPOINT }}/images/${IMAGE_PKG_NAME}"
           fi
           echo 'save_result='$SAVE_RESULT >> $GITHUB_OUTPUT
+          echo 'image_pkg_name='${IMAGE_PKG_NAME} >> $GITHUB_OUTPUT
 
   send-message:
     permissions:
       id-token: write
       contents: read
-    needs: [ save-result, save-app-images ]
+    needs: [ save-result ]
     if: ${{ always() }}
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
     with:
       TYPE: "2"
-      CONTENT: "save images ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz ${{ needs.save-result.outputs.save-result }}  http://kubeblocks-oss.oss-cn-zhangjiakou.aliyuncs.com/images/${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
+      CONTENT: "save ${{ needs.save-result.outputs.image-pkg-name }} ${{ needs.save-result.outputs.save-result }}"
     secrets: inherit
