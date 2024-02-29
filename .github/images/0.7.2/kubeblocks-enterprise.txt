@@ -12,11 +12,6 @@ docker.io/victoriametrics/vminsert:v1.95.1-cluster
 docker.io/bats/bats:v1.4.1
 docker.io/grafana/grafana:10.1.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/logto:1.12
-registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20231011-8b53cabe0
-registry.k8s.io/ingress-nginx/controller:v1.9.4
-quay.io/metallb/speaker:v0.13.12
-quay.io/metallb/controller:v0.13.12
-quay.io/frrouting/frr:8.5.2
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-dataprotection:0.7.2
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.7.2
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascript:0.7.2

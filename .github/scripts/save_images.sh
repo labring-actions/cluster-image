@@ -7,26 +7,37 @@ readonly APP_NAME=${app_name?}
 readonly APP_VERSION=${app_version?}
 readonly IMAGE_FILE_PATH=${images_file?}
 
+echo "ADD_IMAGES_LIST:"${ADD_IMAGES_LIST}
+echo "APP_NAME:"${APP_NAME}
+echo "APP_VERSION:"${APP_VERSION}
+echo "IMAGE_FILE_PATH:"${IMAGE_FILE_PATH}
+
 add_images_list() {
     if [[ -z "${ADD_IMAGES_LIST}" ]]; then
         return
     fi
 
     if [[ ! -f "$IMAGE_FILE_PATH" ]]; then
-        touch "$IMAGE_FILE_PATH"
+        IMAGE_FILE_PATH_LATEST=${IMAGE_FILE_PATH/${APP_VERSION}/latest}
+        if [[ -f "$IMAGE_FILE_PATH_LATEST" ]]; then
+            cp -af $IMAGE_FILE_PATH_LATEST $IMAGE_FILE_PATH
+        else
+            touch "$IMAGE_FILE_PATH"
+        fi
     fi
 
-    for image in `echo "$ADD_IMAGES_LIST" | sed 's/|/ /g'`; do
+    for image in $(echo "$ADD_IMAGES_LIST" | sed 's/|/ /g'); do
         image_name="${image%:*}"
-        exists_images_list="$(cat $IMAGE_FILE_PATH | grep "$image_name")"
+        exists_images_list="$(cat $IMAGE_FILE_PATH | (grep "$image_name" || true))"
         if [[ -z "$exists_images_list" ]]; then
             echo "$image" >> $IMAGE_FILE_PATH
             continue
         fi
-
+        exists_flag=0
         for e_image in $(echo "$exists_images_list"); do
             if [[ "$image" == "$e_image" ]]; then
-                  break
+                exists_flag=1
+                break
             fi
             e_image_name="${e_image%:*}"
             if [[ "$e_image_name" == "$image_name" ]]; then
@@ -37,9 +48,57 @@ add_images_list() {
                 else
                     sed -i "s/${e_image_tmp}/${image_tmp}/" $IMAGE_FILE_PATH
                 fi
+                exists_flag=1
+                break
             fi
         done
+        if [[ $exists_flag -eq 0 ]]; then
+            echo "$image" >> $IMAGE_FILE_PATH
+        fi
     done
+}
+
+save_images_package() {
+    if [[ ! -f "$IMAGE_FILE_PATH" ]]; then
+        echo "no found save images file"
+        return
+    fi
+
+    app_package_name=${APP_NAME}-${APP_VERSION}.tar.gz
+    save_flag=0
+    for i in {1..10}; do
+        save_cmd="docker save -o ${app_package_name} "
+        while read -r image
+        do
+            if [[ -z "$image" ]]; then
+                continue
+            fi
+            echo "pull image $image"
+            for j in {1..10}; do
+                docker pull "$image"
+                ret_msg=$?
+                if [[ $ret_msg -eq 0 ]]; then
+                    echo "$(tput -T xterm setaf 2)pull image $image success$(tput -T xterm sgr0)"
+                    break
+                fi
+                sleep 1
+            done
+            save_cmd="${save_cmd} $image "
+        done < $IMAGE_FILE_PATH
+        echo "$save_cmd"
+        eval "$save_cmd"
+        ret_msg=$?
+        if [[ $ret_msg -eq 0 ]]; then
+            echo "$(tput -T xterm setaf 2)save ${app_package_name} success$(tput -T xterm sgr0)"
+            save_flag=1
+            break
+        fi
+        sleep 1
+    done
+    if [[ $save_flag -eq 0 ]]; then
+        echo "$(tput -T xterm setaf 1)save ${app_package_name} error$(tput -T xterm sgr0)"
+        exit 1
+    fi
 }
 
 main() {
@@ -47,7 +106,7 @@ main() {
 
     add_images_list
 
-
+    save_images_package
 }
 
 main "$@"
