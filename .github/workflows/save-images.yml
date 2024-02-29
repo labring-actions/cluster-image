@@ -1,0 +1,94 @@
+name: Save Large Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      APP_NAME:
+        description: 'app name'
+        required: true
+        default: 'kubeblocks'
+        type: choice
+        options:
+          - kubeblocks-enterprise
+          - apecloud-mysql
+          - clickhouse
+          - kafka
+          - mongodb
+          - oceanbase
+          - postgresql
+          - qdrant
+          - redis
+      APP_VERSION:
+        description: 'app version'
+        required: true
+        default: ''
+      ADD_IMAGES:
+        description: 'additional images (e.g. docker.io/apecloud/kubeblocks:0.8.1|docker.io/apecloud/kubeblocks-tools:0.8.1|...)'
+        required: false
+        default: ''
+
+run-name: save ${{ inputs.APP_NAME }}:${{ inputs.APP_VERSION }} ${{ inputs.ADD_IMAGES }}
+
+env:
+  DOCKER_REGISTRY_URL: docker.io
+  DOCKER_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+  JIHULAB_ACCESS_USER: ${{ secrets.JIHULAB_ACCESS_USER }}
+  JIHULAB_ACCESS_TOKEN: ${{ secrets.JIHULAB_ACCESS_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+jobs:
+  save-app-images:
+    name: save app images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: add images
+        env:
+          add_images: ${{ inputs.ADD_IMAGES }}
+          app_name: ${{ inputs.APP_NAME }}
+          app_version: ${{ inputs.APP_VERSION }}
+          images_file: .github/images/${{ inputs.APP_NAME }}.txt
+        run: |
+          bash .github/scripts/save_images.sh
+
+      - name: get images
+        run: |
+          ls -ll ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz
+
+#  save-result:
+#    runs-on: ubuntu-latest
+#    needs: [ save-app-images ]
+#    if: ${{ always() }}
+#    outputs:
+#      save-result: ${{ steps.get_save_result.outputs.save_result }}
+#    steps:
+#      - name: get save result
+#        id: get_save_result
+#        run: |
+#          SAVE_RESULT="error"
+#          if [[ "${{ needs.save-app-images.result }}" == "success" ]]; then
+#              SAVE_RESULT="success"
+#          fi
+#          echo 'save_result='$SAVE_RESULT >> $GITHUB_OUTPUT
+
+#  send-message:
+#    permissions:
+#      id-token: write
+#      contents: read
+#    needs: [ save-result ]
+#    if: ${{ always() }}
+#    uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
+#    with:
+#      TYPE: "2"
+#      CONTENT: "save images ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz ${{ needs.save-result.outputs.save-result }}"
+#    secrets: inherit
