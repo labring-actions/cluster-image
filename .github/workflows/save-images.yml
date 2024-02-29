@@ -45,8 +45,8 @@ jobs:
   save-app-images:
     name: save app images
     runs-on: ubuntu-latest
-    outputs:
-      oss-url: ${{ steps.upload_to_oss.outputs.url }}
+#    outputs:
+#      oss-url: ${{ steps.upload_to_oss.outputs.url }}
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -119,5 +119,5 @@ jobs:
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
     with:
       TYPE: "2"
-      CONTENT: "save http://kubeblocks-oss.${{ env.OSS_REGION }}.aliyuncs.com/images/${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz ${{ needs.save-result.outputs.save-result }} "
+      CONTENT: "save images ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz ${{ needs.save-result.outputs.save-result }}  http://kubeblocks-oss.${{ env.OSS_REGION }}.aliyuncs.com/images/${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
     secrets: inherit
