@@ -36,6 +36,10 @@ env:
   JIHULAB_ACCESS_USER: ${{ secrets.JIHULAB_ACCESS_USER }}
   JIHULAB_ACCESS_TOKEN: ${{ secrets.JIHULAB_ACCESS_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
+  OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
+  OSS_REGION: "cn-zhangjiakou"
+  OSS_BUCKET: "kubeblocks-oss"
 
 jobs:
   save-app-images:
@@ -64,6 +68,17 @@ jobs:
       - name: get images
         run: |
           ls -ll ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz
+
+      - name: Upload to oss
+        uses: tvrcgo/oss-action@master
+        with:
+          key-id: ${{ env.OSS_KEY_ID }}
+          key-secret: ${{ env.OSS_KEY_SECRET }}
+          region: ${{ env.OSS_REGION }}
+          bucket: ${{ env.OSS_BUCKET }}
+          assets: |
+            ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz:/images/
+
 
 #  save-result:
 #    runs-on: ubuntu-latest
