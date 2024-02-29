@@ -28,7 +28,7 @@ infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0
 #infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-latest
 # apecloud
-docker.io/apecloud/openconsole:default-v0.12.11
+docker.io/apecloud/openconsole:v0.12.11
 docker.io/apecloud/prompt:v0.12.11
 docker.io/apecloud/apiserver:v0.12.11
 docker.io/apecloud/relay:v0.12.11
