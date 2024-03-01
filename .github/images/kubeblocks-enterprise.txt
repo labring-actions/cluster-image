@@ -20,7 +20,7 @@ docker.io/victoriametrics/vminsert:v1.95.1-cluster
 docker.io/apecloud/ape-dts:0.1.12
 docker.io/victoriametrics/vmselect:v1.95.1-cluster
 docker.io/victoriametrics/vmstorage:v1.95.1-cluster
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:c
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.4.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.4.1
 docker.io/apecloud/cubetran-platform:0.1.6
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
