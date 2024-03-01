@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - apecloud-mysql
+          - cilium
           - postgresql
           - redis
           - mongodb
