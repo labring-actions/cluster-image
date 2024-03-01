@@ -1,3 +1,4 @@
+# redis v0.8.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/redis-stack-server:7.0.6-RC8
 docker.io/malexer/twemproxy:0.5.0

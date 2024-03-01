@@ -1,3 +1,4 @@
+# apecloud-mysql v0.8.0-beta.5
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-scale:0.2.3
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-xtrabackup:8.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.beta3.20231215.ge77d836.13

@@ -1,4 +1,4 @@
-# kubeblocks
+# kubeblocks v0.8.1
 docker.io/library/busybox:latest
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks:0.8.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-dataprotection:0.8.1
@@ -6,9 +6,9 @@ infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascri
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.1
 docker.io/apecloud/kubeblocks-charts:0.8.1
 docker.io/apecloud/datasafed:0.1.0
-# logto
+# logto v0.1.3
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/logto:1.12
-# gemini
+# gemini v0.4.1
 docker.io/apecloud/kubeblocks-tools:latest
 docker.io/apecloud/cubetran-sidecar:0.1.0
 docker.io/library/mysql:8.0
@@ -20,14 +20,14 @@ docker.io/victoriametrics/vminsert:v1.95.1-cluster
 docker.io/apecloud/ape-dts:0.1.12
 docker.io/victoriametrics/vmselect:v1.95.1-cluster
 docker.io/victoriametrics/vmstorage:v1.95.1-cluster
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.4.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:c
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.4.1
 docker.io/apecloud/cubetran-platform:0.1.6
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
 #infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-latest
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0
 #infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-latest
-# apecloud
+# apecloud v0.12.11
 docker.io/apecloud/openconsole:v0.12.11
 docker.io/apecloud/prompt:v0.12.11
 docker.io/apecloud/apiserver:v0.12.11
