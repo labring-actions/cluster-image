@@ -73,8 +73,8 @@ main() {
         exit 1
     else
         init_dir
-        command_check "helm --help"
-        command_check "yq --help"
+#        command_check "helm --help"
+#        command_check "yq --help"
         download_chart
         generate_image
     fi
