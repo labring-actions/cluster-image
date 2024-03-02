@@ -1,0 +1,100 @@
+name: Save Charts
+
+on:
+  workflow_dispatch:
+    inputs:
+      APP_NAME:
+        description: 'app name'
+        required: true
+        default: 'kubeblocks'
+        type: choice
+        options:
+          - kubeblocks-enterprise
+      APP_VERSION:
+        description: 'app version'
+        required: true
+        default: ''
+      ADD_CHARTS:
+        description: 'additional charts (e.g. kubeblocks:0.8.1|kubeblocks-cloud:v0.12.11|...)'
+        required: false
+        default: ''
+
+run-name: save ${{ inputs.APP_NAME }}:${{ inputs.APP_VERSION }} ${{ inputs.ADD_CHARTS }}
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
+  OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
+  OSS_ENDPOINT: "oss-cn-zhangjiakou.aliyuncs.com"
+  OSS_BUCKET: "kubeblocks-oss"
+  HELM_VERSION: "v3.14.2"
+
+jobs:
+  save-app-charts:
+    name: save app charts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: save charts
+        env:
+          add_charts: ${{ inputs.ADD_CHARTS }}
+          app_name: ${{ inputs.APP_NAME }}
+          app_version: ${{ inputs.APP_VERSION }}
+          charts_file: .github/charts/${{ inputs.APP_NAME }}.txt
+        run: |
+          bash .github/scripts/save_charts.sh
+
+      - uses: manyuanrong/setup-ossutil@v2.0
+        with:
+          access-key-id: "${{ secrets.OSS_KEY_ID }}"
+          access-key-secret: "${{ secrets.OSS_KEY_SECRET }}"
+          endpoint: "${{ env.OSS_ENDPOINT }}"
+
+      - name: Upload charts to oss
+        id: upload_to_oss
+        run: |
+          CHART_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
+          ossutil cp -rf ./${CHART_PKG_NAME} oss://${{ env.OSS_BUCKET }}/charts/${CHART_PKG_NAME}
+          upload_ret=$?
+          if [[ $upload_ret -eq 0 ]]; then
+              echo "upload ${CHART_PKG_NAME} to oss successfully"
+          else
+              exit 1
+          fi
+
+  save-result:
+    runs-on: ubuntu-latest
+    needs: [ save-app-charts ]
+    if: ${{ always() }}
+    outputs:
+      chart-pkg-name: ${{ steps.get_save_result.outputs.chart_pkg_name }}
+      save-result: ${{ steps.get_save_result.outputs.save_result }}
+    steps:
+      - name: get save result
+        id: get_save_result
+        run: |
+          SAVE_RESULT="error"
+          CHART_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
+          if [[ "${{ needs.save-app-charts.result }}" == "success" ]]; then
+              SAVE_RESULT="success"
+              CHART_PKG_NAME="http://kubeblocks-oss.${{ env.OSS_ENDPOINT }}/charts/${CHART_PKG_NAME}"
+          fi
+          echo 'save_result='$SAVE_RESULT >> $GITHUB_OUTPUT
+          echo 'chart_pkg_name='${CHART_PKG_NAME} >> $GITHUB_OUTPUT
+
+  send-message:
+    permissions:
+      id-token: write
+      contents: read
+    needs: [ save-result ]
+    if: ${{ always() }}
+    uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
+    with:
+      TYPE: "2"
+      CONTENT: "save ${{ needs.save-result.outputs.chart-pkg-name }} ${{ needs.save-result.outputs.save-result }}"
+    secrets: inherit
