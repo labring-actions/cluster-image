@@ -58,7 +58,7 @@ jobs:
       - name: Upload charts to oss
         id: upload_to_oss
         run: |
-          CHART_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
+          CHART_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}-charts.tar.gz"
           ossutil cp -rf ./${CHART_PKG_NAME} oss://${{ env.OSS_BUCKET }}/charts/${CHART_PKG_NAME}
           upload_ret=$?
           if [[ $upload_ret -eq 0 ]]; then
@@ -79,7 +79,7 @@ jobs:
         id: get_save_result
         run: |
           SAVE_RESULT="error"
-          CHART_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
+          CHART_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}-charts.tar.gz"
           if [[ "${{ needs.save-app-charts.result }}" == "success" ]]; then
               SAVE_RESULT="success"
               CHART_PKG_NAME="http://kubeblocks-oss.${{ env.OSS_ENDPOINT }}/charts/${CHART_PKG_NAME}"
