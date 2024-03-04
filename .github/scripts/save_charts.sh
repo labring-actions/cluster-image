@@ -59,6 +59,11 @@ tar_charts_package() {
         return
     fi
     mkdir -p ${KB_CHART_NAME}
+
+    if [[ -z "${APP_VERSION}" && "$APP_NAME" == "kubeblocks-enterprise" ]]; then
+        wget ${KB_REPO_URL}/${APP_VERSION}/kubeblocks_crds.yaml -d ${KB_CHART_NAME}
+    fi
+
     tar_flag=0
     for i in {1..10}; do
         while read -r chart
@@ -97,6 +102,7 @@ tar_charts_package() {
 main() {
     local UNAME=`uname -s`
     local REPO_URL="https://github.com/apecloud/helm-charts/releases/download"
+    local KB_REPO_URL="https://github.com/apecloud/kubeblocks/releases/download"
     local KB_CHART_NAME="${APP_NAME}-charts"
     local APP_PKG_NAME="${KB_CHART_NAME}-${APP_VERSION}.tar.gz"
 
