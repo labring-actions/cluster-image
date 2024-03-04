@@ -60,7 +60,8 @@ tar_charts_package() {
     fi
     mkdir -p ${KB_CHART_NAME}
 
-    if [[ -z "${APP_VERSION}" && "$APP_NAME" == "kubeblocks-enterprise" ]]; then
+    if [[ -n "${APP_VERSION}" && "$APP_NAME" == "kubeblocks-enterprise" ]]; then
+        echo "download Kubeblocks crds"
         wget ${KB_REPO_URL}/${APP_VERSION}/kubeblocks_crds.yaml -d ${KB_CHART_NAME}
     fi
 
