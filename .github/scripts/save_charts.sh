@@ -62,7 +62,8 @@ tar_charts_package() {
 
     if [[ -n "${APP_VERSION}" && "$APP_NAME" == "kubeblocks-enterprise" ]]; then
         echo "download Kubeblocks crds"
-        wget ${KB_REPO_URL}/${APP_VERSION}/kubeblocks_crds.yaml -d ${KB_CHART_NAME}
+        wget ${KB_REPO_URL}/${APP_VERSION}/kubeblocks_crds.yaml -O kubeblocks_crds.yaml
+        mv kubeblocks_crds.yaml ${KB_CHART_NAME}
     fi
 
     tar_flag=0
