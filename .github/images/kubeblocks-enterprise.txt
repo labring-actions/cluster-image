@@ -27,19 +27,29 @@ infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
 #infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-latest
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0
 #infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-latest
-# apecloud v0.12.11
-docker.io/apecloud/openconsole:v0.12.11
-docker.io/apecloud/prompt:v0.12.11
-docker.io/apecloud/apiserver:v0.12.11
-docker.io/apecloud/relay:v0.12.11
-docker.io/apecloud/sentry-init:v0.12.11
-docker.io/apecloud/sentry:v0.12.11
-#docker.io/apecloud/task-manager:latest
-docker.io/apecloud/task-manager:v0.12.11
-docker.io/apecloud/cubetran-front:v0.12.11
-docker.io/victoriametrics/vmalert:v1.95.1
+# apecloud v0.14.0-alpha.7
+docker.io/apecloud/openconsole:v0.14.0-alpha.7
+docker.io/apecloud/prompt:v0.14.0-alpha.7
+docker.io/apecloud/apiserver:v0.14.0-alpha.7
+docker.io/apecloud/relay:v0.14.0-alpha.7
+docker.io/apecloud/sentry:v0.14.0-alpha.7
+docker.io/apecloud/sentry-init:v0.14.0-alpha.7
+docker.io/apecloud/task-manager:v0.14.0-alpha.7
+docker.io/apecloud/cubetran-front:v0.14.0-alpha.7
 docker.io/apecloud/redis:7.0.5
-docker.io/bats/bats:v1.4.1
-docker.io/prom/alertmanager:v0.25.0
 docker.io/grafana/grafana:10.1.1
-docker.io/jimmidyson/configmap-reload:v0.5.0
+docker.io/bats/bats:v1.4.1
+
+# apecloud v0.12.11
+#docker.io/apecloud/openconsole:v0.12.11
+#docker.io/apecloud/prompt:v0.12.11
+#docker.io/apecloud/apiserver:v0.12.11
+#docker.io/apecloud/relay:v0.12.11
+#docker.io/apecloud/sentry-init:v0.12.11
+#docker.io/apecloud/sentry:v0.12.11
+##docker.io/apecloud/task-manager:latest
+#docker.io/apecloud/task-manager:v0.12.11
+#docker.io/apecloud/cubetran-front:v0.12.11
+#docker.io/victoriametrics/vmalert:v1.95.1
+#docker.io/jimmidyson/configmap-reload:v0.5.0
+#docker.io/prom/alertmanager:v0.25.0
