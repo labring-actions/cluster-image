@@ -1,4 +1,4 @@
 kubeblocks:0.8.1
 gemini:0.4.1
 logto:0.1.3
-kubeblocks-cloud:v0.12.11
+kubeblocks-cloud:v0.14.0-alpha.7
