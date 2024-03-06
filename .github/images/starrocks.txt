@@ -1,0 +1,5 @@
+# starrocks v0.7.0
+docker.io/starrocks/fe-ubuntu:3.2.2
+docker.io/starrocks/be-ubuntu:3.2.2
+docker.io/apecloud/starrocks-tools:3.2.2
+docker.io/starrocks/cn-ubuntu:3.2.2
