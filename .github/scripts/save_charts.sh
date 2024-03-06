@@ -75,6 +75,7 @@ tar_charts_package() {
                 continue
             fi
             chart_tmp=${chart/:/-}
+            chart_name=${chart%:*}
             chart_version=${chart#*:}
             if [[ "$chart_tmp" == "starrocks"* ]]; then
                 helm repo add ${ENT_REPO_NAME} --username ${CHART_ACCESS_USER} --password ${CHART_ACCESS_TOKEN} ${KB_ENT_REPO_URL}
@@ -84,7 +85,7 @@ tar_charts_package() {
             echo "fetch chart $chart_tmp"
             for j in {1..10}; do
                 if [[ $ent_flag -eq 1 ]]; then
-                    helm pull -d ${KB_CHART_NAME} ${ENT_REPO_NAME}/${chart_tmp} --version ${chart_version}
+                    helm pull -d ${KB_CHART_NAME} ${ENT_REPO_NAME}/${chart_name} --version ${chart_version}
                 else
                     helm fetch -d ${KB_CHART_NAME} "$REPO_URL/${chart_tmp}/${chart_tmp}.tgz"
                 fi
