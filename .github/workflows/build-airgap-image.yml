@@ -33,6 +33,7 @@ on:
           - minio
           - nginx-ingress
           - prometheus
+          - starrocks
           - victoria-metrics-cluster
       IMAGE_VERSION:
         description: 'image version'
@@ -65,6 +66,9 @@ env:
   ALIYUN_PASSWORD_NEW: ${{ secrets.ALIYUN_PASSWORD_NEW }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
   CLOUD_VALUES: ${{ secrets.CLOUD_VALUES }}
+  CHART_PROJECT_ID: ${{ secrets.JIHULAB_PROJECT_ID }}
+  CHART_ACCESS_USER: ${{ secrets.JIHULAB_ACCESS_USER }}
+  CHART_ACCESS_TOKEN: ${{ secrets.JIHULAB_ACCESS_TOKEN }}
 
 jobs:
   build-apps:

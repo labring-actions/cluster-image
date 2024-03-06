@@ -18,6 +18,7 @@ on:
           - postgresql
           - qdrant
           - redis
+          - starrocks
       APP_VERSION:
         description: 'app version'
         required: true
