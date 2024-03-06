@@ -70,16 +70,27 @@ tar_charts_package() {
     for i in {1..10}; do
         while read -r chart
         do
+            ent_flag=0
             if [[ -z "$chart" || "$chart" == "#"* ]]; then
                 continue
             fi
-            chart=${chart/:/-}
-            echo "fetch chart $chart"
+            chart_tmp=${chart/:/-}
+            chart_version=${chart#*:}
+            if [[ "$chart_tmp" == "starrocks"* ]]; then
+                helm repo add ${ENT_REPO_NAME} --username ${CHART_ACCESS_USER} --password ${CHART_ACCESS_TOKEN} ${KB_ENT_REPO_URL}
+                helm repo update ${ENT_REPO_NAME}
+                ent_flag=1
+            fi
+            echo "fetch chart $chart_tmp"
             for j in {1..10}; do
-                helm fetch -d ${KB_CHART_NAME} "$REPO_URL/${chart}/${chart}.tgz"
+                if [[ $ent_flag -eq 1 ]]; then
+                    helm pull -d ${KB_CHART_NAME} ${ENT_REPO_NAME}/${chart_tmp} --version ${chart_version}
+                else
+                    helm fetch -d ${KB_CHART_NAME} "$REPO_URL/${chart_tmp}/${chart_tmp}.tgz"
+                fi
                 ret_msg=$?
                 if [[ $ret_msg -eq 0 ]]; then
-                    echo "$(tput -T xterm setaf 2)fetch chart $chart success$(tput -T xterm sgr0)"
+                    echo "$(tput -T xterm setaf 2)fetch chart $chart_tmp success$(tput -T xterm sgr0)"
                     break
                 fi
                 sleep 1
@@ -105,6 +116,8 @@ main() {
     local UNAME=`uname -s`
     local REPO_URL="https://github.com/apecloud/helm-charts/releases/download"
     local KB_REPO_URL="https://github.com/apecloud/kubeblocks/releases/download"
+    local KB_ENT_REPO_URL="https://jihulab.com/api/v4/projects/${CHART_PROJECT_ID}/packages/helm/stable"
+    local ENT_REPO_NAME="kb-ent"
     local KB_CHART_NAME="${APP_NAME}-charts"
     local APP_PKG_NAME="${KB_CHART_NAME}-${APP_VERSION}.tar.gz"
 

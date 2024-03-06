@@ -28,6 +28,9 @@ env:
   OSS_ENDPOINT: "oss-cn-zhangjiakou.aliyuncs.com"
   OSS_BUCKET: "kubeblocks-oss"
   HELM_VERSION: "v3.14.2"
+  CHART_PROJECT_ID: ${{ secrets.JIHULAB_PROJECT_ID }}
+  CHART_ACCESS_USER: ${{ secrets.JIHULAB_ACCESS_USER }}
+  CHART_ACCESS_TOKEN: ${{ secrets.JIHULAB_ACCESS_TOKEN }}
 
 jobs:
   save-app-charts:
