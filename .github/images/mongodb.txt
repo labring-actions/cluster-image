@@ -1,6 +1,5 @@
-# mongodb v0.7.0
+# mongodb v0.8.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:6.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:4.2
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:5.0.14
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:4.4
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:5.0.20
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:5.0
