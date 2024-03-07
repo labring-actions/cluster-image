@@ -58,7 +58,10 @@ tar_charts_package() {
         echo "no found tar charts file"
         return
     fi
-    mkdir -p ${KB_CHART_NAME}
+    mkdir -p ${KB_CHART_NAME}/kubeblocks-image-list
+
+    echo "copy image-list.txt"
+    cp -r .github/images/*.txt ${KB_CHART_NAME}/kubeblocks-image-list/
 
     if [[ -n "${APP_VERSION}" && "$APP_NAME" == "kubeblocks-enterprise" ]]; then
         echo "download Kubeblocks crds"
