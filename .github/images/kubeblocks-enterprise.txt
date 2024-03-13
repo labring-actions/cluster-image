@@ -6,6 +6,7 @@ infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascri
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.2-beta.23
 docker.io/apecloud/kubeblocks-charts:0.8.2-beta.23
 docker.io/apecloud/datasafed:0.1.0
+docker.io/apecloud/snapshot-controller:v6.2.1
 # logto v0.1.3
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/logto:1.12
 # gemini v0.4.1
