@@ -47,7 +47,7 @@ function init(){
   fi
   yq e -iN '.podCidr="100.64.0.0/10"' charts/flannel/values.yaml
   if [[ "$XY_LATEST" == true ]]; then
-  cni_tag=$({ curl --silent "https://api.github.com/repos/flannel-io/cni-plugin/releases/latest" | grep -E 'tag/v[0-9.]+"' || echo v1.2.0; } | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}') yq e -i '.podCidr="172.31.0.0/17"|.flannel.image_cni.tag=strenv(cni_tag)' charts/flannel/values.yaml
+  cni_tag=$({ curl --silent "https://api.github.com/repos/flannel-io/cni-plugin/releases/latest" | grep -E 'tag/v[0-9.]+' || echo v1.2.0; } | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}') yq e -i '.podCidr="172.31.0.0/17"|.flannel.image_cni.tag=strenv(cni_tag)' charts/flannel/values.yaml
     cat <<EOF | sed -i '/^\s*initContainers/ r /dev/stdin' charts/flannel/templates/daemonset.yaml
       - name: install-cni-plugins
         image: docker.io/labring4docker/cni-plugins:$({ curl --silent "https://api.github.com/repos/containernetworking/plugins/releases/latest" | grep tarball_url || echo v1.3.0; } | awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}')
