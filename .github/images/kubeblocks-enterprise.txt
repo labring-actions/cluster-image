@@ -35,6 +35,7 @@ docker.io/apecloud/sentry:v0.16.4
 docker.io/apecloud/sentry-init:v0.16.4
 docker.io/apecloud/task-manager:v0.16.4
 docker.io/apecloud/cubetran-front:v0.16.4
+docker.io/apecloud/apecloud-charts:v0.16.4
 docker.io/apecloud/redis:7.0.5
 docker.io/grafana/grafana:10.1.1
 docker.io/bats/bats:v1.4.1
