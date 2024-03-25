@@ -31,16 +31,16 @@ infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g-mysql:2.0.1-1
 docker.io/apecloud/servicemirror:0.2.11
 docker.io/apecloud/kubeviewer:0.1.8
 docker.io/prom/alertmanager:v0.25.0
-# apecloud v0.16.4
-docker.io/apecloud/openconsole:v0.16.4
-docker.io/apecloud/prompt:v0.16.4
-docker.io/apecloud/apiserver:v0.16.4
-docker.io/apecloud/relay:v0.16.4
-docker.io/apecloud/sentry:v0.16.4
-docker.io/apecloud/sentry-init:v0.16.4
-docker.io/apecloud/task-manager:v0.16.4
-docker.io/apecloud/cubetran-front:v0.16.4
-docker.io/apecloud/apecloud-charts:v0.16.4
+# apecloud v0.16.6
+docker.io/apecloud/openconsole:v0.16.6
+docker.io/apecloud/prompt:v0.16.6
+docker.io/apecloud/apiserver:v0.16.6
+docker.io/apecloud/relay:v0.16.6
+docker.io/apecloud/sentry:v0.16.6
+docker.io/apecloud/sentry-init:v0.16.6
+docker.io/apecloud/task-manager:v0.16.6
+docker.io/apecloud/cubetran-front:v0.16.6
+docker.io/apecloud/apecloud-charts:v0.16.6
 docker.io/apecloud/redis:7.0.5
 docker.io/grafana/grafana:10.1.1
 docker.io/bats/bats:v1.4.1
