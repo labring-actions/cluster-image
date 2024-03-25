@@ -1,10 +1,10 @@
-# kubeblocks v0.8.3-beta.0
+# kubeblocks v0.8.3-beta.1
 docker.io/library/busybox:latest
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks:0.8.3-beta.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-dataprotection:0.8.3-beta.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascript:0.8.3-beta.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.3-beta.0
-docker.io/apecloud/kubeblocks-charts:0.8.3-beta.0
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks:0.8.3-beta.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-dataprotection:0.8.3-beta.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascript:0.8.3-beta.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.3-beta.1
+docker.io/apecloud/kubeblocks-charts:0.8.3-beta.1
 docker.io/apecloud/datasafed:0.1.0
 docker.io/apecloud/snapshot-controller:v6.2.1
 # logto v0.1.3
