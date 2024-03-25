@@ -5,7 +5,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
-export readonly TOOLS_VERSION=${4:-"0.2.2"}
 
 rm -rf charts
 mkdir charts
