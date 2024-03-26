@@ -10,13 +10,13 @@ docker.io/library/busybox:latest
 # logto v0.1.3
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/logto:1.12
 # gemini v0.5.1-beta.6
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1-beta.6
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1-beta.7
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2-beta.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g-mysql:2.0.1-1-ubuntu
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.2
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/cubetran-platform:0.5.0
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/cubetran-platform:0.5.1
 docker.io/apecloud/cubetran-sidecar:0.1.0
 docker.io/library/mysql:8.0
 docker.io/library/redis:7.0.5
