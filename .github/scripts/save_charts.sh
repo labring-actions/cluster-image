@@ -61,9 +61,12 @@ tar_charts_package() {
     mkdir -p ${KB_CHART_NAME}/kubeblocks-image-list
 
     echo "copy image-list.txt"
-    cp -r .github/images/*.txt ${KB_CHART_NAME}/kubeblocks-image-list/
-
-    if [[ -n "${APP_VERSION}" && "$APP_NAME" == "kubeblocks-enterprise" ]]; then
+    if [[ "${KB_CHART_NAME}" == "kubeblocks-enterprise" ]]; then
+        cp -r .github/images/*.txt ${KB_CHART_NAME}/kubeblocks-image-list/
+    else
+        cp -r .github/images/${KB_CHART_NAME}.txt ${KB_CHART_NAME}/kubeblocks-image-list/
+    fi
+    if [[ -n "${APP_VERSION}" && ("$APP_NAME" == "kubeblocks-enterprise" || "$APP_NAME" == "kubeblocks" ) ]]; then
         echo "download Kubeblocks crds"
         wget ${KB_REPO_URL}/${APP_VERSION}/kubeblocks_crds.yaml -O kubeblocks_crds.yaml
         mv kubeblocks_crds.yaml ${KB_CHART_NAME}

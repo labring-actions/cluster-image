@@ -1,0 +1,2 @@
+gemini:0.5.1-beta.11
+gemini-monitor:0.5.1-beta.11
