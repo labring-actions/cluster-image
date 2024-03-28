@@ -11,7 +11,7 @@ docker.io/library/busybox:latest
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/logto:1.12
 # gemini v0.5.1-beta.11
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1-beta.11
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2-beta.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2-k8s21-beta.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g-mysql:2.0.1-1-ubuntu
@@ -30,7 +30,7 @@ docker.io/victoriametrics/vmstorage:v1.95.1-cluster
 docker.io/victoriametrics/vmalert:v1.95.1
 docker.io/apecloud/cubetran-sidecar:0.1.1
 docker.io/apecloud/servicemirror:0.2.11
-docker.io/apecloud/kubeviewer:0.1.8
+docker.io/apecloud/kubeviewer:0.1.9
 docker.io/prom/alertmanager:v0.25.0
 docker.io/jimmidyson/configmap-reload:v0.5.0
 # kubeblocks-cloud v0.16.7
