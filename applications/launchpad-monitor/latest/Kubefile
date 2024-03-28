@@ -1,0 +1,4 @@
+FROM scratch
+
+COPY . .
+CMD ["bash scripts/init.sh"]
