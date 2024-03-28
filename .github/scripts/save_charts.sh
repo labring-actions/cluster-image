@@ -64,7 +64,7 @@ tar_charts_package() {
     if [[ "${KB_CHART_NAME}" == "kubeblocks-enterprise" ]]; then
         cp -r .github/images/*.txt ${KB_CHART_NAME}/kubeblocks-image-list/
     else
-        cp -r .github/images/${KB_CHART_NAME}.txt ${KB_CHART_NAME}/kubeblocks-image-list/
+        cp -r .github/images/${APP_NAME}.txt ${KB_CHART_NAME}/kubeblocks-image-list/
     fi
     if [[ -n "${APP_VERSION}" && ("$APP_NAME" == "kubeblocks-enterprise" || "$APP_NAME" == "kubeblocks" ) ]]; then
         echo "download Kubeblocks crds"
