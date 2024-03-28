@@ -1,0 +1,6 @@
+# kubeblocks v0.8.3-beta.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks:0.8.3-beta.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-dataprotection:0.8.3-beta.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascript:0.8.3-beta.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.3-beta.2
+docker.io/apecloud/kubeblocks-charts:0.8.3-beta.2

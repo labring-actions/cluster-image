@@ -6,10 +6,13 @@ on:
       APP_NAME:
         description: 'app name'
         required: true
-        default: 'kubeblocks'
+        default: 'kubeblocks-enterprise'
         type: choice
         options:
           - kubeblocks-enterprise
+          - kubeblocks
+          - apecloud
+          - gemini
           - apecloud-mysql
           - clickhouse
           - kafka
@@ -18,8 +21,8 @@ on:
           - postgresql
           - qdrant
           - redis
-          - redash
           - starrocks
+          - redash
       APP_VERSION:
         description: 'app version'
         required: true

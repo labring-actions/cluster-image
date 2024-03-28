@@ -1,0 +1,3 @@
+# gemini v0.5.1-beta.10
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1-beta.10
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2-beta.1
