@@ -33,7 +33,7 @@ docker.io/apecloud/servicemirror:0.2.11
 docker.io/apecloud/kubeviewer:0.1.8
 docker.io/prom/alertmanager:v0.25.0
 docker.io/jimmidyson/configmap-reload:v0.5.0
-# apecloud v0.16.7
+# kubeblocks-cloud v0.16.7
 docker.io/apecloud/openconsole:v0.16.7
 docker.io/apecloud/prompt:v0.16.7
 docker.io/apecloud/apiserver:v0.16.7

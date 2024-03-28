@@ -11,7 +11,7 @@ on:
         options:
           - kubeblocks-enterprise
           - kubeblocks
-          - apecloud
+          - kubeblocks-cloud
           - gemini
           - apecloud-mysql
           - clickhouse
