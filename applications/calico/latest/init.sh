@@ -36,7 +36,7 @@ cd charts && {
     wget -qO- "https://github.com/tigera/operator/raw/$tigeraOperator_version/pkg/components/$file.go" | grep -B1 Image: | sed "s/version.VERSION/\"$tigeraOperator_version\"/g" |
       awk -F\" '/[IV]+/{str[NR]=$(NF-1);if(str[NR]!~/v[0-9.]+/)if(str[NR]~/calico\/.+/){printf("docker.io/%s:%s\n",$(NF-1),str[NR-1])}else{printf("quay.io/%s:%s\n",$(NF-1),str[NR-1])}}'
   done |
-    grep -v windows-upgrade: |
+    grep -v windows |
     grep -v fips |
     sort >"$NAME/Images"
   cd -
