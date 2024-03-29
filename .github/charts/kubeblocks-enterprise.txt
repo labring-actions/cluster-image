@@ -1,6 +1,6 @@
 kubeblocks:0.8.3-beta.2
-gemini:0.5.1-beta.11
-gemini-monitor:0.5.1-beta.11
+gemini:0.5.1
+gemini-monitor:0.5.1
 logto:0.1.3
 kubeblocks-cloud:v0.16.7
 starrocks:0.8.0

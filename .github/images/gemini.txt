@@ -1,4 +1,4 @@
-# gemini v0.5.1-beta.11
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1-beta.11
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2-k8s21-beta.0
+# gemini v0.5.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2-k8s21
 docker.io/apecloud/kubeviewer:0.1.9
