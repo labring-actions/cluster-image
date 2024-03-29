@@ -6,7 +6,7 @@ on:
       APP_NAME:
         description: 'app name'
         required: true
-        default: 'kubeblocks'
+        default: 'kubeblocks-enterprise'
         type: choice
         options:
           - kubeblocks-enterprise
