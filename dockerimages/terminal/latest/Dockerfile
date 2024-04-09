@@ -24,7 +24,7 @@ RUN arch                                                                        
     apt-get update                                                                                                              && \
     apt-get install -y --no-install-recommends -o Acquire::http::No-Cache=True                                                     \
     ca-certificates curl wget bind9-utils git g++ gcc libc6-dev make pkg-config vim                                                \
-    ncurses-dev libtolua-dev exuberant-ctags gdb dnsutils iputils-ping net-tools postgresql-client                              && \
+    ncurses-dev libtolua-dev exuberant-ctags gdb dnsutils iputils-ping net-tools postgresql-client openssh-client               && \
     apt-get clean && rm -rf /var/lib/apt/lists/*                                                                                && \
     chmod a+x /usr/bin/ttyd-kubectl.sh                                                                                          && \
     bash /usr/bin/ttyd-kubectl.sh                                                                                               && \
