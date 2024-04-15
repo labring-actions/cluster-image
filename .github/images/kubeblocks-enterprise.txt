@@ -1,9 +1,9 @@
-# kubeblocks v0.8.3-beta.2
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks:0.8.3-beta.2
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-dataprotection:0.8.3-beta.2
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascript:0.8.3-beta.2
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.3-beta.2
-docker.io/apecloud/kubeblocks-charts:0.8.3-beta.2
+# kubeblocks v0.8.3
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks:0.8.3
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-dataprotection:0.8.3
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-datascript:0.8.3
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.3
+docker.io/apecloud/kubeblocks-charts:0.8.3
 docker.io/apecloud/datasafed:0.1.0
 docker.io/apecloud/snapshot-controller:v6.2.1
 docker.io/library/busybox:latest
@@ -11,7 +11,7 @@ docker.io/library/busybox:latest
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/logto:1.12
 # gemini v0.5.1
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2-k8s21
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g-mysql:2.0.1-1-ubuntu
@@ -33,16 +33,16 @@ docker.io/apecloud/servicemirror:0.2.11
 docker.io/apecloud/kubeviewer:0.1.9
 docker.io/prom/alertmanager:v0.25.0
 docker.io/jimmidyson/configmap-reload:v0.5.0
-# kubeblocks-cloud v0.16.7
-docker.io/apecloud/openconsole:v0.16.7
-docker.io/apecloud/prompt:v0.16.7
-docker.io/apecloud/apiserver:v0.16.7
-docker.io/apecloud/relay:v0.16.7
-docker.io/apecloud/sentry:v0.16.7
-docker.io/apecloud/sentry-init:v0.16.7
-docker.io/apecloud/task-manager:v0.16.7
-docker.io/apecloud/cubetran-front:v0.16.7
-docker.io/apecloud/apecloud-charts:v0.16.7
+# kubeblocks-cloud v0.19.10
+docker.io/apecloud/openconsole:v0.19.10
+docker.io/apecloud/prompt:v0.19.10
+docker.io/apecloud/apiserver:v0.19.10
+docker.io/apecloud/relay:v0.19.10
+docker.io/apecloud/sentry:v0.19.10
+docker.io/apecloud/sentry-init:v0.19.10
+docker.io/apecloud/task-manager:v0.19.10
+docker.io/apecloud/cubetran-front:v0.19.10
+docker.io/apecloud/apecloud-charts:v0.19.10
 docker.io/apecloud/redis:7.0.5
 docker.io/grafana/grafana:10.1.1
 docker.io/bats/bats:v1.4.1

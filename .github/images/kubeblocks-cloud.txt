@@ -1,10 +1,10 @@
-# kubeblocks-cloud v0.17.11
-docker.io/apecloud/openconsole:v0.17.11
-docker.io/apecloud/prompt:v0.17.11
-docker.io/apecloud/apiserver:v0.17.11
-docker.io/apecloud/relay:v0.17.11
-docker.io/apecloud/sentry:v0.17.11
-docker.io/apecloud/sentry-init:v0.17.11
-docker.io/apecloud/task-manager:v0.17.11
-docker.io/apecloud/cubetran-front:v0.17.11
-docker.io/apecloud/apecloud-charts:v0.17.11
+# kubeblocks-cloud v0.19.10
+docker.io/apecloud/openconsole:v0.19.10
+docker.io/apecloud/prompt:v0.19.10
+docker.io/apecloud/apiserver:v0.19.10
+docker.io/apecloud/relay:v0.19.10
+docker.io/apecloud/sentry:v0.19.10
+docker.io/apecloud/sentry-init:v0.19.10
+docker.io/apecloud/task-manager:v0.19.10
+docker.io/apecloud/cubetran-front:v0.19.10
+docker.io/apecloud/apecloud-charts:v0.19.10
