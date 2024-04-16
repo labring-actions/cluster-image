@@ -61,7 +61,8 @@ tar_charts_package() {
     mkdir -p ${KB_CHART_NAME}/kubeblocks-image-list
 
     echo "copy image-list.txt"
-    if [[ "${KB_CHART_NAME}" == "kubeblocks-enterprise" ]]; then
+    if [[ "${APP_NAME}" == "kubeblocks-enterprise" ]]; then
+        echo
         cp -r .github/images/*.txt ${KB_CHART_NAME}/kubeblocks-image-list/
     else
         cp -r .github/images/${APP_NAME}.txt ${KB_CHART_NAME}/kubeblocks-image-list/
