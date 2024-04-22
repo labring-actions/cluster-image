@@ -1,0 +1,329 @@
+# kata-containers/tools/packaging/kata-deploy/kata-rbac/base/kata-rbac.yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kata-deploy-sa
+  namespace: kube-system
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kata-deploy-role
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "patch"]
+  - apiGroups: ["node.k8s.io"]
+    resources: ["runtimeclasses"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kata-deploy-rb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kata-deploy-role
+subjects:
+  - kind: ServiceAccount
+    name: kata-deploy-sa
+    namespace: kube-system
+# khata-containers/tools/packaging/kata-deploy/kata-deploy/base
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kata-deploy
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: kata-deploy
+  template:
+    metadata:
+      labels:
+        name: kata-deploy
+    spec:
+      containers:
+        - command:
+            - bash
+            - -c
+            - /opt/kata-artifacts/scripts/kata-deploy.sh install
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: DEBUG
+              value: "false"
+            - name: SHIMS
+              value: clh cloud-hypervisor dragonball fc qemu qemu-nvidia-gpu qemu-sev
+                qemu-snp qemu-tdx stratovirt
+            - name: DEFAULT_SHIM
+              value: qemu
+            - name: CREATE_RUNTIMECLASSES
+              value: "false"
+            - name: CREATE_DEFAULT_RUNTIMECLASS
+              value: "false"
+            - name: ALLOWED_HYPERVISOR_ANNOTATIONS
+            - name: SNAPSHOTTER_HANDLER_MAPPING
+            - name: AGENT_HTTPS_PROXY
+            - name: AGENT_NO_PROXY
+          image: registry.kubeblocks.cloud/apecloud/kata-deploy:latest
+          imagePullPolicy: Always
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - -c
+                  - /opt/kata-artifacts/scripts/kata-deploy.sh cleanup
+          name: kube-kata
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /etc/crio/
+              name: crio-conf
+            - mountPath: /etc/containerd/
+              name: containerd-conf
+            - mountPath: /opt/kata/
+              name: kata-artifacts
+            - mountPath: /usr/local/bin/
+              name: local-bin
+      dnsPolicy: ClusterFirst
+      hostPID: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: kata-deploy-sa
+      serviceAccountName: kata-deploy-sa
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - hostPath:
+            path: /etc/crio/
+            type: ""
+          name: crio-conf
+        - hostPath:
+            path: /etc/containerd/
+            type: ""
+          name: containerd-conf
+        - hostPath:
+            path: /opt/kata/
+            type: DirectoryOrCreate
+          name: kata-artifacts
+        - hostPath:
+            path: /usr/local/bin/
+            type: ""
+          name: local-bin
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+# kata-containers/tools/packaging/kata-deploy/runtimeclasses/kata-runtimeClasses.yaml
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-clh
+handler: kata-clh
+overhead:
+  podFixed:
+    memory: "130Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-cloud-hypervisor
+handler: kata-cloud-hypervisor
+overhead:
+  podFixed:
+    memory: "130Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-dragonball
+handler: kata-dragonball
+overhead:
+  podFixed:
+    memory: "130Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-fc
+handler: kata-fc
+overhead:
+  podFixed:
+    memory: "130Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-qemu-nvidia-gpu
+handler: kata-qemu-nvidia-gpu
+overhead:
+  podFixed:
+    memory: "160Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-qemu-se
+handler: kata-qemu-se
+overhead:
+  podFixed:
+    memory: "2048Mi"
+    cpu: "1.0"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-qemu-sev
+handler: kata-qemu-sev
+overhead:
+  podFixed:
+    memory: "2048Mi"
+    cpu: "1.0"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-qemu-snp
+handler: kata-qemu-snp
+overhead:
+  podFixed:
+    memory: "2048Mi"
+    cpu: "1.0"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-qemu-tdx
+handler: kata-qemu-tdx
+overhead:
+  podFixed:
+    memory: "2048Mi"
+    cpu: "1.0"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-qemu
+handler: kata-qemu
+overhead:
+  podFixed:
+    memory: "160Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-remote
+handler: kata-remote
+overhead:
+  podFixed:
+    memory: "120Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+---
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: kata-stratovirt
+handler: kata-stratovirt
+overhead:
+  podFixed:
+    memory: "130Mi"
+    cpu: "250m"
+scheduling:
+  nodeSelector:
+    katacontainers.io/kata-runtime: "true"
+# kata-containers/tools/packaging/kata-deploy/examples/test-deploy-kata-clh.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: php-apache-kata-clh
+  name: php-apache-kata-clh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: php-apache-kata-clh
+  template:
+    metadata:
+      labels:
+        run: php-apache-kata-clh
+    spec:
+      runtimeClassName: kata-clh
+      containers:
+        - image: registry.kubeblocks.cloud/apecloud/hpa-example:latest
+          imagePullPolicy: Always
+          name: php-apache
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache-kata-clh
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    run: php-apache-kata-clh
+  sessionAffinity: None
+  type: ClusterIP

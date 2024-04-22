@@ -1,4 +1,24 @@
-# gemini v0.5.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.2
+# gemini v0.5.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.3
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g-mysql:2.0.1-1-ubuntu
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kubeblocks-tools:0.8.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/cubetran-platform:0.5.1
+docker.io/apecloud/cubetran-sidecar:0.1.0
+docker.io/library/mysql:8.0
+docker.io/library/redis:7.0.5
+docker.io/grafana/loki:2.9.4
+docker.io/library/busybox:1.36
+docker.io/nginxinc/nginx-unprivileged:1.24-alpine
+docker.io/victoriametrics/vminsert:v1.95.1-cluster
+docker.io/apecloud/ape-dts:0.1.16
+docker.io/victoriametrics/vmselect:v1.95.1-cluster
+docker.io/victoriametrics/vmstorage:v1.95.1-cluster
+docker.io/victoriametrics/vmalert:v1.95.1
+docker.io/apecloud/cubetran-sidecar:0.1.1
+docker.io/apecloud/servicemirror:0.2.11
 docker.io/apecloud/kubeviewer:0.1.9
+docker.io/prom/alertmanager:v0.25.0
+docker.io/jimmidyson/configmap-reload:v0.5.0

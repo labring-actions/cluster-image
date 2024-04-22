@@ -58,12 +58,13 @@ tar_charts_package() {
         echo "no found tar charts file"
         return
     fi
-    mkdir -p ${KB_CHART_NAME}/kubeblocks-image-list
+    mkdir -p ${KB_CHART_NAME}/kubeblocks-image-list ${KB_CHART_NAME}/apps
 
     echo "copy image-list.txt"
     if [[ "${APP_NAME}" == "kubeblocks-enterprise" ]]; then
-        echo
         cp -r .github/images/*.txt ${KB_CHART_NAME}/kubeblocks-image-list/
+        echo "copy apps yaml "
+        cp -r .github/apps/* ${KB_CHART_NAME}/apps/
     else
         cp -r .github/images/${APP_NAME}.txt ${KB_CHART_NAME}/kubeblocks-image-list/
     fi
@@ -84,7 +85,7 @@ tar_charts_package() {
             chart_tmp=${chart/:/-}
             chart_name=${chart%:*}
             chart_version=${chart#*:}
-            if [[ "$chart_tmp" == "starrocks"* ]]; then
+            if [[ "$chart_tmp" == "starrocks"* || "$chart_tmp" == "oceanbase"* ]]; then
                 helm repo add ${ENT_REPO_NAME} --username ${CHART_ACCESS_USER} --password ${CHART_ACCESS_TOKEN} ${KB_ENT_REPO_URL}
                 helm repo update ${ENT_REPO_NAME}
                 ent_flag=1

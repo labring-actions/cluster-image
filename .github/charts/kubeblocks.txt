@@ -1,1 +1,2 @@
 kubeblocks:0.8.3
+oceanbase:0.8.3

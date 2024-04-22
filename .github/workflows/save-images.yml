@@ -23,6 +23,8 @@ on:
           - redis
           - starrocks
           - redash
+          - ingress-nginx
+          - kata
       APP_VERSION:
         description: 'app version'
         required: true
