@@ -17,6 +17,7 @@ on:
           - clickhouse
           - kafka
           - mongodb
+          - mysql
           - oceanbase
           - postgresql
           - qdrant

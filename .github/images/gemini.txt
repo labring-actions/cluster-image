@@ -1,5 +1,6 @@
 # gemini v0.5.2
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/gemini:0.5.2
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/easymetrics:0.5.2
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/oteld:0.5.3
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mongo-5.0
 infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:mysql-8.0

@@ -1,13 +1,14 @@
-# kubeblocks-cloud v0.20.15
-docker.io/apecloud/openconsole:v0.20.15
-docker.io/apecloud/prompt:v0.20.15
-docker.io/apecloud/apiserver:v0.20.15
-docker.io/apecloud/relay:v0.20.15
-docker.io/apecloud/sentry:v0.20.15
-docker.io/apecloud/sentry-init:v0.20.15
-docker.io/apecloud/task-manager:v0.20.15
-docker.io/apecloud/cubetran-front:v0.20.15
-docker.io/apecloud/apecloud-charts:v0.20.15
+# kubeblocks-cloud v0.21.0
+# docker.io/apecloud/prompt:v0.21.0
+# docker.io/apecloud/relay:v0.21.0
+# docker.io/apecloud/sentry:v0.21.0
+# docker.io/apecloud/sentry-init:v0.21.0
+docker.io/apecloud/task-manager:v0.21.0
+docker.io/apecloud/openconsole:v0.21.0
+docker.io/apecloud/apiserver:v0.21.0
+docker.io/apecloud/cubetran-front:v0.21.0
+docker.io/apecloud/apecloud-charts:v0.21.0
+docker.io/apecloud/cr4w:v0.21.0
 docker.io/apecloud/redis:7.0.5
 docker.io/grafana/grafana:10.1.1
 docker.io/bats/bats:v1.4.1
