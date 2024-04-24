@@ -1,0 +1,5 @@
+# apecloud-mysql v0.8.1
+infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
+docker.io/library/mysql:8.0.33
+docker.io/library/mysql:5.7.42
+docker.io/perconalab/percona-xtrabackup:8.0.32
