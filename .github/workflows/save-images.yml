@@ -26,6 +26,7 @@ on:
           - redash
           - ingress-nginx
           - kata
+          - kubebench
       APP_VERSION:
         description: 'app version'
         required: true
