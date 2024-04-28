@@ -1,0 +1,7 @@
+FROM scratch
+
+COPY . .
+
+ENV arch=${arch:-"amd64"}
+
+CMD ["bash entrypoint.sh"]
