@@ -47,7 +47,7 @@ download_chart() {
 download_file() {
     local GITHUB_USER="cert-manager"
     local GITHUB_REPO="cert-manager"
-    local GITHUB_FILE="cmctl-linux-${ARCH}.tar.gz"
+    local GITHUB_FILE="$GITHUB_REPO-cmctl-linux-${ARCH}.tar.gz"
     local DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/download/${VERSION}/${GITHUB_FILE}"
 
     wget -qO- "${DOWNLOAD_URL}" | tar -zx -C ./opt cmctl
