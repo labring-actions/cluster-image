@@ -36,6 +36,7 @@ on:
           - nginx-ingress
           - prometheus
           - starrocks
+          - spiderpool
           - victoria-metrics-cluster
       IMAGE_VERSION:
         description: 'image version'

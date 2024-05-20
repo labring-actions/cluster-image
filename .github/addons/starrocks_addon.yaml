@@ -1,0 +1,23 @@
+apiVersion: extensions.kubeblocks.io/v1alpha1
+kind: Addon
+metadata:
+  annotations:
+    addon.kubeblocks.io/kubeblocks-version: '>=0.7.0'
+  labels:
+    addon.kubeblocks.io/model: RDBMS
+    addon.kubeblocks.io/name: starrocks
+    addon.kubeblocks.io/provider: community
+    addon.kubeblocks.io/version: 0.7.0
+  name: starrocks
+spec:
+  defaultInstallValues:
+    - enabled: true
+  description: A Linux Foundation project, is the next-generation data platform designed
+    to make data-intensive real-time analytics fast and easy.
+  helm:
+    chartLocationURL: file:///starrocks-0.7.0.tgz
+    chartsImage: docker.io/apecloud/apecloud-charts:v0.15.2
+    chartsPathInImage: /charts
+  installable:
+    autoInstall: true
+  type: Helm
