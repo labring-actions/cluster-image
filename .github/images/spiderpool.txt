@@ -1,4 +1,4 @@
-ghcr.io/docker/spiderpool/spiderpool-plugins:v0.9.2
+docker.io/docker/spiderpool/spiderpool-plugins:v0.9.2
 docker.io/docker/spiderpool-agent:eb82b45a097ad23906e72199b70e25d161fbe88d
-ghcr.io/docker/spiderpool/spiderpool-controller:v0.9.3
+docker.io/docker/spiderpool/spiderpool-controller:v0.9.3
 docker.io/docker/spiderpool-controller:eb82b45a097ad23906e72199b70e25d161fbe88d
