@@ -1,4 +1,4 @@
-# kubebench v0.0.1
-registry.cn-hangzhou.aliyuncs.com/apecloud/kubebench:0.0.6
-registry.cn-hangzhou.aliyuncs.com/apecloud/customsuites:latest
-registry.cn-hangzhou.aliyuncs.com/apecloud/benchmarksql:latest
+# kubebench v0.0.8
+docker.io/apecloud/kubebench:0.0.8
+docker.io/apecloud/customsuites:latest
+docker.io/apecloud/benchmarksql:latest

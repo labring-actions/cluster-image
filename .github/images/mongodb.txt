@@ -1,5 +1,5 @@
 # mongodb v0.8.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:6.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:5.0.20
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mongo:5.0
+docker.io/apecloud/mongo:6.0
+docker.io/apecloud/agamotto:0.1.2-beta.1
+docker.io/apecloud/mongo:5.0.20
+docker.io/apecloud/mongo:5.0

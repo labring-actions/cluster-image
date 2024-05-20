@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - apecloud-mysql
+          - ape-local-csi-driver
           - cilium
           - postgresql
           - redis

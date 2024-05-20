@@ -1,5 +1,5 @@
 # postgresql v0.8.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/wal-g:postgres-1.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/pgbouncer:1.19.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/spilo:14.8.0-pgvector-v0.5.0
+docker.io/apecloud/wal-g:postgres-1.0
+docker.io/apecloud/agamotto:0.1.2-beta.1
+docker.io/apecloud/pgbouncer:1.19.0
+docker.io/apecloud/spilo:14.8.0-pgvector-v0.5.0

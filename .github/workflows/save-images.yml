@@ -16,8 +16,11 @@ on:
           - apecloud-mysql
           - clickhouse
           - kafka
+          - kata
+          - kubebench
           - mongodb
           - mysql
+          - metallb
           - oceanbase
           - postgresql
           - qdrant
@@ -25,8 +28,7 @@ on:
           - starrocks
           - redash
           - ingress-nginx
-          - kata
-          - kubebench
+          - ape-local-csi-driver
       APP_VERSION:
         description: 'app version'
         required: true

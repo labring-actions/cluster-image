@@ -1,8 +1,11 @@
 kubeblocks:0.8.3
-gemini:0.5.2
-gemini-monitor:0.5.2
+gemini:0.6.0-beta.0
+gemini-monitor:0.6.0-beta.0
 logto:0.1.3
-kubeblocks-cloud:v0.21.0
+kubeblocks-cloud:v0.22.27
 starrocks:0.8.0
 oceanbase:0.8.3
 ingress-nginx:4.8.4
+metallb:0.14.4
+ape-local-csi-driver:0.1.10
+servicemirror:0.2.15

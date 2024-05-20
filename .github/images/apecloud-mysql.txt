@@ -1,8 +1,8 @@
 # apecloud-mysql v0.8.0-beta.6
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-xtrabackup:8.0
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/agamotto:0.1.2-beta.1
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/mysql_audit_log:8.0.33
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-scale:0.2.6
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.beta3.auditlog.20231221.g6ba5e2e.13
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/apecloud-mysql-server:8.0.30-5.beta3.20231215.ge77d836.13
+docker.io/apecloud/apecloud-xtrabackup:8.0
+docker.io/apecloud/agamotto:0.1.2-beta.1
+docker.io/apecloud/mysql_audit_log:8.0.33
+docker.io/apecloud/apecloud-mysql-scale:0.2.6
+docker.io/apecloud/apecloud-mysql-server:8.0.30-5.beta3.auditlog.20231221.g6ba5e2e.13
+docker.io/apecloud/apecloud-mysql-server:8.0.30-5.beta3.20231215.ge77d836.13
 docker.io/library/busybox:1.35

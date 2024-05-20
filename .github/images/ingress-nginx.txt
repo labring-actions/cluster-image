@@ -1,3 +1,3 @@
 # ingress-nginx 4.8.4
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/controller:v1.9.4
-infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/kube-webhook-certgen:v20231011-8b53cabe0
+docker.io/apecloud/controller:v1.9.4
+docker.io/apecloud/kube-webhook-certgen:v20231011-8b53cabe0
