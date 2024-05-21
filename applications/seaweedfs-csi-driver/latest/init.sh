@@ -7,8 +7,8 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-HELM_REPO_URL="https://seaweedfs.github.io/seaweedfs/helm"
-HELM_REPO_NAME="seaweedfs/seaweedfs"
+HELM_REPO_URL="https://seaweedfs.github.io/seaweedfs-csi-driver/helm"
+HELM_REPO_NAME="seaweedfs-csi-driver/seaweedfs-csi-driver"
 
 # When submitting a PR, make sure it is configured as false.
 LOCAL_BUILD_ENABLED=${LOCAL_BUILD_ENABLED:-"false"}

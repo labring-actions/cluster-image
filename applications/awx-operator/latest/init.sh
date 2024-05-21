@@ -7,8 +7,8 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-HELM_REPO_URL="https://seaweedfs.github.io/seaweedfs/helm"
-HELM_REPO_NAME="seaweedfs/seaweedfs"
+HELM_REPO_URL="https://ansible.github.io/awx-operator/"
+HELM_REPO_NAME="awx-operator/awx-operator"
 
 # When submitting a PR, make sure it is configured as false.
 LOCAL_BUILD_ENABLED=${LOCAL_BUILD_ENABLED:-"false"}
@@ -38,7 +38,7 @@ init_directory() {
     CHARTS_DIR_ENABLED=true
     OPT_DIR_ENABLED=false
     ETC_DIR_ENABLED=false
-    IMAGES_DIR_ENABLED=false
+    IMAGES_DIR_ENABLED=true
     MANIFESTS_DIR_ENABLED=false
 
     # Remove existing directories
@@ -64,7 +64,6 @@ command_check() {
 download_chart() {
     # Download Helm chart
     info_log "Downloading Helm chart"
-    local APP_VERSION=${VERSION}
 
     # Add Helm repository
     helm repo add "${HELM_REPO_NAME%/*}" "${HELM_REPO_URL}" --force-update 1>/dev/null
@@ -75,7 +74,7 @@ download_chart() {
 
     # If APP VERSION in helm chart does not contain the v field, remove it
     if [[ ! $LATEST_VERSION == v* ]]; then
-        APP_VERSION=${APP_VERSION#v}
+        APP_VERSION=${VERSION#v}
     fi
 
     # Search for the CHART VERSION corresponding to the APP VERSION.
@@ -87,6 +86,27 @@ download_chart() {
 
     # Pull Helm chart
     helm pull "${HELM_REPO_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
+
+    # Generate image list
+    main_file="https://raw.githubusercontent.com/ansible/awx-operator/${APP_VERSION}/roles/installer/defaults/main.yml"
+    manager_auth_proxy_patch_file="https://raw.githubusercontent.com/ansible/awx-operator/${APP_VERSION}/config/default/manager_auth_proxy_patch.yaml"
+
+    DEFAULT_AWX_VERSION=$(docker run --entrypoint="" quay.io/ansible/awx-operator:${APP_VERSION} bash -c "env | grep DEFAULT_AWX_VERSION" | awk -F= '{print $2}')
+    REDIS_VERSION=$(curl -s ${main_file} | grep 'redis_image_version' | awk '{print $2}')
+    INIT_PROJECTS_CONTAINER_IMAGE=$(curl -s ${main_file} | grep 'init_projects_container_image' | awk '{print $2}')
+    POSTGRES_IMAGE=$(curl -s ${main_file} | grep 'postgres_image:' | awk '{print $2}')
+    POSTGRES_IMAGE_VERSION=$(curl -s ${main_file} | grep 'postgres_image_version:' | awk '{print $2}')
+    KUBE_RBAC_PROXY_VERSION=$(curl -s ${manager_auth_proxy_patch_file} | grep 'image:' | awk '{print $2}')
+
+    cat >images/shim/images.txt<<EOF
+quay.io/ansible/awx:${DEFAULT_AWX_VERSION}
+quay.io/ansible/awx-ee:${DEFAULT_AWX_VERSION}
+docker.io/redis:${REDIS_VERSION}
+${INIT_PROJECTS_CONTAINER_IMAGE}
+${POSTGRES_IMAGE}:${POSTGRES_IMAGE_VERSION}
+${KUBE_RBAC_PROXY_VERSION}
+quay.io/ansible/awx-operator:${APP_VERSION}
+EOF
 }
 
 local_build() {
