@@ -7,8 +7,8 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-HELM_REPO_URL="https://seaweedfs.github.io/seaweedfs/helm"
-HELM_REPO_NAME="seaweedfs/seaweedfs"
+HELM_REPO_URL="https://oceanbase.github.io/ob-operator/"
+HELM_REPO_NAME="ob-operator/ob-operator"
 
 # When submitting a PR, make sure it is configured as false.
 LOCAL_BUILD_ENABLED=${LOCAL_BUILD_ENABLED:-"false"}
@@ -62,31 +62,45 @@ command_check() {
 }
 
 download_chart() {
-    # Download Helm chart
-    info_log "Downloading Helm chart"
-    local APP_VERSION=${VERSION}
-
     # Add Helm repository
     helm repo add "${HELM_REPO_NAME%/*}" "${HELM_REPO_URL}" --force-update 1>/dev/null
 
     # Get version list from Helm repository
-    local app_version_list=$(helm search repo --versions --regexp "\v${HELM_REPO_NAME}\v")
+    local APP_VERSION_LIST=$(helm search repo --versions --regexp "\v${HELM_REPO_NAME}\v")
     local LATEST_VERSION=$(echo "${app_version_list}" | awk '{print $3}' | grep -v VERSION | head -n1)
 
     # If APP VERSION in helm chart does not contain the v field, remove it
-    if [[ ! $LATEST_VERSION == v* ]]; then
-        APP_VERSION=${APP_VERSION#v}
+    if [[ $LATEST_VERSION == v* ]]; then
+        APP_VERSION=${VERSION}
+    else
+        APP_VERSION=${VERSION#v}
     fi
 
     # Search for the CHART VERSION corresponding to the APP VERSION.
     # The same APP VERSION may correspond to multiple CHART VERSIONs.
-    local HELM_CHART_VERSION=$(echo "${app_version_list}" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
+    local HELM_CHART_VERSION=$(echo "${APP_VERSION_LIST}" | grep "${APP_VERSION}" | awk '{print $2}' | sort -rn | head -n1)
 
     # Check if the Helm repository contains the version
     helm search repo "${HELM_REPO_NAME}" --version ${HELM_CHART_VERSION} --fail-on-no-result >/dev/null 2>&1
 
     # Pull Helm chart
     helm pull "${HELM_REPO_NAME}" --version="${HELM_CHART_VERSION}" -d charts --untar
+}
+
+download_manifests() {
+    wget -qP manifests/ https://raw.githubusercontent.com/oceanbase/ob-operator/${VERSION#v}_release/example/quickstart/obcluster.yaml
+    sed -i "s#namespace: default#namespace: oceanbase#g" manifests/obcluster.yaml
+    cat >manifests/root-password-secret.yaml<<EOF
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: root-password
+  namespace: oceanbase
+type: Opaque
+data:
+  password: cm9vdF9wYXNzd29yZA==
+EOF
 }
 
 local_build() {
@@ -138,6 +152,7 @@ main() {
 
     init_directory
     download_chart
+    download_manifests
     info_log "Initialization successful. You can run build now"
 
     if [[ "$LOCAL_BUILD_ENABLED" == "true" ]]; then
