@@ -1,1 +1,4 @@
 # elasticsearch v0.8.0
+docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+docker.io/apecloud/elasticsearch-plugins:8.8.2
+docker.elastic.co/busybox:1.35

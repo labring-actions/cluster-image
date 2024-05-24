@@ -11,3 +11,4 @@ metallb:0.14.4
 ape-local-csi-driver:0.1.10
 servicemirror:0.2.15
 spiderpool:0.9.3
+kubechat:v0.5.0-alpha.9

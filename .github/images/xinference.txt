@@ -1,0 +1,1 @@
+docker.io/xprobe/xinference:v0.11.0-cpu
