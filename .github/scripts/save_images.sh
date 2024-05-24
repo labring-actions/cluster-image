@@ -26,7 +26,7 @@ add_images_list() {
 #        fi
         touch "$IMAGE_FILE_PATH"
     fi
-    echo "" >> $IMAGE_FILE_PATH
+    echo " " >> $IMAGE_FILE_PATH
     for image in $(echo "$ADD_IMAGES_LIST" | sed 's/|/ /g'); do
         image_name="${image%:*}"
         exists_images_list="$(cat $IMAGE_FILE_PATH | (grep "$image_name" || true))"
