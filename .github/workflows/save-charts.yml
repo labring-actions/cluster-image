@@ -17,12 +17,16 @@ on:
         description: 'app version'
         required: true
         default: ''
+      KUBEBLOCKS_VERSION:
+        description: 'kubeblocks version'
+        required: true
+        default: ''
       ADD_CHARTS:
         description: 'additional charts (e.g. kubeblocks:0.8.1|kubeblocks-cloud:v0.12.11|...)'
         required: false
         default: ''
 
-run-name: save ${{ inputs.APP_NAME }}:${{ inputs.APP_VERSION }} ${{ inputs.ADD_CHARTS }}
+run-name: save ${{ inputs.APP_NAME }}:${{ inputs.APP_VERSION }} ${{ inputs.KUBEBLOCKS_VERSION }} ${{ inputs.ADD_CHARTS }}
 
 env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -51,6 +55,7 @@ jobs:
           add_charts: ${{ inputs.ADD_CHARTS }}
           app_name: ${{ inputs.APP_NAME }}
           app_version: ${{ inputs.APP_VERSION }}
+          kubeblocks_version: ${{ inputs.KUBEBLOCKS_VERSION }}
           charts_file: .github/charts/${{ inputs.APP_NAME }}.txt
         run: |
           bash .github/scripts/save_charts.sh

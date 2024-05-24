@@ -6,11 +6,13 @@ readonly ADD_CHARTS_LIST=${add_charts?}
 readonly APP_NAME=${app_name?}
 readonly APP_VERSION=${app_version?}
 readonly CHART_FILE_PATH=${charts_file?}
+readonly KUBEBLOCKS_VERSION=${kubeblocks_version?}
 
 echo "ADD_CHARTS_LIST:"${ADD_CHARTS_LIST}
 echo "APP_NAME:"${APP_NAME}
 echo "APP_VERSION:"${APP_VERSION}
 echo "CHART_FILE_PATH:"${CHART_FILE_PATH}
+echo "KUBEBLOCKS_VERSION:"${KUBEBLOCKS_VERSION}
 
 add_charts_list() {
     if [[ -z "${ADD_CHARTS_LIST}" ]]; then
@@ -68,9 +70,9 @@ tar_charts_package() {
     else
         cp -r .github/images/${APP_NAME}.txt ${KB_CHART_NAME}/kubeblocks-image-list/
     fi
-    if [[ -n "${APP_VERSION}" && ("$APP_NAME" == "kubeblocks-enterprise" || "$APP_NAME" == "kubeblocks" ) ]]; then
+    if [[ -n "${KUBEBLOCKS_VERSION}" && ("$APP_NAME" == "kubeblocks-enterprise" || "$APP_NAME" == "kubeblocks" ) ]]; then
         echo "download Kubeblocks crds"
-        wget ${KB_REPO_URL}/${APP_VERSION}/kubeblocks_crds.yaml -O kubeblocks_crds.yaml
+        wget ${KB_REPO_URL}/${KUBEBLOCKS_VERSION}/kubeblocks_crds.yaml -O kubeblocks_crds.yaml
         mv kubeblocks_crds.yaml ${KB_CHART_NAME}
     fi
 

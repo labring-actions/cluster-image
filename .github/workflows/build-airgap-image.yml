@@ -20,6 +20,7 @@ on:
           - clickhouse
           - oceanbase
           - mysql
+          - elasticsearch
           - kubeblocks
           - kubeblocks-cloud
           - gemini
@@ -38,6 +39,7 @@ on:
           - starrocks
           - spiderpool
           - victoria-metrics-cluster
+          - metrics-server
       IMAGE_VERSION:
         description: 'image version'
         required: true

@@ -1,5 +1,8 @@
 # mongodb v0.8.0
+# docker.io/apecloud/mongo:4.2
+# docker.io/apecloud/mongo:4.4
+# docker.io/apecloud/mongo:5.0
+# docker.io/apecloud/mongo:5.0.20
 docker.io/apecloud/mongo:6.0
 docker.io/apecloud/agamotto:0.1.2-beta.1
-docker.io/apecloud/mongo:5.0.20
-docker.io/apecloud/mongo:5.0
+docker.io/apecloud/mongo:5.0.14
