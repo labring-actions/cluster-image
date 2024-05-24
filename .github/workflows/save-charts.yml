@@ -26,7 +26,7 @@ on:
         required: false
         default: ''
 
-run-name: save ${{ inputs.APP_NAME }}:${{ inputs.APP_VERSION }} ${{ inputs.KUBEBLOCKS_VERSION }} ${{ inputs.ADD_CHARTS }}
+run-name: save ${{ inputs.APP_NAME }}:${{ inputs.APP_VERSION }} KB_VERSION:${{ inputs.KUBEBLOCKS_VERSION }} ${{ inputs.ADD_CHARTS }}
 
 env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
