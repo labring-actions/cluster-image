@@ -11,6 +11,7 @@ on:
         options:
           - apecloud-mysql
           - ape-local-csi-driver
+          - calico
           - cilium
           - postgresql
           - redis
