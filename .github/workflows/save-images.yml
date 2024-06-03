@@ -60,6 +60,18 @@ jobs:
     name: save app images
     runs-on: ubuntu-latest
     steps:
+      - name: Free disk space
+        run: |
+          if [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" ]]; then
+              sudo apt-get autoremove -y >/dev/null 2>&1
+              sudo apt-get autoclean -y >/dev/null 2>&1
+              sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
+              docker rmi $(docker image ls -aq) >/dev/null 2>&1
+              sudo swapoff -a
+              sudo rm -f /swapfile
+              df -h
+          fi
+
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
 
