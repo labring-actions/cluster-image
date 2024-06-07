@@ -44,7 +44,6 @@ docker.io/apecloud/apiserver:v0.24.48-jni
 # docker.io/apecloud/apiserver:v0.24.48
 docker.io/apecloud/task-manager:v0.24.48
 docker.io/apecloud/cubetran-front:v0.24.48
-docker.io/apecloud/apecloud-charts:v0.24.48
 docker.io/apecloud/cr4w:v0.24.48
 docker.io/apecloud/prompt:v0.24.48
 docker.io/apecloud/relay:v0.24.48
