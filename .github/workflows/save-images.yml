@@ -26,7 +26,6 @@ on:
           - qdrant
           - redis
           - starrocks
-          - redash
           - ingress-nginx
           - ape-local-csi-driver
           - spiderpool
