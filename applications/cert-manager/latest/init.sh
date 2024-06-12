@@ -65,7 +65,8 @@ main() {
           exit 1
         }
         download_chart
-        download_file
+        # v1.15.0 does not have cmctl
+        download_file || true
     fi
 }
 
