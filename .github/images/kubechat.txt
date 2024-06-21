@@ -1,4 +1,4 @@
 docker.io/apecloud/kubechat-console:latest
 docker.io/apecloud/kubechat-website:latest
-docker.io/apecloud/kubechat:v0.5.0-alpha.10
+docker.io/apecloud/kubechat:v0.5.0-alpha.11
 docker.io/apecloud/logto:1.12
