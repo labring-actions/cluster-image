@@ -13,7 +13,7 @@ repo_url="https://opensource.zalando.com/postgres-operator/charts/postgres-opera
 
 helm repo add postgres-operator-charts ${repo_url}
 
-helm fetch -d charts --untar postgres-operator-charts/postgres-operator --version ${VERSION}
+helm fetch -d charts --untar postgres-operator-charts/postgres-operator --version ${VERSION#v}
 
 rm -rf charts/"${chart}"-"${VERSION#v}".tgz
 
