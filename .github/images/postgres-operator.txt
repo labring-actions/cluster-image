@@ -1,0 +1,5 @@
+# zalando postgres-operator v1.12.2
+ghcr.io/zalando/postgres-operator:v1.12.2
+registry.opensource.zalan.do/acid/pgbouncer:master-32
+ghcr.io/zalando/spilo-16:3.2-p3
+ghcr.io/zalando/postgres-operator/logical-backup:v1.12.2
