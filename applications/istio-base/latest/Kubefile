@@ -1,0 +1,3 @@
+FROM scratch
+COPY . .
+CMD ["helm install istio-base istio/base -n istio-system --create-namespace"]
