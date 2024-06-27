@@ -1,3 +1,8 @@
 FROM scratch
+
+ENV NAME=${NAME:-"istio-base"}
+ENV NAMESPACE=${NAMESPACE:-"istio-system"}
+ENV CHARTS="./charts/base"
+
 COPY . .
-CMD ["helm install istio-base istio/base -n istio-system --create-namespace"]
+CMD ["helm upgrade -i $(NAME) $(CHARTS) -n $(NAMESPACE) --create-namespace"]
