@@ -31,7 +31,7 @@ function check_version(){
 
 function init(){
   # Find the chart version through the app version
-  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION} | awk '{print $2}' | sort -rn | head -n1)
+  chart_version=$(helm search repo --versions --regexp "\v"${repo_name}"\v" |grep ${VERSION#v} | awk '{print $2}' | sort -rn | head -n1)
 
   # Pull helm charts to local
   helm pull ${repo_name} --version=${chart_version} -d charts --untar
