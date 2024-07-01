@@ -2,3 +2,4 @@
 docker.io/apecloud/frr:9.0.2
 docker.io/apecloud/speaker:v0.14.4
 docker.io/apecloud/controller:v0.14.4
+docker.io/apecloud/metallb-charts:v0.14.4
