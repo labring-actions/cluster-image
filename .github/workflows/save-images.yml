@@ -33,6 +33,7 @@ on:
           - elasticsearch
           - xinference
           - kubechat
+          - postgres-operator
           - cubetran-platform
       APP_VERSION:
         description: 'app version'

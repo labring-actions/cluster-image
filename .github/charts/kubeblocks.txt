@@ -1,2 +1,2 @@
-kubeblocks:0.8.4-beta.6
+kubeblocks:0.8.4-beta.11
 oceanbase:0.8.3

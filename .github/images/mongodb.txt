@@ -1,4 +1,4 @@
-# mongodb v0.8.0
+# mongodb v0.8.1
 # docker.io/apecloud/mongo:4.2
 # docker.io/apecloud/mongo:4.4
 # docker.io/apecloud/mongo:5.0
