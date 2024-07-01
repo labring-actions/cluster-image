@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -e
-set -x
 
-NAME=${NAME:-"oceanbase-dashboard"}
-NAMESPACE=${NAMESPACE:-"oceanbase"}
-CHARTS=${CHARTS:-"./charts/oceanbase-dashboard"}
+NAME=${NAME:-"zabbix-agent"}
+NAMESPACE=${NAMESPACE:-"zabbix-monitoring"}
+CHARTS=${CHARTS:-"./charts/zabbix-helm-chrt"}
 HELM_OPTS=${HELM_OPTS:-""}
 
 helm upgrade -i ${NAME} ${CHARTS} -n ${NAMESPACE} --create-namespace ${HELM_OPTS}
