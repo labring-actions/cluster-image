@@ -20,7 +20,7 @@ on:
       KUBEBLOCKS_VERSION:
         description: 'kubeblocks version'
         required: true
-        default: 'v0.8.4-beta.11'
+        default: 'v0.9.0'
       ADD_CHARTS:
         description: 'additional charts (e.g. kubeblocks:0.8.1|kubeblocks-cloud:v0.12.11|...)'
         required: false
