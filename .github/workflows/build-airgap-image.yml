@@ -41,7 +41,6 @@ on:
           - spiderpool
           - victoria-metrics-cluster
           - metrics-server
-          - postgres-operator
       IMAGE_VERSION:
         description: 'image version'
         required: true

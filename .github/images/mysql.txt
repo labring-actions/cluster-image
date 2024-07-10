@@ -1,4 +1,4 @@
-# mysql v0.8.2
+# mysql v0.9.1
 docker.io/apecloud/agamotto:0.1.2-beta.1
 docker.io/apecloud/mysql:8.0.33
 docker.io/apecloud/mysql:5.7.44
@@ -7,3 +7,5 @@ docker.io/apecloud/percona-xtrabackup:8.0.33-28
 docker.io/apecloud/percona-xtrabackup:2.4
 docker.io/apecloud/mysql_audit_log:5.7.44
 docker.io/apecloud/mysql_audit_log:8.0.33
+docker.io/apecloud/syncer:mysql
+docker.io/apecloud/syncer:0.1.0

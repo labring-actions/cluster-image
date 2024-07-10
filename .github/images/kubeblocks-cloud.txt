@@ -1,15 +1,13 @@
-# kubeblocks-cloud v0.25.59
-docker.io/apecloud/openconsole:v0.25.59
-docker.io/apecloud/apiserver:v0.25.59-jni
-# docker.io/apecloud/apiserver:v0.25.59
-docker.io/apecloud/task-manager:v0.25.59
-docker.io/apecloud/cubetran-front:v0.25.59
-docker.io/apecloud/cr4w:v0.25.59
-docker.io/apecloud/prompt:v0.25.59
-docker.io/apecloud/relay:v0.25.59
-docker.io/apecloud/sentry:v0.25.59
-docker.io/apecloud/sentry-init:v0.25.59
-docker.io/apecloud/kb-cloud-installer:v0.25.59
+# kubeblocks-cloud v0.26.12-alpha.9
+docker.io/apecloud/openconsole:v0.26.12-alpha.9
+docker.io/apecloud/apiserver:v0.26.12-alpha.9
+docker.io/apecloud/task-manager:v0.26.12-alpha.9
+docker.io/apecloud/cubetran-front:v0.26.12-alpha.9
+docker.io/apecloud/cr4w:v0.26.12-alpha.9
+docker.io/apecloud/relay:v0.26.12-alpha.9
+docker.io/apecloud/sentry:v0.26.12-alpha.9
+docker.io/apecloud/sentry-init:v0.26.12-alpha.9
+docker.io/apecloud/kb-cloud-installer:v0.26.12-alpha.9
 docker.io/apecloud/kubeblocks-installer:v0.9.0-offline
 docker.io/apecloud/redis:7.0.5
 docker.io/apecloud/grafana:10.1.1
@@ -18,3 +16,4 @@ docker.io/apecloud/workflow-controller:v3.5.5
 docker.io/apecloud/argocli:v3.5.5
 docker.io/apecloud/argoexec:v3.5.5
 docker.io/apecloud/cloudshell:1.7.7
+docker.io/apecloud/dms:0.0.1

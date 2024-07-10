@@ -1,16 +1,17 @@
-# gemini v0.6.1-beta.1
-docker.io/apecloud/gemini:0.6.1-beta.1
-docker.io/apecloud/gemini-tools:0.6.1-beta.1
-docker.io/apecloud/easymetrics:0.6.1-beta.1
+# gemini v0.6.2-beta.2
+docker.io/apecloud/gemini:0.6.2-beta.2
+docker.io/apecloud/gemini-tools:0.6.2-beta.2
+docker.io/apecloud/easymetrics:0.6.2-beta.2
 docker.io/apecloud/oteld:0.5.2-k8s21
-docker.io/apecloud/oteld:0.6.1-beta.1
+docker.io/apecloud/oteld:0.6.1
 docker.io/apecloud/wal-g:mongo-5.0
 docker.io/apecloud/wal-g:mysql-8.0
 docker.io/apecloud/wal-g-mysql:2.0.1-1-ubuntu
 docker.io/apecloud/kubeblocks-tools:0.8.2
-docker.io/apecloud/cubetran-platform:0.5.4
+docker.io/apecloud/cubetran-platform:0.5.8
+docker.io/apecloud/cubetran-sidecar:0.1.2
+docker.io/apecloud/cubetran-core:0.1.1
 docker.io/apecloud/kubeviewer:0.1.17
-docker.io/apecloud/cubetran-sidecar:0.1.0
 docker.io/apecloud/mysql:8.0
 docker.io/apecloud/redis:7.0.5
 docker.io/apecloud/loki:2.9.4
@@ -21,8 +22,7 @@ docker.io/apecloud/vminsert:v1.95.1-cluster
 docker.io/apecloud/vmselect:v1.95.1-cluster
 docker.io/apecloud/vmstorage:v1.95.1-cluster
 docker.io/apecloud/vmalert:v1.95.1
-docker.io/apecloud/cubetran-sidecar:0.1.1
-docker.io/apecloud/servicemirror:0.2.15
+docker.io/apecloud/servicemirror:0.2.17
 docker.io/apecloud/alertmanager:v0.25.0
 docker.io/apecloud/configmap-reload:v0.5.0
 docker.io/apecloud/minio:RELEASE.2022-09-17T00-09-45Z
