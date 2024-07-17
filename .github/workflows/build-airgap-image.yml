@@ -68,8 +68,6 @@ env:
   DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
   ALIYUN_USER: ${{ secrets.ALIYUN_REGISTRY_USER }}
   ALIYUN_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
-  ALIYUN_USER_NEW: ${{ secrets.ALIYUN_USER_NEW }}
-  ALIYUN_PASSWORD_NEW: ${{ secrets.ALIYUN_PASSWORD_NEW }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
   CLOUD_VALUES: ${{ secrets.CLOUD_VALUES }}
   CHART_PROJECT_ID: ${{ secrets.JIHULAB_PROJECT_ID }}
@@ -144,15 +142,16 @@ jobs:
       - name: generate image yaml
         run: |
           bash ${{ github.workspace }}/apecloud-cd/.github/utils/utils.sh \
-            --type 27 \
+            --type 32 \
             --images "${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-amd64|${{ env.DOCKER_REPO }}/${{ inputs.APP_NAME }}-airgap:${{ inputs.IMAGE_VERSION }}-arm64" \
             --registry "${{ env.DOCKER_REGISTRY_URL }}"
 
       - uses: hhyasdf/image-sync-action@v1.1
-        if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && env.ALIYUN_USER != '' && env.ALIYUN_PASSWORD != '' && env.ALIYUN_USER_NEW != '' && env.ALIYUN_PASSWORD_NEW != '' }}
+        name: sync image to apecloud aliyun registry
+        if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && env.ALIYUN_USER != '' && env.ALIYUN_PASSWORD != '' }}
         with:
-          auth_file: ${{ github.workspace }}/apecloud-cd/.github/actions/image-sync-auth.yml
-          images_file: ./image_sync_yaml.yml
+          auth_file: ${{ github.workspace }}/apecloud-cd/.github/actions/image-sync-auth-apecloud.yml
+          images_file: ./image_sync_yaml_apecloud.yml
           proc: 6
           retries: 5
           version: v1.5.2
@@ -161,8 +160,6 @@ jobs:
           DOCKER_PASSWORD: ${{ env.DOCKER_PASSWORD }}
           ALIYUN_USER: ${{ env.ALIYUN_USER }}
           ALIYUN_PASSWORD: ${{ env.ALIYUN_PASSWORD }}
-          ALIYUN_USER_NEW: ${{ env.ALIYUN_USER_NEW }}
-          ALIYUN_PASSWORD_NEW: ${{ env.ALIYUN_PASSWORD_NEW }}
 
   build-result:
     runs-on: ubuntu-latest
