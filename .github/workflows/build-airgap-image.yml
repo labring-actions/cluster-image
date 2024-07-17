@@ -137,7 +137,7 @@ jobs:
           repository: apecloud-inc/apecloud-cd
           path: apecloud-cd
           token: ${{ env.GITHUB_TOKEN }}
-          ref: v0.1.0
+          ref: v0.3.0
 
       - name: generate image yaml
         run: |

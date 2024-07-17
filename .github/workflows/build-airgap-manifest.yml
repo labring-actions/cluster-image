@@ -26,8 +26,6 @@ env:
   DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
   ALIYUN_USER: ${{ secrets.ALIYUN_REGISTRY_USER }}
   ALIYUN_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
-  ALIYUN_USER_NEW: ${{ secrets.ALIYUN_USER_NEW }}
-  ALIYUN_PASSWORD_NEW: ${{ secrets.ALIYUN_PASSWORD_NEW }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
 jobs:
@@ -61,7 +59,7 @@ jobs:
           repository: apecloud-inc/apecloud-cd
           path: apecloud-cd
           token: ${{ env.GITHUB_TOKEN }}
-          ref: v0.1.0
+          ref: v0.3.0
 
       - name: generate image yaml
         run: |
@@ -71,7 +69,7 @@ jobs:
             --registry "${{ env.DOCKER_REGISTRY_URL }}"
 
       - uses: hhyasdf/image-sync-action@v1.1
-        if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && env.ALIYUN_USER != '' && env.ALIYUN_PASSWORD != '' && env.ALIYUN_USER_NEW != '' && env.ALIYUN_PASSWORD_NEW != '' }}
+        if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && env.ALIYUN_USER != '' && env.ALIYUN_PASSWORD != '' }}
         with:
           auth_file: ${{ github.workspace }}/apecloud-cd/.github/actions/image-sync-auth.yml
           images_file: ./image_sync_yaml.yml
@@ -83,8 +81,6 @@ jobs:
           DOCKER_PASSWORD: ${{ env.DOCKER_PASSWORD }}
           ALIYUN_USER: ${{ env.ALIYUN_USER }}
           ALIYUN_PASSWORD: ${{ env.ALIYUN_PASSWORD }}
-          ALIYUN_USER_NEW: ${{ env.ALIYUN_USER_NEW }}
-          ALIYUN_PASSWORD_NEW: ${{ env.ALIYUN_PASSWORD_NEW }}
 
   build-result:
     runs-on: ubuntu-latest
