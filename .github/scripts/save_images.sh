@@ -65,7 +65,7 @@ save_images_package() {
         return
     fi
 
-    if [[ "${APP_NAME}" == "kubeblocks-enterprise" || "$APP_NAME" == "kubeblocks-cloud" ]]; then
+    if [[ "${APP_NAME}" == "kubeblocks-enterprise" || "$APP_NAME" == "kubeblocks-cloud" || "$APP_NAME" == "kubeblocks-enterprise-patch" ]]; then
         echo "change ${APP_NAME}.txt images tag"
         sed -i "s/^# kubeblocks-cloud .*/# kubeblocks-cloud :${APP_VERSION}/" $IMAGE_FILE_PATH
         sed -i "s/^docker.io\/apecloud\/openconsole:.*/docker.io\/apecloud\/openconsole:${APP_VERSION}/" $IMAGE_FILE_PATH

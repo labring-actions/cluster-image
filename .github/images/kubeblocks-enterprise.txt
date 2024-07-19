@@ -7,8 +7,6 @@ docker.io/apecloud/kubeblocks-charts:0.9.0
 docker.io/apecloud/datasafed:0.2.0
 docker.io/apecloud/snapshot-controller:v6.2.1
 docker.io/apecloud/busybox:latest
-# logto v0.1.4
-docker.io/apecloud/logto:1.12
 # gemini v0.6.2-beta.2
 docker.io/apecloud/gemini:0.6.2-beta.2
 docker.io/apecloud/gemini-tools:0.6.2-beta.2
@@ -33,22 +31,25 @@ docker.io/apecloud/vminsert:v1.95.1-cluster
 docker.io/apecloud/vmselect:v1.95.1-cluster
 docker.io/apecloud/vmstorage:v1.95.1-cluster
 docker.io/apecloud/vmalert:v1.95.1
-docker.io/apecloud/servicemirror:0.2.17
+docker.io/apecloud/servicemirror:0.2.15
 docker.io/apecloud/alertmanager:v0.25.0
 docker.io/apecloud/configmap-reload:v0.5.0
 docker.io/apecloud/minio:RELEASE.2022-09-17T00-09-45Z
 docker.io/apecloud/mc:RELEASE.2022-09-16T09-16-47Z
-# kubeblocks-cloud v0.26.12-alpha.9
-docker.io/apecloud/openconsole:v0.26.12-alpha.9
-docker.io/apecloud/apiserver:v0.26.12-alpha.9
-docker.io/apecloud/task-manager:v0.26.12-alpha.9
-docker.io/apecloud/cubetran-front:v0.26.12-alpha.9
-docker.io/apecloud/cr4w:v0.26.12-alpha.9
-docker.io/apecloud/relay:v0.26.12-alpha.9
-docker.io/apecloud/sentry:v0.26.12-alpha.9
-docker.io/apecloud/sentry-init:v0.26.12-alpha.9
-docker.io/apecloud/kb-cloud-installer:v0.26.12-alpha.9
-docker.io/apecloud/kubeblocks-installer:v0.9.0-offline
+# kubeblocks-cloud v0.26.63
+docker.io/apecloud/openconsole:v0.26.63
+docker.io/apecloud/apiserver:v0.26.63
+docker.io/apecloud/task-manager:v0.26.63
+docker.io/apecloud/cubetran-front:v0.26.63
+docker.io/apecloud/cr4w:v0.26.63
+docker.io/apecloud/relay:v0.26.63
+docker.io/apecloud/sentry:v0.26.63
+docker.io/apecloud/sentry-init:v0.26.63
+docker.io/apecloud/kb-cloud-installer:v0.26.63
+docker.io/apecloud/dms:0.0.1-alpha.19
+docker.io/apecloud/ob-grpc-server:0.1.2
+docker.io/apecloud/servicemirror:0.2.17
+docker.io/apecloud/kubeblocks-installer:202407171056-offline
 docker.io/apecloud/redis:7.0.5
 docker.io/apecloud/grafana:10.1.1
 docker.io/apecloud/bats:v1.4.1
@@ -56,4 +57,5 @@ docker.io/apecloud/workflow-controller:v3.5.5
 docker.io/apecloud/argocli:v3.5.5
 docker.io/apecloud/argoexec:v3.5.5
 docker.io/apecloud/cloudshell:1.7.7
-docker.io/apecloud/dms:0.0.1
+# logto v0.1.4
+docker.io/apecloud/logto:1.12

@@ -1,0 +1,10 @@
+# kubeblocks-cloud v0.26.63
+docker.io/apecloud/openconsole:v0.26.63
+docker.io/apecloud/apiserver:v0.26.63
+docker.io/apecloud/task-manager:v0.26.63
+docker.io/apecloud/cubetran-front:v0.26.63
+docker.io/apecloud/cr4w:v0.26.63
+docker.io/apecloud/relay:v0.26.63
+docker.io/apecloud/sentry:v0.26.63
+docker.io/apecloud/sentry-init:v0.26.63
+docker.io/apecloud/kb-cloud-installer:v0.26.63

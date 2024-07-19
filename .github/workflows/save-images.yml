@@ -10,8 +10,10 @@ on:
         type: choice
         options:
           - kubeblocks-enterprise
+          - kubeblocks-enterprise-patch
           - kubeblocks
           - kubeblocks-cloud
+          - cert-manager
           - gemini
           - apecloud-mysql
           - clickhouse
