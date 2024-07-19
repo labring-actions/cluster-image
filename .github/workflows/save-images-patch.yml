@@ -1,4 +1,4 @@
-name: Save Large Images
+name: Save Images Patch
 
 on:
   workflow_dispatch:
@@ -6,11 +6,10 @@ on:
       APP_NAME:
         description: 'app name'
         required: true
-        default: 'kubeblocks'
+        default: 'kubeblocks-enterprise-patch'
         type: choice
         options:
-          - kubeblocks-enterprise
-          - starrocks
+          - kubeblocks-enterprise-patch
       APP_VERSION:
         description: 'app version'
         required: true
@@ -33,19 +32,22 @@ env:
   OSS_BUCKET: "kubeblocks-oss"
 
 jobs:
-  enable-self-runner:
-    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
-    with:
-      GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
-      RUNNER_LABEL: "kubeblocks-airgap-runner"
-      RUNNER_REPLICAS: 1
-    secrets: inherit
-
   save-app-images:
-    needs: [ enable-self-runner ]
     name: save app images
-    runs-on: [ self-hosted, amd-runner ]
+    runs-on: ubuntu-latest
     steps:
+      - name: Free disk space
+        run: |
+          if [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" ]]; then
+              sudo apt-get autoremove -y >/dev/null 2>&1
+              sudo apt-get autoclean -y >/dev/null 2>&1
+              sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
+              docker rmi $(docker image ls -aq) >/dev/null 2>&1
+              sudo swapoff -a
+              sudo rm -f /swapfile
+              df -h
+          fi
+
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
 
@@ -119,14 +121,3 @@ jobs:
       TYPE: "2"
       CONTENT: "save image ${{ needs.save-result.outputs.image-pkg-name }} ${{ needs.save-result.outputs.save-result }}"
     secrets: inherit
-
-  disable-self-runner:
-    if: ${{ always() }}
-    needs: [ save-app-images ]
-    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
-    with:
-      GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
-      RUNNER_LABEL: "kubeblocks-airgap-runner"
-      ENABLE: "disable"
-    secrets: inherit
-
