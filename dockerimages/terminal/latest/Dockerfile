@@ -23,7 +23,7 @@ COPY scripts/ttyd-kubectl.sh /usr/bin/
 RUN arch                                                                                                                        && \
     apt-get update                                                                                                              && \
     apt-get install -y --no-install-recommends -o Acquire::http::No-Cache=True                                                     \
-    ca-certificates curl wget bind9-utils git g++ gcc libc6-dev make pkg-config vim                                                \
+    ca-certificates curl wget bind9-utils git g++ gcc libc6-dev make pkg-config vim bash-completion                                \
     ncurses-dev libtolua-dev exuberant-ctags gdb dnsutils iputils-ping net-tools postgresql-client openssh-client               && \
     apt-get clean && rm -rf /var/lib/apt/lists/*                                                                                && \
     chmod a+x /usr/bin/ttyd-kubectl.sh                                                                                          && \
@@ -34,6 +34,8 @@ RUN arch                                                                        
 COPY --from=mysql-client /usr/bin/mysql /usr/bin/mysql
 COPY --from=mongo-client /usr/bin/mongosh /usr/bin/mongosh
 COPY --from=redis-client /usr/local/bin/redis-cli /usr/local/bin/redis-cli
+
+RUN echo 'source /etc/profile' >>/root/.bashrc
 
 ENV USER_TOKEN ""
 ENV APISERVER "https://apiserver.cluster.local:6443"
