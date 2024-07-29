@@ -36,6 +36,7 @@ on:
           - xinference
           - kubechat
           - postgres-operator
+          - rabbitmq
       APP_VERSION:
         description: 'app version'
         required: true
@@ -64,7 +65,7 @@ jobs:
     steps:
       - name: Free disk space
         run: |
-          if [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" ]]; then
+          if [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" || "${{ inputs.APP_NAME }}" == "starrocks" ]]; then
               sudo apt-get autoremove -y >/dev/null 2>&1
               sudo apt-get autoclean -y >/dev/null 2>&1
               sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
@@ -107,6 +108,8 @@ jobs:
       - name: Upload images to oss
         id: upload_to_oss
         run: |
+          echo "Free space:"
+          df -h
           IMAGE_PKG_NAME="${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz"
           ossutil cp -rf ./${IMAGE_PKG_NAME} oss://${{ env.OSS_BUCKET }}/images/${IMAGE_PKG_NAME}
           upload_ret=$?

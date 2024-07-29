@@ -7,12 +7,12 @@ docker.io/apecloud/kubeblocks-charts:0.9.0
 docker.io/apecloud/datasafed:0.2.0
 docker.io/apecloud/snapshot-controller:v6.2.1
 docker.io/apecloud/busybox:latest
-# gemini v0.6.2-beta.2
-docker.io/apecloud/gemini:0.6.2-beta.2
-docker.io/apecloud/gemini-tools:0.6.2-beta.2
-docker.io/apecloud/easymetrics:0.6.2-beta.2
+# gemini v0.6.2
+docker.io/apecloud/gemini:0.6.2
+docker.io/apecloud/gemini-tools:0.6.2
+docker.io/apecloud/easymetrics:0.6.2
 docker.io/apecloud/oteld:0.5.2-k8s21
-docker.io/apecloud/oteld:0.6.1
+docker.io/apecloud/oteld:0.6.2
 docker.io/apecloud/wal-g:mongo-5.0
 docker.io/apecloud/wal-g:mysql-8.0
 docker.io/apecloud/wal-g-mysql:2.0.1-1-ubuntu
@@ -36,20 +36,21 @@ docker.io/apecloud/alertmanager:v0.25.0
 docker.io/apecloud/configmap-reload:v0.5.0
 docker.io/apecloud/minio:RELEASE.2022-09-17T00-09-45Z
 docker.io/apecloud/mc:RELEASE.2022-09-16T09-16-47Z
-# kubeblocks-cloud v0.26.63
-docker.io/apecloud/openconsole:v0.26.63
-docker.io/apecloud/apiserver:v0.26.63
-docker.io/apecloud/task-manager:v0.26.63
-docker.io/apecloud/cubetran-front:v0.26.63
-docker.io/apecloud/cr4w:v0.26.63
-docker.io/apecloud/relay:v0.26.63
-docker.io/apecloud/sentry:v0.26.63
-docker.io/apecloud/sentry-init:v0.26.63
-docker.io/apecloud/kb-cloud-installer:v0.26.63
-docker.io/apecloud/dms:0.0.1-alpha.19
+# kubeblocks-cloud v0.26.114
+docker.io/apecloud/openconsole:v0.26.114
+docker.io/apecloud/apiserver:v0.26.114
+docker.io/apecloud/task-manager:v0.26.114
+docker.io/apecloud/cubetran-front:v0.26.114
+docker.io/apecloud/cr4w:v0.26.114
+docker.io/apecloud/relay:v0.26.114
+docker.io/apecloud/sentry:v0.26.114
+docker.io/apecloud/sentry-init:v0.26.114
+docker.io/apecloud/kb-cloud-installer:v0.26.114
+docker.io/apecloud/apecloud-charts:v0.26.114
+docker.io/apecloud/dms:0.0.1-alpha.40
 docker.io/apecloud/ob-grpc-server:0.1.2
 docker.io/apecloud/servicemirror:0.2.17
-docker.io/apecloud/kubeblocks-installer:202407171056-offline
+docker.io/apecloud/kubeblocks-installer:202407252051-offline
 docker.io/apecloud/redis:7.0.5
 docker.io/apecloud/grafana:10.1.1
 docker.io/apecloud/bats:v1.4.1
