@@ -10,6 +10,7 @@ Usage: $(basename "$0") <options>
     -h, --help                    Display help
     -t, --type                    Operation type
                                     1) upgrade version
+                                    2) generate release note
     -cv, --cloud-version          KubeBlocks Cloud Version
     -kv, --kubeblocks-version     KubeBlocks Version
     -gv, --gemini-version         Gemini Version
@@ -84,7 +85,7 @@ change_cloud_version() {
         echo "change ${imageFile} images tag"
         image_file_path=.github/images/${imageFile}
         if [[ "$UNAME" == "Darwin" ]]; then
-            sed -i '' "s/^# kubeblocks-cloud .*/# kubeblocks-cloud ${CLOUD_VERSION}/" $image_file_path
+            sed -i '' "s/^# KubeBlocks Cloud .*/# KubeBlocks Cloud ${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/openconsole:.*/docker.io\/apecloud\/openconsole:${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/apiserver:.*/docker.io\/apecloud\/apiserver:${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/task-manager:.*/docker.io\/apecloud\/task-manager:${CLOUD_VERSION}/" $image_file_path
@@ -136,7 +137,7 @@ change_kubeblocks_version() {
         image_file_path=.github/images/${imageFile}
         if [[ "$UNAME" == "Darwin" ]]; then
             sed -i '' "s/^docker.io\/apecloud\/kubeblocks-tools:0.8.2/#docker.io\/apecloud\/kubeblocks-tools:0.8.2/" $image_file_path
-            sed -i '' "s/^# kubeblocks .*/# kubeblocks v${KUBEBLOCKS_VERSION}/" $image_file_path
+            sed -i '' "s/^# KubeBlocks .*/# KubeBlocks v${KUBEBLOCKS_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/kubeblocks:.*/docker.io\/apecloud\/kubeblocks:${KUBEBLOCKS_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/kubeblocks-dataprotection:.*/docker.io\/apecloud\/kubeblocks-dataprotection:${KUBEBLOCKS_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/kubeblocks-datascript:.*/docker.io\/apecloud\/kubeblocks-datascript:${KUBEBLOCKS_VERSION}/" $image_file_path
@@ -145,7 +146,7 @@ change_kubeblocks_version() {
             sed -i '' "s/^#docker.io\/apecloud\/kubeblocks-tools:0.8.2/docker.io\/apecloud\/kubeblocks-tools:0.8.2/" $image_file_path
         else
             sed -i "s/^docker.io\/apecloud\/kubeblocks-tools:0.8.2/#docker.io\/apecloud\/kubeblocks-tools:0.8.2/" $image_file_path
-            sed -i "s/^# kubeblocks .*/# kubeblocks v${KUBEBLOCKS_VERSION}/" $image_file_path
+            sed -i "s/^# KubeBlocks .*/# KubeBlocks v${KUBEBLOCKS_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/kubeblocks:.*/docker.io\/apecloud\/kubeblocks:${KUBEBLOCKS_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/kubeblocks-dataprotection:.*/docker.io\/apecloud\/kubeblocks-dataprotection:${KUBEBLOCKS_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/kubeblocks-datascript:.*/docker.io\/apecloud\/kubeblocks-datascript:${KUBEBLOCKS_VERSION}/" $image_file_path
@@ -175,12 +176,12 @@ change_gemini_version() {
         echo "change ${imageFile} images tag"
         image_file_path=.github/images/${imageFile}
         if [[ "$UNAME" == "Darwin" ]]; then
-            sed -i '' "s/^# gemini .*/# gemini v${GEMINI_VERSION}/" $image_file_path
+            sed -i '' "s/^# Gemini .*/# Gemini v${GEMINI_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/gemini:.*/docker.io\/apecloud\/gemini:${GEMINI_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/gemini-tools:.*/docker.io\/apecloud\/gemini-tools:${GEMINI_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/easymetrics:.*/docker.io\/apecloud\/easymetrics:${GEMINI_VERSION}/" $image_file_path
         else
-            sed -i "s/^# gemini .*/# gemini v${GEMINI_VERSION}/" $image_file_path
+            sed -i "s/^# Gemini .*/# Gemini v${GEMINI_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/gemini:.*/docker.io\/apecloud\/gemini:${GEMINI_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/gemini-tools:.*/docker.io\/apecloud\/gemini-tools:${GEMINI_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/easymetrics:.*/docker.io\/apecloud\/easymetrics:${GEMINI_VERSION}/" $image_file_path
@@ -248,6 +249,13 @@ change_dms_version() {
     done
 }
 
+generate_release_note() {
+    release_note_file="./docs/release-notes/${CLOUD_VERSION}.md"
+    kubeblocks_enterprise_txt="./.github/images/kubeblocks-enterprise.txt"
+    cp -r "$kubeblocks_enterprise_txt" "$release_note_file"
+    git add "$release_note_file"
+}
+
 main() {
     local TYPE=""
     local UNAME=`uname -s`
@@ -273,7 +281,7 @@ main() {
                 if [[ "${CLOUD_VERSION}" != "v"* ]]; then
                     CLOUD_VERSION="v${CLOUD_VERSION}"
                 fi
-                change_cloud_version "${CLOUD_VERSION}"
+                change_cloud_version
             fi
 
             if [[ -n "$KUBEBLOCKS_VERSION" ]]; then
@@ -316,6 +324,14 @@ main() {
                     $DMS_VERSION="${DMS_VERSION/v/}"
                 fi
                 change_dms_version
+            fi
+        ;;
+        2)
+            if [[ -n "$CLOUD_VERSION" ]]; then
+                if [[ "${CLOUD_VERSION}" != "v"* ]]; then
+                    CLOUD_VERSION="v${CLOUD_VERSION}"
+                fi
+                generate_release_note
             fi
         ;;
         *)

@@ -36,6 +36,9 @@ env:
 jobs:
   release-version:
     runs-on: ubuntu-latest
+    outputs:
+      release-version: ${{ steps.update_version.outputs.release_version }}
+      release-commit: ${{ steps.update_version.outputs.release_commit }}
     steps:
       - name: checkout ${{ github.ref_name }}
         uses: actions/checkout@v4
@@ -45,9 +48,16 @@ jobs:
         run: |
           commit_message="chore: upgrade"
           update_version_cmd="bash .github/scripts/upgrade_version.sh --type 1 "
+          generate_release_note_cmd="bash .github/scripts/upgrade_version.sh --type 2 "
           if [[ -n "${{ inputs.APP_VERSION }}" ]]; then
               update_version_cmd="${update_version_cmd} --cloud-version ${{ inputs.APP_VERSION }} "
+              generate_release_note_cmd="${generate_release_note_cmd} --cloud-version ${{ inputs.APP_VERSION }} "
               commit_message="${commit_message} cloud ${{ inputs.APP_VERSION }}"
+              RELEASE_VERSION="${{ inputs.APP_VERSION }}"
+              if [[ "${RELEASE_VERSION}" != "v"* ]]; then
+                  RELEASE_VERSION=v"${RELEASE_VERSION}"
+              fi
+              echo release_version=${RELEASE_VERSION} >> $GITHUB_OUTPUT
           fi
           
           if [[ -n "${{ inputs.KB_VERSION }}" ]]; then
@@ -78,6 +88,9 @@ jobs:
           echo "${update_version_cmd}"
           eval "${update_version_cmd}"
           
+          echo "${generate_release_note_cmd}"
+          eval "${generate_release_note_cmd}"
+          
           FILE_CHANGES=`git diff --name-only ${{ github.sha }}`
           if [[ ! -z "$FILE_CHANGES" ]]; then
               echo $FILE_CHANGES
@@ -88,7 +101,7 @@ jobs:
           echo file_changes=$FILE_CHANGES >> $GITHUB_OUTPUT
           
           RELEASE_COMMIT="$(git rev-parse HEAD)"
-          echo 'RELEASE_COMMIT='${RELEASE_COMMIT} >> $GITHUB_ENV
+          echo 'release_commit='${RELEASE_COMMIT} >> $GITHUB_OUTPUT
 
       - name: push upgrade version
         if: ${{ steps.update_version.outputs.file_changes }}
@@ -103,7 +116,7 @@ jobs:
         with:
           custom_tag: ${{ inputs.APP_VERSION }}
           github_token: ${{ env.GITHUB_TOKEN }}
-          commit_sha: ${{ env.RELEASE_COMMIT }}
+          commit_sha: ${{ steps.update_version.outputs.release_commit }}
           tag_prefix: ""
 
   release-result:
@@ -113,6 +126,11 @@ jobs:
     outputs:
       release-result: ${{ steps.get_release_result.outputs.release_result }}
     steps:
+      - name: checkout ${{ github.ref_name }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: get release result
         id: get_release_result
         run: |
@@ -122,14 +140,23 @@ jobs:
           fi
           echo 'release_result='$RELEASE_RESULT >> $GITHUB_OUTPUT
 
+      - name: release with release notes
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: ./docs/release-notes/${{ needs.release-version.outputs.release-version }}.md
+          name: "KubeBlocks Enterprise ${{ needs.release-version.outputs.release-version }}"
+          tag_name: "${{ needs.release-version.outputs.release-version }}"
+          target_commitish: "${{ needs.release-version.outputs.release-version }}"
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
   send-message:
     permissions:
       id-token: write
       contents: read
-    needs: [ release-result ]
+    needs: [ release-version, release-result ]
     if: ${{ always() && inputs.APP_VERSION != '' }}
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
     with:
       TYPE: "2"
-      CONTENT: "release cloud airgap:${{ inputs.APP_VERSION }} ${{ needs.release-result.outputs.release-result }}"
+      CONTENT: "release cloud airgap:${{ needs.release-version.outputs.release-version }} ${{ needs.release-result.outputs.release-result }}"
     secrets: inherit

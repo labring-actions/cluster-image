@@ -9,3 +9,6 @@ bin
 app.log
 .versions
 *charts
+
+# Project-specific stuff
+!docs/release-notes/*
