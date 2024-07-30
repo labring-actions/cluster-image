@@ -3,32 +3,32 @@ name: Release Version
 on:
   workflow_dispatch:
     inputs:
-      release_version:
+      APP_VERSION:
         description: 'The version of cloud'
         required: false
         default: ''
-      kubeblocks_version:
+      KB_VERSION:
         description: 'The version of kubeblocks'
         required: false
         default: ''
-      gemini_version:
+      GEMINI_VERSION:
         description: 'The version of gemini'
         required: false
         default: ''
-      oteld_version:
+      OTELD_VERSION:
         description: 'The version of oteld'
         required: false
         default: ''
-      installer_version:
+      INSTALLER_VERSION:
         description: 'The version of offline installer'
         required: false
         default: ''
-      dms_version:
+      DMS_VERSION:
         description: 'The version of dms'
         required: false
         default: ''
 
-run-name: ref_name:${{ github.ref_name }} cloud:${{ inputs.release_version }} kubeblocks:${{ inputs.kubeblocks_version }} gemini:${{ inputs.gemini_version }} oteld:${{ inputs.oteld_version }} installer:${{ inputs.installer_version }} dms:${{ inputs.dms_version }}
+run-name: ref_name:${{ github.ref_name }} cloud:${{ inputs.APP_VERSION }} kubeblocks:${{ inputs.KB_VERSION }} gemini:${{ inputs.GEMINI_VERSION }} oteld:${{ inputs.OTELD_VERSION }} installer:${{ inputs.INSTALLER_VERSION }} dms:${{ inputs.DMS_VERSION }}
 
 env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -37,7 +37,7 @@ jobs:
   release-version:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout branch ${{ github.ref_name }}
+      - name: checkout ${{ github.ref_name }}
         uses: actions/checkout@v4
 
       - name: Update version
@@ -45,35 +45,38 @@ jobs:
         run: |
           commit_message="chore: upgrade"
           update_version_cmd="bash .github/scripts/upgrade_version.sh --type 1 "
-          if [[ -n "${{ inputs.release_version }}" ]]; then
-              update_version_cmd="${update_version_cmd} --cloud-version ${{ inputs.release_version }} "
-              commit_message="${commit_message} cloud ${{ inputs.release_version }}"
+          if [[ -n "${{ inputs.APP_VERSION }}" ]]; then
+              update_version_cmd="${update_version_cmd} --cloud-version ${{ inputs.APP_VERSION }} "
+              commit_message="${commit_message} cloud ${{ inputs.APP_VERSION }}"
           fi
           
-          if [[ -n "${{ inputs.kubeblocks_version }}" ]]; then
-              update_version_cmd="${update_version_cmd} --kubeblocks-version ${{ inputs.kubeblocks_version }} "
-              commit_message="${commit_message} kubeblocks ${{ inputs.kubeblocks_version }}"
+          if [[ -n "${{ inputs.KB_VERSION }}" ]]; then
+              update_version_cmd="${update_version_cmd} --kubeblocks-version ${{ inputs.KB_VERSION }} "
+              commit_message="${commit_message} kubeblocks ${{ inputs.KB_VERSION }}"
           fi
           
-          if [[ -n "${{ inputs.gemini_version }}" ]]; then
-              update_version_cmd="${update_version_cmd} --gemini-version ${{ inputs.gemini_version }} "
-              commit_message="${commit_message} gemini ${{ inputs.gemini_version }}"
+          if [[ -n "${{ inputs.GEMINI_VERSION }}" ]]; then
+              update_version_cmd="${update_version_cmd} --gemini-version ${{ inputs.GEMINI_VERSION }} "
+              commit_message="${commit_message} gemini ${{ inputs.GEMINI_VERSION }}"
           fi
           
-          if [[ -n "${{ inputs.oteld_version }}" ]]; then
-              update_version_cmd="${update_version_cmd} --oteld-version ${{ inputs.oteld_version }} "
-              commit_message="${commit_message} oteld ${{ inputs.oteld_version }}"
+          if [[ -n "${{ inputs.OTELD_VERSION }}" ]]; then
+              update_version_cmd="${update_version_cmd} --oteld-version ${{ inputs.OTELD_VERSION }} "
+              commit_message="${commit_message} oteld ${{ inputs.OTELD_VERSION }}"
           fi
           
-          if [[ -n "${{ inputs.installer_version }}" ]]; then
-              update_version_cmd="${update_version_cmd} --installer-version ${{ inputs.installer_version }} "
-              commit_message="${commit_message} installer ${{ inputs.installer_version }}"
+          if [[ -n "${{ inputs.INSTALLER_VERSION }}" ]]; then
+              update_version_cmd="${update_version_cmd} --installer-version ${{ inputs.INSTALLER_VERSION }} "
+              commit_message="${commit_message} installer ${{ inputs.INSTALLER_VERSION }}"
           fi
           
-          if [[ -n "${{ inputs.dms_version }}" ]]; then
-              update_version_cmd="${update_version_cmd} --dms-version ${{ inputs.dms_version }} "
-              commit_message="${commit_message} dms ${{ inputs.dms_version }}"
+          if [[ -n "${{ inputs.DMS_VERSION }}" ]]; then
+              update_version_cmd="${update_version_cmd} --dms-version ${{ inputs.DMS_VERSION }} "
+              commit_message="${commit_message} dms ${{ inputs.DMS_VERSION }}"
           fi
+          
+          echo "${update_version_cmd}"
+          eval "${update_version_cmd}"
           
           FILE_CHANGES=`git diff --name-only ${{ github.sha }}`
           if [[ ! -z "$FILE_CHANGES" ]]; then
@@ -87,19 +90,18 @@ jobs:
           RELEASE_COMMIT="$(git rev-parse HEAD)"
           echo 'RELEASE_COMMIT='${RELEASE_COMMIT} >> $GITHUB_ENV
 
-
-      - name: push addons version changes to new branch
+      - name: push upgrade version
         if: ${{ steps.update_version.outputs.file_changes }}
         uses: ad-m/github-push-action@master
         with:
           branch: ${{ github.ref }}
           github_token: ${{ env.GITHUB_TOKEN }}
 
-      - name: push tag ${{ inputs.release_version }}
-        if: ${{ inputs.release_version }}
+      - name: push tag ${{ inputs.APP_VERSION }}
+        if: ${{ inputs.APP_VERSION }}
         uses: mathieudutour/github-tag-action@v6.1
         with:
-          custom_tag: ${{ inputs.release_version }}
+          custom_tag: ${{ inputs.APP_VERSION }}
           github_token: ${{ env.GITHUB_TOKEN }}
           commit_sha: ${{ env.RELEASE_COMMIT }}
           tag_prefix: ""
@@ -107,7 +109,7 @@ jobs:
   release-result:
     runs-on: ubuntu-latest
     needs: [ release-version ]
-    if: ${{ always() && inputs.release_version != '' }}
+    if: ${{ always() && inputs.APP_VERSION != '' }}
     outputs:
       release-result: ${{ steps.get_release_result.outputs.release_result }}
     steps:
@@ -125,9 +127,9 @@ jobs:
       id-token: write
       contents: read
     needs: [ release-result ]
-    if: ${{ always() && inputs.release_version != '' }}
+    if: ${{ always() && inputs.APP_VERSION != '' }}
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
     with:
       TYPE: "2"
-      CONTENT: "release cloud airgap:${{ inputs.release_version }} ${{ needs.release-result.outputs.release-result }}"
+      CONTENT: "release cloud airgap:${{ inputs.APP_VERSION }} ${{ needs.release-result.outputs.release-result }}"
     secrets: inherit
