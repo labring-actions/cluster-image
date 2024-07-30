@@ -214,7 +214,7 @@ change_oteld_version() {
             sed -i '' "s/^docker.io\/apecloud\/oteld:.*/docker.io\/apecloud\/oteld:${OTELD_VERSION}/" $image_file_path
             sed -i '' "s/^#docker.io\/apecloud\/oteld:0.5.2-k8s21/docker.io\/apecloud\/oteld:0.5.2-k8s21/" $image_file_path
         else
-            sed -i "s/^docker.io\/apecloud\/oteld:0.5.2-k8s212/#docker.io\/apecloud\/oteld:0.5.2-k8s21/" $image_file_path
+            sed -i "s/^docker.io\/apecloud\/oteld:0.5.2-k8s21/#docker.io\/apecloud\/oteld:0.5.2-k8s21/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/oteld:.*/docker.io\/apecloud\/oteld:${OTELD_VERSION}/" $image_file_path
             sed -i "s/^#docker.io\/apecloud\/oteld:0.5.2-k8s21/docker.io\/apecloud\/oteld:0.5.2-k8s21/" $image_file_path
         fi

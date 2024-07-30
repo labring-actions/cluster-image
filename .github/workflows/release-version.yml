@@ -32,9 +32,13 @@ run-name: ref_name:${{ github.ref_name }} Cloud:${{ inputs.APP_VERSION }} KubeBl
 
 env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
 jobs:
   release-version:
+    permissions:
+      contents: write # for pushing changes back to the repository
+      packages: write
     runs-on: ubuntu-latest
     outputs:
       release-version: ${{ steps.update_version.outputs.release_version }}
@@ -119,6 +123,16 @@ jobs:
           commit_sha: ${{ steps.update_version.outputs.release_commit }}
           tag_prefix: ""
 
+      - name: release with release notes ${{ inputs.APP_VERSION }}
+        if: ${{ inputs.APP_VERSION }}
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: ./docs/release-notes/${{ steps.update_version.outputs.release_version }}.md
+          name: "KubeBlocks Enterprise ${{ steps.update_version.outputs.release_version }}"
+          tag_name: "${{ steps.update_version.outputs.release_version }}"
+          target_commitish: "${{ steps.update_version.outputs.release_commit }}"
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
   release-result:
     runs-on: ubuntu-latest
     needs: [ release-version ]
@@ -126,11 +140,6 @@ jobs:
     outputs:
       release-result: ${{ steps.get_release_result.outputs.release_result }}
     steps:
-      - name: checkout ${{ github.ref_name }}
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: get release result
         id: get_release_result
         run: |
@@ -139,15 +148,6 @@ jobs:
               RELEASE_RESULT="success"
           fi
           echo 'release_result='$RELEASE_RESULT >> $GITHUB_OUTPUT
-
-      - name: release with release notes
-        uses: softprops/action-gh-release@v2
-        with:
-          body_path: ./docs/release-notes/${{ needs.release-version.outputs.release-version }}.md
-          name: "KubeBlocks Enterprise ${{ needs.release-version.outputs.release-version }}"
-          tag_name: "${{ needs.release-version.outputs.release-version }}"
-          target_commitish: "${{ needs.release-version.outputs.release-version }}"
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
   send-message:
     permissions:
