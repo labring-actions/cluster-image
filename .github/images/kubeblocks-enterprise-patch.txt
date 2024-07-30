@@ -1,23 +1,23 @@
-# kubeblocks-cloud v0.26.125
-docker.io/apecloud/openconsole:v0.26.125
-docker.io/apecloud/apiserver:v0.26.125
-docker.io/apecloud/task-manager:v0.26.125
-docker.io/apecloud/cubetran-front:v0.26.125
-docker.io/apecloud/cr4w:v0.26.125
-docker.io/apecloud/relay:v0.26.125
-docker.io/apecloud/sentry:v0.26.125
-docker.io/apecloud/sentry-init:v0.26.125
-docker.io/apecloud/kb-cloud-installer:v0.26.125
-docker.io/apecloud/apecloud-charts:v0.26.125
-docker.io/apecloud/kubeblocks-installer:202407291819-offline
-docker.io/apecloud/dms:0.0.1-alpha.40
-# kubeblocks v0.9.1-beta.8
-docker.io/apecloud/kubeblocks:0.9.1-beta.8
-docker.io/apecloud/kubeblocks-dataprotection:0.9.1-beta.8
-docker.io/apecloud/kubeblocks-datascript:0.9.1-beta.8
-docker.io/apecloud/kubeblocks-tools:0.9.1-beta.8
-docker.io/apecloud/kubeblocks-charts:0.9.1-beta.8
-# gemini v0.6.2
+# KubeBlocks-Cloud v0.26.128
+docker.io/apecloud/openconsole:v0.26.128
+docker.io/apecloud/apiserver:v0.26.128
+docker.io/apecloud/task-manager:v0.26.128
+docker.io/apecloud/cubetran-front:v0.26.128
+docker.io/apecloud/cr4w:v0.26.128
+docker.io/apecloud/relay:v0.26.128
+docker.io/apecloud/sentry:v0.26.128
+docker.io/apecloud/sentry-init:v0.26.128
+docker.io/apecloud/kb-cloud-installer:v0.26.128
+docker.io/apecloud/apecloud-charts:v0.26.128
+docker.io/apecloud/kubeblocks-installer:202407301836-offline
+docker.io/apecloud/dms:0.0.1-alpha.43
+# KubeBlocks v0.9.1-beta.10
+docker.io/apecloud/kubeblocks:0.9.1-beta.10
+docker.io/apecloud/kubeblocks-dataprotection:0.9.1-beta.10
+docker.io/apecloud/kubeblocks-datascript:0.9.1-beta.10
+docker.io/apecloud/kubeblocks-tools:0.9.1-beta.10
+docker.io/apecloud/kubeblocks-charts:0.9.1-beta.10
+# Gemini v0.6.2
 docker.io/apecloud/gemini:0.6.2
 docker.io/apecloud/gemini-tools:0.6.2
 docker.io/apecloud/easymetrics:0.6.2
