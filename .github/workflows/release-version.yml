@@ -28,7 +28,7 @@ on:
         required: false
         default: ''
 
-run-name: ref_name:${{ github.ref_name }} cloud:${{ inputs.APP_VERSION }} kubeblocks:${{ inputs.KB_VERSION }} gemini:${{ inputs.GEMINI_VERSION }} oteld:${{ inputs.OTELD_VERSION }} installer:${{ inputs.INSTALLER_VERSION }} dms:${{ inputs.DMS_VERSION }}
+run-name: ref_name:${{ github.ref_name }} Cloud:${{ inputs.APP_VERSION }} KubeBlocks:${{ inputs.KB_VERSION }} Gemini:${{ inputs.GEMINI_VERSION }} Oteld:${{ inputs.OTELD_VERSION }} Installer:${{ inputs.INSTALLER_VERSION }} Dms:${{ inputs.DMS_VERSION }}
 
 env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
