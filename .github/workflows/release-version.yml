@@ -4,27 +4,27 @@ on:
   workflow_dispatch:
     inputs:
       APP_VERSION:
-        description: 'The version of cloud'
+        description: 'Cloud version'
         required: false
         default: ''
       KB_VERSION:
-        description: 'The version of kubeblocks'
+        description: 'KubeBlocks version'
         required: false
         default: ''
       GEMINI_VERSION:
-        description: 'The version of gemini'
+        description: 'Gemini '
         required: false
         default: ''
       OTELD_VERSION:
-        description: 'The version of oteld'
+        description: 'Oteld version'
         required: false
         default: ''
       INSTALLER_VERSION:
-        description: 'The version of offline installer'
+        description: 'Offline Installer version'
         required: false
         default: ''
       DMS_VERSION:
-        description: 'The version of dms'
+        description: 'Dms version'
         required: false
         default: ''
 
