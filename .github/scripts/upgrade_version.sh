@@ -253,6 +253,12 @@ generate_release_note() {
     release_note_file="./docs/release-notes/${CLOUD_VERSION}.md"
     kubeblocks_enterprise_txt="./.github/images/kubeblocks-enterprise.txt"
     cp -r "$kubeblocks_enterprise_txt" "$release_note_file"
+    imageFiles=("ape-local-csi-driver" "kubebench" "apecloud-mysql" "postgresql" "redis" "mongodb" "mysql" "kafka" "oceanbase" "starrocks" "qdrant" "rabbitmq" "elasticsearch" "clickhouse")
+    for imageFile in "${imageFiles[@]}"; do
+        echo "add ${imageFile} to release note "
+        image_file_path=.github/images/${imageFile}.txt
+        cat ${image_file_path} >> "$release_note_file"
+    done
     git add "$release_note_file"
 }
 
