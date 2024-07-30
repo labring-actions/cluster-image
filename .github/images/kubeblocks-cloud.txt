@@ -1,17 +1,17 @@
-# kubeblocks-cloud v0.26.114
-docker.io/apecloud/openconsole:v0.26.114
-docker.io/apecloud/apiserver:v0.26.114
-docker.io/apecloud/task-manager:v0.26.114
-docker.io/apecloud/cubetran-front:v0.26.114
-docker.io/apecloud/cr4w:v0.26.114
-docker.io/apecloud/relay:v0.26.114
-docker.io/apecloud/sentry:v0.26.114
-docker.io/apecloud/sentry-init:v0.26.114
-docker.io/apecloud/kb-cloud-installer:v0.26.114
-docker.io/apecloud/apecloud-charts:v0.26.114
+# kubeblocks-cloud v0.26.125
+docker.io/apecloud/openconsole:v0.26.125
+docker.io/apecloud/apiserver:v0.26.125
+docker.io/apecloud/task-manager:v0.26.125
+docker.io/apecloud/cubetran-front:v0.26.125
+docker.io/apecloud/cr4w:v0.26.125
+docker.io/apecloud/relay:v0.26.125
+docker.io/apecloud/sentry:v0.26.125
+docker.io/apecloud/sentry-init:v0.26.125
+docker.io/apecloud/kb-cloud-installer:v0.26.125
+docker.io/apecloud/apecloud-charts:v0.26.125
 docker.io/apecloud/dms:0.0.1-alpha.40
 docker.io/apecloud/ob-grpc-server:0.1.2
-docker.io/apecloud/kubeblocks-installer:202407252051-offline
+docker.io/apecloud/kubeblocks-installer:202407291819-offline
 docker.io/apecloud/redis:7.0.5
 docker.io/apecloud/grafana:10.1.1
 docker.io/apecloud/bats:v1.4.1
