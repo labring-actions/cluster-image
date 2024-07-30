@@ -18,6 +18,26 @@ on:
         description: 'additional images (e.g. docker.io/apecloud/kubeblocks:0.8.1|docker.io/apecloud/kubeblocks-tools:0.8.1|...)'
         required: false
         default: ''
+      KB_VERSION:
+        description: 'KubeBlocks version'
+        required: false
+        default: ''
+      GEMINI_VERSION:
+        description: 'Gemini '
+        required: false
+        default: ''
+      OTELD_VERSION:
+        description: 'Oteld version'
+        required: false
+        default: ''
+      INSTALLER_VERSION:
+        description: 'Offline Installer version'
+        required: false
+        default: ''
+      DMS_VERSION:
+        description: 'Dms version'
+        required: false
+        default: ''
 
 run-name: save ${{ inputs.APP_NAME }}:${{ inputs.APP_VERSION }} ${{ inputs.ADD_IMAGES }}
 
