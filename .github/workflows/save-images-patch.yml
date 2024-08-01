@@ -83,6 +83,11 @@ jobs:
           add_images: ${{ inputs.ADD_IMAGES }}
           app_name: ${{ inputs.APP_NAME }}
           app_version: ${{ inputs.APP_VERSION }}
+          kubeblocks_version: ${{ inputs.KB_VERSION }}
+          gemini_version: ${{ inputs.GEMINI_VERSION }}
+          oteld_version: ${{ inputs.OTELD_VERSION }}
+          installer_version: ${{ inputs.INSTALLER_VERSION }}
+          dms_version: ${{ inputs.DMS_VERSION }}
           images_file: .github/images/${{ inputs.APP_NAME }}.txt
         run: |
           bash .github/scripts/save_images.sh
