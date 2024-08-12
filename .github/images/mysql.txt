@@ -9,3 +9,4 @@ docker.io/apecloud/mysql_audit_log:5.7.44
 docker.io/apecloud/mysql_audit_log:8.0.33
 docker.io/apecloud/syncer:mysql
 docker.io/apecloud/syncer:0.1.0
+docker.io/apecloud/syncer:0.1.2

@@ -1,8 +1,8 @@
-kubeblocks:0.9.1-beta.10
-kubeblocks-cloud:v0.26.128
-kb-cloud-installer:0.26.128
-gemini:0.6.2
-gemini-monitor:0.6.2
+kubeblocks:0.9.1-beta.12
+kubeblocks-cloud:v0.26.183
+kb-cloud-installer:0.26.183
+gemini:0.6.3-beta.1
+gemini-monitor:0.6.3-beta.1
 logto:0.1.4
 ingress-nginx:4.8.4
 metallb:0.14.4
@@ -19,9 +19,8 @@ mysql:0.9.1
 postgresql:0.9.0
 redis:0.9.0
 starrocks:0.9.0
-oceanbase:0.9.0
+oceanbase:0.9.1
 clickhouse:0.9.0
 cert-manager:v1.14.2
 rabbitmq:0.9.0
 metrics-server:3.12.0
-

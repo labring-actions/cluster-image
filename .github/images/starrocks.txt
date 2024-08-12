@@ -1,6 +1,7 @@
 # starrocks v0.9.0
 docker.io/apecloud/apecloud-addon-charts:starrocks-0.9.0
 docker.io/library/nginx:1.24.0
+docker.io/nginx:1.24.0
 docker.io/starrocks/fe-ubuntu:3.2.2
 docker.io/starrocks/cn-ubuntu:3.2.2
 docker.io/starrocks/be-ubuntu:3.2.2
