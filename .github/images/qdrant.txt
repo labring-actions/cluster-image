@@ -4,3 +4,4 @@ docker.io/qdrant/qdrant:v1.5.0
 docker.io/qdrant/qdrant:v1.7.3
 docker.io/qdrant/qdrant:v1.8.1
 docker.io/qdrant/qdrant:v1.8.4
+docker.io/qdrant/qdrant:v1.10.0

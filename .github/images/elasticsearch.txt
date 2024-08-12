@@ -1,4 +1,5 @@
 # elasticsearch v0.9.0
-docker.io/prometheuscommunity/elasticsearch-exporter:v1.7.0
+docker.io/apecloud/elasticsearch-exporter:v1.7.0
 docker.io/apecloud/curl-jq:latest
+docker.io/apecloud/elasticsearch-plugins:8.8.2
 docker.io/library/elasticsearch:8.8.2
