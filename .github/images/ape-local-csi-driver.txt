@@ -1,5 +1,5 @@
-# ape-local-csi-driver v0.2.0
-docker.io/apecloud/ape-local:0.2.0
+# ape-local-csi-driver v0.2.2
+docker.io/apecloud/ape-local:0.2.2
 docker.io/apecloud/livenessprobe:v2.12.0
 docker.io/apecloud/csi-node-driver-registrar:v2.10.0
 docker.io/apecloud/csi-attacher:v4.5.0

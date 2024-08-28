@@ -64,14 +64,8 @@ add_charts_list() {
     done
 }
 
-tar_charts_package() {
-    if [[ ! -f "$CHART_FILE_PATH" ]]; then
-        echo "no found tar charts file"
-        return
-    fi
-    mkdir -p ${KB_CHART_NAME}/kubeblocks-image-list ${KB_CHART_NAME}/apps
-
-    IMAGE_FILE_PATH=.github/images/${APP_NAME}.txt
+change_charts_version() {
+    IMAGE_FILE_PATH=$1
     if [[ "${APP_NAME}" == "kubeblocks-enterprise" || "$APP_NAME" == "kubeblocks-cloud" || "$APP_NAME" == "kubeblocks-enterprise-patch" ]]; then
         echo "change ${APP_NAME}.txt images tag"
         if [[ "${APP_VERSION}" != "v"* ]]; then
@@ -184,7 +178,20 @@ tar_charts_package() {
             sed -i "s/^docker.io\/apecloud\/dms:.*/docker.io\/apecloud\/dms:${DMS_VERSION}/" $IMAGE_FILE_PATH
         fi
     fi
+}
 
+tar_charts_package() {
+    if [[ ! -f "$CHART_FILE_PATH" ]]; then
+        echo "no found tar charts file"
+        return
+    fi
+    mkdir -p ${KB_CHART_NAME}/kubeblocks-image-list ${KB_CHART_NAME}/apps
+
+    image_file_path=.github/images/${APP_NAME}.txt
+    change_charts_version "$image_file_path"
+
+    image_file_path2=.github/images/kubeblocks-enterprise-patch.txt
+    change_charts_version "$image_file_path2"
 
     echo "copy image-list.txt"
     if [[ "${APP_NAME}" == "kubeblocks-enterprise" ]]; then
