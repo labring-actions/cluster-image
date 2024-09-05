@@ -12,7 +12,7 @@ on:
         description: 'Enable save addon images (e.g. apecloud-mysql|clickhouse|elasticsearch|kafka|mongodb|mysql|oceanbase|postgresql|qdrant|rabbitmq|redis|starrocks|zookeeper|damengdb|kingbase)'
         type: string
         required: false
-        default: ''
+        default: 'false'
       SELF_RUNNER:
         description: "Enable self runner"
         default: 'false'
@@ -37,17 +37,20 @@ jobs:
     secrets: inherit
 
   check-self-runner:
+    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' }}
     runs-on: ubuntu-latest
     outputs:
       self-runner: ${{ steps.check-self-runner.outputs.self-runner }}
+      enable-addons: ${{ steps.check-self-runner.outputs.enable-addons }}
     steps:
       - name: check self runner
         id: check-self-runner
         run: |
           SELF_RUNNER="${{ inputs.SELF_RUNNER }}"
           ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
-          if [[ -z "${ENABLE_ADDONS}" ]]; then
+          if [[ "${ENABLE_ADDONS}" == "true" ]]; then
               SELF_RUNNER="true"
+              ENABLE_ADDONS=""
           else
               ADDON_COUNTS=$(echo "${{ inputs.ENABLE_ADDONS }}" | grep -o "|" | wc -l)
               if [[ ${ADDON_COUNTS} -gt 8 ]]; then
@@ -55,24 +58,24 @@ jobs:
               fi
           fi
           echo "self-runner=${SELF_RUNNER}" >> $GITHUB_OUTPUT
-          
+          echo "enable-addons=${ENABLE_ADDONS}" >> $GITHUB_OUTPUT
 
   save-addon-images:
-    needs: [check-self-runner]
-    if: ${{ needs.check-self-runner.outputs.self-runner != 'true' }}
+    needs: [ check-self-runner ]
+    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' && needs.check-self-runner.outputs.self-runner != 'true' }}
     uses: ./.github/workflows/manifests-images-save.yml
     with:
       RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
       IS_ADDON: "true"
-      ENABLE_ADDONS: "${{ inputs.ENABLE_ADDONS }}"
+      ENABLE_ADDONS: "${{ needs.check-self-runner.outputs.enable-addons }}"
     secrets: inherit
 
   save-addon-images-self:
-    needs: [check-self-runner]
-    if: ${{ needs.check-self-runner.outputs.self-runner == 'true' }}
+    needs: [ check-self-runner ]
+    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' && needs.check-self-runner.outputs.self-runner == 'true' }}
     uses: ./.github/workflows/manifests-images-save-self.yml
     with:
       RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
       IS_ADDON: "true"
-      ENABLE_ADDONS: "${{ inputs.ENABLE_ADDONS }}"
+      ENABLE_ADDONS: "${{ needs.check-self-runner.outputs.enable-addons }}"
     secrets: inherit

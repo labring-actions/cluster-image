@@ -29,7 +29,7 @@ on:
         required: true
         default: ''
       IS_ADDON:
-        description: "Save addon images type"
+        description: "Save addon images flag"
         default: 'false'
         type: string
         required: true
