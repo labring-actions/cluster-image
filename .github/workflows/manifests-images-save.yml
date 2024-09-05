@@ -111,7 +111,7 @@ jobs:
     uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
     with:
       GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
-      RUNNER_LABEL: "kubeblocks-airgap-runner"
+      RUNNER_LABEL: "kubeblocks-airgap-yq-runner"
       RUNNER_REPLICAS: 1
     secrets: inherit
 
@@ -162,6 +162,6 @@ jobs:
     uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
     with:
       GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
-      RUNNER_LABEL: "kubeblocks-airgap-runner"
+      RUNNER_LABEL: "kubeblocks-airgap-yq-runner"
       ENABLE: "disable"
     secrets: inherit
