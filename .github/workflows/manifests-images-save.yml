@@ -117,7 +117,7 @@ jobs:
 
   save-images:
     needs: [ enable-self-runner ]
-    runs-on: [ self-hosted, amd-runner ]
+    runs-on: [ self-hosted, amd-yq-runner ]
     outputs:
       release-version: ${{ steps.save-images.outputs.release-version }}
     steps:
