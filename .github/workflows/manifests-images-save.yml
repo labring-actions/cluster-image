@@ -100,6 +100,9 @@ on:
 run-name: save image ${{ inputs.IMAGES_NAME }} ${{ inputs.RELEASE_VERSION }}
 
 env:
+  DOCKER_REGISTRY_URL: docker.io
+  DOCKER_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
   OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
   OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
@@ -123,6 +126,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_PASSWORD }}
 
       - name: manifests images save
         id: save-images
