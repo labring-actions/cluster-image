@@ -5,7 +5,7 @@ VALUES_FILE=${2:-"deploy-values.yaml"}
 RELEASE_VERSION=${3:-""}
 KB_IMAGE_NAME=${4:-"kubeblocks-enterprise"}
 IS_ADDON=${5:-"false"}
-ENABLE_ADDON=${6:-""}
+ENABLE_ADDONS=${6:-""}
 
 
 pull_chart_images() {
@@ -60,10 +60,10 @@ save_charts_images() {
         esac
         chart_enable=$(yq e ".${chart_name}.enable" "${VALUES_FILE}")
 
-        if [[ "${IS_ADDON}" == "true" && -n "$ENABLE_ADDON" ]]; then
+        if [[ "${IS_ADDON}" == "true" && -n "$ENABLE_ADDONS" ]]; then
               skip_addon=0
-              echo "$ENABLE_ADDON"
-              for addon_name in $(echo "${ENABLE_ADDON}"|sed 's/|/ /g' ); do
+              echo "$ENABLE_ADDONS"
+              for addon_name in $(echo "${ENABLE_ADDONS}"|sed 's/|/ /g' ); do
                   if [[ "${addon_name}" == "${chart_name}" ]]; then
                       skip_addon=1
                       chart_enable="true"

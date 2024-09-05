@@ -16,7 +16,7 @@ on:
         options:
           - false
           - true
-      ENABLE_ADDON:
+      ENABLE_ADDONS:
         description: 'Enable save addon images (e.g. apecloud-mysql|clickhouse|elasticsearch|kafka|mongodb|mysql|oceanbase|postgresql|qdrant|rabbitmq|redis|starrocks|zookeeper|damengdb|kingbase)'
         type: string
         required: false
@@ -33,14 +33,14 @@ on:
         default: 'false'
         type: string
         required: true
-      ENABLE_ADDON:
+      ENABLE_ADDONS:
         description: 'The enable of save addon images (e.g. apecloud-mysql|clickhouse|elasticsearch|kafka|mongodb|mysql|oceanbase|postgresql|qdrant|rabbitmq|redis|starrocks|zookeeper|damengdb|kingbase)'
         type: string
         required: false
         default: ''
 
 
-run-name: save images ${{ inputs.RELEASE_VERSION }} is_addon:${{ inputs.IS_ADDON }} ${{ inputs.ENABLE_ADDON }}
+run-name: save images ${{ inputs.RELEASE_VERSION }} is_addon:${{ inputs.IS_ADDON }} ${{ inputs.ENABLE_ADDONS }}
 
 env:
   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -83,12 +83,12 @@ jobs:
         run: |
           IMAGE_NAME="kubeblocks-enterprise"
           if [[ "${{ inputs.IS_ADDON }}" == "true" ]]; then
-              if [[ -z "${{ inputs.ENABLE_ADDON }}" ]]; then
+              if [[ -z "${{ inputs.ENABLE_ADDONS }}" ]]; then
                   IMAGE_NAME="kb-ent-addons-all"
               else
-                  ENABLE_ADDON="${{ inputs.ENABLE_ADDON }}"
+                  ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
                   IMAGE_NAME="kb-ent-addons"
-                  for addon_name in $(echo "${ENABLE_ADDON}"|sed 's/|/ /g' ); do
+                  for addon_name in $(echo "${ENABLE_ADDONS}"|sed 's/|/ /g' ); do
                       IMAGE_NAME="${IMAGE_NAME}-${addon_name}"
                   done
               fi
@@ -103,10 +103,10 @@ jobs:
           RELEASE_VERSION="${{ steps.get-version.outputs.release-version }}"
           IMAGES_NAME="${{ steps.get-image-name.outputs.image-name }}"
           IS_ADDON="${{ inputs.IS_ADDON }}"
-          ENABLE_ADDON="${{ inputs.ENABLE_ADDON }}"
+          ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
        
           echo "save manifests images"
-          bash .github/scripts/manifests_images_save.sh "${MANIFESTS_FILE}" "${VALUES_FILE}" "${RELEASE_VERSION}" "${IMAGES_NAME}" "${IS_ADDON}" "${ENABLE_ADDON}"
+          bash .github/scripts/manifests_images_save.sh "${MANIFESTS_FILE}" "${VALUES_FILE}" "${RELEASE_VERSION}" "${IMAGES_NAME}" "${IS_ADDON}" "${ENABLE_ADDONS}"
 
           echo "Free space:"
           df -h

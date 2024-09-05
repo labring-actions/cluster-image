@@ -8,7 +8,7 @@ on:
         type: string
         required: true
         default: ''
-      ENABLE_ADDON:
+      ENABLE_ADDONS:
         description: 'Enable save addon images (e.g. apecloud-mysql|clickhouse|elasticsearch|kafka|mongodb|mysql|oceanbase|postgresql|qdrant|rabbitmq|redis|starrocks|zookeeper|damengdb|kingbase)'
         type: string
         required: false
@@ -22,7 +22,7 @@ on:
           - false
           - true
 
-run-name: save images ${{ inputs.RELEASE_VERSION }} ${{ inputs.ENABLE_ADDON }}
+run-name: save images ${{ inputs.RELEASE_VERSION }} ${{ inputs.ENABLE_ADDONS }}
 
 jobs:
   save-cloud-images:
@@ -41,11 +41,11 @@ jobs:
         id: check-self-runner
         run: |
           SELF_RUNNER="${{ inputs.SELF_RUNNER }}"
-          ENABLE_ADDON="${{ inputs.ENABLE_ADDON }}"
-          if [[ -z "${ENABLE_ADDON}" ]]; then
+          ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
+          if [[ -z "${ENABLE_ADDONS}" ]]; then
               SELF_RUNNER="true"
           else
-              ADDON_COUNTS=$(echo "${{ inputs.ENABLE_ADDON }}" | grep -o "|" | wc -l)
+              ADDON_COUNTS=$(echo "${{ inputs.ENABLE_ADDONS }}" | grep -o "|" | wc -l)
               if [[ ${ADDON_COUNTS} -gt 8 ]]; then
                   SELF_RUNNER="true"
               fi
@@ -60,7 +60,7 @@ jobs:
     with:
       RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
       IS_ADDON: "true"
-      ENABLE_ADDON: "${{ inputs.ENABLE_ADDON }}"
+      ENABLE_ADDONS: "${{ inputs.ENABLE_ADDONS }}"
     secrets: inherit
 
   save-addon-images-self:
@@ -70,5 +70,5 @@ jobs:
     with:
       RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
       IS_ADDON: "true"
-      ENABLE_ADDON: "${{ inputs.ENABLE_ADDON }}"
+      ENABLE_ADDONS: "${{ inputs.ENABLE_ADDONS }}"
     secrets: inherit
