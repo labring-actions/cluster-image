@@ -114,7 +114,6 @@ jobs:
           echo "image-name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
 
       - name: manifests images save
-        id: save-images
         run: |
           MANIFESTS_FILE="${{ env.MANIFESTS_FILE }}"
           VALUES_FILE="${{ env.VALUES_FILE }}"
@@ -124,7 +123,7 @@ jobs:
           ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
        
           echo "save manifests images"
-          bash apecloud-cd/.github/utils/manifests_images_save.sh "${MANIFESTS_FILE}" "${VALUES_FILE}" "${RELEASE_VERSION}" "${IMAGES_NAME}" "${IS_ADDON}" "${ENABLE_ADDONS}"
+          bash .github/scripts/manifests_images_save.sh "${MANIFESTS_FILE}" "${VALUES_FILE}" "${RELEASE_VERSION}" "${IMAGES_NAME}" "${IS_ADDON}" "${ENABLE_ADDONS}"
           
           echo "Free space:"
           df -h
