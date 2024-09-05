@@ -20,6 +20,7 @@ on:
           - kafka
           - kata
           - kubebench
+          - minio
           - mongodb
           - mysql
           - metallb
@@ -38,6 +39,8 @@ on:
           - postgres-operator
           - rabbitmq
           - zookeeper
+          - damengdb
+          - kingbase
       APP_VERSION:
         description: 'app version'
         required: true

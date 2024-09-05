@@ -41,6 +41,8 @@ on:
           - spiderpool
           - victoria-metrics-cluster
           - metrics-server
+          - damengdb
+          - kingbase
       IMAGE_VERSION:
         description: 'image version'
         required: true

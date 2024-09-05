@@ -1,0 +1,3 @@
+# minio v0.9.0
+docker.io/apecloud/kubeblocks-tools:0.8.2
+docker.io/apecloud/minio:RELEASE.2024-06-29T01-20-47Z

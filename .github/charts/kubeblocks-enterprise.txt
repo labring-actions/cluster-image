@@ -1,8 +1,8 @@
-kubeblocks:0.9.1-beta.17
-kubeblocks-cloud:v0.27.27
-kb-cloud-installer:0.27.27
-gemini:0.6.4-beta.0
-gemini-monitor:0.6.4-beta.0
+kubeblocks:0.9.1-beta.18
+kubeblocks-cloud:v0.27.31
+kb-cloud-installer:0.27.31
+gemini:0.6.4-beta.5
+gemini-monitor:0.6.4-beta.5
 logto:0.1.4
 ingress-nginx:4.8.4
 metallb:0.14.4
@@ -26,3 +26,6 @@ metrics-server:3.12.0
 qdrant:0.9.1
 postgres-operator:1.12.2
 zookeeper:0.9.0
+minio:0.9.0
+damengdb:0.9.0
+kingbase:0.9.0
