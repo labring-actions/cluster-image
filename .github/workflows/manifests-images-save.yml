@@ -1,0 +1,167 @@
+name: Manifests Images Save
+
+on:
+  workflow_dispatch:
+    inputs:
+      MANIFESTS_FILE:
+        description: "The manifests file path to save"
+        type: string
+        required: true
+        default: ''
+      VALUES_FILE:
+        description: "The values file path to save"
+        type: string
+        required: true
+        default: ''
+      RELEASE_VERSION:
+        description: 'The version of release'
+        type: string
+        required: false
+        default: ''
+      GITHUB_REPO:
+        description: "The github repo to save"
+        type: string
+        required: false
+        default: ''
+      GITHUB_REF:
+        description: "The github repo ref to save"
+        type: string
+        required: false
+        default: 'main'
+      APECD_REF:
+        description: "The branch name of apecloud-cd"
+        type: string
+        required: false
+        default: 'main'
+      IMAGES_NAME:
+        description: "The images package name to save"
+        type: string
+        required: false
+        default: 'kubeblocks-enterprise'
+      BOT_TYPE:
+        description: 'The bot type (e.g. release/package/specify)'
+        type: string
+        required: false
+        default: 'specify'
+      BOT_WEBHOOK:
+        description: 'The bot webhook'
+        type: string
+        required: false
+        default: ''
+  workflow_call:
+    inputs:
+      MANIFESTS_FILE:
+        description: "The file path to save"
+        type: string
+        required: true
+        default: ''
+      VALUES_FILE:
+        description: "The values file path to save"
+        type: string
+        required: true
+        default: ''
+      RELEASE_VERSION:
+        description: 'The version of release'
+        type: string
+        required: false
+        default: ''
+      GITHUB_REPO:
+        description: "The github repo to save"
+        type: string
+        required: false
+        default: ''
+      GITHUB_REF:
+        description: "The github repo ref to save"
+        type: string
+        required: false
+        default: 'main'
+      APECD_REF:
+        description: "The branch name of apecloud-cd"
+        type: string
+        required: false
+        default: 'main'
+      IMAGES_NAME:
+        description: "The images package name to save"
+        type: string
+        required: false
+        default: 'kubeblocks-enterprise'
+      BOT_TYPE:
+        description: 'The bot type (e.g. release/package/specify)'
+        type: string
+        required: false
+        default: 'specify'
+      BOT_WEBHOOK:
+        description: 'The bot webhook'
+        type: string
+        required: false
+        default: ''
+
+
+run-name: save image ${{ inputs.IMAGES_NAME }} ${{ inputs.RELEASE_VERSION }}
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
+  OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
+  OSS_ENDPOINT: "oss-cn-zhangjiakou.aliyuncs.com"
+  OSS_BUCKET: "kubeblocks-oss"
+
+jobs:
+  enable-self-runner:
+    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
+    with:
+      GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
+      RUNNER_LABEL: "kubeblocks-airgap-runner"
+      RUNNER_REPLICAS: 1
+    secrets: inherit
+
+  save-images:
+    needs: [ enable-self-runner ]
+    runs-on: [ self-hosted, amd-runner ]
+    outputs:
+      release-version: ${{ steps.save-images.outputs.release-version }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: manifests images save
+        id: save-images
+        run: |
+          MANIFESTS_FILE="${{ inputs.MANIFESTS_FILE }}"
+          VALUES_FILE="${{ inputs.VALUES_FILE }}"
+          RELEASE_VERSION="${{ inputs.RELEASE_VERSION }}"
+          if [[ -z "${RELEASE_VERSION}" && -f ${MANIFESTS_FILE} ]]; then
+              RELEASE_VERSION="$(yq e ".kubeblocks-cloud[0].version"  ${MANIFESTS_FILE})"
+          fi
+          echo "release-version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+    
+          echo "save manifests images"
+          bash .github/scripts/manifests_images_save.sh "${MANIFESTS_FILE}" "${VALUES_FILE}" "${RELEASE_VERSION}"
+
+      - uses: manyuanrong/setup-ossutil@v2.0
+        with:
+          access-key-id: "${{ env.OSS_KEY_ID }}"
+          access-key-secret: "${{ env.OSS_KEY_SECRET }}"
+          endpoint: "${{ env.OSS_ENDPOINT }}"
+
+      - name: Upload images to oss
+        id: upload_to_oss
+        run: |
+          IMAGE_PKG_NAME="${{ inputs.IMAGES_NAME }}-images-${{ steps.save-images.outputs.release-version }}.tar.gz"
+          ossutil cp -rf ./${IMAGE_PKG_NAME} oss://${{ env.OSS_BUCKET }}/images/${IMAGE_PKG_NAME}
+          upload_ret=$?
+          if [[ $upload_ret -eq 0 ]]; then
+              echo "upload ${IMAGE_PKG_NAME} to oss successfully"
+          else
+              exit 1
+          fi
+
+  disable-self-runner:
+    if: ${{ always() }}
+    needs: [ save-images ]
+    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
+    with:
+      GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
+      RUNNER_LABEL: "kubeblocks-airgap-runner"
+      ENABLE: "disable"
+    secrets: inherit

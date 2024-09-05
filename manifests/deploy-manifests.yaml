@@ -1,0 +1,335 @@
+# kubeblocks-enterprise
+kubeblocks-cloud:
+  - version: v0.27.31
+    isEnterprise: true
+    images:
+      - apecloud/openconsole:v0.27.31
+      - apecloud/apiserver:v0.27.31
+      - apecloud/task-manager:v0.27.31
+      - apecloud/cubetran-front:v0.27.31
+      - apecloud/cr4w:v0.27.31
+      - apecloud/relay:v0.27.31
+      - apecloud/sentry:v0.27.31
+      - apecloud/sentry-init:v0.27.31
+      - apecloud/apecloud-charts:v0.27.31
+      - apecloud/kubeblocks-installer:v0.27.31-0.9.1-beta.18-offline
+      - apecloud/dms:0.0.1-alpha.67
+      - apecloud/ob-grpc-server:0.1.2
+      - apecloud/redis:7.0.5
+      - apecloud/grafana:10.1.1
+      - apecloud/bats:v1.4.1
+      - apecloud/workflow-controller:v3.5.5
+      - apecloud/argocli:v3.5.5
+      - apecloud/argoexec:v3.5.5
+      - apecloud/cloudshell:1.7.8
+      - apecloud/servicemirror:0.3.1
+      - apecloud/apecloud-website:latest
+      - apecloud/busybox:latest
+kb-cloud-installer:
+  - version: 0.27.31
+    isEnterprise: false
+    images:
+      - apecloud/kb-cloud-installer:v0.27.31
+postgres-operator:
+  - version: 1.12.2
+    isEnterprise: false
+    images:
+      - apecloud/postgres-operator:v1.12.2
+      - apecloud/pgbouncer:master-32
+      - apecloud/spilo-16:3.2-p3
+      - apecloud/logical-backup:v1.12.2
+logto:
+  - version: 0.1.4
+    isEnterprise: false
+    images:
+      - apecloud/logto:1.12
+kubeblocks:
+  - version: 0.9.1-beta.18
+    isEnterprise: false
+    images:
+      - apecloud/kubeblocks:0.9.1-beta.18
+      - apecloud/kubeblocks-dataprotection:0.9.1-beta.18
+      - apecloud/kubeblocks-datascript:0.9.1-beta.18
+      - apecloud/kubeblocks-tools:0.9.1-beta.18
+      - apecloud/kubeblocks-charts:0.9.1-beta.18
+      - apecloud/datasafed:0.2.0
+      - apecloud/snapshot-controller:v6.2.1
+      - apecloud/busybox:latest
+gemini:
+  - version: 0.6.4-beta.5
+    isEnterprise: false
+    images:
+      - apecloud/gemini:0.6.4-beta.5
+      - apecloud/gemini-tools:0.6.4-beta.5
+      - apecloud/easymetrics:0.6.4-beta.5
+      - apecloud/wal-g:mongo-5.0.1
+      - apecloud/wal-g:mysql-8.0
+      - apecloud/wal-g-mysql:2.0.1-1-ubuntu
+      - apecloud/kubeblocks-tools:latest
+      - apecloud/kubeblocks-tools:0.8.2
+      - apecloud/cubetran-platform:0.5.8
+      - apecloud/cubetran-sidecar:0.1.2
+      - apecloud/cubetran-core:0.1.1
+      - apecloud/kubeviewer:0.1.17
+      - apecloud/mysql:8.0
+      - apecloud/redis:7.0.5
+      - apecloud/loki:2.9.4
+      - apecloud/busybox:1.36
+      - apecloud/nginx-unprivileged:1.24-alpine
+      - apecloud/ape-dts:0.1.16
+      - apecloud/vminsert:v1.102.1-cluster
+      - apecloud/vmselect:v1.102.1-cluster
+      - apecloud/vmstorage:v1.102.1-cluster
+      - apecloud/vmalert:v1.102.1
+      - apecloud/vmalert:v1.95.1
+      - apecloud/servicemirror:0.3.1
+      - apecloud/alertmanager:v0.25.0
+      - apecloud/configmap-reload:v0.5.0
+      - apecloud/minio:RELEASE.2022-09-17T00-09-45Z
+      - apecloud/mc:RELEASE.2022-09-16T09-16-47Z
+      - apecloud/cr-exporter:0.1.0-alpha.10
+gemini-monitor:
+  - version: 0.6.4-beta.5
+    isEnterprise: false
+    images:
+      - apecloud/oteld:0.6.3
+ape-local-csi-driver:
+  - version: 0.2.2
+    isEnterprise: false
+    images:
+      - apecloud/ape-local:0.2.2
+      - apecloud/livenessprobe:v2.12.0
+      - apecloud/csi-node-driver-registrar:v2.10.0
+      - apecloud/csi-attacher:v4.5.0
+      - apecloud/csi-provisioner:v4.0.0
+      - apecloud/csi-resizer:v1.10.0
+      - apecloud/kubectl:1.29
+kubebench:
+  - version: 0.0.1
+    isEnterprise: false
+    images:
+      - apecloud/kubebench:0.0.10
+      - apecloud/customsuites:latest
+      - apecloud/benchmarksql:latest
+      - apecloud/go-ycsb:latest
+      - apecloud/spilo:14.8.0
+      - apecloud/tpcds:latest
+      - apecloud/go-ycsb:latest
+      - apecloud/fio:latest
+      - apecloud/redis:7.0.5
+# addons
+apecloud-mysql:
+  - version: 0.9.0-beta.10
+    isEnterprise: false
+    images:
+      - apecloud/apecloud-xtrabackup:8.0
+      - apecloud/agamotto:0.1.2-beta.1
+      - apecloud/mysql_audit_log:8.0.33
+      - apecloud/apecloud-mysql-scale:0.2.7
+      - apecloud/apecloud-mysql-server:8.0.30-5.beta3.auditlog.20231221.g6ba5e2e.14
+      - apecloud/apecloud-mysql-server:8.0.30-5.beta3.20231215.ge77d836.14
+      - apecloud/mysqld-exporter:0.15.1
+      - apecloud/busybox:1.35
+clickhouse:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/zookeeper:3.8.0-debian-11-r47
+      - apecloud/clickhouse:22.9.4-debian-11-r1
+elasticsearch:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/elasticsearch-exporter:v1.7.0
+      - apecloud/curl-jq:latest
+      - apecloud/elasticsearch-plugins:8.8.2
+      - apecloud/elasticsearch:8.8.2
+      - apecloud/elasticsearch:7.8.1
+      - apecloud/elasticsearch:7.7.1
+      - apecloud/elasticsearch:7.10.1
+      - apecloud/elasticsearch:8.1.3
+kafka:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/jmx-exporter:0.18.0-debian-11-r20
+      - apecloud/kafka:3.3.2-debian-11-r54
+      - apecloud/kafka-exporter:1.6.0-debian-11-r67
+minio:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/kubeblocks-tools:0.8.2
+      - apecloud/minio:RELEASE.2024-06-29T01-20-47Z
+mongodb:
+  - version: 0.9.1
+    isEnterprise: false
+    images:
+      - apecloud/mongo:4.2
+      - apecloud/mongo:4.4
+      - apecloud/mongo:5.0.14
+      - apecloud/mongo:5.0.20
+      - apecloud/mongo:6.0
+      - apecloud/mongo:7.0.12
+      - apecloud/syncer:0.1.2
+      - apecloud/agamotto:0.1.2-beta.1
+      - apecloud/mongo:4.0.28
+      - apecloud/mongo:4.2.24
+      - apecloud/mongo:4.4.29
+      - apecloud/mongo:5.0.28
+      - apecloud/mongo:6.0.16
+      - apecloud/mongo:7.0.12
+mysql:
+  - version: 0.9.2
+    isEnterprise: false
+    images:
+      - apecloud/agamotto:0.1.2-beta.1
+      - apecloud/mysql:8.0.33
+      - apecloud/mysql:5.7.44
+      - apecloud/mysql:8.4.2
+      - apecloud/percona-xtrabackup:8.0.32
+      - apecloud/percona-xtrabackup:8.0.33-28
+      - apecloud/percona-xtrabackup:2.4
+      - apecloud/mysql_audit_log:5.7.44
+      - apecloud/mysql_audit_log:8.0.33
+      - apecloud/syncer:0.1.9
+      - apecloud/xtrabackup:2.4
+      - apecloud/xtrabackup:8.0
+      - apecloud/xtrabackup:8.4
+oceanbase:
+  - version: 0.9.1
+    isEnterprise: true
+    images:
+      - apecloud/obtools:4.2.1
+      - apecloud/obagent:4.2.1-100000092023101717
+      - apecloud/oceanbase-ent:4.2.1.7-107020012024061213
+      - apecloud/oceanbase-ent:4.2.1.7-107020012024061213-sshd
+      - apecloud/apecloud-addon-charts:oceanbase-0.9.1
+      - apecloud/syncer:0.1.7
+postgresql:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/agamotto:0.1.2-beta.1
+      - apecloud/postgres-exporter:v0.15.0
+      - apecloud/pgbouncer:1.19.0
+      - apecloud/spilo:12.15.0-pgvector-v0.6.1
+      - apecloud/spilo:12.14.0-pgvector-v0.6.1
+      - apecloud/spilo:14.8.0-pgvector-v0.6.1
+      - apecloud/spilo:12.14.1-pgvector-v0.6.1
+      - apecloud/spilo:14.7.2-pgvector-v0.6.1
+      - apecloud/spilo:15.7.0
+      - apecloud/wal-g:postgres-1.0
+      - apecloud/spilo:16.4.0
+qdrant:
+  - version: 0.9.1
+    isEnterprise: false
+    images:
+      - apecloud/curl-jq:0.1.0
+      - apecloud/qdrant:v1.5.0
+      - apecloud/qdrant:v1.7.3
+      - apecloud/qdrant:v1.8.1
+      - apecloud/qdrant:v1.8.4
+      - apecloud/qdrant:v1.10.0
+rabbitmq:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/rabbitmq:3.13.2-management
+      - apecloud/rabbitmq:3.8.14-management
+      - apecloud/rabbitmq:3.9.29-management
+      - apecloud/rabbitmq:3.10.25-management
+      - apecloud/rabbitmq:3.11.28-management
+      - apecloud/rabbitmq:3.12.14-management
+redis:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/agamotto:0.1.2-beta.1
+      - apecloud/redis-stack-server:7.0.6-RC8
+      - apecloud/redis-stack-server:7.2.0-v10
+      - apecloud/redis-stack-server:7.0.6-RC4
+      - apecloud/twemproxy:0.5.0
+      - apecloud/busybox:1.36
+      - apecloud/ape-dts:0.1.17
+starrocks:
+  - version: 0.9.0
+    isEnterprise: true
+    images:
+      - apecloud/apecloud-addon-charts:starrocks-0.9.0
+      - apecloud/nginx:1.24.0
+      - apecloud/fe-ubuntu:3.2.2
+      - apecloud/cn-ubuntu:3.2.2
+      - apecloud/be-ubuntu:3.2.2
+      - apecloud/fe-ubuntu:3.3.0
+      - apecloud/cn-ubuntu:3.3.0
+      - apecloud/be-ubuntu:3.3.0
+      - apecloud/be-ubuntu:3.3.2
+      - apecloud/cn-ubuntu:3.3.2
+      - apecloud/fe-ubuntu:3.3.2
+      - apecloud/starrocks-tools:3.2.2
+zookeeper:
+  - version: 0.9.0
+    isEnterprise: false
+    images:
+      - apecloud/zoocreeper:1.0.1
+      - apecloud/zookeeper:3.4.14
+      - apecloud/zookeeper:3.6.4
+      - apecloud/zookeeper:3.7.2
+      - apecloud/zookeeper:3.8.4
+      - apecloud/zookeeper:3.9.2
+damengdb:
+  - version: 0.9.0
+    isEnterprise: true
+    images:
+      - apecloud/dm:8.1
+      - apecloud/dmdb-exporter:0.1.0
+      - apecloud/dmdb-tool:8.1
+      - apecloud/apecloud-addon-charts:damengdb-0.9.0
+kingbase:
+  - version: 0.9.0
+    isEnterprise: true
+    images:
+      - apecloud/kingbase:v008r006c008b0014
+      - apecloud/kingbase-monitor:v2.4.0
+      - apecloud/kubeblocks-tools:0.8.3
+      - apecloud/apecloud-addon-charts:kingbase-0.9.0
+# applications
+ingress-nginx:
+  - version: 4.8.4
+    isEnterprise: false
+    images:
+      - apecloud/controller:v1.9.4
+      - apecloud/kube-webhook-certgen:v20231011-8b53cabe0
+metallb:
+  - version: 0.14.4
+    isEnterprise: false
+    images:
+      - apecloud/frr:9.0.2
+      - apecloud/speaker:v0.14.4
+      - apecloud/controller:v0.14.4
+      - apecloud/metallb-charts:v0.14.4
+metrics-server:
+  - version: 3.12.0
+    isEnterprise: false
+    images:
+      - apecloud/metrics-server:v0.7.0
+cert-manager:
+  - version: v1.14.2
+    isEnterprise: false
+    images:
+      - apecloud/cert-manager-cainjector:v1.14.2
+      - apecloud/cert-manager-controller:v1.14.2
+      - apecloud/cert-manager-webhook:v1.14.2
+      - apecloud/cert-manager-startupapicheck:v1.14.2
+      - apecloud/cert-manager-acmesolver:v1.14.2
+spiderpool:
+  - version: 0.9.3
+    isEnterprise: false
+    images:
+      - apecloud/spiderpool-plugins:v0.9.2
+      - apecloud/spiderpool-agent:v0.9.3
+      - apecloud/spiderpool-agent:07195d2997e9839b586c0f95a32c23cf8dc96f1e
+      - apecloud/spiderpool-controller:v0.9.3
+      - apecloud/spiderpool-controller:07195d2997e9839b586c0f95a32c23cf8dc96f1e
+      - apecloud/multus-cni:v3.9.3
