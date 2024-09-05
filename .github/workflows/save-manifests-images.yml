@@ -24,6 +24,10 @@ on:
 
 run-name: save images ${{ inputs.RELEASE_VERSION }} ${{ inputs.ENABLE_ADDONS }}
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   save-cloud-images:
     uses: ./.github/workflows/manifests-images-save.yml
