@@ -84,8 +84,7 @@ jobs:
           repository: apecloud/apecloud
           path: apecloud
           token: ${{ env.GITHUB_TOKEN }}
-          ref: "release-0.27"
-          # ref: ${{ steps.get-version.outputs.release-version }}
+          ref: ${{ steps.get-version.outputs.release-version }}
 
       - name: get image name
         id: get-image-name
