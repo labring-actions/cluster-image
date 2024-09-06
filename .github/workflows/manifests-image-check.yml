@@ -1,0 +1,82 @@
+name: Manifests Images Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      RELEASE_VERSION:
+        description: 'The version of release'
+        type: string
+        required: true
+        default: ''
+      CHECK_REGISTRY:
+        description: "check registry"
+        default: ''
+        type: choice
+        required: false
+        options:
+          - default
+          - aliyun
+          - dockerhub
+  workflow_call:
+    inputs:
+      RELEASE_VERSION:
+        description: 'The version of release'
+        type: string
+        required: true
+        default: ''
+      CHECK_REGISTRY:
+        description: "check registry"
+        default: ''
+        type: string
+        required: false
+
+run-name: check images ${{ inputs.RELEASE_VERSION }}
+
+env:
+  CR_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  HELM_VERSION: v3.15.4
+  DOCKER_REGISTRY_URL: docker.io
+  ALIYUN_REGISTRY_URL: apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com
+  MANIFESTS_FILE: "apecloud/manifests/deploy-manifests.yaml"
+
+jobs:
+  images-check:
+    runs-on: ubuntu-latest
+    outputs:
+      release-version: ${{ steps.get-version.outputs.release-version }}
+    steps:
+      - name: get version
+        id: get-version
+        run: |
+          RELEASE_VERSION="${{ inputs.RELEASE_VERSION }}"
+          if [[ "${RELEASE_VERSION}" != "v"* ]]; then
+              RELEASE_VERSION="v${RELEASE_VERSION}"
+          fi
+          echo "release-version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v4
+
+      - name: Checkout apecloud Code
+        uses: actions/checkout@v4
+        with:
+          repository: apecloud/apecloud
+          path: apecloud
+          token: ${{ env.CR_TOKEN }}
+          ref: "release-0.27"
+          # ref: ${{ steps.get-version.outputs.release-version }}
+
+      - name: manifests images check
+        run: |
+          CHECK_REGISTRY="${{ inputs.CHECK_REGISTRY }}"
+          MANIFESTS_FILE="${{ env.MANIFESTS_FILE }}"
+          case $CHECK_REGISTRY in
+              aliyun)
+                  bash .github/scripts/manifests_image_check.sh "${MANIFESTS_FILE}" "${{ env.ALIYUN_REGISTRY_URL }}"
+              ;;
+              dockerhub)
+                  bash .github/scripts/manifests_image_check.sh "${MANIFESTS_FILE}" "${{ env.DOCKER_REGISTRY_URL }}"
+              ;;
+              *)
+                  bash .github/scripts/manifests_image_check.sh "${MANIFESTS_FILE}"
+              ;;
+          esac

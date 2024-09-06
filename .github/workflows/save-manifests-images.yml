@@ -29,7 +29,20 @@ permissions:
   contents: read
 
 jobs:
+  check-manifests-image:
+    uses: ./.github/workflows/manifests-image-check.yml
+    with:
+      RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
+    secrets: inherit
+
+  check-manifests-charts-image:
+    uses: ./.github/workflows/manifests-charts-image-check.yml
+    with:
+      RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
+    secrets: inherit
+
   save-cloud-images:
+    needs: [ check-manifests-image, check-manifests-charts-image ]
     uses: ./.github/workflows/manifests-images-save.yml
     with:
       RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
@@ -78,4 +91,17 @@ jobs:
       RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
       IS_ADDON: "true"
       ENABLE_ADDONS: "${{ needs.check-self-runner.outputs.enable-addons }}"
+    secrets: inherit
+
+  send-message:
+    permissions:
+      id-token: write
+      contents: read
+    needs: [ check-manifests-image, check-manifests-charts-image ]
+    if: ${{ failure() || cancelled() }}
+    uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
+    with:
+      TYPE: "2"
+      BOT_TYPE: "package"
+      CONTENT: "save images ${{ inputs.RELEASE_VERSION }} error"
     secrets: inherit
