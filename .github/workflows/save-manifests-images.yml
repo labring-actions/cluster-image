@@ -50,6 +50,7 @@ jobs:
     secrets: inherit
 
   check-self-runner:
+    needs: [ check-manifests-image, check-manifests-charts-image ]
     if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' }}
     runs-on: ubuntu-latest
     outputs:
