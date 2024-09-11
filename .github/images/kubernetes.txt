@@ -1,0 +1,2 @@
+# kubernetes v1.27.7
+docker.io/apecloud/kubernetes-airgap:v1.27.7
