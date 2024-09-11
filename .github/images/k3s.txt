@@ -1,0 +1,8 @@
+# k3s
+apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/rancher/klipper-lb:v0.4.7
+apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/rancher/mirrored-library-traefik:2.10.7
+apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/rancher/local-path-provisioner:v0.0.28
+apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/rancher/mirrored-coredns-coredns:1.10.1
+apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/rancher/mirrored-pause:3.6
+apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/rancher/mirrored-metrics-server:v0.7.0
+apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com/apecloud/rancher/klipper-helm:v0.8.4-build20240523
