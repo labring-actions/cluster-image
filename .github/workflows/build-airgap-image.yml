@@ -43,6 +43,7 @@ on:
           - metrics-server
           - damengdb
           - kingbase
+          - kubernetes
       IMAGE_VERSION:
         description: 'image version'
         required: true
