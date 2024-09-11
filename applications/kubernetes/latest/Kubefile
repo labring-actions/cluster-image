@@ -2,7 +2,7 @@ FROM labring/kubernetes:v1.27.7
 MAINTAINER sealos
 LABEL init="init-cri.sh \$registryDomain \$registryPort && bash init.sh" \
       clean="clean.sh && bash clean-cri.sh \$criData" \
-      check="clean.sh && bash clean-cri.sh \$criData" \
+      check="" \
       init-registry="init-registry.sh \$registryData \$registryConfig" \
       clean-registry="clean-registry.sh \$registryData \$registryConfig" \
       vip="\$defaultVIP"
