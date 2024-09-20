@@ -29,8 +29,9 @@ env:
 
 jobs:
   enable-self-runner:
-    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
+    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-self-runner.yml@v0.4.0
     with:
+      CLOUD_PROVIDER: "eks"
       GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
       RUNNER_LABEL: "kubeblocks-airgap-runner"
       RUNNER_REPLICAS: 1
@@ -81,8 +82,9 @@ jobs:
   disable-self-runner:
     if: ${{ always() }}
     needs: [ build-amd64-apps ]
-    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-gke-runner.yml@v0.1.0
+    uses: apecloud-inc/apecloud-cd/.github/workflows/enable-self-runner.yml@v0.4.0
     with:
+      CLOUD_PROVIDER: "eks"
       GITHUB_REPO: "apecloud-inc/kubeblocks-airgap"
       RUNNER_LABEL: "kubeblocks-airgap-runner"
       ENABLE: "disable"
