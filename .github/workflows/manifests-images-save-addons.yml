@@ -41,7 +41,7 @@ jobs:
   save-images:
     runs-on: ubuntu-latest
     outputs:
-      release-version: ${{ steps.get-version.outputs.release-version }}
+      release-version: ${{ steps.manifests-images-save.outputs.release-version }}
       image-name: ${{ steps.get-version.outputs.image-name }}
     steps:
       - name: get version
@@ -67,15 +67,20 @@ jobs:
           ref: ${{ steps.get-version.outputs.release-version }}
 
       - name: manifests images save
+        id: manifests-images-save
         run: |
           MANIFESTS_FILE="${{ env.MANIFESTS_FILE }}"
-          IMAGES_NAME="${{ steps.get-version.outputs.image-name }}"
+          IMAGE_NAME="${{ steps.get-version.outputs.image-name }}"
        
           echo "save addons manifests images"
-          bash .github/scripts/manifests_addons_images_save.sh "${MANIFESTS_FILE}" "${IMAGES_NAME}"
+          bash .github/scripts/manifests_addons_images_save.sh "${MANIFESTS_FILE}" "${IMAGE_NAME}"
           
           echo "Free space:"
           df -h
+          
+          RELEASE_VERSION=$(yq e "."${IMAGE_NAME}"[0].version" ${MANIFESTS_FILE})
+          echo "release-version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+          
 
       - uses: manyuanrong/setup-ossutil@v2.0
         with:
@@ -86,7 +91,7 @@ jobs:
       - name: Upload images to oss
         id: upload_to_oss
         run: |
-          IMAGE_PKG_NAME="${{ steps.get-version.outputs.image-name }}-images-${{ steps.get-version.outputs.release-version }}.tar.gz"
+          IMAGE_PKG_NAME="${{ steps.get-version.outputs.image-name }}-images-${{ steps.manifests-images-save.outputs.release-version }}.tar.gz"
           ossutil cp -rf ./${IMAGE_PKG_NAME} oss://${{ env.OSS_BUCKET }}/images/${IMAGE_PKG_NAME}
           upload_ret=$?
           if [[ $upload_ret -eq 0 ]]; then
