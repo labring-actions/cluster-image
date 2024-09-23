@@ -1,4 +1,4 @@
-name: Manifests Images Save
+name: Manifests Addons Images Save
 
 on:
   workflow_dispatch:
