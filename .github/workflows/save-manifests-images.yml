@@ -90,14 +90,15 @@ jobs:
           VALUES_FILE="${{ env.VALUES_FILE }}"
           if [[ "${ENABLE_ADDONS}" == "true" ]]; then
               ADDONS_NAME="$(bash .github/scripts/get_manifests_addons.sh "${MANIFESTS_FILE}" "${VALUES_FILE}")"
+          else
+              for addons_name in $( echo "${ENABLE_ADDONS}" | sed 's/|/ /g'); do
+                  if [[ -z "$ADDONS_NAME" ]]; then
+                      ADDONS_NAME="{\"addon-name\":\"$addons_name\"}"
+                  else
+                      ADDONS_NAME="$ADDONS_NAME,{\"addon-name\":\"$addons_name\"}"
+                  fi
+              done
           fi
-          for addons_name in $( echo "${ENABLE_ADDONS}" | sed 's/|/ /g'); do
-              if [[ -z "$ADDONS_NAME" ]]; then
-                  ADDONS_NAME="{\"addon-name\":\"$addons_name\"}"
-              else
-                  ADDONS_NAME="$ADDONS_NAME,{\"addon-name\":\"$addons_name\"}"
-              fi
-          done
           echo "matrix={\"include\":[$ADDONS_NAME]}" >> $GITHUB_OUTPUT
 
   save-addon-images:
