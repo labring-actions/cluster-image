@@ -1,0 +1,129 @@
+name: Manifests Images Save
+
+on:
+  workflow_dispatch:
+    inputs:
+      RELEASE_VERSION:
+        description: 'The version of release'
+        type: string
+        required: true
+        default: ''
+      ENABLE_ADDONS:
+        description: 'Enable save addon images (e.g. apecloud-mysql|clickhouse|elasticsearch|kafka|mongodb|mysql|oceanbase|postgresql|qdrant|rabbitmq|redis|starrocks|zookeeper|damengdb|kingbase)'
+        type: string
+        required: true
+        default: ''
+  workflow_call:
+    inputs:
+      RELEASE_VERSION:
+        description: 'The version of release'
+        type: string
+        required: true
+        default: ''
+      ENABLE_ADDONS:
+        description: 'Enable save addon images (e.g. apecloud-mysql|clickhouse|elasticsearch|kafka|mongodb|mysql|oceanbase|postgresql|qdrant|rabbitmq|redis|starrocks|zookeeper|damengdb|kingbase)'
+        type: string
+        required: true
+        default: ''
+
+
+run-name: save addons images ${{ inputs.RELEASE_VERSION }} ${{ inputs.ENABLE_ADDONS }}
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
+  OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
+  OSS_ENDPOINT: "oss-cn-zhangjiakou.aliyuncs.com"
+  OSS_BUCKET: "kubeblocks-oss"
+  MANIFESTS_FILE: "apecloud/manifests/deploy-manifests.yaml"
+
+jobs:
+  save-images:
+    runs-on: ubuntu-latest
+    outputs:
+      release-version: ${{ steps.get-version.outputs.release-version }}
+      image-name: ${{ steps.get-version.outputs.image-name }}
+    steps:
+      - name: get version
+        id: get-version
+        run: |
+          RELEASE_VERSION="${{ inputs.RELEASE_VERSION }}"
+          if [[ "${RELEASE_VERSION}" != "v"* ]]; then
+              RELEASE_VERSION="v${RELEASE_VERSION}"
+          fi
+          echo "release-version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+          
+          IMAGE_NAME="${{ inputs.ENABLE_ADDONS }}"
+          echo "image-name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v4
+
+      - name: Checkout apecloud Code
+        uses: actions/checkout@v4
+        with:
+          repository: apecloud/apecloud
+          path: apecloud
+          token: ${{ env.GITHUB_TOKEN }}
+          ref: ${{ steps.get-version.outputs.release-version }}
+
+      - name: manifests images save
+        run: |
+          MANIFESTS_FILE="${{ env.MANIFESTS_FILE }}"
+          IMAGES_NAME="${{ steps.get-version.outputs.image-name }}"
+       
+          echo "save addons manifests images"
+          bash .github/scripts/manifests_addons_images_save.sh "${MANIFESTS_FILE}" "${IMAGES_NAME}"
+          
+          echo "Free space:"
+          df -h
+
+      - uses: manyuanrong/setup-ossutil@v2.0
+        with:
+          access-key-id: "${{ env.OSS_KEY_ID }}"
+          access-key-secret: "${{ env.OSS_KEY_SECRET }}"
+          endpoint: "${{ env.OSS_ENDPOINT }}"
+
+      - name: Upload images to oss
+        id: upload_to_oss
+        run: |
+          IMAGE_PKG_NAME="${{ steps.get-version.outputs.image-name }}-images-${{ steps.get-version.outputs.release-version }}.tar.gz"
+          ossutil cp -rf ./${IMAGE_PKG_NAME} oss://${{ env.OSS_BUCKET }}/images/${IMAGE_PKG_NAME}
+          upload_ret=$?
+          if [[ $upload_ret -eq 0 ]]; then
+              echo "upload ${IMAGE_PKG_NAME} to oss successfully"
+          else
+              exit 1
+          fi
+
+  save-result:
+    runs-on: ubuntu-latest
+    needs: [ save-images ]
+    if: ${{ always() }}
+    outputs:
+      image-pkg-name: ${{ steps.get_save_result.outputs.image_pkg_name }}
+      save-result: ${{ steps.get_save_result.outputs.save_result }}
+    steps:
+      - name: get save result
+        id: get_save_result
+        run: |
+          SAVE_RESULT="error"
+          IMAGE_PKG_NAME="${{ needs.save-images.outputs.image-name }}-images-${{ needs.save-images.outputs.release-version }}.tar.gz"
+          if [[ "${{ needs.save-images.result }}" == "success" ]]; then
+              SAVE_RESULT="success"
+              IMAGE_PKG_NAME="http://kubeblocks-oss.${{ env.OSS_ENDPOINT }}/images/${IMAGE_PKG_NAME}"
+          fi
+          echo 'save_result='$SAVE_RESULT >> $GITHUB_OUTPUT
+          echo 'image_pkg_name='${IMAGE_PKG_NAME} >> $GITHUB_OUTPUT
+
+  send-message:
+    permissions:
+      id-token: write
+      contents: read
+    needs: [ save-result ]
+    if: ${{ always() }}
+    uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.1.0
+    with:
+      TYPE: "2"
+      BOT_TYPE: "package"
+      CONTENT: "save image ${{ needs.save-result.outputs.image-pkg-name }} ${{ needs.save-result.outputs.save-result }}"
+    secrets: inherit

@@ -28,6 +28,11 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  MANIFESTS_FILE: "apecloud/manifests/deploy-manifests.yaml"
+  VALUES_FILE: "apecloud/manifests/deploy-values.yaml"
+
 jobs:
   check-manifests-image:
     uses: ./.github/workflows/manifests-image-check.yml
@@ -49,49 +54,61 @@ jobs:
       IS_ADDON: "false"
     secrets: inherit
 
-  check-self-runner:
+  get-enbale-addons:
     needs: [ check-manifests-image, check-manifests-charts-image ]
     if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' }}
     runs-on: ubuntu-latest
     outputs:
-      self-runner: ${{ steps.check-self-runner.outputs.self-runner }}
-      enable-addons: ${{ steps.check-self-runner.outputs.enable-addons }}
+      matrix: ${{ steps.get_addons_name.outputs.matrix }}
     steps:
-      - name: check self runner
-        id: check-self-runner
+      - uses: actions/checkout@v4
+      - name: get version
+        if: ${{ inputs.ENABLE_ADDONS == 'true' }}
+        id: get-version
         run: |
-          SELF_RUNNER="${{ inputs.SELF_RUNNER }}"
-          ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
-          if [[ "${ENABLE_ADDONS}" == "true" ]]; then
-              SELF_RUNNER="true"
-              ENABLE_ADDONS=""
-          else
-              ADDON_COUNTS=$(echo "${{ inputs.ENABLE_ADDONS }}" | grep -o "|" | wc -l)
-              if [[ ${ADDON_COUNTS} -gt 8 ]]; then
-                  SELF_RUNNER="true"
-              fi
+          RELEASE_VERSION="${{ inputs.RELEASE_VERSION }}"
+          if [[ "${RELEASE_VERSION}" != "v"* ]]; then
+              RELEASE_VERSION="v${RELEASE_VERSION}"
           fi
-          echo "self-runner=${SELF_RUNNER}" >> $GITHUB_OUTPUT
-          echo "enable-addons=${ENABLE_ADDONS}" >> $GITHUB_OUTPUT
+          echo "release-version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Checkout apecloud Code
+        if: ${{ inputs.ENABLE_ADDONS == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          repository: apecloud/apecloud
+          path: apecloud
+          token: ${{ env.GITHUB_TOKEN }}
+          ref: ${{ steps.get-version.outputs.release-version }}
+
+      - name: get addons name
+        id: get_addons_name
+        run: |
+          ADDONS_NAME=""
+          ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
+          MANIFESTS_FILE="${{ env.MANIFESTS_FILE }}"
+          VALUES_FILE="${{ env.VALUES_FILE }}"
+          if [[ "${ENABLE_ADDONS}" == "true" ]]; then
+              ADDONS_NAME="$(bash .github/scripts/get_manifests_addons.sh "${MANIFESTS_FILE}" "${VALUES_FILE}")"
+          fi
+          for addons_name in $( echo "${ENABLE_ADDONS}" | sed 's/|/ /g'); do
+              if [[ -z "$ADDONS_NAME" ]]; then
+                  ADDONS_NAME="{\"addon-name\":\"$addons_name\"}"
+              else
+                  ADDONS_NAME="$ADDONS_NAME,{\"addon-name\":\"$addons_name\"}"
+              fi
+          done
+          echo "matrix={\"include\":[$ADDONS_NAME]}" >> $GITHUB_OUTPUT
 
   save-addon-images:
-    needs: [ check-self-runner ]
-    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' && needs.check-self-runner.outputs.self-runner != 'true' }}
-    uses: ./.github/workflows/manifests-images-save.yml
+    needs: [ get-enbale-addons ]
+    uses: ./.github/workflows/manifests-images-save-addons.yml
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.get-enbale-addons.outputs.matrix) }}
     with:
       RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
-      IS_ADDON: "true"
-      ENABLE_ADDONS: "${{ needs.check-self-runner.outputs.enable-addons }}"
-    secrets: inherit
-
-  save-addon-images-self:
-    needs: [ check-self-runner ]
-    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' && needs.check-self-runner.outputs.self-runner == 'true' }}
-    uses: ./.github/workflows/manifests-images-save-self.yml
-    with:
-      RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
-      IS_ADDON: "true"
-      ENABLE_ADDONS: "${{ needs.check-self-runner.outputs.enable-addons }}"
+      ENABLE_ADDONS: "${{ matrix.addon-name }}"
     secrets: inherit
 
   send-message:
@@ -106,3 +123,48 @@ jobs:
       BOT_TYPE: "package"
       CONTENT: "save images ${{ inputs.RELEASE_VERSION }} error"
     secrets: inherit
+
+#  check-self-runner:
+#    needs: [ check-manifests-image, check-manifests-charts-image ]
+#    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' }}
+#    runs-on: ubuntu-latest
+#    outputs:
+#      self-runner: ${{ steps.check-self-runner.outputs.self-runner }}
+#      enable-addons: ${{ steps.check-self-runner.outputs.enable-addons }}
+#    steps:
+#      - name: check self runner
+#        id: check-self-runner
+#        run: |
+#          SELF_RUNNER="${{ inputs.SELF_RUNNER }}"
+#          ENABLE_ADDONS="${{ inputs.ENABLE_ADDONS }}"
+#          if [[ "${ENABLE_ADDONS}" == "true" ]]; then
+#              SELF_RUNNER="true"
+#              ENABLE_ADDONS=""
+#          else
+#              ADDON_COUNTS=$(echo "${{ inputs.ENABLE_ADDONS }}" | grep -o "|" | wc -l)
+#              if [[ ${ADDON_COUNTS} -gt 8 ]]; then
+#                  SELF_RUNNER="true"
+#              fi
+#          fi
+#          echo "self-runner=${SELF_RUNNER}" >> $GITHUB_OUTPUT
+#          echo "enable-addons=${ENABLE_ADDONS}" >> $GITHUB_OUTPUT
+#
+#  save-addon-images:
+#    needs: [ check-self-runner ]
+#    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' && needs.check-self-runner.outputs.self-runner != 'true' }}
+#    uses: ./.github/workflows/manifests-images-save.yml
+#    with:
+#      RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
+#      IS_ADDON: "true"
+#      ENABLE_ADDONS: "${{ needs.check-self-runner.outputs.enable-addons }}"
+#    secrets: inherit
+#
+#  save-addon-images-self:
+#    needs: [ check-self-runner ]
+#    if: ${{ inputs.ENABLE_ADDONS != 'false' && inputs.ENABLE_ADDONS != '' && needs.check-self-runner.outputs.self-runner == 'true' }}
+#    uses: ./.github/workflows/manifests-images-save-self.yml
+#    with:
+#      RELEASE_VERSION: "${{ inputs.RELEASE_VERSION }}"
+#      IS_ADDON: "true"
+#      ENABLE_ADDONS: "${{ needs.check-self-runner.outputs.enable-addons }}"
+#    secrets: inherit
