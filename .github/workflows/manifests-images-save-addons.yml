@@ -44,6 +44,26 @@ jobs:
       release-version: ${{ steps.manifests-images-save.outputs.release-version }}
       image-name: ${{ steps.get-version.outputs.image-name }}
     steps:
+      - name: Free disk space
+        if: ${{ inputs.ENABLE_ADDONS == 'starrocks' }}
+        run: |
+          sudo apt-get autoremove -y >/dev/null 2>&1
+          sudo apt-get autoclean -y >/dev/null 2>&1
+          sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
+          docker rmi $(docker image ls -aq) >/dev/null 2>&1
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          df -h
+          
+          sudo mkdir -p /mnt/new-storage
+          sudo touch /etc/docker/daemon.json
+          sudo tee /etc/docker/daemon.json <<EOF
+          {
+            "data-root": "/mnt/new-storage"
+          }
+          EOF
+          sudo systemctl restart docker
+
       - name: get version
         id: get-version
         run: |
