@@ -13,14 +13,14 @@ on:
         type: string
         required: false
         default: 'false'
-      SELF_RUNNER:
-        description: "Enable self runner"
-        default: 'false'
-        type: choice
-        required: false
-        options:
-          - false
-          - true
+#      SELF_RUNNER:
+#        description: "Enable self runner"
+#        default: 'false'
+#        type: choice
+#        required: false
+#        options:
+#          - false
+#          - true
 
 run-name: save images ${{ inputs.RELEASE_VERSION }} ${{ inputs.ENABLE_ADDONS }}
 
