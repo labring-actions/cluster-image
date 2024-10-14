@@ -84,7 +84,7 @@ check_images() {
             done
 
             if [[ $check_flag -eq 0 ]]; then
-                echo "$(tput -T xterm setaf 1)::error title=Not found $repository in manifests file:${MANIFESTS_FILE}$(tput -T xterm sgr0)"
+                echo "$(tput -T xterm setaf 1)::error title=Not found ${chart_name_tmp} ${chart_version_tmp} image:$repository in manifests file:${MANIFESTS_FILE}$(tput -T xterm sgr0)"
                 echo 1 > exit_result
             fi
             repository=""
