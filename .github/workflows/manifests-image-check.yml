@@ -38,6 +38,10 @@ env:
   DOCKER_REGISTRY_URL: docker.io
   ALIYUN_REGISTRY_URL: apecloud-registry.cn-zhangjiakou.cr.aliyuncs.com
   MANIFESTS_FILE: "apecloud/manifests/deploy-manifests.yaml"
+  DOCKER_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+  ALIYUN_USER: ${{ secrets.ALIYUN_REGISTRY_USER }}
+  ALIYUN_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
 
 jobs:
   images-check:
@@ -63,6 +67,22 @@ jobs:
           path: apecloud
           token: ${{ env.CR_TOKEN }}
           ref: ${{ steps.get-version.outputs.release-version }}
+
+      - if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && inputs.CHECK_REGISTRY != 'aliyun' }}
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - if: ${{ env.ALIYUN_USER != '' && env.ALIYUN_PASSWORD != '' && inputs.CHECK_REGISTRY == 'aliyun' }}
+        name: Login to Aliyun Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.ALIYUN_REGISTRY_URL }}
+          username: ${{ env.ALIYUN_USER }}
+          password: ${{ env.ALIYUN_PASSWORD }}
 
       - name: manifests images check
         run: |
