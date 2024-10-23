@@ -30,7 +30,7 @@ subjects:
   - kind: ServiceAccount
     name: kata-deploy-sa
     namespace: kube-system
-# khata-containers/tools/packaging/kata-deploy/kata-deploy/base
+# kata-containers/tools/packaging/kata-deploy/kata-deploy/base
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -46,86 +46,69 @@ spec:
       labels:
         name: kata-deploy
     spec:
-      containers:
-        - command:
-            - bash
-            - -c
-            - /opt/kata-artifacts/scripts/kata-deploy.sh install
-          env:
-            - name: NODE_NAME
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.nodeName
-            - name: DEBUG
-              value: "false"
-            - name: SHIMS
-              value: clh cloud-hypervisor dragonball fc qemu qemu-nvidia-gpu qemu-sev
-                qemu-snp qemu-tdx stratovirt
-            - name: DEFAULT_SHIM
-              value: qemu
-            - name: CREATE_RUNTIMECLASSES
-              value: "false"
-            - name: CREATE_DEFAULT_RUNTIMECLASS
-              value: "false"
-            - name: ALLOWED_HYPERVISOR_ANNOTATIONS
-            - name: SNAPSHOTTER_HANDLER_MAPPING
-            - name: AGENT_HTTPS_PROXY
-            - name: AGENT_NO_PROXY
-          image: registry.kubeblocks.cloud/apecloud/kata-deploy:latest
-          imagePullPolicy: Always
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - bash
-                  - -c
-                  - /opt/kata-artifacts/scripts/kata-deploy.sh cleanup
-          name: kube-kata
-          resources: {}
-          securityContext:
-            privileged: true
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /etc/crio/
-              name: crio-conf
-            - mountPath: /etc/containerd/
-              name: containerd-conf
-            - mountPath: /opt/kata/
-              name: kata-artifacts
-            - mountPath: /usr/local/bin/
-              name: local-bin
-      dnsPolicy: ClusterFirst
-      hostPID: true
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      serviceAccount: kata-deploy-sa
       serviceAccountName: kata-deploy-sa
-      terminationGracePeriodSeconds: 30
+      hostPID: true
+      containers:
+      - name: kube-kata
+        image: quay.io/kata-containers/kata-deploy:3.10.0
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command: ["bash", "-c", "/opt/kata-artifacts/scripts/kata-deploy.sh cleanup"]
+        command: ["bash", "-c", "/opt/kata-artifacts/scripts/kata-deploy.sh install"]
+        # NOTE: Please don't change the order of the environment variables below.
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: DEBUG
+          value: "false"
+        - name: SHIMS
+          value: "clh cloud-hypervisor dragonball fc qemu qemu-coco-dev qemu-runtime-rs qemu-sev qemu-snp qemu-tdx stratovirt qemu-nvidia-gpu qemu-nvidia-gpu-snp qemu-nvidia-gpu-tdx"
+        - name: DEFAULT_SHIM
+          value: "qemu"
+        - name: CREATE_RUNTIMECLASSES
+          value: "false"
+        - name: CREATE_DEFAULT_RUNTIMECLASS
+          value: "false"
+        - name: ALLOWED_HYPERVISOR_ANNOTATIONS
+          value: ""
+        - name: SNAPSHOTTER_HANDLER_MAPPING
+          value: ""
+        - name: AGENT_HTTPS_PROXY
+          value: ""
+        - name: AGENT_NO_PROXY
+          value: ""
+        - name: PULL_TYPE_MAPPING
+          value: ""
+        - name: INSTALLATION_PREFIX
+          value: ""
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: crio-conf
+          mountPath: /etc/crio/
+        - name: containerd-conf
+          mountPath: /etc/containerd/
+        - name: host
+          mountPath: /host/
       volumes:
-        - hostPath:
-            path: /etc/crio/
-            type: ""
-          name: crio-conf
-        - hostPath:
-            path: /etc/containerd/
-            type: ""
-          name: containerd-conf
-        - hostPath:
-            path: /opt/kata/
-            type: DirectoryOrCreate
-          name: kata-artifacts
-        - hostPath:
-            path: /usr/local/bin/
-            type: ""
-          name: local-bin
+      - name: crio-conf
+        hostPath:
+          path: /etc/crio/
+      - name: containerd-conf
+        hostPath:
+          path: /etc/containerd/
+      - name: host
+        hostPath:
+          path: /
   updateStrategy:
     rollingUpdate:
-      maxSurge: 0
       maxUnavailable: 1
     type: RollingUpdate
+
 # kata-containers/tools/packaging/kata-deploy/runtimeclasses/kata-runtimeClasses.yaml
 ---
 kind: RuntimeClass
