@@ -1,0 +1,8 @@
+FROM scratch
+
+ENV NAME=${NAME:-"minio-operator"}
+ENV NAMESPACE=${NAMESPACE:-"minio-system"}
+
+COPY . .
+
+CMD ["bash entrypoint.sh"]
