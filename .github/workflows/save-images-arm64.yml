@@ -130,6 +130,9 @@ jobs:
 
       - name: setup ossutil
         run: |
+          sudo apt-get update
+          sudo apt-get install unzip
+          
           sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
           ossutil config --access-key-id="${{ secrets.OSS_KEY_ID }}" --access-key-secret="${{ secrets.OSS_KEY_SECRET }}" --endpoint=${{ env.OSS_ENDPOINT }}" 
 
