@@ -99,6 +99,22 @@ jobs:
     name: save app images
     runs-on: [ self-hosted, kubeblocks-airgap-runner-arm64 ]
     steps:
+      - name: setup ossutil
+        run: |
+          sudo apt-get update
+          sudo apt-get install unzip
+          ossutil_cli=$( command -v ossutil )
+          if [[ -z "$ossutil_cli" ]]; then
+              sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
+          fi
+
+      - name: ossutil config
+        env:
+          OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
+          OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
+        run: |
+          ossutil config --access-key-id="${{ env.OSS_KEY_ID }}" --access-key-secret="${{ env.OSS_KEY_SECRET }}" --endpoint="${{ env.OSS_ENDPOINT }}"
+
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
 
@@ -126,18 +142,7 @@ jobs:
       - name: get images size
         run: |
           docker images
-          du -sh ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz
-
-      - name: setup ossutil
-        env:
-          OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
-          OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install unzip
-          
-          sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
-          ossutil config --access-key-id="${{ env.OSS_KEY_ID }}" --access-key-secret="${{ env.OSS_KEY_SECRET }}" --endpoint="${{ env.OSS_ENDPOINT }}" 
+          du -sh ${{ inputs.APP_NAME }}-${{ inputs.APP_VERSION }}.tar.gz 
 
       - name: Upload arm64 images to oss
         id: upload_to_oss
