@@ -171,7 +171,7 @@ jobs:
               IMAGE_PKG_NAME_ARM64="http://kubeblocks-oss.${{ env.OSS_ENDPOINT }}/images/arm64/${IMAGE_PKG_NAME_ARM64}"
           fi
           echo 'save_result='$SAVE_RESULT >> $GITHUB_OUTPUT
-          echo 'IMAGE_PKG_NAME_ARM64='${IMAGE_PKG_NAME_ARM64} >> $GITHUB_OUTPUT
+          echo 'image_pkg_name='${IMAGE_PKG_NAME_ARM64} >> $GITHUB_OUTPUT
 
   send-message:
     permissions:
