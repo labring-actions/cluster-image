@@ -48,7 +48,7 @@ on:
         required: true
         default: ''
       ADD_IMAGES:
-        description: 'additional images (e.g. docker.io/apecloud/kubeblocks:0.8.1|docker.io/apecloud/kubeblocks-tools:0.8.1|...)'
+        description: 'additional images (e.g. docker.io/apecloud/kubeblocks:0.8.1)'
         required: false
         default: ''
       KB_VERSION:

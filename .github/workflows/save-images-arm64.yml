@@ -48,7 +48,27 @@ on:
         required: true
         default: ''
       ADD_IMAGES:
-        description: 'additional images (e.g. docker.io/apecloud/kubeblocks:0.8.1|docker.io/apecloud/kubeblocks-tools:0.8.1|...)'
+        description: 'additional images (e.g. docker.io/apecloud/kubeblocks:0.8.1)'
+        required: false
+        default: ''
+      KB_VERSION:
+        description: 'KubeBlocks version'
+        required: false
+        default: ''
+      GEMINI_VERSION:
+        description: 'Gemini '
+        required: false
+        default: ''
+      OTELD_VERSION:
+        description: 'Oteld version'
+        required: false
+        default: ''
+      INSTALLER_VERSION:
+        description: 'Offline Installer version'
+        required: false
+        default: ''
+      DMS_VERSION:
+        description: 'Dms version'
         required: false
         default: ''
 
@@ -94,6 +114,11 @@ jobs:
           add_images: ${{ inputs.ADD_IMAGES }}
           app_name: ${{ inputs.APP_NAME }}
           app_version: ${{ inputs.APP_VERSION }}
+          kubeblocks_version: ${{ inputs.KB_VERSION }}
+          gemini_version: ${{ inputs.GEMINI_VERSION }}
+          oteld_version: ${{ inputs.OTELD_VERSION }}
+          installer_version: ${{ inputs.INSTALLER_VERSION }}
+          dms_version: ${{ inputs.DMS_VERSION }}
           images_file: .github/images/${{ inputs.APP_NAME }}.txt
         run: |
           bash .github/scripts/save_images.sh
