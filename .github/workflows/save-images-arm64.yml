@@ -100,13 +100,11 @@ jobs:
     runs-on: [ self-hosted, kubeblocks-airgap-runner-arm64 ]
     steps:
       - name: setup ossutil
+        continue-on-error: true
         run: |
-          ossutil_cli=$( command -v ossutil )
-          if [[ -z "$ossutil_cli" ]]; then
-              sudo apt-get update
-              sudo apt-get install unzip
-              sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
-          fi
+          sudo apt-get update
+          sudo apt-get install unzip
+          sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
 
       - name: ossutil config
         env:
