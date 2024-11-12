@@ -154,14 +154,20 @@ jobs:
               echo "ossutil cp ${IMAGE_PKG_NAME_ARM64} to oss://${{ env.OSS_BUCKET }}/images/arm64/${IMAGE_PKG_NAME_ARM64} ..."
               ossutil cp -rf ./${IMAGE_PKG_NAME_ARM64} oss://${{ env.OSS_BUCKET }}/images/arm64/${IMAGE_PKG_NAME_ARM64}  --read-timeout=420 --retry-times=5
               upload_ret=$?
-          
-              ossutil_report_file_name="$(ls ossutil_output/ossutil_report_*.report)" 
-              if [[ -f "${ossutil_report_file_name}" ]]; then
-                  echo "cp ${IMAGE_PKG_NAME_ARM64} to oss error, retry..."
-                  cat "${ossutil_report_file_name}"
-                  rm -rf ossutil_output/ossutil_report_*.report
-                  upload_ret=1
-              elif [[ $upload_ret -eq 0 ]]; then
+                
+              if [[ -d "ossutil_output" ]]; then
+                  ossutil_report_files=$(ls ossutil_output)
+                  if [[ -n "${ossutil_report_files}" ]]; then
+                      ossutil_report_file_name="$(ls ossutil_output/ossutil_report_*.report)"
+                      if [[ -n "${ossutil_report_file_name}" && -f "${ossutil_report_file_name}" ]]; then
+                          echo "cp ${IMAGE_PKG_NAME_ARM64} to oss error, retry..."
+                          cat "${ossutil_report_file_name}"
+                          rm -rf ossutil_output/ossutil_report_*.report
+                          upload_ret=1
+                      fi
+                  fi
+              fi
+              if [[ $upload_ret -eq 0 ]]; then
                   break
               fi
               sleep 1
