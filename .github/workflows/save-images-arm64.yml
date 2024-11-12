@@ -101,10 +101,10 @@ jobs:
     steps:
       - name: setup ossutil
         run: |
-          sudo apt-get update
-          sudo apt-get install unzip
           ossutil_cli=$( command -v ossutil )
           if [[ -z "$ossutil_cli" ]]; then
+              sudo apt-get update
+              sudo apt-get install unzip
               sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
           fi
 
