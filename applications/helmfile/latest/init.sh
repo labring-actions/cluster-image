@@ -17,5 +17,5 @@ readonly helm_diff_version=${helmDiffLatest:-$(
 until curl -sL "https://api.github.com/repos/databus23/helm-diff/releases/latest"; do sleep 3; done | grep tarball_url | \
 awk -F\" '{print $(NF-1)}' | awk -F/ '{print $NF}' | cut -dv -f2)}
 
-wget -qO- https://github.com/databus23/helm-diff/releases/download/v${helm_diff_version}/helm-diff-linux-amd64.tgz | tar -xz
+wget -qO- https://github.com/databus23/helm-diff/releases/download/v${helm_diff_version}/helm-diff-linux-${ARCH}.tgz | tar -xz
 mv diff ${BINARY_FILE}
