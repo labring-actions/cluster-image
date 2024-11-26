@@ -1,2 +1,0 @@
-# xinference v0.9.0
-docker.io/apecloud/xinference:v0.11.0-cpu

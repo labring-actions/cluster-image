@@ -34,7 +34,8 @@ on:
           - spiderpool
           - metrics-server
           - elasticsearch
-          - xinference
+          - xinference-cpu
+          - xinference-gpu
           - kubechat
           - postgres-operator
           - rabbitmq

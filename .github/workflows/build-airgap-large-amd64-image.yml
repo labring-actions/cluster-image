@@ -13,7 +13,8 @@ on:
         default: 'kubeblocks'
         type: choice
         options:
-          - xinference
+          - xinference-cpu
+          - xinference-gpu
 
 run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 

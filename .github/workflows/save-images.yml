@@ -34,7 +34,8 @@ on:
           - spiderpool
           - metrics-server
           - elasticsearch
-          - xinference
+          - xinference-cpu
+          - xinference-gpu
           - kubechat
           - postgres-operator
           - rabbitmq
@@ -91,7 +92,7 @@ jobs:
     steps:
       - name: Free disk space
         run: |
-          if [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" || "${{ inputs.APP_NAME }}" == "starrocks" ]]; then
+          if [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" || "${{ inputs.APP_NAME }}" == "starrocks" || "${{ inputs.APP_NAME }}" == "xinference"* ]]; then
               sudo apt-get autoremove -y >/dev/null 2>&1
               sudo apt-get autoclean -y >/dev/null 2>&1
               sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
