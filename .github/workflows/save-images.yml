@@ -92,7 +92,24 @@ jobs:
     steps:
       - name: Free disk space
         run: |
-          if [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" || "${{ inputs.APP_NAME }}" == "starrocks" || "${{ inputs.APP_NAME }}" == "xinference"* ]]; then
+          if [[ "${{ inputs.APP_NAME }}" == "mysql" || "${{ inputs.APP_NAME }}" == "starrocks"  || "${{ inputs.APP_NAME }}" == "xinference"*  ]]; then
+              sudo apt-get autoremove -y >/dev/null 2>&1
+              sudo apt-get autoclean -y >/dev/null 2>&1
+              sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
+              docker rmi $(docker image ls -aq) >/dev/null 2>&1
+              sudo swapoff -a
+              sudo rm -f /swapfile
+              df -h
+          
+              sudo mkdir -p /mnt/new-storage
+              sudo touch /etc/docker/daemon.json
+              sudo tee /etc/docker/daemon.json <<EOF
+          {
+            "data-root": "/mnt/new-storage"
+          }
+          EOF
+              sudo systemctl restart docker
+          elif [[ "${{ inputs.APP_NAME }}" == "kubeblocks-enterprise" || "${{ inputs.APP_NAME }}" == "elasticsearch" || "${{ inputs.APP_NAME }}" == "starrocks"* ]]; then
               sudo apt-get autoremove -y >/dev/null 2>&1
               sudo apt-get autoclean -y >/dev/null 2>&1
               sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
