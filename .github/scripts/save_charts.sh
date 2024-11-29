@@ -32,6 +32,7 @@ add_charts_list() {
         touch "$CHART_FILE_PATH"
     fi
     echo "
+
 " >>  $CHART_FILE_PATH
     for chart in $(echo "$ADD_CHARTS_LIST" | sed 's/|/ /g'); do
         chart_name="${chart%:*}"
