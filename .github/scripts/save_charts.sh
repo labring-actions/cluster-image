@@ -31,7 +31,8 @@ add_charts_list() {
     if [[ ! -f "$CHART_FILE_PATH" ]]; then
         touch "$CHART_FILE_PATH"
     fi
-    echo "" >> $CHART_FILE_PATH
+    echo "
+" >>  $CHART_FILE_PATH
     for chart in $(echo "$ADD_CHARTS_LIST" | sed 's/|/ /g'); do
         chart_name="${chart%:*}"
         exists_charts_list="$(cat $CHART_FILE_PATH | (grep "$chart_name" || true))"
