@@ -1,0 +1,4 @@
+# dify
+langgenius/dify-api:0.6.11
+langgenius/dify-web:0.6.11
+langgenius/dify-sandbox:0.2.0
