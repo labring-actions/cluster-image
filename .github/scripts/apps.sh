@@ -19,7 +19,14 @@ rm -rf $buildDir
 mkdir -p $buildDir
 
 if [[ ! -d "applications/$APP_NAME/latest" ]]; then
-    sed -i "s/^CMD.*/CMD [\"kbcli addon enable $APP_NAME\"]/" applications/addons/latest/Dockerfile
+    case $APP_NAME in
+        apecloud-mysql|etcd|kafka|llm|mongodb|mysql|postgresql|pulsar|qdrant|redis)
+            sed -i "s/^CMD.*/CMD [\"kbcli addon enable $APP_NAME\"]/" applications/addons/latest/Dockerfile
+        ;;
+        *)
+            sed -i "s/^CMD.*/CMD [\"helm upgrade --install kb-addon-$APP_NAME charts/$APP_NAME --namespace kb-system --create-namespace \"]/" applications/addons/latest/Dockerfile
+        ;;
+    esac
     sed -i "s/^charts=.*/charts=(\"$APP_NAME\")/" applications/addons/latest/init.sh
     cp -af applications/addons applications/$APP_NAME
 fi
