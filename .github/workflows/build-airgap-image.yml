@@ -100,6 +100,15 @@ jobs:
               sudo swapoff -a
               sudo rm -f /swapfile
               df -h
+          
+              sudo mkdir -p /mnt/new-storage
+              sudo touch /etc/docker/daemon.json
+              sudo tee /etc/docker/daemon.json <<EOF
+          {
+            "data-root": "/mnt/new-storage"
+          }
+          EOF
+              sudo systemctl restart docker
           fi
 
       - uses: actions/checkout@v4
