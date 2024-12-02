@@ -10,20 +10,26 @@ on:
         type: choice
         options:
           - apecloud-mysql
+          - clickhouse
+          - damengdb
+          - elasticsearch
+          - greptimedb
+          - kafka
+          - kingbase
+          - postgresql
+          - rabbitmq
+          - redis
+          - nebula
+          - mongodb
+          - mysql
+          - oceanbase
+          - qdrant
+          - starrocks-ce
+          - kubeblocks
+          - kubeblocks-cloud
           - ape-local-csi-driver
           - calico
           - cilium
-          - postgresql
-          - redis
-          - mongodb
-          - kafka
-          - qdrant
-          - clickhouse
-          - oceanbase
-          - mysql
-          - elasticsearch
-          - kubeblocks
-          - kubeblocks-cloud
           - gemini
           - gemini-monitor
           - kubebench
@@ -41,8 +47,6 @@ on:
           - spiderpool
           - victoria-metrics-cluster
           - metrics-server
-          - damengdb
-          - kingbase
           - kubernetes
       IMAGE_VERSION:
         description: 'image version'
