@@ -20,7 +20,7 @@ done
 
 # add extra images
 mkdir -p images/shim
-echo "docker.io/starrocks/be-ubuntu:3.2.2" > images/shim/kubeblocksImages
-echo "docker.io/starrocks/be-ubuntu:3.3.0" >> images/shim/kubeblocksImages
-echo "docker.io/starrocks/fe-ubuntu:3.2.2" >> images/shim/kubeblocksImages
-echo "docker.io/starrocks/fe-ubuntu:3.3.0" >> images/shim/kubeblocksImages
+echo "docker.io/apecloud/be-ubuntu:3.2.2" > images/shim/kubeblocksImages
+echo "docker.io/apecloud/be-ubuntu:3.3.0" >> images/shim/kubeblocksImages
+echo "docker.io/apecloud/fe-ubuntu:3.2.2" >> images/shim/kubeblocksImages
+echo "docker.io/apecloud/fe-ubuntu:3.3.0" >> images/shim/kubeblocksImages
