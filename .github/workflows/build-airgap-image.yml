@@ -24,7 +24,6 @@ on:
           - mysql
           - oceanbase
           - qdrant
-          - starrocks-ce
           - kubeblocks
           - kubeblocks-cloud
           - ape-local-csi-driver
