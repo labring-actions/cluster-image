@@ -15,33 +15,45 @@ on:
           - kubeblocks-cloud
           - cert-manager
           - gemini
+          - ape-local-csi-driver
           - apecloud-mysql
           - clickhouse
+          - damengdb
+          - elasticsearch
+          - gaussdb
+          - gbase
           - kafka
           - kata
+          - kingbase
           - kubebench
+          - kubechat
+          - k3s
+          - kubernetes
+          - loki
           - minio
           - mongodb
+          - mssql
           - mysql
           - metallb
+          - metrics-server
           - oceanbase
+          - oceanbase-proxy
           - postgresql
+          - postgres-operator
           - qdrant
+          - rabbitmq
           - redis
           - starrocks
-          - ingress-nginx
-          - ape-local-csi-driver
+          - starrocks-3.2.2
+          - starrocks-3.3.0
+          - starrocks-3.3.2
+          - starrocks-3.3.3
           - spiderpool
-          - metrics-server
-          - elasticsearch
+          - victoria-metrics
           - xinference-cpu
           - xinference-gpu
-          - kubechat
-          - postgres-operator
-          - rabbitmq
           - zookeeper
-          - damengdb
-          - kingbase
+          - ingress-nginx
           - k3s
           - kubernetes
           - nvidia-device-plugin
@@ -94,7 +106,7 @@ jobs:
     steps:
       - name: Free disk space
         run: |
-          if [[ "${{ inputs.APP_NAME }}" == "mysql" || "${{ inputs.APP_NAME }}" == "starrocks"  || "${{ inputs.APP_NAME }}" == "xinference"*  ]]; then
+          if [[ "${{ inputs.APP_NAME }}" == "mysql" || "${{ inputs.APP_NAME }}" == "starrocks" ]]; then
               sudo apt-get autoremove -y >/dev/null 2>&1
               sudo apt-get autoclean -y >/dev/null 2>&1
               sudo rm -rf /usr/local/lib/android >/dev/null 2>&1

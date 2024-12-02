@@ -96,6 +96,8 @@ change_cloud_version() {
             sed -i '' "s/^docker.io\/apecloud\/sentry-init:.*/docker.io\/apecloud\/sentry-init:${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/kb-cloud-installer:.*/docker.io\/apecloud\/kb-cloud-installer:${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/apecloud-charts:.*/docker.io\/apecloud\/apecloud-charts:${CLOUD_VERSION}/" $image_file_path
+            sed -i '' "s/^docker.io\/apecloud\/apecloud-addon-charts:.*/docker.io\/apecloud\/apecloud-addon-charts:${CLOUD_VERSION}/" $image_file_path
+            sed -i '' "s/^docker.io\/apecloud\/kb-cloud-hook:.*/docker.io\/apecloud\/kb-cloud-hook:${CLOUD_VERSION}/" $image_file_path
         else
             sed -i "s/^# KubeBlocks-Cloud .*/# KubeBlocks-Cloud ${CLOUD_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/openconsole:.*/docker.io\/apecloud\/openconsole:${CLOUD_VERSION}/" $image_file_path
@@ -108,6 +110,8 @@ change_cloud_version() {
             sed -i "s/^docker.io\/apecloud\/sentry-init:.*/docker.io\/apecloud\/sentry-init:${CLOUD_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/kb-cloud-installer:.*/docker.io\/apecloud\/kb-cloud-installer:${CLOUD_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/apecloud-charts:.*/docker.io\/apecloud\/apecloud-charts:${CLOUD_VERSION}/" $image_file_path
+            sed -i "s/^docker.io\/apecloud\/apecloud-addon-charts:.*/docker.io\/apecloud\/apecloud-addon-charts:${CLOUD_VERSION}/" $image_file_path
+            sed -i "s/^docker.io\/apecloud\/kb-cloud-hook:.*/docker.io\/apecloud\/kb-cloud-hook:${CLOUD_VERSION}/" $image_file_path
         fi
     done
     echo "$(tput -T xterm setaf 3)change kubeblocks-cloud chart version:${CLOUD_VERSION}$(tput -T xterm sgr0)"

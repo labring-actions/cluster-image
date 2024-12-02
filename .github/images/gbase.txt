@@ -1,0 +1,3 @@
+# gbase v0.9.0
+docker.io/apecloud/gbase8c_v5:5.0 
+docker.io/apecloud/gaussdb-exporter:1.1.2 

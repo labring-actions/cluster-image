@@ -1,4 +1,7 @@
-# kafka v0.9.0
+# kafka v0.9.1
 docker.io/apecloud/jmx-exporter:0.18.0-debian-11-r20
 docker.io/apecloud/kafka:3.3.2-debian-11-r54
 docker.io/apecloud/kafka-exporter:1.6.0-debian-11-r67
+docker.io/apecloud/kafka:2.8.1-debian-11-r7
+docker.io/apecloud/kafka:2.8.2
+docker.io/apecloud/zookeeper:3.7.2

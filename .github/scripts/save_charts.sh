@@ -33,7 +33,7 @@ add_charts_list() {
     fi
     echo "
 
-" >>  $CHART_FILE_PATH
+" >> $CHART_FILE_PATH
     for chart in $(echo "$ADD_CHARTS_LIST" | sed 's/|/ /g'); do
         chart_name="${chart%:*}"
         exists_charts_list="$(cat $CHART_FILE_PATH | (grep "$chart_name" || true))"
@@ -248,9 +248,6 @@ tar_charts_package() {
         fi
     fi
 
-
-
-
     tar_flag=0
     for i in {1..10}; do
         while read -r chart
@@ -262,11 +259,15 @@ tar_charts_package() {
             chart_tmp=${chart/:/-}
             chart_name=${chart%:*}
             chart_version=${chart#*:}
-            if [[ "$chart_tmp" == "starrocks"* || "$chart_tmp" == "oceanbase"* || "$chart_tmp" == "kubeblocks-cloud"* || "$chart_tmp" == "damengdb"* || "$chart_tmp" == "kingbase"* ]]; then
-                helm repo add ${ENT_REPO_NAME} --username ${CHART_ACCESS_USER} --password ${CHART_ACCESS_TOKEN} ${KB_ENT_REPO_URL}
-                helm repo update ${ENT_REPO_NAME}
-                ent_flag=1
-            fi
+
+            case "$chart_tmp" in
+                "kubeblocks-cloud"*|"clickhouse"*|"damengdb"*|"elasticsearch"*|"gaussdb"*|"gbase"*|"kafka"*|"kingbase"*|"loki"*|"minio"*|"mssql"*|"mysql"*|"oceanbase"*|"postgresql"*|"qdrant"*|"redis"*|"starrocks"*|"victoria-metrics"*)
+                    helm repo add ${ENT_REPO_NAME} --username ${CHART_ACCESS_USER} --password ${CHART_ACCESS_TOKEN} ${KB_ENT_REPO_URL}
+                    helm repo update ${ENT_REPO_NAME}
+                    ent_flag=1
+                ;;
+            esac
+
             echo "fetch chart $chart_tmp"
             for j in {1..10}; do
                 if [[ $ent_flag -eq 1 ]]; then

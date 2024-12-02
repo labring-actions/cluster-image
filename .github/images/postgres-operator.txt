@@ -3,3 +3,4 @@ docker.io/apecloud/postgres-operator:v1.12.2
 docker.io/apecloud/pgbouncer:master-32
 docker.io/apecloud/spilo-16:3.2-p3
 docker.io/apecloud/logical-backup:v1.12.2
+docker.io/apecloud/postgres-exporter:v0.13.2

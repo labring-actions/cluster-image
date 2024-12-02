@@ -1,0 +1,4 @@
+# loki v0.9.1
+docker.io/apecloud/loki:3.0.0
+docker.io/apecloud/nginx-unprivileged:1.24-alpine
+docker.io/apecloud/k8s-sidecar:1.24.3

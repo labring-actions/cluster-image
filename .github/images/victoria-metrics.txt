@@ -1,0 +1,4 @@
+# victoria-metrics v0.9.1
+docker.io/apecloud/vminsert:v1.101.0-cluster 
+docker.io/apecloud/vmselect:v1.101.0-cluster 
+docker.io/apecloud/vmstorage:v1.101.0-cluster

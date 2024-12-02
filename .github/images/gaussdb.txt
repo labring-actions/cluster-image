@@ -1,0 +1,4 @@
+# gaussdb v0.9.0
+docker.io/apecloud/gaussdb:2.23.01.200
+docker.io/apecloud/gaussdb-exporter:1.1.2
+docker.io/apecloud/gaussdb-tools:2.23.01.200

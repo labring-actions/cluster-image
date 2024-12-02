@@ -1,10 +1,12 @@
-# gemini v0.6.2
-docker.io/apecloud/gemini:0.6.4-beta.5
-docker.io/apecloud/gemini-tools:0.6.4-beta.5
-docker.io/apecloud/easymetrics:0.6.4-beta.5
-docker.io/apecloud/oteld:0.6.3
+# gemini v0.7.1-beta.4
+docker.io/apecloud/gemini:0.8.0-alpha.0
+docker.io/apecloud/gemini-tools:0.8.0-alpha.0
+docker.io/apecloud/easymetrics:0.8.0-alpha.0
+docker.io/apecloud/oteld:0.7.2-beta.7
 docker.io/apecloud/oteld:0.5.2-k8s21
+docker.io/apecloud/cr-exporter:0.1.0-alpha.13
 docker.io/apecloud/wal-g:mongo-5.0
+docker.io/apecloud/wal-g:mongo-5.0.1
 docker.io/apecloud/wal-g:mysql-8.0
 docker.io/apecloud/wal-g-mysql:2.0.1-1-ubuntu
 docker.io/apecloud/kubeblocks-tools:0.8.2
@@ -26,8 +28,11 @@ docker.io/apecloud/vminsert:v1.102.1-cluster
 docker.io/apecloud/vmselect:v1.102.1-cluster
 docker.io/apecloud/vmstorage:v1.102.1-cluster
 docker.io/apecloud/vmalert:v1.102.1
-docker.io/apecloud/servicemirror:0.2.15
+docker.io/apecloud/servicemirror:0.3.1
 docker.io/apecloud/alertmanager:v0.25.0
 docker.io/apecloud/configmap-reload:v0.5.0
 docker.io/apecloud/minio:RELEASE.2022-09-17T00-09-45Z
+docker.io/apecloud/minio:RELEASE.2024-06-29T01-20-47Z
 docker.io/apecloud/mc:RELEASE.2022-09-16T09-16-47Z
+docker.io/apecloud/kubeblocks-tools:latest
+docker.io/apecloud/datasafed:0.2.0

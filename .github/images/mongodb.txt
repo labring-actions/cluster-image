@@ -5,8 +5,8 @@ docker.io/apecloud/mongo:5.0.14
 docker.io/apecloud/mongo:5.0.20
 docker.io/apecloud/mongo:6.0
 docker.io/apecloud/mongo:7.0.12
-docker.io/apecloud/syncer:0.1.0
-docker.io/apecloud/syncer:0.1.2
+docker.io/apecloud/syncer:0.2.0
+docker.io/apecloud/syncer:0.3.7
 docker.io/apecloud/agamotto:0.1.2-beta.1
 docker.io/apecloud/mongo:4.0.28
 docker.io/apecloud/mongo:4.2.24

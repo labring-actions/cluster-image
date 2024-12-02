@@ -11,6 +11,7 @@ on:
         options:
           - kubeblocks-enterprise
           - starrocks
+          - mysql
       APP_VERSION:
         description: 'app version'
         required: true
