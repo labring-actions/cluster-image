@@ -154,7 +154,7 @@ jobs:
         if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && env.ALIYUN_USER != '' && env.ALIYUN_PASSWORD != '' }}
         with:
           auth_file: ${{ github.workspace }}/apecloud-cd/.github/actions/image-sync-auth-apecloud.yml
-          images_file: ./image_sync_yaml_apecloud.yml
+          images_file: ./image-sync-auth-apecloud.yml
           proc: 6
           retries: 5
           version: v1.5.2
