@@ -14,6 +14,7 @@ on:
         type: choice
         options:
           - llm
+          - starrocks-ce
 
 run-name: build ${{ inputs.APP_NAME }}:${{ inputs.IMAGE_VERSION }}
 
