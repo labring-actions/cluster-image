@@ -98,6 +98,8 @@ jobs:
     needs: [ enable-self-runner ]
     name: save app images
     runs-on: [ self-hosted, kubeblocks-airgap-runner-arm64 ]
+    outputs:
+      runner-name: ${{ steps.get_runner_name.outputs.runner-name }}
     steps:
       - name: setup ossutil
         continue-on-error: true
@@ -178,6 +180,20 @@ jobs:
           else
               exit 1
           fi
+
+      - name: get self runner name
+        id: get_runner_name
+        if: ${{ always() }}
+        run: |
+          echo runner-name=${RUNNER_NAME} >> $GITHUB_OUTPUT
+
+  delete-self-runner:
+    if: ${{ always() }}
+    needs: [ save-app-images ]
+    uses: apecloud-inc/apecloud-cd/.github/workflows/delete-self-runner.yml@v0.5.0
+    with:
+      RUNNER_NAME: "${{ needs.save-app-images.outputs.runner-name }}"
+    secrets: inherit
 
   save-result:
     runs-on: ubuntu-latest
