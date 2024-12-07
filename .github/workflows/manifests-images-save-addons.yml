@@ -45,7 +45,7 @@ jobs:
       image-name: ${{ steps.get-version.outputs.image-name }}
     steps:
       - name: Free disk space
-        if: ${{ inputs.ENABLE_ADDONS == 'starrocks' }}
+        if: ${{ inputs.ENABLE_ADDONS == 'starrocks' || inputs.ENABLE_ADDONS == 'mysql' || inputs.ENABLE_ADDONS == 'elasticsearch' }}
         run: |
           sudo apt-get autoremove -y >/dev/null 2>&1
           sudo apt-get autoclean -y >/dev/null 2>&1
