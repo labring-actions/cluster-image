@@ -36,6 +36,9 @@ env:
   OSS_ENDPOINT: "oss-cn-zhangjiakou.aliyuncs.com"
   OSS_BUCKET: "kubeblocks-oss"
   MANIFESTS_FILE: "apecloud/manifests/deploy-manifests.yaml"
+  DOCKER_REGISTRY_URL: docker.io
+  DOCKER_REGISTRY_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
+  DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
 jobs:
   save-images:
@@ -85,6 +88,14 @@ jobs:
           path: apecloud
           token: ${{ env.GITHUB_TOKEN }}
           ref: ${{ steps.get-version.outputs.release-version }}
+
+      - if: ${{ env.DOCKER_REGISTRY_USER != '' && env.DOCKER_REGISTRY_PASSWORD != '' }}
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_REGISTRY_USER }}
+          password: ${{ env.DOCKER_REGISTRY_PASSWORD }}
 
       - name: manifests images save
         id: manifests-images-save
