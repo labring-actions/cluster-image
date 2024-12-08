@@ -134,6 +134,26 @@ jobs:
           access-key-secret: "${{ env.OSS_KEY_SECRET }}"
           endpoint: "${{ env.OSS_ENDPOINT }}"
 
+      - name: Upload manifests to oss
+        run: |
+          MANIFESTS_FILE="${{ env.MANIFESTS_FILE }}"
+          VALUES_FILE="${{ env.VALUES_FILE }}"
+          RELEASE_VERSION="${{ steps.get-version.outputs.release-version }}"
+          ossutil cp -rf ./${MANIFESTS_FILE} oss://${{ env.OSS_BUCKET }}/manifests/${RELEASE_VERSION}/manifests.yaml
+          upload_ret=$?
+          if [[ $upload_ret -eq 0 ]]; then
+              echo "upload ${MANIFESTS_FILE} to oss successfully"
+          else
+              exit 1
+          fi 
+          ossutil cp -rf ./${VALUES_FILE} oss://${{ env.OSS_BUCKET }}/manifests/${RELEASE_VERSION}/values.yaml
+          upload_ret=$?
+          if [[ $upload_ret -eq 0 ]]; then
+              echo "upload ${VALUES_FILE} to oss successfully"
+          else
+              exit 1
+          fi
+
       - name: Upload images to oss
         id: upload_to_oss
         run: |
