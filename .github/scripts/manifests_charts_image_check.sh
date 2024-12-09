@@ -134,6 +134,9 @@ check_charts_images() {
                 set_values="${set_values} --set controller.admissionWebhooks.patch.image.image=apecloud/kube-webhook-certgen "
                 set_values="${set_values} --set controller.admissionWebhooks.patch.image.digest= "
             ;;
+            gemini)
+                set_values="${set_values} --set cr-exporter.enabled=true "
+            ;;
         esac
         check_images "$ent_flag" "$chart_version" "$chart_name" "$chart_images" "$set_values" &
     done
