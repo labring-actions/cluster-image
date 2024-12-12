@@ -1,5 +1,5 @@
 # spiderpool v0.9.3
 ghcr.io/spidernet-io/spiderpool/spiderpool-plugins:v0.9.2
-docker.io/apecloud/spiderpool-agent:07195d2997e9839b586c0f95a32c23cf8dc96f1e
+docker.io/apecloud/spiderpool-agent:53a00dcca484c05ab380f126be77e660201f6f6c
 ghcr.io/spidernet-io/spiderpool/spiderpool-controller:v0.9.3
-docker.io/apecloud/spiderpool-controller:07195d2997e9839b586c0f95a32c23cf8dc96f1e
+docker.io/apecloud/spiderpool-controller:53a00dcca484c05ab380f126be77e660201f6f6c
