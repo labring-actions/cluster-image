@@ -38,3 +38,4 @@ victoria-metrics:0.9.1
 xinference:0.9.1
 dify:0.5.1
 nvidia-device-plugin:0.17.0
+netshoot:0.1.0
