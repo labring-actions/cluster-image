@@ -1,0 +1,14 @@
+# tidb v0.9.0
+docker.io/apecloud/br:v7.1.5
+docker.io/apecloud/pd:v7.1.5
+docker.io/apecloud/tidb:v7.1.5
+docker.io/apecloud/tikv:v7.1.5
+docker.io/apecloud/busybox:1.35
+docker.io/apecloud/br:v7.5.2
+docker.io/apecloud/pd:v7.5.2
+docker.io/apecloud/tidb:v7.5.2
+docker.io/apecloud/tikv:v7.5.2
+docker.io/apecloud/br:v8.4.0
+docker.io/apecloud/pd:v8.4.0
+docker.io/apecloud/tidb:v8.4.0
+docker.io/apecloud/tikv:v8.4.0

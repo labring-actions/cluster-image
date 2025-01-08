@@ -1,0 +1,10 @@
+# polardbx v0.9.1
+docker.io/apecloud/mysql-client:latest
+docker.io/apecloud/mysql:8.0.30
+docker.io/apecloud/polardbx-cdc:5.4.18-20231101115000
+docker.io/apecloud/polardbx-engine-2.0:80-8.0.18-20231101115000
+docker.io/apecloud/polardbx-exporter:v1.5.0
+docker.io/apecloud/polardbx-init:v1.5.0
+docker.io/apecloud/polardbx-sql:5.4.18-20231101115000
+docker.io/apecloud/xstore-tools:v1.5.0
+docker.io/apecloud/mysqld-exporter:v0.14.0

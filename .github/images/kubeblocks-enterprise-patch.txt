@@ -1,27 +1,26 @@
-# KubeBlocks-Cloud v0.28.98
-docker.io/apecloud/openconsole:v0.28.98
-docker.io/apecloud/apiserver:v0.28.98
-docker.io/apecloud/task-manager:v0.28.98
-docker.io/apecloud/cubetran-front:v0.28.98
-docker.io/apecloud/cr4w:v0.28.98
-docker.io/apecloud/relay:v0.28.98
-docker.io/apecloud/sentry:v0.28.98
-docker.io/apecloud/sentry-init:v0.28.98
-docker.io/apecloud/kb-cloud-installer:v0.28.98
-docker.io/apecloud/apecloud-charts:v0.28.98
-docker.io/apecloud/apecloud-addon-charts:v0.28.98
-docker.io/apecloud/kb-cloud-hook:v0.28.98
-docker.io/apecloud/kubeblocks-installer:v0.28.98-0.9.2-offline
-docker.io/apecloud/dms:0.0.1-alpha.94
-# KubeBlocks v0.9.2
-docker.io/apecloud/kubeblocks:0.9.2
-docker.io/apecloud/kubeblocks-dataprotection:0.9.2
-docker.io/apecloud/kubeblocks-datascript:0.9.2
-docker.io/apecloud/kubeblocks-tools:0.9.2
-docker.io/apecloud/kubeblocks-charts:0.9.2
-# Gemini v0.8.0-alpha.0
-docker.io/apecloud/gemini:0.8.0-alpha.0
-docker.io/apecloud/gemini-tools:0.8.0-alpha.0
-docker.io/apecloud/easymetrics:0.8.0-alpha.0
+# KubeBlocks-Cloud v0.29.38
+docker.io/apecloud/openconsole:v0.29.38
+docker.io/apecloud/apiserver:v0.29.38
+docker.io/apecloud/task-manager:v0.29.38
+docker.io/apecloud/cubetran-front:v0.29.38
+docker.io/apecloud/cr4w:v0.29.38
+docker.io/apecloud/relay:v0.29.38
+docker.io/apecloud/sentry:v0.29.38
+docker.io/apecloud/sentry-init:v0.29.38
+docker.io/apecloud/kb-cloud-installer:v0.29.38
+docker.io/apecloud/apecloud-addon-charts:v0.29.38
+docker.io/apecloud/kb-cloud-hook:v0.29.38
+docker.io/apecloud/kubeblocks-installer:v0.29.38-0.9.2-offline
+docker.io/apecloud/dms:0.0.2-alpha.63
+# KubeBlocks v0.9.3-beta.18
+docker.io/apecloud/kubeblocks:0.9.3-beta.18
+docker.io/apecloud/kubeblocks-dataprotection:0.9.3-beta.18
+docker.io/apecloud/kubeblocks-datascript:0.9.3-beta.18
+docker.io/apecloud/kubeblocks-tools:0.9.3-beta.18
+docker.io/apecloud/kubeblocks-charts:0.9.3-beta.18
+# Gemini v0.8.0-alpha.11
+docker.io/apecloud/gemini:0.8.0-alpha.11
+docker.io/apecloud/gemini-tools:0.8.0-alpha.11
+docker.io/apecloud/easymetrics:0.8.0-alpha.11
 docker.io/apecloud/oteld:0.7.2-beta.7
 docker.io/apecloud/cr-exporter:0.1.0-alpha.13

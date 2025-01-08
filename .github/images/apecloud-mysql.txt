@@ -1,4 +1,4 @@
-# apecloud-mysql v0.9.0-beta.10
+# apecloud-mysql v0.9.0
 docker.io/apecloud/apecloud-xtrabackup:8.0
 docker.io/apecloud/agamotto:0.1.2-beta.1
 docker.io/apecloud/mysql_audit_log:8.0.33

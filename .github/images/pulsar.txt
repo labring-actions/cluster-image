@@ -1,0 +1,4 @@
+# pulsar v0.9.1
+docker.io/apecloud/pulsar:2.11.2
+docker.io/apecloud/pulsar:3.0.2
+docker.io/apecloud/pulsartools:2.11

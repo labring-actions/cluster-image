@@ -84,6 +84,7 @@ change_cloud_version() {
     for imageFile in "${imageFiles[@]}"; do
         echo "change ${imageFile} images tag"
         image_file_path=.github/images/${imageFile}
+        HEAD_CLOUD_VERSION="${CLOUD_VERSION%%.*}"
         if [[ "$UNAME" == "Darwin" ]]; then
             sed -i '' "s/^# KubeBlocks-Cloud .*/# KubeBlocks-Cloud ${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/openconsole:.*/docker.io\/apecloud\/openconsole:${CLOUD_VERSION}/" $image_file_path
@@ -96,7 +97,7 @@ change_cloud_version() {
             sed -i '' "s/^docker.io\/apecloud\/sentry-init:.*/docker.io\/apecloud\/sentry-init:${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/kb-cloud-installer:.*/docker.io\/apecloud\/kb-cloud-installer:${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/apecloud-charts:.*/docker.io\/apecloud\/apecloud-charts:${CLOUD_VERSION}/" $image_file_path
-            sed -i '' "s/^docker.io\/apecloud\/apecloud-addon-charts:.*/docker.io\/apecloud\/apecloud-addon-charts:${CLOUD_VERSION}/" $image_file_path
+            sed -i '' "s/^docker.io\/apecloud\/apecloud-addon-charts:${HEAD_CLOUD_VERSION}.*/docker.io\/apecloud\/apecloud-addon-charts:${CLOUD_VERSION}/" $image_file_path
             sed -i '' "s/^docker.io\/apecloud\/kb-cloud-hook:.*/docker.io\/apecloud\/kb-cloud-hook:${CLOUD_VERSION}/" $image_file_path
         else
             sed -i "s/^# KubeBlocks-Cloud .*/# KubeBlocks-Cloud ${CLOUD_VERSION}/" $image_file_path
@@ -110,7 +111,7 @@ change_cloud_version() {
             sed -i "s/^docker.io\/apecloud\/sentry-init:.*/docker.io\/apecloud\/sentry-init:${CLOUD_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/kb-cloud-installer:.*/docker.io\/apecloud\/kb-cloud-installer:${CLOUD_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/apecloud-charts:.*/docker.io\/apecloud\/apecloud-charts:${CLOUD_VERSION}/" $image_file_path
-            sed -i "s/^docker.io\/apecloud\/apecloud-addon-charts:.*/docker.io\/apecloud\/apecloud-addon-charts:${CLOUD_VERSION}/" $image_file_path
+            sed -i "s/^docker.io\/apecloud\/apecloud-addon-charts:${HEAD_CLOUD_VERSION}.*/docker.io\/apecloud\/apecloud-addon-charts:${CLOUD_VERSION}/" $image_file_path
             sed -i "s/^docker.io\/apecloud\/kb-cloud-hook:.*/docker.io\/apecloud\/kb-cloud-hook:${CLOUD_VERSION}/" $image_file_path
         fi
     done

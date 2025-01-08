@@ -1,0 +1,4 @@
+# oceanbase-proxy v0.9.2
+docker.io/apecloud/ob-configserver:1.0.0-2
+docker.io/apecloud/obproxy:4.2.1.0-alpha8
+docker.io/apecloud/obtools:4.2.1

@@ -10,25 +10,20 @@ on:
         type: choice
         options:
           - apecloud-mysql
-          - clickhouse
-          - damengdb
-          - elasticsearch
-          - greptimedb
-          - kafka
-          - kingbase
-          - postgresql
-          - rabbitmq
-          - redis
-          - nebula
-          - mongodb
-          - mysql
-          - oceanbase
-          - qdrant
-          - kubeblocks
-          - kubeblocks-cloud
           - ape-local-csi-driver
           - calico
           - cilium
+          - postgresql
+          - redis
+          - mongodb
+          - kafka
+          - qdrant
+          - clickhouse
+          - oceanbase
+          - mysql
+          - elasticsearch
+          - kubeblocks
+          - kubeblocks-cloud
           - gemini
           - gemini-monitor
           - kubebench
@@ -36,7 +31,7 @@ on:
           - csi-s3
           - cubetran
           - grafana
-          - logto
+          - casdoor-helm-charts
           - loki
           - metallb
           - minio
@@ -46,6 +41,8 @@ on:
           - spiderpool
           - victoria-metrics-cluster
           - metrics-server
+          - damengdb
+          - kingbase
           - kubernetes
       IMAGE_VERSION:
         description: 'image version'
@@ -89,27 +86,6 @@ jobs:
       matrix:
         arch: [ amd64, arm64 ]
     steps:
-      - name: Free disk space
-        run: |
-          if [[ "${{ inputs.APP_NAME }}" == "starrocks"* ]]; then
-              sudo apt-get autoremove -y >/dev/null 2>&1
-              sudo apt-get autoclean -y >/dev/null 2>&1
-              sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
-              docker rmi $(docker image ls -aq) >/dev/null 2>&1
-              sudo swapoff -a
-              sudo rm -f /swapfile
-              df -h
-          
-              sudo mkdir -p /mnt/new-storage
-              sudo touch /etc/docker/daemon.json
-              sudo tee /etc/docker/daemon.json <<EOF
-          {
-            "data-root": "/mnt/new-storage"
-          }
-          EOF
-              sudo systemctl restart docker
-          fi
-
       - uses: actions/checkout@v4
       - name: Download buildah and sealos
         run: .github/scripts/download.sh

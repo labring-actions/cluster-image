@@ -1,2 +1,2 @@
-gemini:0.8.0-alpha.0
-gemini-monitor:0.8.0-alpha.0
+gemini:0.8.0-alpha.11
+gemini-monitor:0.8.0-alpha.11
