@@ -45,6 +45,7 @@ on:
           - dify
           - tidb
           - vastbase
+          - victoria-metrics
       APP_VERSION:
         description: 'app version'
         required: true
