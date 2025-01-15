@@ -18,7 +18,7 @@ mongodb:0.9.1
 rabbitmq:0.9.0
 zookeeper:0.9.0
 clickhouse:0.9.1
-damengdb:0.9.0
+damengdb:0.9.1
 elasticsearch:0.9.1
 gaussdb:0.9.0
 gbase:0.9.0
