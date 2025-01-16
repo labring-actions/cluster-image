@@ -1,0 +1,6 @@
+# calico v3.28.0
+docker.io/apecloud/cni:v3.28.0
+docker.io/apecloud/node:v3.28.0
+docker.io/apecloud/kube-controllers:v3.28.0
+docker.io/apecloud/pod2daemon-flexvol:v3.28.0
+docker.io/apecloud/typha:v3.28.0

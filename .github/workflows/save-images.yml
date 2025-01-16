@@ -62,6 +62,7 @@ on:
           - mogdb
           - polardbx
           - pulsar
+          - calico
       APP_VERSION:
         description: 'app version'
         required: true
