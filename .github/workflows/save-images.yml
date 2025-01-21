@@ -107,7 +107,7 @@ env:
 jobs:
   save-app-images:
     name: save app images
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Free disk space
         run: |
