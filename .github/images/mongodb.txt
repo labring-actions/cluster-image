@@ -12,5 +12,9 @@ docker.io/apecloud/mongo:4.0.28
 docker.io/apecloud/mongo:4.2.24
 docker.io/apecloud/mongo:4.4.29
 docker.io/apecloud/mongo:5.0.28
+docker.io/apecloud/mongo:5.0.30
 docker.io/apecloud/mongo:6.0.16
+docker.io/apecloud/mongo:6.0.20
 docker.io/apecloud/mongo:7.0.12
+docker.io/apecloud/mongo:7.0.16
+docker.io/apecloud/mongo:8.0.4
