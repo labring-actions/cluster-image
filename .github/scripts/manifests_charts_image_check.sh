@@ -69,6 +69,11 @@ check_images() {
                 continue
             fi
 
+            if [[ -n "$repository" && "$repository" == *"apecloud/dm:8.1.4-6-20241231"* ]]; then
+                repository=""
+                continue
+            fi
+
             if [[ "$repository" == "'"*"'" ]]; then
                 repository=${repository//\'/}
             fi
