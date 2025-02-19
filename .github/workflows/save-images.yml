@@ -63,6 +63,7 @@ on:
           - polardbx
           - pulsar
           - calico
+          - csi-driver-nfs
       APP_VERSION:
         description: 'app version'
         required: true

@@ -1,0 +1,8 @@
+# csi-driver-nfs v4.10.0
+docker.io/apecloud/csi-node-driver-registrar:v2.13.0
+docker.io/apecloud/nfsplugin:v4.10.0
+docker.io/apecloud/livenessprobe:v2.15.0
+docker.io/apecloud/csi-snapshotter:v8.2.0
+docker.io/apecloud/csi-resizer:v1.13.1
+docker.io/apecloud/csi-provisioner:v5.2.0
+docker.io/apecloud/snapshot-controller:v8.2.0
