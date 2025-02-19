@@ -50,10 +50,13 @@ env:
   OSS_BUCKET: "kubeblocks-oss"
   MANIFESTS_FILE: "apecloud/manifests/deploy-manifests.yaml"
   VALUES_FILE: "apecloud/manifests/deploy-values.yaml"
+  DOCKER_REGISTRY_URL: docker.io
+  DOCKER_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
 jobs:
   save-images:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       release-version: ${{ steps.get-version.outputs.release-version }}
       image-name: ${{ steps.get-image-name.outputs.image-name }}
@@ -112,6 +115,14 @@ jobs:
               fi
           fi
           echo "image-name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+
+      - if: ${{ env.DOCKER_USER != '' && env.DOCKER_PASSWORD != '' && inputs.ENABLE_ADDONS == 'damengdb' }}
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_PASSWORD }}
 
       - name: manifests images save
         run: |
