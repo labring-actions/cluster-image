@@ -38,7 +38,7 @@ on:
           - postgres-operator
           - rabbitmq
           - zookeeper
-          - damengdb
+          - damengdb-arm
           - kingbase
           - k3s
           - kubernetes
