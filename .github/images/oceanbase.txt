@@ -4,5 +4,5 @@ docker.io/apecloud/obagent:4.2.1-100000092023101717
 docker.io/apecloud/oceanbase-ent:4.2.1.7-107020012024061213
 docker.io/apecloud/oceanbase-ent:4.2.1.7-107020012024061213-sshd
 docker.io/apecloud/oceanbase-ent:4.2.1.7-107020012024061213-ocp
-docker.io/apecloud/syncer:0.3.8
+docker.io/apecloud/syncer:0.4.2
 docker.io/apecloud/syncer:0.1.7

@@ -22,6 +22,7 @@ on:
           - elasticsearch
           - gaussdb
           - gbase
+          - goldendb
           - kafka
           - kata
           - kingbase

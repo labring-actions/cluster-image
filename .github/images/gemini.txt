@@ -10,10 +10,9 @@ docker.io/apecloud/wal-g:mongo-5.0.1
 docker.io/apecloud/wal-g:mysql-8.0
 docker.io/apecloud/wal-g-mysql:2.0.1-1-ubuntu
 docker.io/apecloud/kubeblocks-tools:0.8.2
-docker.io/apecloud/cubetran-platform:0.5.10
+docker.io/apecloud/cubetran-platform:0.5.11-alpha.1
 docker.io/apecloud/cubetran-sidecar:0.1.2
 docker.io/apecloud/cubetran-core:0.1.1
-docker.io/apecloud/kubeviewer:0.1.17
 docker.io/apecloud/mysql:8.0
 docker.io/apecloud/redis:7.0.5
 docker.io/apecloud/loki:2.9.4

@@ -1,0 +1,8 @@
+# goldendb v0.9.0
+docker.io/apecloud/goldendb-cn:6.1.03.08
+docker.io/apecloud/goldendb-dn:6.1.03.08
+docker.io/apecloud/goldendb-gtm:6.1.03.08
+docker.io/apecloud/goldendb-lds:6.1.03.08
+docker.io/apecloud/goldendb-control:6.1.03.08
+docker.io/apecloud/goldendb-zk:6.1.03.08
+      
