@@ -10,7 +10,11 @@ export readonly REDUCE_VERSION=${5:-"true"}
 
 if [[ -z "${BIN_DOWNLOAD}" || "${BIN_DOWNLOAD}" == "true" ]]; then
     mkdir -p opt
-    wget https://github.com/apecloud/kbcli/releases/download/"${VERSION}"/kbcli-linux-"${ARCH}"-"${VERSION}".tar.gz -O kbcli.tar.gz
+    if [[ "$VERSION" == "v1.0.0-beta."* ]]; then
+        wget https://github.com/apecloud/kbcli/releases/download/v1.0.0-beta.15/kbcli-linux-"${ARCH}"-"v1.0.0-beta.15".tar.gz -O kbcli.tar.gz
+    else
+        wget https://github.com/apecloud/kbcli/releases/download/"${VERSION}"/kbcli-linux-"${ARCH}"-"${VERSION}".tar.gz -O kbcli.tar.gz
+    fi
     tar -zxvf kbcli.tar.gz linux-"${ARCH}"/kbcli
     mv linux-"${ARCH}"/kbcli opt/kbcli
     chmod a+x opt/kbcli
