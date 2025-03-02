@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1
 export readonly ARCH=${1:-amd64}
@@ -51,7 +51,7 @@ generate_image() {
     vmagent_version=$(yq .vmagent.spec.image.tag $values_file)
     vmalert_version=$(yq .vmalert.spec.image.tag $values_file)
     victoria_metrics_version=$vmalert_version
-    operator_version=$(yq .image.tag charts/victoria-metrics-k8s-stack/charts/victoria-metrics-operator/values.yaml)
+    operator_version=$(yq .appVersion charts/victoria-metrics-k8s-stack/charts/victoria-metrics-operator/Chart.yaml)
 
     wget -qO- https://github.com/VictoriaMetrics/operator/archive/refs/tags/${operator_version}.tar.gz | tar -zx
     config_file="operator-${operator_version#v}/internal/config/config.go"
