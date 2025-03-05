@@ -64,6 +64,7 @@ jobs:
           app_name: ${{ inputs.APP_NAME }}
           app_version: ${{ inputs.APP_VERSION }}
           images_file: .github/images/${{ inputs.APP_NAME }}.txt
+          image_platform: "linux/amd64"
         run: |
           bash .github/scripts/save_images.sh
 
