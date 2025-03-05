@@ -96,3 +96,6 @@ docker.io/apecloud/mc:RELEASE.2022-09-16T09-16-47Z
 docker.io/apecloud/kubeblocks-tools:0.9.3
 # casdoor v1.721.0
 docker.io/apecloud/casdoor:v1.721.0
+#minio
+docker.io/apecloud/minio:RELEASE.2024-06-29T01-20-47Z
+
