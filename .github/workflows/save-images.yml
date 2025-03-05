@@ -161,7 +161,6 @@ jobs:
           installer_version: ${{ inputs.INSTALLER_VERSION }}
           dms_version: ${{ inputs.DMS_VERSION }}
           images_file: .github/images/${{ inputs.APP_NAME }}.txt
-          image_platform: "linux/amd64"
         run: |
           bash .github/scripts/save_images.sh
 

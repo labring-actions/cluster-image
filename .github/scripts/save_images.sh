@@ -11,7 +11,6 @@ readonly GEMINI_VERSION_TMP="${gemini_version?}"
 readonly OTELD_VERSION_TMP="${oteld_version?}"
 readonly OFFLINE_INSTALLER_VERSION_TMP="${installer_version?}"
 readonly DMS_VERSION_TMP="${dms_version?}"
-readonly IMAGE_PLATFORM="${image_platform?}"
 
 echo "ADD_IMAGES_LIST:"${ADD_IMAGES_LIST}
 echo "APP_NAME:"${APP_NAME}
@@ -23,7 +22,6 @@ echo "GEMINI_VERSION:"${GEMINI_VERSION_TMP}
 echo "OTELD_VERSION:"${OTELD_VERSION_TMP}
 echo "OFFLINE_INSTALLER_VERSION:"${OFFLINE_INSTALLER_VERSION_TMP}
 echo "DMS_VERSION:"${DMS_VERSION_TMP}
-echo "IMAGE_PLATFORM:"${IMAGE_PLATFORM}
 
 add_images_list() {
     if [[ -z "${ADD_IMAGES_LIST}" ]]; then
@@ -203,16 +201,7 @@ save_images_package() {
             fi
             echo "pull image $image"
             for j in {1..10}; do
-                if [[ -n "${IMAGE_PLATFORM}" && "${IMAGE_PLATFORM}" == *"amd64"* ]]; then
-                    echo "docker pull --platform linux/amd64 $image"
-                    docker pull --platform linux/amd64 "$image"
-                elif [[ -n "${IMAGE_PLATFORM}" && "${IMAGE_PLATFORM}" == *"arm64"* ]]; then
-                    echo "docker pull --platform linux/arm64 $image"
-                    docker pull --platform linux/arm64 "$image"
-                else
-                    echo "docker pull $image"
-                    docker pull "$image"
-                fi
+                docker pull "$image"
                 ret_msg=$?
                 if [[ $ret_msg -eq 0 ]]; then
                     echo "$(tput -T xterm setaf 2)pull image $image success$(tput -T xterm sgr0)"
