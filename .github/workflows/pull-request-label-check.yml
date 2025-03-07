@@ -2,7 +2,7 @@ name: Pull Request Label Check
 
 on:
   pull_request:
-    types: [ labeled ]
+    types: [ labeled, unlabeled ]
     branches:
       - main
       - release-*
