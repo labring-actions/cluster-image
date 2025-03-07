@@ -9,7 +9,6 @@ env:
 
 jobs:
   cherry-pick:
-    name: Cherry Pick
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/cherry-pick')
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +38,6 @@ jobs:
     secrets: inherit
 
   label-pick:
-    name: Label Pick
     if: ${{ github.event.issue.pull_request != '' && (contains(github.event.comment.body, '/pick') || contains(github.event.comment.body, '/nopick')) }}
     uses: apecloud-inc/apecloud-cd/.github/workflows/pull-request-label-pick.yml@v0.6.0
     secrets: inherit
