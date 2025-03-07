@@ -23,6 +23,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
+  send-message:
+    permissions:
+      id-token: write
+      contents: read
+    needs: [ cherry-pick ]
+    if: ${{ failure() || cancelled() }}
+    uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.6.0
+    with:
+      TYPE: "5"
+      BOT_WEBHOOK: "${{ vars.CHERRY_PICK_BOT_WEBHOOK }}"
+      CONTENT: "${{ github.event.comment.body }} error"
+      PR_NUMBER: "${{ github.event.issue.number }}"
+    secrets: inherit
+
   label-pick:
     name: Label Pick
     if: ${{ github.event.issue.pull_request != '' && (contains(github.event.comment.body, '/pick') || contains(github.event.comment.body, '/nopick')) }}
