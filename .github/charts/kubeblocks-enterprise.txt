@@ -1,8 +1,8 @@
 kubeblocks:0.9.3
-kubeblocks-cloud:v0.30.25
-kb-cloud-installer:0.30.25
-gemini:0.8.0-alpha.11
-gemini-monitor:0.8.0-alpha.11
+kubeblocks-cloud:v0.30.30
+kb-cloud-installer:0.30.30
+gemini:0.8.2
+gemini-monitor:0.8.2
 casdoor-helm-charts:v1.721.0
 ingress-nginx:4.8.4
 metallb:0.14.4
@@ -22,6 +22,7 @@ damengdb:0.9.1
 elasticsearch:0.9.1
 gaussdb:0.9.0
 gbase:0.9.0
+goldendb:0.9.0
 kafka:0.9.1
 kingbase:0.9.0
 loki:0.9.1
