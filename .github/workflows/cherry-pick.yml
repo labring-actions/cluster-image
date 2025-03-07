@@ -32,8 +32,9 @@ jobs:
     uses: apecloud-inc/apecloud-cd/.github/workflows/feishui-message.yml@v0.6.0
     with:
       TYPE: "5"
+      BOT_TYPE: "specify"
       BOT_WEBHOOK: "${{ vars.CHERRY_PICK_BOT_WEBHOOK }}"
-      CONTENT: "${{ github.event.comment.body }} error"
+      CONTENT: " ${{ github.event.comment.body }} error"
       PR_NUMBER: "${{ github.event.issue.number }}"
     secrets: inherit
 
