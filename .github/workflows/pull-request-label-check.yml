@@ -10,7 +10,7 @@ on:
 jobs:
   pr-label-check:
     name: check-pr-label
-    if: ${{ github.event.action == 'labeled' }}
+    if: ${{ github.event.action == 'labeled' || github.event.action == 'unlabeled' }}
     uses: apecloud-inc/apecloud-cd/.github/workflows/pull-request-label-check.yml@v0.6.0
     with:
       CHECK_LABLE: "pick"
