@@ -13,6 +13,6 @@ env:
 
 jobs:
   cherry-pick-auto:
-    if: ${{ github.event.pull_request.merged == true && (github.base_ref == 'main' || startsWith(github.base_ref, 'release-') }}
+    if: ${{ github.event.pull_request.merged == true && (github.base_ref == 'main' || startsWith(github.base_ref, 'release-')) }}
     uses: apecloud-inc/apecloud-cd/.github/workflows/pull-request-cherry-pick-auto.yml@v0.6.0
     secrets: inherit
