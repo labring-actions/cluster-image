@@ -1,4 +1,4 @@
-name: Pull Request Label Check
+name: Cherry Pick Label Check
 
 on:
   pull_request_target:
@@ -8,7 +8,7 @@ on:
       - release-*
 
 jobs:
-  pr-label-check:
+  label-check:
     name: check-pr-label
     uses: apecloud-inc/apecloud-cd/.github/workflows/pull-request-label-check.yml@v0.6.0
     with:
