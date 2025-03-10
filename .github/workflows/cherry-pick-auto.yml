@@ -8,6 +8,7 @@ on:
       - main
       - release-*
       -
+
 env:
   GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
