@@ -12,6 +12,6 @@ env:
   GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
 jobs:
-  pick-usage:
+  cherry-pick-usage:
     uses: apecloud-inc/apecloud-cd/.github/workflows/pull-request-cherry-pick-usage.yml@v0.6.0
     secrets: inherit

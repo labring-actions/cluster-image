@@ -1,4 +1,4 @@
-name: Cherry Pick
+name: Cherry Pick Or Label Pick
 on:
   issue_comment:
     types: [created]
@@ -22,7 +22,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
-  send-message:
+  pick-meassge:
     permissions:
       id-token: write
       contents: read
