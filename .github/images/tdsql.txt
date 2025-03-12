@@ -1,0 +1,6 @@
+# tdsql v0.9.3
+docker.io/apecloud/tdsql-db:8.0.33-v24-txsql-22.6.0-20240417
+docker.io/apecloud/tdsql-proxy:8.0.33-v24-txsql-22.6.0-20240417
+docker.io/apecloud/tdsql-scheduler:8.0.33-v24-txsql-22.6.0-20240417
+docker.io/apecloud/zookeeper:3.6.4
+docker.io/apecloud/mysqld-exporter:0.15.1

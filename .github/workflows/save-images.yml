@@ -58,6 +58,7 @@ on:
           - ingress-nginx
           - nvidia-device-plugin
           - dify
+          - tdsql
           - tidb
           - vastbase
           - mogdb
