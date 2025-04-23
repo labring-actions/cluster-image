@@ -1,0 +1,6 @@
+FROM scratch
+COPY . .
+ENV NAME=${NAME:-"quickstart"}
+ENV NAMESPACE=${NAMESPACE:-"ns-admin"}
+ENV SERVICE_TYPE=${SERVICE_TYPE:-"LoadBalancer"}
+CMD ["kubectl apply -f manifests/deploy.yaml"]
