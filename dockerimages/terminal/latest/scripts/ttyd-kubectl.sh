@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 to_download_arch() {
     case $ARCH in
         amd64)
@@ -17,12 +16,12 @@ to_download_arch() {
 to_download_arch
 echo "download arch : $_ARCH"
 
-
 wget https://storage.googleapis.com/kubernetes-release/release/v${kubeVersion}/bin/linux/${ARCH}/kubectl -O /usr/bin/kubectl && chmod a+x /usr/bin/kubectl
 if [ $? != 0 ]; then
    echo "====download kubectl failed!===="
    exit 1
 fi
+echo 'source <(kubectl completion bash)' >>/etc/bash.bashrc
 
 wget https://github.com/tsl0922/ttyd/releases/download/${ttydVersion}/ttyd.${_ARCH} && chmod +x ttyd.${_ARCH} && mv ttyd.${_ARCH} /usr/bin/ttyd
 if [ $? != 0 ]; then
