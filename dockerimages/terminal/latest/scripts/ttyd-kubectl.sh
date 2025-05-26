@@ -36,7 +36,7 @@ if [ $? != 0 ]; then
    exit 1
 fi
 
-wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc && chmod a+x /usr/bin/mc
+wget https://dl.min.io/client/mc/release/linux-$ARCH/mc -O /usr/bin/mc && chmod a+x /usr/bin/mc
 if [ $? != 0 ]; then
    echo "====download mc failed!===="
    exit 1
