@@ -7,5 +7,7 @@ jobs:
   start-build:
     if: github.event.label.name == 'accepted' && startswith(github.event.issue.body, '/imagebuild_dockerimages') 
     uses: ./.github/workflows/autobuild-dockerfiles.yml
+    permissions:
+      issues: write
     with:
         body: ${{github.event.issue.body}}
