@@ -27,5 +27,7 @@ jobs:
     needs: [check-accepted]
     if: needs.check-accepted.outputs.has_accepted == 'true' && startswith(github.event.comment.body, '/imagebuild_apps')
     uses: ./.github/workflows/autobuild-apps.yml
+    permissions:
+      issues: write
     with: 
       body: ${{github.event.comment.body}}
