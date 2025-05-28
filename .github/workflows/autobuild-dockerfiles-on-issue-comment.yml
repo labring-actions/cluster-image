@@ -27,5 +27,7 @@ jobs:
     needs: [check-accepted]
     if: needs.check-accepted.outputs.has_accepted == 'true' && startswith(github.event.comment.body, '/imagebuild_dockerimages')
     uses: ./.github/workflows/autobuild-dockerfiles.yml
+    permissions:
+      issues: write
     with:
         body: ${{github.event.comment.body}}
