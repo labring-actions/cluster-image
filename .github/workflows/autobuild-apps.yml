@@ -1,11 +1,13 @@
 name: Auto build APP image
 on:
-  issue_comment:
-    types:
-      - created
+  workflow_call:
+    inputs:
+      body:
+        required: true
+        type: string
+
 jobs:
   resolve-issue-var:
-    if: startswith(github.event.comment.body, '/imagebuild_apps')
     runs-on: ubuntu-latest
     outputs:
       app: ${{ steps.set-appversion.outputs.app }}
@@ -14,7 +16,7 @@ jobs:
       - name: Write vars
         id: set-appversion
         run: |
-          commentbody="${{github.event.comment.body}}"
+          commentbody="${{ inputs.body }}"
           app=`echo "$commentbody"| awk '{print $2}'`
           version=`echo "$commentbody"| awk '{print $3}'`
           echo "app=$app" >> $GITHUB_OUTPUT
@@ -69,7 +71,7 @@ jobs:
         run: .github/scripts/manifest-other.sh
 
   add-tips:
-    if: contains(github.event.comment.body, 'imagebuild')
+    if: contains(inputs.body, 'imagebuild')
     needs:
       - build_manifest
       - resolve-issue-var

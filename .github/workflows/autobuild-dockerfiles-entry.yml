@@ -1,0 +1,11 @@
+name: Auto build DOCKER image Entry
+on:
+  issues:
+    types:
+      - labeled
+jobs:
+  start-build:
+    if: github.event.label.name == 'accepted' && startswith(github.event.issue.body, '/imagebuild_dockerimages') 
+    uses: ./.github/workflows/autobuild-dockerfiles.yml
+    with:
+        body: ${{github.event.issue.body}}
