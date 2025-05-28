@@ -1,0 +1,31 @@
+name: Auto build APP image
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  check-accepted:
+    runs-on: ubuntu-latest
+    outputs:
+      has_accepted: ${{ steps.check-label.outputs.has_accepted }}
+    steps:
+      - name: Check for 'accepted' label
+        id: check-label
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number
+            });
+            
+            const hasAccepted = issue.labels.some(label => label.name.toLowerCase() === 'accepted');
+            core.setOutput('has_accepted', hasAccepted);
+            return hasAccepted;
+  start-build:
+    needs: [check-accepted]
+    if: needs.check-accepted.outputs.has_accepted == 'true' && startswith(github.event.comment.body, '/imagebuild_apps')
+    uses: ./.github/workflows/autobuild-apps.yml
+    with: 
+      body: ${{github.event.comment.body}}
