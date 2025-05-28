@@ -5,7 +5,7 @@ on:
       - labeled
 jobs:
   start-build:
-    if: github.event.label.name == 'accepted' && startswith(github.event.issue.body, '/imagebuild_apps')
+    if: ${{ github.event.label.name == 'accepted' && startswith(github.event.issue.body, '/imagebuild_apps') }}
     uses: ./.github/workflows/autobuild-apps.yml
     permissions:
       issues: write
