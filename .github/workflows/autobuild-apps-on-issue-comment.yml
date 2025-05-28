@@ -20,9 +20,14 @@ jobs:
               issue_number: context.payload.issue.number
             });
             
-            const hasAccepted = issue.labels.some(label => label.name.toLowerCase() === 'accepted');
-            core.setOutput('has_accepted', hasAccepted);
-            return hasAccepted;
+            const hasAccepted = issue.labels.some(label => 
+              label.name.toLowerCase() === 'accepted'
+            );
+            core.setOutput('has_accepted', hasAccepted.toString());
+      - name: Complete
+        run: |
+          echo "If accepted? ${{ steps.check-label.outputs.has_accepted }}"
+          echo "Output Type: $(echo ${{ steps.check-label.outputs.has_accepted }} | jq type)"
   start-build:
     needs: [check-accepted]
     if: ${{ needs.check-accepted.outputs.has_accepted == 'true' && startswith(github.event.comment.body, '/imagebuild_apps') }} 
