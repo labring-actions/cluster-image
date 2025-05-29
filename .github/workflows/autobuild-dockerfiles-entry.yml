@@ -4,10 +4,31 @@ on:
     types:
       - labeled
 jobs:
-  start-build:
+  resolve-image-info:
     if: ${{ github.event.label.name == 'accepted' && startswith(github.event.issue.body, '/imagebuild_dockerimages') }} 
+    uses: ./.github/workflows/resolve-image-info.yml
+    permissions: read-all
+    with:
+      body: ${{github.event.issue.body}}
+      title: ${{ github.event.issue.title }}
+  start-build:
+    if: ${{ needs.resolve-image-info.outputs.app == needs.resolve-image-info.outputs.title-app }}
+    needs:
+      - resolve-image-info
     uses: ./.github/workflows/autobuild-dockerfiles.yml
+    permissions: read-all
+    with:
+      app: ${{ needs.resolve-image-info.outputs.app }}
+      version: ${{ needs.resolve-image-info.outputs.version }}
+      build-args: ${{ needs.resolve-image-info.outputs.build-args }}
+  add-tips:
+    needs:
+      - resolve-image-info
+      - start-build
+    uses: ./.github/workflows/add-tips.yml
     permissions:
       issues: write
     with:
-        body: ${{github.event.issue.body}}
+      body: ${{github.event.issue.body}}
+      app: ${{ needs.resolve-image-info.outputs.app }}
+      version: ${{ needs.resolve-image-info.outputs.version }}

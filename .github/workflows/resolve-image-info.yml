@@ -15,6 +15,8 @@ on:
         value: ${{ jobs.resolve-image-info.outputs.version }}
       title-app:
         value: ${{ jobs.resolve-image-info.outputs.title-app }}
+      build-args:
+        value: ${{ jobs.resolve-image-info.outputs.build-args }}
 
 jobs:
   resolve-image-info:
@@ -23,6 +25,7 @@ jobs:
       app: ${{ steps.parse-title-body.outputs.app }}
       version: ${{ steps.parse-title-body.outputs.version }}
       title-app: ${{ steps.parse-title-body.outputs.title-app }}
+      build-args: ${{ steps.parse-title-body.outputs.build-args }}
     steps:
       - name: Checkout repository # Required to access your custom action
         uses: actions/checkout@v4

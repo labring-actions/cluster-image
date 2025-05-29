@@ -6,6 +6,7 @@ on:
 jobs:
   check-accepted:
     runs-on: ubuntu-latest
+    permissions: read-all
     outputs:
       has_accepted: ${{ steps.check-label.outputs.has_accepted }}
     steps:
@@ -28,11 +29,32 @@ jobs:
         run: |
           echo "If accepted? ${{ steps.check-label.outputs.has_accepted }}"
           echo "Output Type: $(echo ${{ steps.check-label.outputs.has_accepted }} | jq type)"
-  start-building:
-    needs: [check-accepted]
+  resolve-image-info:
+    needs:
+      - check-accepted
     if: ${{ needs.check-accepted.outputs.has_accepted == 'true' && startswith(github.event.comment.body, '/imagebuild_dockerimages') }}
+    uses: ./.github/workflows/resolve-image-info.yml
+    permissions: read-all
+    with:
+      body: ${{github.event.comment.body}}
+      title: ${{github.event.issue.title}}
+  start-building:
+    needs:
+      - resolve-image-info
     uses: ./.github/workflows/autobuild-dockerfiles.yml
+    permissions: read-all
+    with: 
+      app: ${{ needs.resolve-image-info.outputs.app }}
+      version: ${{ needs.resolve-image-info.outputs.version }}
+      build-args: ${{ needs.resolve-image-info.outputs.build-args }}
+  add-tips:
+    needs:
+      - resolve-image-info
+      - start-building
+    uses: ./.github/workflows/add-tips.yml
     permissions:
       issues: write
     with:
-        body: ${{github.event.comment.body}}
+      body: ${{github.event.comment.body}}
+      app: ${{ needs.resolve-image-info.outputs.app }}
+      version: ${{ needs.resolve-image-info.outputs.version }}

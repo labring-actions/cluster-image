@@ -16,6 +16,8 @@ outputs:
   title-app:
     # New output for the app name from the title
     description: 'The extracted application name from the title.'
+  build-args:
+    description: 'The extracted application build arguments.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

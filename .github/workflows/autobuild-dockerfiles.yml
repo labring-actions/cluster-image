@@ -2,32 +2,19 @@ name: Auto build DOCKER image
 on:
   workflow_call:
     inputs:
-      body:
+      app:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      build-args:
         required: true
         type: string
 
 jobs:
-  resolve-issue-var:
-    runs-on: ubuntu-latest
-    outputs:
-      app: ${{ steps.set-appversion.outputs.app }}
-      version: ${{ steps.set-appversion.outputs.version }}
-      build_args: ${{ steps.set-appversion.outputs.build_args }}
-    steps:
-      - name: Write vars
-        id: set-appversion
-        run: |
-          commentbody="${{ inputs.body }}"
-          app=`echo "$commentbody"| awk '{print $2}'`
-          version=`echo "$commentbody"| awk '{print $3}'`
-          build_args=`echo "$commentbody"| awk '{print $4}'`
-          echo "app=$app" >> $GITHUB_OUTPUT
-          echo "version=$version" >> $GITHUB_OUTPUT
-          echo "build_args=$build_args" >> $GITHUB_OUTPUT
   build_apps:
     name: Auto build app image
-    needs:
-      - resolve-issue-var
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,15 +35,14 @@ jobs:
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
-          app: ${{ needs.resolve-issue-var.outputs.app }}
-          version: ${{ needs.resolve-issue-var.outputs.version }}
+          app: ${{ inputs.app }}
+          version: ${{ inputs.version }}
           arch: ${{ matrix.arch }}
-          build_args: "${{ needs.resolve-issue-var.outputs.build_args }}"
+          build_args: "${{ inputs.build-args }}"
         run: .github/scripts/dockers.sh
 
   build_manifest:
     needs:
-      - resolve-issue-var
       - build_apps
     name: Auto manifest app image
     runs-on: ubuntu-latest
@@ -71,27 +57,6 @@ jobs:
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
-          app: ${{ needs.resolve-issue-var.outputs.app }}
-          version: ${{ needs.resolve-issue-var.outputs.version }}
+          app: ${{ inputs.app }}
+          version: ${{ inputs.version }}
         run: .github/scripts/manifest-docker.sh
-
-  add-tips:
-    if: contains(inputs.body, 'imagebuild')
-    needs:
-      - build_manifest
-      - resolve-issue-var
-    name: Auto add tips
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: Success Commit
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            ```
-            image docker.io/${{ vars.D_D_REGISTRY_REPOSITORY }}/${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
-            ```
-            
-            See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
