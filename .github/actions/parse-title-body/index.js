@@ -24,7 +24,7 @@ try {
     version = words[2]; // Third word (index 2)
   }
   if (words.length >= 4) {
-    version = words[3]; // Fourth word (index 3)
+    buildArgs = words[3]; // Fourth word (index 3)
   }
 
   // --- Sanitize the Extracted Values (Crucial for downstream use!) ---
@@ -36,7 +36,7 @@ try {
 
   app = app.replace(/[^a-zA-Z0-9.\-_]/g, '');
   version = version.replace(/[^a-zA-Z0-9.\-_]/g, '');
-  buildArgs = version.replace(/[^a-zA-Z0-9.,=_]/g, '');
+  buildArgs = buildArgs.replace(/[^a-zA-Z0-9.,=_]/g, '');
 
   let appFromTitle = '';
   const titleRegex = /^【Auto-build】(.*)/;
