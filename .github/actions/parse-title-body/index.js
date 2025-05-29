@@ -1,10 +1,10 @@
-const core = require('@actions/core'); // GitHub Actions toolkit for inputs/outputs
-const github = require('@actions/github'); // GitHub context object
+import { setOutput, setFailed } from '@actions/core'; // GitHub Actions toolkit for inputs/outputs
+import github from '@actions/github'; // GitHub context object
 
 try {
   // Get the issue body input from the action.yml definition
-  const body = core.getInput('body');
-  const title = core.getInput('title');
+  const body = process.argv[2];
+  const title = process.argv[3];
 
   // --- Start Parsing Logic ---
   let app = '';
@@ -47,14 +47,14 @@ try {
   // --- End Parsing Logic ---
 
   // Set the outputs of the action
-  core.setOutput('app', app);
-  core.setOutput('version', version);
-  core.setOutput('title-app', appFromTitle);
+  setOutput('app', app);
+  setOutput('version', version);
+  setOutput('title-app', appFromTitle);
 
   console.log(`Extracted App: "${app}"`);
   console.log(`Extracted Version: "${version}"`);
   console.log(`Extracted App from Title: "${appFromTitle}"`);
 
 } catch (error) {
-  core.setFailed(error.message); // Set the action to a failed state if an error occurs
+  setFailed(error.message); // Set the action to a failed state if an error occurs
 }

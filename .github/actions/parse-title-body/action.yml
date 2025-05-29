@@ -11,14 +11,14 @@ inputs:
 outputs:
   app:
     description: 'The extracted application name.'
-    value: ${{ steps.parse.outputs.app }}
   version:
     description: 'The extracted version number.'
-    value: ${{ steps.parse.outputs.version }}
   title-app:
     # New output for the app name from the title
     description: 'The extracted application name from the title.'
-    value: ${{ steps.parse.outputs.title-app }}
 runs:
-  using: 'node16' # Or 'node20' if available and you prefer
-  main: 'index.js'
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+  - ${{ inputs.body }}
+  - ${{ inputs.title }}
