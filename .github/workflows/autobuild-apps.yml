@@ -2,29 +2,21 @@ name: Auto build APP image
 on:
   workflow_call:
     inputs:
-      body:
+      app:
         required: true
         type: string
-      title:
+      version:
         required: true
         type: string
 
 jobs:
-  resolve-image-info:
-    uses: ./.github/workflows/resolve-image-info.yml
-    permissions: read-all
-    with:
-      body: ${{ inputs.body }}
-      title: ${{ inputs.title }} 
   build_apps:
-    if: ${{ needs.resolve-image-info.outputs.app == needs.resolve-image-info.outputs.title_app }}
     name: Auto build app image
     runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: [ amd64,arm64 ]
     permissions: read-all
-    needs: [resolve-image-info]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,13 +28,12 @@ jobs:
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
-          app: ${{ needs.resolve-image-info.outputs.app }}
-          version: ${{ needs.resolve-image-info.outputs.version }}
+          app: ${{ inputs.app }}
+          version: ${{ inputs.version }}
           arch: ${{ matrix.arch }}
         run: .github/scripts/apps.sh
   build_manifest:
     needs:
-      - resolve-image-info
       - build_apps
     name: Auto manifest app image
     runs-on: ubuntu-latest
@@ -58,18 +49,6 @@ jobs:
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
-          app: ${{ needs.resolve-image-info.outputs.app }}
-          version: ${{ needs.resolve-image-info.outputs.version }}
+          app: ${{ inputs.app }}
+          version: ${{ inputs.version }}
         run: .github/scripts/manifest-other.sh
-  add-tips:
-    if: contains(inputs.body, 'imagebuild')
-    needs:
-      - build_manifest
-      - resolve-image-info
-    uses: ./.github/workflows/add-tips.yml
-    permissions:
-      issues: write
-    with:
-      body: ${{ inputs.body }}
-      app: ${{ needs.resolve-image-info.outputs.app }}
-      version: ${{ needs.resolve-image-info.outputs.version }}

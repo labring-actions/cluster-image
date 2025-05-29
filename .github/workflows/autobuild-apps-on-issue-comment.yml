@@ -29,12 +29,32 @@ jobs:
         run: |
           echo "If accepted? ${{ steps.check-label.outputs.has_accepted }}"
           echo "Output Type: $(echo ${{ steps.check-label.outputs.has_accepted }} | jq type)"
-  start-build:
-    needs: [check-accepted]
+  resolve-image-info:
+    needs:
+      - check-accepted
     if: ${{ needs.check-accepted.outputs.has_accepted == 'true' && startswith(github.event.comment.body, '/imagebuild_apps') }} 
-    uses: ./.github/workflows/autobuild-apps.yml
-    permissions:
-      issues: write
-    with: 
+    uses: ./.github/workflows/resolve-image-info.yml
+    permissions: read-all
+    with:
       body: ${{github.event.comment.body}}
       title: ${{github.event.issue.title}}
+  start-build:
+    if: ${{ needs.resolve-image-info.outputs.app == needs.resolve-image-info.outputs.title_app }}
+    needs: 
+      - resolve-image-info
+    uses: ./.github/workflows/autobuild-apps.yml
+    permissions: read-all
+    with: 
+      app: ${{ needs.resolve-image-info.outputs.app }}
+      version: ${{ needs.resolve-image-info.outputs.version }}
+  add-tips:
+    needs:
+      - resolve-image-info
+      - start-build
+    uses: ./.github/workflows/add-tips.yml
+    permissions:
+      issues: write
+    with:
+      body: ${{github.event.comment.body}}
+      app: ${{ needs.resolve-image-info.outputs.app }}
+      version: ${{ needs.resolve-image-info.outputs.version }}
