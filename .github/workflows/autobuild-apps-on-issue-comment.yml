@@ -39,7 +39,7 @@ jobs:
       body: ${{github.event.comment.body}}
       title: ${{github.event.issue.title}}
   start-build:
-    if: ${{ needs.resolve-image-info.outputs.app == needs.resolve-image-info.outputs.title_app }}
+    if: ${{ needs.resolve-image-info.outputs.app == needs.resolve-image-info.outputs.title-app }}
     needs: 
       - resolve-image-info
     uses: ./.github/workflows/autobuild-apps.yml

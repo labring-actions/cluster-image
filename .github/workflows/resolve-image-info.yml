@@ -13,8 +13,8 @@ on:
         value: ${{ jobs.resolve-image-info.outputs.app }}
       version:
         value: ${{ jobs.resolve-image-info.outputs.version }}
-      title_app:
-        value: ${{ jobs.resolve-image-info.outputs.title_app }}
+      title-app:
+        value: ${{ jobs.resolve-image-info.outputs.title-app }}
 
 jobs:
   resolve-image-info:
@@ -22,7 +22,7 @@ jobs:
     outputs:
       app: ${{ steps.parse-title-body.outputs.app }}
       version: ${{ steps.parse-title-body.outputs.version }}
-      title_app: ${{ steps.parse-title-body.outputs.title }}
+      title-app: ${{ steps.parse-title-body.outputs.title-app }}
     steps:
       - name: Checkout repository # Required to access your custom action
         uses: actions/checkout@v4
