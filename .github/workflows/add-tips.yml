@@ -1,0 +1,31 @@
+name: Add tips
+on:
+  workflow_call:
+    inputs:
+      body:
+        type: string
+        required: true
+      app:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+
+jobs:
+  add-tips:
+    name: Auto add tips
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Success Commit
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ```
+            image docker.io/${{ vars.D_D_REGISTRY_REPOSITORY }}/${{ inputs.app }}:${{ inputs.version }} build successfully!
+            ```
+            
+            See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

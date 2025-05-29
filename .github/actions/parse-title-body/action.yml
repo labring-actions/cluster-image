@@ -1,0 +1,24 @@
+name: 'Parse Title and Body'
+description: 'Parses the GitHub issue body and issue comment body to extract app and version.'
+inputs:
+  body:
+    description: 'The full text of the GitHub issue and issue comment body.'
+    required: true
+  title:
+    # New input for the issue title
+    description: 'The full text of the GitHub issue title.'
+    required: true
+outputs:
+  app:
+    description: 'The extracted application name.'
+    value: ${{ steps.parse.outputs.app }}
+  version:
+    description: 'The extracted version number.'
+    value: ${{ steps.parse.outputs.version }}
+  title-app:
+    # New output for the app name from the title
+    description: 'The extracted application name from the title.'
+    value: ${{ steps.parse.outputs.title-app }}
+runs:
+  using: 'node16' # Or 'node20' if available and you prefer
+  main: 'index.js'

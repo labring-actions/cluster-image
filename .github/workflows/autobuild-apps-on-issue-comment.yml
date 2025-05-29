@@ -6,6 +6,7 @@ on:
 jobs:
   check-accepted:
     runs-on: ubuntu-latest
+    permissions: read-all
     outputs:
       has_accepted: ${{ steps.check-label.outputs.has_accepted }}
     steps:
@@ -36,3 +37,4 @@ jobs:
       issues: write
     with: 
       body: ${{github.event.comment.body}}
+      title: ${{github.event.issue.title}}

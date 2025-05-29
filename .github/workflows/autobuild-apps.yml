@@ -5,32 +5,26 @@ on:
       body:
         required: true
         type: string
+      title:
+        required: true
+        type: string
 
 jobs:
-  resolve-issue-var:
-    runs-on: ubuntu-latest
-    outputs:
-      app: ${{ steps.set-appversion.outputs.app }}
-      version: ${{ steps.set-appversion.outputs.version }}
-    steps:
-      - name: Write vars
-        id: set-appversion
-        run: |
-          commentbody="${{ inputs.body }}"
-          app=`echo "$commentbody"| awk '{print $2}'`
-          version=`echo "$commentbody"| awk '{print $3}'`
-          echo "app=$app" >> $GITHUB_OUTPUT
-          echo "version=$version" >> $GITHUB_OUTPUT
+  resolve-image-info:
+    uses: ./.github/workflows/resolve-image-info.yml
+    permissions: read-all
+    with:
+      body: ${{ inputs.body }}
+      title: ${{ inputs.title }} 
   build_apps:
+    if: ${{ needs.resolve-image-info.outputs.app == needs.resolve-image-info.outputs.title_app }}
     name: Auto build app image
-    needs:
-      - resolve-issue-var
     runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: [ amd64,arm64 ]
-    permissions:
-      issues: write
+    permissions: read-all
+    needs: [resolve-image-info]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -42,19 +36,17 @@ jobs:
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
-          app: ${{ needs.resolve-issue-var.outputs.app }}
-          version: ${{ needs.resolve-issue-var.outputs.version }}
+          app: ${{ needs.resolve-image-info.outputs.app }}
+          version: ${{ needs.resolve-image-info.outputs.version }}
           arch: ${{ matrix.arch }}
         run: .github/scripts/apps.sh
-
   build_manifest:
     needs:
-      - resolve-issue-var
+      - resolve-image-info
       - build_apps
     name: Auto manifest app image
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
+    permissions: read-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -66,27 +58,18 @@ jobs:
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
-          app: ${{ needs.resolve-issue-var.outputs.app }}
-          version: ${{ needs.resolve-issue-var.outputs.version }}
+          app: ${{ needs.resolve-image-info.outputs.app }}
+          version: ${{ needs.resolve-image-info.outputs.version }}
         run: .github/scripts/manifest-other.sh
-
   add-tips:
     if: contains(inputs.body, 'imagebuild')
     needs:
       - build_manifest
-      - resolve-issue-var
-    name: Auto add tips
-    runs-on: ubuntu-latest
+      - resolve-image-info
+    uses: ./.github/workflows/add-tips.yml
     permissions:
       issues: write
-    steps:
-      - name: Success Commit
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            ```
-            image docker.io/${{ vars.D_D_REGISTRY_REPOSITORY }}/${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
-            ```
-            
-            See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    with:
+      body: ${{ inputs.body }}
+      app: ${{ needs.resolve-image-info.outputs.app }}
+      version: ${{ needs.resolve-image-info.outputs.version }}

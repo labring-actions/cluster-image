@@ -10,4 +10,5 @@ jobs:
     permissions:
       issues: write
     with:
-        body: ${{github.event.issue.body}}
+      body: ${{github.event.issue.body}}
+      title: ${{ github.event.issue.title }}
