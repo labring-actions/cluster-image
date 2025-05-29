@@ -14,4 +14,4 @@ RUN npm ci --only=production
 COPY index.js ./
 
 # Define the entry point for your action
-ENTRYPOINT ["node", "index.js"]
+ENTRYPOINT ["node", "/app/index.js"]
