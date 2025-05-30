@@ -17,6 +17,7 @@ jobs:
       - resolve-image-info
     uses: ./.github/workflows/autobuild-dockerfiles.yml
     permissions: read-all
+    secrets: inherit
     with:
       app: ${{ needs.resolve-image-info.outputs.app }}
       version: ${{ needs.resolve-image-info.outputs.version }}
