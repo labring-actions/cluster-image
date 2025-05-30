@@ -48,6 +48,9 @@ Sealos 在 dockerhub 中的镜像使用 `github action` 自动构建，社区用
 ```bash
 /imagebuild_apps nginx v1.23.1
 ```
+出于安全考虑及便于管理 ，在未打上 `accepted` 的 ISSUE 中触发镜像构建，或者 ISSUE 标题应用名与指令应用名不匹配，镜像构建将不生效。
+如果需构建镜像，请通知或 @ 仓库维护者打上 `accepted` label 并在对应的 ISSUE 中构建镜像。
+如果 ISSUE 中没找到对应的应用，请用模版新增一个 ISSUE ，标题格式必须正确。
 
 ### 项目结构
 
