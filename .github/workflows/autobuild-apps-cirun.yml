@@ -39,7 +39,7 @@ jobs:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_C_REGISTRY_REPOSITORY }}
-          password: ${{ secrets.D_D_REGISTRY_TOKEN }}
+          password: ${{ secrets.D_C_REGISTRY_TOKEN }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
           arch: ${{ matrix.arch }}
@@ -63,7 +63,7 @@ jobs:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
-          password: ${{ secrets.D_D_REGISTRY_TOKEN }}
+          password: ${{ secrets.D_C_REGISTRY_TOKEN }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
         run: .github/scripts/manifest-other.sh
