@@ -25,7 +25,7 @@ jobs:
     needs:
       - resolve-image-info
       - start-build
-    uses: ./.github/workflows/add-tips.yml
+    uses: ./.github/workflows/add-tips-c.yml
     permissions:
       issues: write
     with:
