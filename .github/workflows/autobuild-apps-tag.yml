@@ -37,7 +37,7 @@ jobs:
       - name: Auto build image
         env:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
-          repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          repo: ${{ vars.D_C_REGISTRY_REPOSITORY }}
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
         run: |
@@ -67,6 +67,6 @@ jobs:
           body: |
             🤖 says: Hooray! The action sync image has been completed successfully. 🎉
             
-            ${{ env.FROM_IMAGE }} to ${{ vars.D_D_REGISTRY_NAME }}/${{ vars.D_D_REGISTRY_REPOSITORY }}
+            ${{ env.FROM_IMAGE }} to ${{ vars.D_D_REGISTRY_NAME }}/${{ vars.D_C_REGISTRY_REPOSITORY }}
             
             See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
