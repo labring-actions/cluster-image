@@ -37,7 +37,7 @@ jobs:
       - name: Build Image
         env:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
-          username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          username: ${{ vars.D_C_REGISTRY_REPOSITORY }}
           repo: ${{ vars.D_C_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_C_REGISTRY_TOKEN }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
@@ -61,8 +61,8 @@ jobs:
       - name: Manifest Image
         env:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
-          username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
-          repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          username: ${{ vars.D_C_REGISTRY_REPOSITORY }}
+          repo: ${{ vars.D_C_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_C_REGISTRY_TOKEN }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}

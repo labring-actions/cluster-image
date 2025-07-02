@@ -38,7 +38,7 @@ jobs:
         env:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
           repo: ${{ vars.D_C_REGISTRY_REPOSITORY }}
-          username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          username: ${{ vars.D_C_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_C_REGISTRY_TOKEN }}
         run: |
           sudo podman run -it --rm -v ${PWD}:/workspace -w /workspace quay.io/skopeo/stable:latest \
