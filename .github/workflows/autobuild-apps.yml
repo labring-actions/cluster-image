@@ -26,7 +26,7 @@ jobs:
         env:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
-          repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          repo: ${{ vars.D_C_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
           app: ${{ inputs.app }}
           version: ${{ inputs.version }}
