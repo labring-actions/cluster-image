@@ -6,7 +6,7 @@ export readonly ARCH=${1:-amd64}
 export readonly NAME=${2:-$(basename "${PWD%/*}")}
 export readonly VERSION=${3:-$(basename "$PWD")}
 
-repo_url="https://openebs.github.io/charts"
+repo_url="https://openebs.github.io/openebs"
 repo_name="openebs/openebs"
 chart_name="openebs"
 version_pattern="^v([0-9]+)\.([0-9]+)\.([0-9]+)$"
