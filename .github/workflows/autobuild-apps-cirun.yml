@@ -38,7 +38,7 @@ jobs:
         env:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
           username: ${{ vars.D_D_REGISTRY_REPOSITORY }}
-          repo: ${{ vars.D_D_REGISTRY_REPOSITORY }}
+          repo: ${{ vars.D_C_REGISTRY_REPOSITORY }}
           password: ${{ secrets.D_D_REGISTRY_TOKEN }}
           app: ${{ needs.resolve-issue-var.outputs.app }}
           version: ${{ needs.resolve-issue-var.outputs.version }}
@@ -84,7 +84,7 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ```
-            image docker.io/${{ vars.D_D_REGISTRY_REPOSITORY }}/${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
+            image docker.io/${{ vars.D_C_REGISTRY_REPOSITORY }}/${{ needs.resolve-issue-var.outputs.app }}:${{ needs.resolve-issue-var.outputs.version }} build successfully!
             ```
             
             See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
