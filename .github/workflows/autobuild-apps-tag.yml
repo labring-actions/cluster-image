@@ -13,7 +13,7 @@ on:
 #    - cron: '0 22 * * *'
 jobs:
   build-images:
-    if: (startswith(github.event.comment.body, '/imagesync') &&  github.event.comment.user.login=='sealos-ci-robot' ) || (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu')
+    if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu')
     name: Auto tag  app image
     runs-on: ubuntu-latest
     steps:
@@ -46,27 +46,3 @@ jobs:
             --dest-username ${username} --dest-password ${password} --keep-going --retry-times 2
     outputs:
       fromImage: ${{ env.FROM_IMAGE }}
-  add-tips:
-    if: startswith(github.event.comment.body, '/imagesync')
-    needs:
-      - build-images
-    name: Auto add tips
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: Set fromImage environment variable
-        id: set_fromImage
-        run: |
-          FROM_IMAGE=$(echo ${{ github.event.comment.body }} | cut -d' ' -f2)
-          echo "FROM_IMAGE=$FROM_IMAGE" >> $GITHUB_ENV
-      - name: Success Commit
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            🤖 says: Hooray! The action sync image has been completed successfully. 🎉
-            
-            ${{ env.FROM_IMAGE }} to ${{ vars.D_C_REGISTRY_REPOSITORY }}/${{ vars.D_C_REGISTRY_REPOSITORY }}
-            
-            See: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
