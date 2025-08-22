@@ -17,7 +17,6 @@ jobs:
         run: |
             echo "app is ${{ inputs.app }}"
             echo "version is ${{ inputs.version }}"
-            echo "event is ${{ fromJSON(github.event) }}"
   build_apps:
     if: ( inputs.app != 'sealos-patch') && ( inputs.version != 'v5.0.1-beta1')
     name: Auto build app image
