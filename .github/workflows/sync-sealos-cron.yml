@@ -24,4 +24,13 @@ jobs:
           git fetch --tags
           tags=$(git tag | grep '^v5')
           echo "tags=$tags"
+          matrix="{\"include\":["
+          for tag in $tags; do
+            echo "tag: $tag"
+            version=$(echo $tag | sed 's/^v5.//')
+            echo "version: $version"
+            matrix="$matrix{\"version\":\"$version\"},"
+          done
+          matrix="${matrix%,}]}"
+          echo "matrix: $matrix"
           #sealos,sealos-cloud,sealos-patch
