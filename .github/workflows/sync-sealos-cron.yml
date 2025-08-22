@@ -25,7 +25,6 @@ jobs:
           tags=$(git tag | grep '^v5')
           echo "tags=$tags"
           matrix="{\"include\":["
-          matrix="$matrix{\"version\":\"latest\"},"
           for tag in $tags; do
             version=$(echo $tag)
             matrix="$matrix{\"version\":\"$version\"},"
@@ -33,7 +32,7 @@ jobs:
           matrix="${matrix%,}]}"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
           #sealos,sealos-cloud,sealos-patch
-  start-build:
+  start-sealos:
     needs: [ resolve-versions ]
     strategy:
       fail-fast: false
@@ -44,16 +43,36 @@ jobs:
     with:
       app: sealos
       version: ${{ matrix.version }}
-  start-sync-patch:
+  start-sealos-latest:
+    uses: ./.github/workflows/autobuild-apps.yml
+    permissions: read-all
+    secrets: inherit
+    with:
+      app: sealos
+      version: latest
+  start-build-patch:
     needs: [ resolve-versions ]
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
+    uses: ./.github/workflows/autobuild-apps.yml
+    permissions: read-all
+    secrets: inherit
+    with:
+      app: sealos-patch
+      version: ${{ matrix.version }}
+  start-sync-patch:
     uses: ./.github/workflows/autobuild-apps-tag.yml
     permissions: read-all
     secrets: inherit
     with:
-      fromImage: 'ghcr.io/labring/sealos-patch:${{ matrix.version }}'
+      fromImage: 'ghcr.io/labring/sealos-patch:latest'
+  start-sync-cloud-latest:
+    uses: ./.github/workflows/autobuild-apps-tag.yml
+    permissions: read-all
+    secrets: inherit
+    with:
+      fromImage: 'ghcr.io/labring/sealos-cloud:latest'
   start-sync-cloud:
     needs: [ resolve-versions ]
     strategy:
