@@ -54,10 +54,7 @@ jobs:
     needs: [ resolve-versions ]
     strategy:
       fail-fast: false
-      matrix:
-        include: ${{ fromJson(needs.resolve-versions.outputs.matrix).include.filter(
-          item,
-          item.version != 'v5.0.1-beta1' )}}
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
     uses: ./.github/workflows/autobuild-apps.yml
     permissions: read-all
     secrets: inherit
