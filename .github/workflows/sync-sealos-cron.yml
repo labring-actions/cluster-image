@@ -3,7 +3,7 @@ name: Sync Sealos Cluster Images
 on:
   workflow_dispatch:
   schedule:
-    - cron: "00 18 * * *"
+    - cron: "55 20 * * *"
 
 jobs:
   resolve-versions:

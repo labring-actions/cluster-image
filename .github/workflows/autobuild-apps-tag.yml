@@ -25,7 +25,7 @@ jobs:
           event_name=${{ github.event_name }}
           echo "event_name=$event_name"
   build-images:
-    if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu') || (github.event.inputs.fromImage != '' && github.event_name == 'workflow_call')
+    if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu')
     name: Auto tag  app image
     runs-on: ubuntu-latest
     steps:
