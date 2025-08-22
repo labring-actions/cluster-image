@@ -42,5 +42,5 @@ jobs:
     permissions: read-all
     secrets: inherit
     with:
-      app: selaos
+      app: sealos
       version: ${{ matrix.version }}
