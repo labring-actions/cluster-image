@@ -21,8 +21,6 @@ jobs:
       - name: Resolve Modules
         id: set-matrix
         run: |
-          user=${{ github.event.sender.login }}
-          echo "user=$user"
           git fetch --tags --force
           tags=$(git tag | grep '^v5')
           echo "tags=$tags"

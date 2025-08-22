@@ -12,6 +12,16 @@ on:
         type: string
         description: 'from remote image name'
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo fromImage
+        run: | 
+          echo "fromImage is ${{ github.event.inputs.fromImage }}"
+          user=${{ github.event.sender.login }}
+          echo "user=$user"
+          event_name=${{ github.event_name }}
+          echo "event_name=$event_name"
   build-images:
     if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu') || (github.event.inputs.fromImage != '' && github.event_name == 'workflow_call')
     name: Auto tag  app image
