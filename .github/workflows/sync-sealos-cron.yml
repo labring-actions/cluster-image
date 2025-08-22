@@ -21,13 +21,13 @@ jobs:
       - name: Resolve Modules
         id: set-matrix
         run: |
-          git fetch --tags
+          git fetch --tags --force
           tags=$(git tag | grep '^v5')
           echo "tags=$tags"
           matrix="{\"include\":["
           for tag in $tags; do
             echo "tag: $tag"
-            version=$(echo $tag | sed 's/^v5.//')
+            version=$(echo $tag)
             echo "version: $version"
             matrix="$matrix{\"version\":\"$version\"},"
           done
