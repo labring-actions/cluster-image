@@ -25,10 +25,9 @@ jobs:
           tags=$(git tag | grep '^v5')
           echo "tags=$tags"
           matrix="{\"include\":["
+          matrix="$matrix{\"version\":\"latest\"},"
           for tag in $tags; do
-            echo "tag: $tag"
             version=$(echo $tag)
-            echo "version: $version"
             matrix="$matrix{\"version\":\"$version\"},"
           done
           matrix="${matrix%,}]}"
