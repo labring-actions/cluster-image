@@ -33,12 +33,14 @@ jobs:
           matrix="${matrix%,}]}"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
           #sealos,sealos-cloud,sealos-patch
-  sync-images:
+  start-build:
     needs: [ resolve-versions ]
-    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/autobuild-apps.yml
+    permissions: read-all
+    secrets: inherit
+    with:
+      app: selaos
+      version: ${{ matrix.version }}
