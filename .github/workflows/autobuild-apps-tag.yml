@@ -5,12 +5,6 @@ on:
       fromImage:
         required: true
         type: string
-  workflow_dispatch:
-    inputs:
-      fromImage:
-        required: true
-        type: string
-        description: 'from remote image name'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -25,7 +19,7 @@ jobs:
           event_name=${{ github.event_name }}
           echo "event_name=$event_name"
   build-images:
-    if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu') || (github.event.inputs.fromImage != '' && github.event_name == 'workflow_dispatch')
+    if: (github.event.inputs.fromImage != '')
     name: Auto tag  app image
     runs-on: ubuntu-latest
     steps:
