@@ -1,16 +1,16 @@
-name: Auto tag image
+name: Auto sync image to docker hub
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  issue_comment:
-    types:
-      - created
+  workflow_call:
+    inputs:
+      fromImage:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       fromImage:
-        description: 'from remote image name'
         required: true
-#  schedule:
-#    - cron: '0 22 * * *'
+        type: string
+        description: 'from remote image name'
 jobs:
   build-images:
     if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu')
@@ -24,16 +24,6 @@ jobs:
         run: |
           sudo podman version
 
-      - name: Set fromImage environment variable
-        id: set_fromImage
-        run: |
-          if [[ ${{ github.event_name }} == "issue_comment" ]]; then
-            FROM_IMAGE=$(echo ${{ github.event.comment.body }} | cut -d' ' -f2)
-          else
-            FROM_IMAGE=${{ github.event.inputs.fromImage }}
-          fi
-          echo "FROM_IMAGE=$FROM_IMAGE" >> $GITHUB_ENV
-
       - name: Auto build image
         env:
           registry: ${{ vars.D_D_REGISTRY_NAME }}
@@ -42,7 +32,8 @@ jobs:
           password: ${{ secrets.D_C_REGISTRY_TOKEN }}
         run: |
           sudo podman run -it --rm -v ${PWD}:/workspace -w /workspace quay.io/skopeo/stable:latest \
-            sync --src docker --dest docker --all ${{ env.FROM_IMAGE }} ${registry}/${repo} \
+            sync --src docker --dest docker --all ${{ github.event.inputs.fromImage }} ${registry}/${repo} \
             --dest-username ${username} --dest-password ${password} --keep-going --retry-times 2
-    outputs:
-      fromImage: ${{ env.FROM_IMAGE }}
+          if [ $? -ne 0 ]; then
+            echo "⚠️  Warning: Build for version ${{ github.event.inputs.fromImage }} failed, but continuing..."
+          fi

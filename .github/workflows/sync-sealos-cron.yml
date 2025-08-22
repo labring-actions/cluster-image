@@ -44,3 +44,23 @@ jobs:
     with:
       app: sealos
       version: ${{ matrix.version }}
+  start-sync-patch:
+    needs: [ resolve-versions ]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
+    uses: ./.github/workflows/autobuild-apps-tag.yml
+    permissions: read-all
+    secrets: inherit
+    with:
+      fromImage: 'ghcr.io/labring/sealos-patch:${{ matrix.version }}'
+  start-sync-cloud:
+    needs: [ resolve-versions ]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
+    uses: ./.github/workflows/autobuild-apps-tag.yml
+    permissions: read-all
+    secrets: inherit
+    with:
+      fromImage: 'ghcr.io/labring/sealos-cloud:${{ matrix.version }}'
