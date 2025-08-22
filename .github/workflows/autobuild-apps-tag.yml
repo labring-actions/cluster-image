@@ -13,7 +13,7 @@ on:
         description: 'from remote image name'
 jobs:
   build-images:
-    if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu')
+    if: (github.event.inputs.fromImage != '' && github.event.sender.login=='cuisongliu') || (github.event.inputs.fromImage != '' && github.event_name == 'workflow_call')
     name: Auto tag  app image
     runs-on: ubuntu-latest
     steps:
