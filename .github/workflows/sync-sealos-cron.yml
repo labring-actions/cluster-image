@@ -1,0 +1,27 @@
+name: Sync Sealos Cluster Images
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 18 * * *"
+
+jobs:
+  resolve-versions:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: "labring/sealos"
+          ref: main
+          fetch-depth: 0
+
+      - name: Resolve Modules
+        id: set-matrix
+        run: |
+          git fetch --tags
+          tags=$(git tag | grep '^v5')
+          echo "tags=$tags"
+          #sealos,sealos-cloud,sealos-patch
