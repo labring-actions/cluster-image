@@ -6,18 +6,6 @@ on:
         required: true
         type: string
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo fromImage
-        run: | 
-          echo "fromImage is ${{ inputs.fromImage }}"
-          user=${{ github.event.sender.login }}
-          echo "user=$user"
-          actor=${{ github.actor }}
-          echo "actor=$actor"
-          event_name=${{ github.event_name }}
-          echo "event_name=$event_name"
   build-images:
     if: ( inputs.fromImage != '')
     name: Auto tag  app image
