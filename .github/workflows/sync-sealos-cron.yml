@@ -58,6 +58,7 @@ jobs:
     uses: ./.github/workflows/autobuild-apps.yml
     permissions: read-all
     secrets: inherit
+    if : ${{ matrix.version != 'v5.0.1-beta1' }}
     with:
       app: sealos-patch
       version: ${{ matrix.version }}
