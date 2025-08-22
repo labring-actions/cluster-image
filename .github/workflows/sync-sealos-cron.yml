@@ -50,7 +50,7 @@ jobs:
     with:
       app: sealos
       version: latest
-  start-build-patch:
+  start-sealos-patch:
     needs: [ resolve-versions ]
     strategy:
       fail-fast: false
@@ -61,19 +61,19 @@ jobs:
     with:
       app: sealos-patch
       version: ${{ matrix.version }}
-  start-sync-patch:
+  start-sealos-patch-latest:
     uses: ./.github/workflows/autobuild-apps-tag.yml
     permissions: read-all
     secrets: inherit
     with:
       fromImage: 'ghcr.io/labring/sealos-patch:latest'
-  start-sync-cloud-latest:
+  start-sealos-cloud-latest:
     uses: ./.github/workflows/autobuild-apps-tag.yml
     permissions: read-all
     secrets: inherit
     with:
       fromImage: 'ghcr.io/labring/sealos-cloud:latest'
-  start-sync-cloud:
+  start-sealos-cloud:
     needs: [ resolve-versions ]
     strategy:
       fail-fast: false
