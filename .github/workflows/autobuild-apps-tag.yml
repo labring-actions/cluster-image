@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Echo fromImage
         run: | 
-          echo "fromImage is ${{ github.event.inputs.fromImage }}"
+          echo "fromImage is ${{ inputs.fromImage }}"
           user=${{ github.event.sender.login }}
           echo "user=$user"
           actor=${{ github.actor }}
@@ -19,7 +19,7 @@ jobs:
           event_name=${{ github.event_name }}
           echo "event_name=$event_name"
   build-images:
-    if: (github.event.inputs.fromImage != '')
+    if: ( inputs.fromImage != '')
     name: Auto tag  app image
     runs-on: ubuntu-latest
     steps:
