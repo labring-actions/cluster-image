@@ -11,6 +11,7 @@ on:
 
 jobs:
   build_apps:
+    if : ( inputs.app != 'sealos-patch' && inputs.version != 'v5.0.1-beta1')
     name: Auto build app image
     runs-on: ubuntu-latest
     strategy:
