@@ -20,6 +20,8 @@ jobs:
           echo "fromImage is ${{ github.event.inputs.fromImage }}"
           user=${{ github.event.sender.login }}
           echo "user=$user"
+          actor=${{ github.actor }}
+          echo "actor=$actor"
           event_name=${{ github.event_name }}
           echo "event_name=$event_name"
   build-images:
