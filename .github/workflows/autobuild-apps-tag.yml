@@ -7,7 +7,7 @@ on:
         type: string
 jobs:
   build-images:
-    if: ( inputs.fromImage != '')
+    if: ( inputs.fromImage != '') && (inputs.fromImage != 'ghcr.io/labring/sealos-cloud:v5.1.0-beta1')
     name: Auto tag  app image
     runs-on: ubuntu-latest
     steps:
