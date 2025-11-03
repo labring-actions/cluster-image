@@ -1,0 +1,5 @@
+FROM scratch
+COPY . .
+ENV NAME=${NAME:-"quickstart"}
+ENV NAMESPACE=${NAMESPACE:-"ns-admin"}
+CMD ["kubectl apply -f manifests/deploy.yaml"]

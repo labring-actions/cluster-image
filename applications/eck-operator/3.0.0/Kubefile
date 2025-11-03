@@ -1,0 +1,6 @@
+FROM scratch
+COPY . .
+ENV NAME=${NAME:-"elastic-operator"}
+ENV NAMESPACE=${NAMESPACE:-"ns-admin"}
+ENV MANAGED_NAMESPACE=${MANAGED_NAMESPACE:-"ns-admin"}
+CMD ["helm upgrade -i $NAME eck-operator -n $NAMESPACE --create-namespace --set=installCRDs=false --set=managedNamespaces='{$MANAGED_NAMESPACE}' --set=createClusterScopedResources=false --set=webhook.enabled=false --set=config.validateStorageClass=false"]
