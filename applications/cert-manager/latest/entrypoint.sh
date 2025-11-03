@@ -5,7 +5,7 @@ NAME=${NAME:-"cert-manager"}
 NAMESPACE=${NAMESPACE:-"cert-manager"}
 CHARTS=${CHARTS:-"./charts/cert-manager"}
 HELM_OPTS=${HELM_OPTS:-"
---set installCRDs=true \
+--set crds.enabled=true \
 "}
 
 helm upgrade -i ${NAME} ${CHARTS} -n ${NAMESPACE} --create-namespace ${HELM_OPTS} --wait
