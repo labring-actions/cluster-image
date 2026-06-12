@@ -1,4 +1,4 @@
-FROM bitnami/kubectl:latest
+FROM soldevelo/kubectl:latest
 ARG SSL_KEYSTORE_PASSWORD
 USER root
 
